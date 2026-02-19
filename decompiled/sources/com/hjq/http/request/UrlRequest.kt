@@ -26,7 +26,7 @@ abstract class UrlRequest<T : UrlRequest<T>>(
         if (str2 != null) {
             builder.tag(str2)
         }
-        if (getRequestCache().getMode() == CacheMode.NO_CACHE) {
+        if (requestCache.getMode() == CacheMode.NO_CACHE) {
             builder.cacheControl(CacheControl.Builder().noCache().build())
         }
         if (!httpHeaders.isEmpty()) {
@@ -62,6 +62,6 @@ abstract class UrlRequest<T : UrlRequest<T>>(
                 EasyLog.print()
             }
         }
-        return getRequestHandler().requestStart(getLifecycleOwner(), getRequestApi(), builder)
+        return requestHandler.requestStart(lifecycleOwner, requestApi, builder)
     }
 }

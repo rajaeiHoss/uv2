@@ -83,27 +83,27 @@ class DownloadRequest(
         bodyType: BodyType
     ): Request {
         return when (mMethod) {
-            HttpMethod.GET -> GetRequest(getLifecycleOwner()).createRequest(str, str2, httpParams, httpHeaders, bodyType)
-            HttpMethod.POST -> PostRequest(getLifecycleOwner()).createRequest(str, str2, httpParams, httpHeaders, bodyType)
+            HttpMethod.GET -> GetRequest(lifecycleOwner).createRequest(str, str2, httpParams, httpHeaders, bodyType)
+            HttpMethod.POST -> PostRequest(lifecycleOwner).createRequest(str, str2, httpParams, httpHeaders, bodyType)
             else -> throw IllegalStateException("method nonsupport")
         }
     }
 
     fun start(): DownloadRequest {
-        val delayMillis = getDelayMillis()
-        if (delayMillis > 0) {
-            EasyLog.print("RequestDelay", delayMillis.toString())
+        val delayValue = delayMillis
+        if (delayValue > 0) {
+            EasyLog.print("RequestDelay", delayValue.toString())
         }
         val stackTrace = Throwable().stackTrace
         EasyUtils.postDelayed(
             { startInternal(stackTrace) },
-            delayMillis
+            delayValue
         )
         return this
     }
 
     private fun startInternal(stackTraceElementArr: Array<StackTraceElement>) {
-        if (!HttpLifecycleManager.isLifecycleActive(getLifecycleOwner())) {
+        if (!HttpLifecycleManager.isLifecycleActive(lifecycleOwner)) {
             EasyLog.print("宿主已被销毁，请求无法进行")
             return
         }

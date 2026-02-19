@@ -67,7 +67,7 @@ abstract class BodyRequest<T : BodyRequest<T>>(
         if (str2 != null) {
             builder.tag(str2)
         }
-        if (getRequestCache().getMode() == CacheMode.NO_CACHE) {
+        if (requestCache.getMode() == CacheMode.NO_CACHE) {
             builder.cacheControl(CacheControl.Builder().noCache().build())
         }
         if (!httpHeaders.isEmpty()) {
@@ -108,7 +108,7 @@ abstract class BodyRequest<T : BodyRequest<T>>(
                 EasyLog.print()
             }
         }
-        return getRequestHandler().requestStart(getLifecycleOwner(), getRequestApi(), builder)
+        return requestHandler.requestStart(lifecycleOwner, requestApi, builder)
     }
 
     override fun request(onHttpListener: OnHttpListener<*>?) {
@@ -175,7 +175,7 @@ abstract class BodyRequest<T : BodyRequest<T>>(
         return if (mUpdateListener == null) {
             requestBody
         } else {
-            ProgressBody(requestBody, getLifecycleOwner(), mUpdateListener)
+            ProgressBody(requestBody, lifecycleOwner, mUpdateListener)
         }
     }
 }
