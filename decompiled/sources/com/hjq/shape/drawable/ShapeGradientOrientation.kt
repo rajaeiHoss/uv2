@@ -1,6 +1,6 @@
-package com.hjq.shape.drawable;
+package com.hjq.shape.drawable
 
-public enum ShapeGradientOrientation {
+enum class ShapeGradientOrientation {
     TR_BL,
     RIGHT_LEFT,
     BR_TL,
