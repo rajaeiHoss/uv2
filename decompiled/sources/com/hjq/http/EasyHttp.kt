@@ -68,7 +68,7 @@ class EasyHttp private constructor() {
         @JvmStatic
         fun cancel(obj: Any?) {
             if (obj != null) {
-                val client: OkHttpClient = EasyConfig.getInstance().getClient()
+                val client: OkHttpClient = EasyConfig.getInstance().client
                 for (next: Call in client.dispatcher().queuedCalls()) {
                     if (obj == next.request().tag()) {
                         next.cancel()
@@ -84,7 +84,7 @@ class EasyHttp private constructor() {
 
         @JvmStatic
         fun cancel() {
-            val client: OkHttpClient = EasyConfig.getInstance().getClient()
+            val client: OkHttpClient = EasyConfig.getInstance().client
             for (cancel: Call in client.dispatcher().queuedCalls()) {
                 cancel.cancel()
             }
