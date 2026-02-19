@@ -59,7 +59,7 @@ public abstract class AppActivity extends BaseActivity implements ToastAction, T
     }
 
     public /* synthetic */ void onSucceed(Object obj, boolean z) {
-        OnHttpListener.CC.$default$onSucceed(this, obj, z);
+        onSucceed(obj);
     }
 
     public /* synthetic */ void onTitleClick(View view) {
