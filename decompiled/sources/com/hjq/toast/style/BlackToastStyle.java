@@ -10,12 +10,12 @@ import android.widget.TextView;
 import com.hjq.toast.config.IToastStyle;
 
 public class BlackToastStyle implements IToastStyle<TextView> {
-    public /* synthetic */ int getGravity() {
-        return IToastStyle.CC.$default$getGravity(this);
+    public int getGravity() {
+        return 17;
     }
 
-    public /* synthetic */ float getHorizontalMargin() {
-        return IToastStyle.CC.$default$getHorizontalMargin(this);
+    public float getHorizontalMargin() {
+        return 0.0f;
     }
 
     /* access modifiers changed from: protected */
@@ -33,16 +33,16 @@ public class BlackToastStyle implements IToastStyle<TextView> {
         return 17;
     }
 
-    public /* synthetic */ float getVerticalMargin() {
-        return IToastStyle.CC.$default$getVerticalMargin(this);
+    public float getVerticalMargin() {
+        return 0.0f;
     }
 
-    public /* synthetic */ int getXOffset() {
-        return IToastStyle.CC.$default$getXOffset(this);
+    public int getXOffset() {
+        return 0;
     }
 
-    public /* synthetic */ int getYOffset() {
-        return IToastStyle.CC.$default$getYOffset(this);
+    public int getYOffset() {
+        return 0;
     }
 
     public TextView createView(Context context) {
