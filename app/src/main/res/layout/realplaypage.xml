@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/title_realplay" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="20sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/preview_title_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/preview"/>
+    </FrameLayout>
+    <RelativeLayout android:layout_gravity="center" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <com.streamax.client.VideoContainer android:id="@+id/realplay_videogroup" android:layout_width="match_parent" android:layout_height="match_parent">
+            <ImageView android:id="@+id/ptz_control_left" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/direction_left" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:contentDescription="@string/left"/>
+            <ImageView android:id="@+id/ptz_control_up" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/direction_up" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:contentDescription="@string/up"/>
+            <ImageView android:id="@+id/ptz_control_right" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/direction_right" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:contentDescription="@string/right"/>
+            <ImageView android:id="@+id/ptz_control_down" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/direction_down" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:contentDescription="@string/down"/>
+        </com.streamax.client.VideoContainer>
+        <ProgressBar android:id="@+id/realplay_pbloading" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <FrameLayout android:gravity="center" android:id="@+id/realplay_videoinformation" android:background="#000000" android:layout_width="match_parent" android:layout_height="48dp">
+        <TextView android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/realplay_videoinformation_text" android:background="#000000" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/information"/>
+    </FrameLayout>
+    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/realplayvideocontrol" android:background="@drawable/sliderback" android:layout_width="match_parent" android:layout_height="48dp">
+        <ImageView android:layout_gravity="center" android:id="@+id/realplay_toolbar_ptz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ptz_normal" android:layout_weight="1" android:contentDescription="@string/ptz"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/realplay_toolbar_record" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/record_unuse" android:layout_weight="1" android:contentDescription="@string/record"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/realplay_toolbar_capture" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/capture" android:layout_weight="1" android:contentDescription="@string/capture"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/realplay_toolbar_stop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/stop" android:layout_weight="1" android:contentDescription="@string/stop"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/realplay_toolbar_sound" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/soundopen" android:layout_weight="1" android:contentDescription="@string/sound"/>
+    </LinearLayout>
+</LinearLayout>

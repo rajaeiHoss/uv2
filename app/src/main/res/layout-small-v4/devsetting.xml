@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:layout_gravity="center" android:orientation="vertical" android:background="#99ffffff" android:scrollbars="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="true" android:weightSum="1">
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:id="@+id/setting_return" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/returnback"/>
+        <TextView android:textSize="30px" android:gravity="center" android:id="@+id/title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/devicemanager" android:layout_weight="1"/>
+        <Button android:textColor="#ffffff" android:id="@+id/setting_savedata" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/save"/>
+    </LinearLayout>
+    <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TableLayout android:gravity="top|center_vertical|center_horizontal|center" android:orientation="vertical" android:id="@+id/linearLayout1" android:background="@drawable/corners_bg" android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:layout_marginBottom="2dp">
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvdevicename" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/devicename"/>
+                <EditText android:id="@+id/setting_devicename" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/devicename" android:layout_weight="100"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvdeviceip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/deviceip" android:layout_weight="1"/>
+                <EditText android:id="@+id/setting_deviceaddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/deviceip" android:layout_weight="100"/>
+                <ImageView android:layout_gravity="right|center_vertical|center_horizontal|center" android:id="@+id/btton_scanning" android:clickable="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/button_qr"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvmediaport" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/mediaport" android:layout_weight="1"/>
+                <EditText android:id="@+id/settting_mediaport" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="9000" android:hint="@string/mediaport" android:layout_weight="100" android:inputType="number"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvwebport" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/webport" android:layout_weight="1"/>
+                <EditText android:id="@+id/setting_webport" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="80" android:hint="@string/webport" android:layout_weight="100" android:inputType="number"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvusername" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/username" android:layout_weight="1"/>
+                <EditText android:id="@+id/setting_username" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="admin" android:hint="@string/username" android:layout_weight="100"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:id="@+id/tvpassword" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/password" android:layout_weight="1"/>
+                <EditText android:id="@+id/setting_password" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/password" android:layout_weight="100" android:inputType="textPassword"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:textColor="#ff000000" android:layout_gravity="center" android:id="@+id/tvchannelcount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="@string/channelcount" android:layout_weight="1"/>
+                <com.streamax.client.SegmentedRadioGroup android:orientation="horizontal" android:id="@+id/segment_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:checkedButton="@+id/channel_1_text">
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_1_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="1"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_4_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="4"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_8_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="8"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_16_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="16"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_24_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="24"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_32_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="32"/>
+                    <RadioButton android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="@color/radio_colors" android:gravity="center" android:id="@+id/channel_auto_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:button="@null" android:minWidth="36dp" android:minHeight="33dp" android:text="@string/auto"/>
+                </com.streamax.client.SegmentedRadioGroup>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

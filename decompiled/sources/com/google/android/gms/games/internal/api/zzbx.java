@@ -1,0 +1,23 @@
+package com.google.android.gms.games.internal.api;
+
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.internal.zzn;
+import com.google.android.gms.games.internal.GamesClientImpl;
+import com.google.android.gms.games.request.Requests;
+
+final class zzbx extends zzcb {
+    private /* synthetic */ String[] zziaw;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    zzbx(zzbv zzbv, GoogleApiClient googleApiClient, String[] strArr) {
+        super(googleApiClient, (zzbw) null);
+        this.zziaw = strArr;
+    }
+
+    /* access modifiers changed from: protected */
+    public final /* synthetic */ void zza(GamesClientImpl gamesClientImpl) throws RemoteException {
+        gamesClientImpl.zzb((zzn<Requests.UpdateRequestsResult>) this, this.zziaw);
+    }
+}

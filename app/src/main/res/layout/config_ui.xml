@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:orientation="horizontal" android:id="@+id/title_device_list" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_ChSelector">
+        <Button android:textColor="#ffffff" android:layout_gravity="left" android:id="@+id/config_title_btn_back" android:background="@drawable/back_white" android:layout_width="30dp" android:layout_height="30dp" android:layout_marginTop="6dp" android:text=""/>
+        <com.streamax.view.VsTextView android:textSize="18sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/config_title_tv_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/config_DeviceIp"/>
+        <Button android:textColor="#ffffff" android:gravity="center" android:layout_gravity="right" android:id="@+id/config_title_btn_update" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/config_update"/>
+    </FrameLayout>
+    <FrameLayout android:id="@+id/config_framelayout" android:layout_width="match_parent" android:layout_height="match_parent">
+        <ListView android:id="@+id/config_lv_device_name_list" android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <ListView android:id="@+id/config_lv_device_name" android:layout_width="match_parent" android:layout_height="match_parent"/>
+    </FrameLayout>
+</LinearLayout>

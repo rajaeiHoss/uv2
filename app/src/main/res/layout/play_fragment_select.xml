@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <TextView android:id="@+id/config_select_tv_all" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_margin="10dp" android:text="@string/config_All" android:drawableRight="@drawable/cb_unselected" style="@style/TvParentLeft"/>
+    <Button android:id="@+id/config_select_btn_save" android:layout_marginTop="20dp" android:layout_marginBottom="10dp" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    <LinearLayout android:orientation="vertical" android:id="@+id/config_select_ll" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_above="@+id/config_select_btn_save" android:layout_below="@+id/config_select_tv_all">
+        <ListView android:id="@+id/config_select_lv" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:divider="#cccccc" android:dividerHeight="0.5dp"/>
+    </LinearLayout>
+</RelativeLayout>

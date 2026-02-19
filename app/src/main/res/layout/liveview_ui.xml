@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical" android:id="@+id/ll_content" android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="horizontal" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView android:textSize="12sp" android:textColor="#ffffff" android:gravity="center" android:id="@+id/tv_start_audio" android:background="#0000ff" android:paddingTop="5dp" android:paddingBottom="5dp" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="startRecord" android:layout_weight="1"/>
+            <TextView android:textSize="12sp" android:textColor="#ffffff" android:gravity="center" android:id="@+id/tv_stop_audio" android:background="#0000ff" android:paddingTop="5dp" android:paddingBottom="5dp" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="stopRecord" android:layout_weight="1"/>
+        </LinearLayout>
+        <com.streamax.client.ui.play.MyVg android:id="@+id/iv_play_vg" android:background="#77ff0000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp">
+            <com.streamax.client.ui.play.MyIv android:id="@+id/iv_play_one" android:background="#7700ff00" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <com.streamax.client.ui.play.MyIv android:id="@+id/iv_play_two" android:background="#770000ff" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <com.streamax.client.ui.play.MyIv android:id="@+id/iv_play_three" android:background="#77ffffff" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </com.streamax.client.ui.play.MyVg>
+    </LinearLayout>
+    <ProgressBar android:id="@+id/pb_loading" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

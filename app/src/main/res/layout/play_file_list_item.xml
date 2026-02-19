@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="horizontal" android:id="@+id/item_ll" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView android:layout_gravity="left|center_vertical|center_horizontal|center|start" android:id="@+id/icon_view" android:background="@drawable/icon_file" android:layout_width="50dp" android:layout_height="40dp" android:layout_margin="8dp"/>
+    <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/item_layout" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:id="@+id/texts_layout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:layout_marginBottom="12dp" android:layout_weight="1">
+            <TextView android:ellipsize="end" android:id="@+id/title_view" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="2dp" style="@style/TextAppearance.AppCompat.Subhead"/>
+            <TextView android:textColor="?android:attr/textColorSecondary" android:ellipsize="end" android:id="@+id/subtitle_view" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" style="@style/TextAppearance.AppCompat.Body1"/>
+        </LinearLayout>
+        <ImageView android:id="@+id/icon_opt" android:background="@drawable/icon_down" android:clickable="true" android:layout_width="30dp" android:layout_height="30dp" android:layout_margin="8dp" android:scaleType="centerInside" android:layout_centerInParent="true" android:alpha="1"/>
+    </LinearLayout>
+</LinearLayout>

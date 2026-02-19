@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/network_lan_sv_content" android:background="#999999" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_network_lan_AutoObtainIP" style="@style/TvParentLeft"/>
+                <Button android:id="@+id/network_lan_btn_staticip" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_lan_IPAddress" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:id="@+id/network_lan_et_ip" android:text="" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_lan_SubnetMask" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:id="@+id/network_lan_et_sm" android:text="" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_lan_DefaultGateway" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:id="@+id/network_lan_et_dg" android:text="" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_network_lan_AutoObtainDNS" style="@style/TvParentLeft"/>
+                <Button android:id="@+id/network_lan_btn_staticdns" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_lan_PreferredDNSServer" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:id="@+id/network_lan_et_firstdns" android:text="" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_lan_AltermateDNSServer" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:id="@+id/network_lan_et_seconddns" android:text="" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/network_lan_btn_save" android:layout_marginTop="10dp" android:text="@string/config_Save" android:layout_below="@+id/network_lan_sv_content" style="@style/ButtonParent"/>
+    <ProgressBar android:id="@+id/network_lan_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

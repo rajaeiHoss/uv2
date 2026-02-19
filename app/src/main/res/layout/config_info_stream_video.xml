@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/config_stream_video_rl_ch" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Channel" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_ch" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_stream_video_view_enable" android:visibility="gone" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_enable" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Enable" style="@style/TvParentLeft"/>
+                <Button android:id="@+id/config_stream_video_btn_enable" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_resolution" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Resolution" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_resolution" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_framerate" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_FrameRate" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_framerate" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_stream_video_view_bitrate" android:visibility="gone" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_bitrate" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_BitRate" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_bitrate" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_stream_video_view_bitmode" android:visibility="gone" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_bitmode" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_BitRateMode" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_bitmode" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_stream_video_view_enctype" android:visibility="gone" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_enctype" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_EncodeType" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_enctype" android:text="" android:drawableRight="@null" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_stream_video_view_qulity" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_stream_video_rl_qulity" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Qulity" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_stream_video_tv_qulity" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <Button android:id="@+id/config_stream_video_btn_copy" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:text="@string/config_CopyChToCh" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    </RelativeLayout>
+    <ProgressBar android:id="@+id/config_video_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

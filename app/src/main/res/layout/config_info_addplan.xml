@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/config_addplan_rl_starttime" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_StartTime" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_addplan_tv_starttime" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_addplan_rl_endtime" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_EndTime" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_addplan_tv_endtime" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_addplan_line_above_recordtype" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_addplan_rl_recordtype" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_record_schedule_Rt" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_addplan_tv_recordtype" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <Button android:id="@+id/config_addplan_btn_save" android:layout_marginBottom="10dp" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    </RelativeLayout>
+    <ProgressBar android:id="@+id/config_addplan_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

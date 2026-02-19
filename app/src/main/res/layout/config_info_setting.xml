@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:id="@+id/config_info_setting_content" android:background="#00000000" android:layout_width="match_parent" android:layout_height="0dp">
+            <LinearLayout android:layout_gravity="top|center_vertical|center_horizontal|center" android:orientation="vertical" android:id="@+id/config_info_setting_basic_content" android:background="@drawable/corners_bg" android:padding="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="5dp">
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_basic_title" android:layout_width="match_parent" android:layout_height="45dp" android:text="@string/config_info_setting_basic_Title" android:drawablePadding="5dp"/>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_dev_info" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_dev_info_Title" android:drawableLeft="@drawable/setting_nav_dev_info" android:drawablePadding="5dp"/>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_sys_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_sys_time_Title" android:drawableLeft="@drawable/setting_nav_sys_time" android:drawablePadding="5dp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_gravity="top|center_vertical|center_horizontal|center" android:orientation="vertical" android:id="@+id/config_info_setting_network" android:background="@drawable/corners_bg" android:padding="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="5dp">
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_network_title" android:layout_width="match_parent" android:layout_height="45dp" android:text="@string/config_info_setting_network_Title" android:drawablePadding="5dp"/>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_xg_net" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_xgNet_Title" android:drawableLeft="@drawable/setting_nav_xg" android:drawablePadding="5dp"/>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:id="@+id/config_info_setting_cms" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_cms_Title" android:drawableLeft="@drawable/setting_nav_cms" android:drawablePadding="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

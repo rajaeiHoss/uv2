@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:background="#99ffffff" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/loginType_title" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:layout_gravity="left|center_vertical|center_horizontal|center" android:id="@+id/loginType_title_button_back" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/back"/>
+        <TextView android:textSize="20sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/loginType_title_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/more_ServerType"/>
+    </FrameLayout>
+    <ListView android:id="@+id/loginType_lv" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:divider="#000000" android:dividerHeight="0.5dp"/>
+</LinearLayout>

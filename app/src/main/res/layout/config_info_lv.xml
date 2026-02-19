@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ListView android:id="@+id/config_info_lv_content" android:background="@drawable/corners_bg_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:divider="#000000" android:dividerHeight="0.5dp"/>
+</RelativeLayout>

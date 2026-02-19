@@ -1,0 +1,19 @@
+package com.google.android.gms.internal;
+
+import android.os.RemoteException;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+final class zzbqn extends zzbni {
+    private /* synthetic */ zzbql zzgwm;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    zzbqn(zzbql zzbql, GoogleApiClient googleApiClient) {
+        super(googleApiClient);
+        this.zzgwm = zzbql;
+    }
+
+    /* access modifiers changed from: protected */
+    public final void zza(zzbnq zzbnq) throws RemoteException {
+        ((zzbrk) zzbnq.zzalw()).zza(new zzbrt(this.zzgwm.zzgpe), (zzbrm) new zzbqt(this));
+    }
+}

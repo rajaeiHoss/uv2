@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/config_record_rl_content" android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/config_record_rl_ch_selector" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Channel" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_record_tv_ch" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Enable" style="@style/TvParentLeft"/>
+                <Button android:id="@+id/config_record_btn_enable" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_record_rl_rm_selector" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_record_RecordType" style="@style/TvParentLeft"/>
+                <com.streamax.view.VsTextView android:id="@+id/config_record_tv_record_mode" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/config_record_view_to_hide" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_record_rl_plan" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_record_Schedule" style="@style/TvParentLeft"/>
+                <TextView style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <Button android:id="@+id/config_btn_copy_to" android:layout_marginTop="10dp" android:layout_marginBottom="10dp" android:text="@string/config_CopyChToCh" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    </RelativeLayout>
+</RelativeLayout>

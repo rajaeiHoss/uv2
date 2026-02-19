@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/config_datetime_sv_content" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+                <RelativeLayout android:id="@+id/config_cms_rl_protocol1" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_cms_Protocol" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_cms_tv_protocol1" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_cms_rl_visitType1" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_cms_VisitType" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_cms_tv_visitType1" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_cms_ServerHost" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_cms_et_serverHost1" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_cms_ServerPort" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_cms_et_serverPort1" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+                <RelativeLayout android:id="@+id/config_cms_rl_protocol2" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_cms_Protocol" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_cms_tv_protocol2" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_cms_rl_visitType2" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_cms_VisitType" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_cms_tv_visitType2" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_cms_ServerHost" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_cms_et_serverHost2" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_cms_ServerPort" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_cms_et_serverPort2" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/config_cms_btn_save" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+</RelativeLayout>

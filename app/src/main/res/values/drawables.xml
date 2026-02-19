@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="ad_press">#7f000000</drawable>
+    <drawable name="comment_bg">#e2181e47</drawable>
+    <drawable name="default_core_menu_drawable">@drawable/def_icon</drawable>
+    <drawable name="default_round_menu_drawable">@drawable/right</drawable>
+    <drawable name="list_line">#ff999999</drawable>
+    <drawable name="material_ic_keyboard_arrow_next_black_24dp">@drawable/material_ic_keyboard_arrow_right_black_24dp</drawable>
+    <drawable name="material_ic_keyboard_arrow_previous_black_24dp">@drawable/material_ic_keyboard_arrow_left_black_24dp</drawable>
+    <drawable name="notification_template_icon_bg">#3333b5e5</drawable>
+    <drawable name="notification_template_icon_low_bg">#0cffffff</drawable>
+    <drawable name="tab_line">#ffb2a2fb</drawable>
+</resources>

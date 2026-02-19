@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:background="@drawable/sliderback" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView android:layout_gravity="center" android:id="@+id/popview_toolbar_ptz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ptz_normal" android:layout_weight="1" android:contentDescription="@string/ptz"/>
+    <ImageView android:layout_gravity="center" android:id="@+id/popview_toolbar_record" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/record_unuse" android:layout_weight="1" android:contentDescription="@string/record"/>
+    <ImageView android:layout_gravity="center" android:id="@+id/popview_toolbar_capture" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/capture" android:layout_weight="1" android:contentDescription="@string/capture"/>
+    <ImageView android:layout_gravity="center" android:id="@+id/popview_toolbar_stop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/stop" android:layout_weight="1" android:contentDescription="@string/stop"/>
+    <ImageView android:layout_gravity="center" android:id="@+id/popview_toolbar_sound" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/soundopen" android:layout_weight="1" android:contentDescription="@string/sound"/>
+</LinearLayout>

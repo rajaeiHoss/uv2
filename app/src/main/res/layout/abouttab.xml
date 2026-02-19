@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <ImageView android:gravity="center" android:layout_gravity="center" android:id="@+id/maintoolbar_about_image" android:padding="6sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/main_nav_about" android:layout_weight="1" android:contentDescription="@string/app_name"/>
+    <TextView android:textSize="12sp" android:gravity="center" android:layout_gravity="center" android:id="@+id/maintoolbar_about_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/nav_item_About" android:layout_weight="1"/>
+</LinearLayout>

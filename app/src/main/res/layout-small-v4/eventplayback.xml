@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.streamax.client.EventPlayback xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/event_playback_title" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:layout_gravity="left|center_vertical|center_horizontal|center" android:id="@+id/event_playback_title_cancel" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cancel"/>
+        <TextView android:textSize="16sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/event_playback_title_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/eventplayback"/>
+        <Button android:textColor="#ffffff" android:layout_gravity="right|center_vertical|center_horizontal|center" android:id="@+id/event_playback_title_button_select" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/select"/>
+    </FrameLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <ListView android:layout_gravity="top|center_vertical|center_horizontal|center" android:id="@+id/eventlist" android:background="#99ffffff" android:fadingEdge="none" android:clickable="true" android:layout_width="match_parent" android:layout_height="match_parent" android:scrollingCache="false" android:cacheColorHint="#00000000"/>
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:id="@+id/eventplayback_busy" android:background="#88333333" android:visibility="invisible" android:layout_width="match_parent" android:layout_height="match_parent">
+            <ProgressBar android:layout_gravity="center" android:id="@+id/eventplayback_busyprogress" android:layout_width="wrap_content" android:layout_height="wrap_content" style="?android:attr/progressBarStyleLarge"/>
+            <TextView android:layout_gravity="center" android:id="@+id/eventplayback_busytext" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/updating"/>
+        </LinearLayout>
+    </FrameLayout>
+</com.streamax.client.EventPlayback>

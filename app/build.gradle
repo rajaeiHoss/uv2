@@ -1,0 +1,51 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    compileSdk 30
+
+    defaultConfig {
+        applicationId "com.zycs.UView"
+        minSdk 21
+        targetSdk 30
+        versionCode 1041
+        versionName "1.0.41"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    namespace "com.zycs.UView"
+
+    androidResources {
+        additionalParameters += ["--stable-ids", "${projectDir}/stable-ids.txt"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    // Keep the manifest and resources from the extracted APK.
+    sourceSets {
+        main {
+            manifest.srcFile "src/main/AndroidManifest.xml"
+            res.srcDirs = ["src/main/res"]
+            assets.srcDirs = ["src/main/assets"]
+            jniLibs.srcDirs = ["src/main/jniLibs"]
+        }
+    }
+}
+
+dependencies {
+    // Intentionally empty: the runnable APK is produced by swapping in the original dex files.
+}
+
+tasks.register("repackDebugWithDex", Exec) {
+    dependsOn("assembleDebug")
+    workingDir(rootDir)
+    commandLine("bash", "${rootDir}/tools/repack_debug.sh")
+}

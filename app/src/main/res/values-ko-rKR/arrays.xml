@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="AlarmOutputDurationSelector">
+        <item>5s</item>
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="BrmSelector">
+        <item>CBR</item>
+        <item>VBR</item>
+    </array>
+    <array name="BuzzerSelector">
+        <item>None</item>
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="ColorSpinner">
+        <item>24-Hour</item>
+        <item>12-Hour</item>
+    </array>
+    <array name="DateFormat">
+        <item>MM/DD/YYYY</item>
+        <item>YYYY-MM-DD</item>
+        <item>DD-MM-YYYY</item>
+    </array>
+    <array name="DaySelector">
+        <item>일요일</item>
+        <item>월요일</item>
+        <item>화요일</item>
+        <item>수요일</item>
+        <item>목요일</item>
+        <item>금요일</item>
+        <item>일요일</item>
+    </array>
+    <array name="DelayRecordSelector">
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="ModeSelector">
+        <item>주</item>
+        <item>일</item>
+    </array>
+    <array name="MonthSelector">
+        <item>1월</item>
+        <item>2월</item>
+        <item>3월</item>
+        <item>4월</item>
+        <item>5월</item>
+        <item>6월</item>
+        <item>7월</item>
+        <item>8월</item>
+        <item>9월</item>
+        <item>10월</item>
+        <item>11월</item>
+        <item>12월</item>
+    </array>
+    <array name="NtpServer">
+        <item>time.windows.com</item>
+        <item>time.nist.gov</item>
+        <item>time-nw.nist.gov</item>
+        <item>time-a.nist.gov</item>
+        <item>time-b.nist.gov</item>
+    </array>
+    <array name="OffsetSelector">
+        <item>1시간</item>
+        <item>2시간</item>
+    </array>
+    <array name="PlanSelector">
+        <item>첫번째</item>
+        <item>두번째</item>
+        <item>세번째</item>
+        <item>네번째</item>
+        <item>다섯번째</item>
+        <item>여섯번째</item>
+        <item>일곱번째</item>
+        <item>여덟번째</item>
+    </array>
+    <array name="PreRecordSelector">
+        <item>None</item>
+        <item>5s</item>
+        <item>10s</item>
+    </array>
+    <array name="QltSelector">
+        <item>매우좋음</item>
+        <item>아주좋음</item>
+        <item>좋음</item>
+        <item>보통</item>
+    </array>
+    <array name="RecordTypeSelector">
+        <item>일반</item>
+        <item>알람</item>
+    </array>
+    <array name="RstSelector">
+        <item>CIF</item>
+        <item>HD1</item>
+        <item>D1</item>
+        <item>QCIF</item>
+        <item>QVGA</item>
+        <item>VGA</item>
+        <item>720P</item>
+        <item>1080P</item>
+        <item>3MP(2048*1536)</item>
+        <item>5MP(2592*1920)</item>
+        <item>WQCIF</item>
+        <item>WCIF</item>
+        <item>WHD1</item>
+        <item>WD1</item>
+        <item>960P</item>
+        <item>540P</item>
+        <item>4MP(2592*1520)</item>
+        <item>3MP(2304*1296)</item>
+        <item>2k(2560*1440)</item>
+        <item>1080N</item>
+        <item>5mp(3072*1728)</item>
+        <item>8mp(3840*2160)</item>
+        <item>5mp(2560*1920)</item>
+    </array>
+    <array name="SensitivitySelector">
+        <item>1(높은)</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8(낮은)</item>
+    </array>
+    <array name="SmartStreamType">
+        <item>자동</item>
+        <item>메인스트림</item>
+        <item>서브스트림</item>
+        <item>모바일스트림</item>
+    </array>
+    <array name="StreamListForThree">
+        <item>메인스트림</item>
+        <item>서브스트림</item>
+        <item>모바일스트림</item>
+    </array>
+    <array name="StreamListForTwo">
+        <item>메인스트림</item>
+        <item>서브스트림</item>
+    </array>
+    <array name="TimeFormat">
+        <item>24-시</item>
+        <item>12-시</item>
+    </array>
+    <array name="WeekSelector">
+        <item>첫번째</item>
+        <item>두번째</item>
+        <item>세번째</item>
+        <item>네번째</item>
+        <item>마지막</item>
+    </array>
+    <array name="config_ModelList">
+        <item>녹화</item>
+        <item>영상</item>
+        <item>일자시간</item>
+        <item>비밀번호 변경</item>
+        <item>모션감지</item>
+        <item>정보</item>
+        <item>네트워크</item>
+        <item>시스템설정</item>
+        <item>디스크관리</item>
+    </array>
+    <array name="config_diskManage_DiskStatusSelector">
+        <item>None</item>
+        <item>Has not format</item>
+        <item>Formatting</item>
+        <item>Unmount</item>
+        <item>Disk full</item>
+        <item>Normal</item>
+        <item>Recording</item>
+        <item>Read|Write error</item>
+    </array>
+    <array name="config_diskManage_StorageConfigMode">
+        <item>Auto</item>
+        <item>Custom</item>
+    </array>
+    <array name="config_diskManage_overWrite_OmSelector">
+        <item>by capacity</item>
+        <item>by days</item>
+        <item>Never</item>
+    </array>
+    <array name="config_netWork_ModelDatas">
+        <item>LAN</item>
+        <item>포트</item>
+        <item>DDNS</item>
+        <item>E-MAIL</item>
+        <item>FTP 업로드</item>
+        <item>UPnP</item>
+    </array>
+    <array name="config_network_email_interval_selector">
+        <item>Immediately</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+    </array>
+    <array name="config_network_email_ssl_selector">
+        <item>None</item>
+        <item>SSL/TLS</item>
+    </array>
+    <array name="config_record_rm_rmSelector">
+        <item>Always</item>
+        <item>Schedule</item>
+    </array>
+    <array name="config_record_schedule_rtSelector">
+        <item>Normal</item>
+        <item>Alarm</item>
+    </array>
+    <array name="config_systemInfo_InfoDatas">
+        <item>장치이름</item>
+        <item>장치 ID</item>
+        <item>시리얼 NO.</item>
+        <item>펌웨어 버전</item>
+        <item>MAC</item>
+    </array>
+    <array name="config_systemSet_reset_ResetSelector">
+        <item>System</item>
+        <item>Display</item>
+        <item>Maintenance</item>
+        <item>Alarm</item>
+        <item>COMM</item>
+        <item>Data/Time</item>
+        <item>Record</item>
+        <item>UserSet</item>
+        <item>Network</item>
+        <item>Remote device</item>
+    </array>
+    <array name="config_systemSet_videoFormat_VfSelector">
+        <item>PAL</item>
+        <item>NTSC</item>
+    </array>
+</resources>

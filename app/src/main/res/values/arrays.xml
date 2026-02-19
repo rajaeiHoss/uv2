@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="AlarmOutputDurationSelector">
+        <item>5s</item>
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="BrmSelector">
+        <item>CBR</item>
+        <item>VBR</item>
+    </array>
+    <array name="BuzzerSelector">
+        <item>None</item>
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="ColorSpinner">
+        <item>24-Hour</item>
+        <item>12-Hour</item>
+    </array>
+    <array name="DateFormat">
+        <item>MM/DD/YYYY</item>
+        <item>YYYY-MM-DD</item>
+        <item>DD/MM/YYYY</item>
+    </array>
+    <array name="DaySelector">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </array>
+    <array name="DelayRecordSelector">
+        <item>10s</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+        <item>15min</item>
+        <item>30min</item>
+    </array>
+    <array name="ModeSelector">
+        <item>Week</item>
+        <item>Date</item>
+    </array>
+    <array name="MonthSelector">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+    <array name="NtpServer">
+        <item>time.windows.com</item>
+        <item>time.nist.gov</item>
+        <item>time-nw.nist.gov</item>
+        <item>time-a.nist.gov</item>
+        <item>time-b.nist.gov</item>
+    </array>
+    <array name="NtpServerName">
+        <item>pool.ntp.org</item>
+        <item>time.windows.com</item>
+        <item>time.nist.gov</item>
+        <item>time-nw.nist.gov</item>
+        <item>time-a.nist.gov</item>
+        <item>time-b.nist.gov</item>
+    </array>
+    <array name="OffsetSelector">
+        <item>One hour</item>
+        <item>Two hours</item>
+    </array>
+    <array name="PlanSelector">
+        <item>First</item>
+        <item>Second</item>
+        <item>Third</item>
+        <item>Fourth</item>
+        <item>Fifth</item>
+        <item>Sixth</item>
+        <item>Seventh</item>
+        <item>Eighth</item>
+    </array>
+    <array name="PreRecordSelector">
+        <item>None</item>
+        <item>5s</item>
+        <item>10s</item>
+    </array>
+    <array name="QltSelector">
+        <item>best</item>
+        <item>better</item>
+        <item>good</item>
+        <item>medium</item>
+    </array>
+    <array name="RecordTypeSelector">
+        <item>Normal</item>
+        <item>Alarm</item>
+    </array>
+    <array name="RstSelector">
+        <item>CIF</item>
+        <item>HD1</item>
+        <item>D1</item>
+        <item>QCIF</item>
+        <item>QVGA</item>
+        <item>VGA</item>
+        <item>720P</item>
+        <item>1080P</item>
+        <item>3MP(2048*1536)</item>
+        <item>5MP(2592*1920)</item>
+        <item>WQCIF</item>
+        <item>WCIF</item>
+        <item>WHD1</item>
+        <item>WD1</item>
+        <item>960P</item>
+        <item>540P</item>
+        <item>4MP(2592*1520)</item>
+        <item>3MP(2304*1296)</item>
+        <item>2K(2560*1440)</item>
+        <item>1080N</item>
+        <item>5MP(3072*1728)</item>
+        <item>8MP(3840*2160)</item>
+        <item>5MP(2560*1920)</item>
+    </array>
+    <array name="SensitivitySelector">
+        <item>1(Highest)</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8(Lowest)</item>
+    </array>
+    <array name="ServerSelectorCode">
+        <item>56</item>
+        <item>24</item>
+        <item>16</item>
+        <item>@null</item>
+        <item>1</item>
+        <item>4</item>
+        <item>13</item>
+        <item>15</item>
+    </array>
+    <array name="SmartStreamType">
+        <item>Auto</item>
+        <item>Main Stream</item>
+        <item>Sub Stream</item>
+        <item>Mob Stream</item>
+    </array>
+    <array name="StreamListForThree">
+        <item>Main Stream</item>
+        <item>Sub Stream</item>
+        <item>Mob Stream</item>
+    </array>
+    <array name="StreamListForTwo">
+        <item>Main Stream</item>
+        <item>Sub Stream</item>
+    </array>
+    <array name="TimeFormat">
+        <item>24-Hour</item>
+        <item>12-Hour</item>
+    </array>
+    <array name="TimeZoneCase">
+        <item>-720A</item>
+        <item>-660A</item>
+        <item>-660B</item>
+        <item>-600A</item>
+        <item>-540A</item>
+        <item>-480A</item>
+        <item>-480B</item>
+        <item>-420A</item>
+        <item>-420B</item>
+        <item>-420C</item>
+        <item>-360A</item>
+        <item>-360B</item>
+        <item>-360C</item>
+        <item>-360D</item>
+        <item>-300A</item>
+        <item>-300B</item>
+        <item>-300C</item>
+        <item>-270A</item>
+        <item>-240A</item>
+        <item>-240B</item>
+        <item>-240C</item>
+        <item>-240D</item>
+        <item>-240E</item>
+        <item>-210A</item>
+        <item>-180A</item>
+        <item>-180B</item>
+        <item>-180C</item>
+        <item>-180D</item>
+        <item>-180E</item>
+        <item>-120A</item>
+        <item>-120B</item>
+        <item>-60A</item>
+        <item>-60B</item>
+        <item>0A</item>
+        <item>0B</item>
+        <item>0C</item>
+        <item>0D</item>
+        <item>60A</item>
+        <item>60B</item>
+        <item>60C</item>
+        <item>60D</item>
+        <item>60E</item>
+        <item>60F</item>
+        <item>120A</item>
+        <item>120B</item>
+        <item>120C</item>
+        <item>120D</item>
+        <item>120E</item>
+        <item>120F</item>
+        <item>120G</item>
+        <item>120H</item>
+        <item>120I</item>
+        <item>180A</item>
+        <item>180B</item>
+        <item>180C</item>
+        <item>180D</item>
+        <item>210A</item>
+        <item>240A</item>
+        <item>240B</item>
+        <item>240C</item>
+        <item>240D</item>
+        <item>240E</item>
+        <item>270A</item>
+        <item>300A</item>
+        <item>300B</item>
+        <item>300C</item>
+        <item>330A</item>
+        <item>330B</item>
+        <item>345A</item>
+        <item>360A</item>
+        <item>360B</item>
+        <item>390A</item>
+        <item>420A</item>
+        <item>420B</item>
+        <item>480A</item>
+        <item>480B</item>
+        <item>480C</item>
+        <item>480D</item>
+        <item>480E</item>
+        <item>480F</item>
+        <item>540A</item>
+        <item>540B</item>
+        <item>540C</item>
+        <item>570A</item>
+        <item>570B</item>
+        <item>600A</item>
+        <item>600B</item>
+        <item>600C</item>
+        <item>600D</item>
+        <item>600E</item>
+        <item>660A</item>
+        <item>720A</item>
+        <item>720B</item>
+        <item>720C</item>
+        <item>780A</item>
+    </array>
+    <array name="TimeZoneLongName">
+        <item>(UTC-12:00)International Date Line West</item>
+        <item>(UTC-11:00)Samoa</item>
+        <item>(UTC-11:00)Coordination of the world when -11</item>
+        <item>(UTC-10:00)Hawaii</item>
+        <item>(UTC-09:00)Alaska</item>
+        <item>(UTC-08:00)Pacific Time(U.S. and Canada)</item>
+        <item>(UTC-08:00)Under Jiafu Li Asia</item>
+        <item>(UTC-07:00)Chihuahua, La Paz, Mazatlan</item>
+        <item>(UTC-07:00)Mountain Time(U.S. and Canada)</item>
+        <item>(UTC-07:00)Arizona</item>
+        <item>(UTC-06:00)Guadalajiara, Mexico City, Monterrey</item>
+        <item>(UTC-06:00)Saskatchewan</item>
+        <item>(UTC-06:00)Central Time(U.S. and Canada)</item>
+        <item>(UTC-06:00)Central America</item>
+        <item>(UTC-05:00)Bogota, Lima, Quito</item>
+        <item>(UTC-05:00)Eastern Time(U.S. and Canada)</item>
+        <item>(UTC-05:00)Indiana(East)</item>
+        <item>(UTC-04:30)Caracas</item>
+        <item>(UTC-04:00)Atlantic Time(Canada)</item>
+        <item>(UTC-04:00)Cuiaba</item>
+        <item>(UTC-04:00)Georgetown, La Paz, Manaus, San Juan</item>
+        <item>(UTC-04:00)Santiago</item>
+        <item>(UTC-04:00)Asuncion</item>
+        <item>(UTC-03:30)Newfoundland</item>
+        <item>(UTC-03:00)Brasilia</item>
+        <item>(UTC-03:00)Buenos Aires</item>
+        <item>(UTC-03:00)Greenland</item>
+        <item>(UTC-03:00)Cayenne, Fortaleza</item>
+        <item>(UTC-03:00)Montevideo</item>
+        <item>(UTC-02:00)Coordination time -02</item>
+        <item>(UTC-02:00)Mid-Atlantic</item>
+        <item>(UTC-01:00)Cape Verde Islands</item>
+        <item>(UTC-01:00)Azores</item>
+        <item>(UTC)Dublin, Edinburgh, Lisbon, London</item>
+        <item>(UTC)Casablanca</item>
+        <item>(UTC)Monrovia, Reykjavik</item>
+        <item>(UTC)Coordinated Universal Time</item>
+        <item>(UTC+01:00)Amsterdam, Berlin, Bemier, Rome, Stockholm, Vienna</item>
+        <item>(UTC+01:00)Belgrade, Bratislava, Budapest, Ljubljana</item>
+        <item>(UTC+01:00)Brussels, Copenhagen, Madrid, Paris</item>
+        <item>(UTC+01:00)Sarajevo, Skopje, Warsaw, Zagreb</item>
+        <item>(UTC+01:00)Central Africa west</item>
+        <item>(UTC+01:00)Windhoek</item>
+        <item>(UTC+02:00)Amman</item>
+        <item>(UTC+02:00)Beirut</item>
+        <item>(UTC+02:00)Damascus</item>
+        <item>(UTC+02:00)Harare, Pretoria</item>
+        <item>(UTC+02:00)Helsinki, Kiev, Riga, Sofia, Tallinn, Vilnius</item>
+        <item>(UTC+02:00)Cairo</item>
+        <item>(UTC+02:00)Minsk</item>
+        <item>(UTC+02:00)Athens, Bucharest, Istanbul</item>
+        <item>(UTC+02:00)Jerusalem</item>
+        <item>(UTC+03:00)Baghdad</item>
+        <item>(UTC+03:00)Kuwait, Riyadh</item>
+        <item>(UTC+03:00)Moscow, St.Petersburg, Volgograd</item>
+        <item>(UTC+03:00)Nairobi</item>
+        <item>(UTC+03:30)Tehran</item>
+        <item>(UTC+04:00)Abu Dhabi, Muscat</item>
+        <item>(UTC+04:00)Yerevan</item>
+        <item>(UTC+04:00)Baku</item>
+        <item>(UTC+04:00)Tbilisi</item>
+        <item>(UTC+04:00)Port Louis</item>
+        <item>(UTC+04:30)Kabul</item>
+        <item>(UTC+05:00)Tashkent</item>
+        <item>(UTC+05:00)Ekaterinburg</item>
+        <item>(UTC+05:00)Islamabad, Karachi</item>
+        <item>(UTC+05:30)Chennai, Kolkata, Mumbai, New Delhi</item>
+        <item>(UTC+05:30)Sri jayawardenepura</item>
+        <item>(UTC+05:45)Kathmandu</item>
+        <item>(UTC+06:00)Astana, Dhaka</item>
+        <item>(UTC+06:00)Novosibirsk</item>
+        <item>(UTC+06:30)Rangoon</item>
+        <item>(UTC+07:00)Krasnoyarsk</item>
+        <item>(UTC+07:00)Bangkok, Hanoi, Jakarta</item>
+        <item>(UTC+08:00)Beijing, Chongqing, Hong Kong, Urumqi</item>
+        <item>(UTC+08:00)Kuala Lumpur, Singapore</item>
+        <item>(UTC+08:00)Perth</item>
+        <item>(UTC+08:00)Taipei</item>
+        <item>(UTC+08:00)Ulan Bator</item>
+        <item>(UTC+08:00)Lrkutsk</item>
+        <item>(UTC+09:00)Osaka, Sapporo, Tokyo</item>
+        <item>(UTC+09:00)Seoul</item>
+        <item>(UTC+09:00)Yakutsk</item>
+        <item>(UTC+09:30)Adelaide Ryder</item>
+        <item>(UTC+09:30)Darwin</item>
+        <item>(UTC+10:00)Brisbane</item>
+        <item>(UTC+10:00)Vladivostok</item>
+        <item>(UTC+10:00)Guam, Port Moresby</item>
+        <item>(UTC+10:00)Hobart</item>
+        <item>(UTC+10:00)Canberra, Melbourne, Sydney</item>
+        <item>(UTC+11:00)Magadan, Solomon Lslands, New Caledonia</item>
+        <item>(UTC+12:00)Auckland, Wellington</item>
+        <item>(UTC+12:00)Fiji</item>
+        <item>(UTC+12:00)Coordination of the world when +12</item>
+        <item>(UTC+13:00)Nukuanuo France</item>
+    </array>
+    <array name="TimeZoneShortName">
+        <item>(UTC-12:00)</item>
+        <item>(UTC-11:00)</item>
+        <item>(UTC-11:00)</item>
+        <item>(UTC-10:00)</item>
+        <item>(UTC-09:00)</item>
+        <item>(UTC-08:00)</item>
+        <item>(UTC-08:00)</item>
+        <item>(UTC-07:00)</item>
+        <item>(UTC-07:00)</item>
+        <item>(UTC-07:00)</item>
+        <item>(UTC-06:00)</item>
+        <item>(UTC-06:00)</item>
+        <item>(UTC-06:00)</item>
+        <item>(UTC-06:00)</item>
+        <item>(UTC-05:00)</item>
+        <item>(UTC-05:00)</item>
+        <item>(UTC-05:00)</item>
+        <item>(UTC-04:30)</item>
+        <item>(UTC-04:00)</item>
+        <item>(UTC-04:00)</item>
+        <item>(UTC-04:00)</item>
+        <item>(UTC-04:00)</item>
+        <item>(UTC-04:00)</item>
+        <item>(UTC-03:30)</item>
+        <item>(UTC-03:00)</item>
+        <item>(UTC-03:00)</item>
+        <item>(UTC-03:00)</item>
+        <item>(UTC-03:00)</item>
+        <item>(UTC-03:00)</item>
+        <item>(UTC-02:00)</item>
+        <item>(UTC-02:00)</item>
+        <item>(UTC-01:00)</item>
+        <item>(UTC-01:00)</item>
+        <item>(UTC+00:00)</item>
+        <item>(UTC+00:00)</item>
+        <item>(UTC+00:00)</item>
+        <item>(UTC+00:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+01:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+02:00)</item>
+        <item>(UTC+03:00)</item>
+        <item>(UTC+03:00)</item>
+        <item>(UTC+03:00)</item>
+        <item>(UTC+03:00)</item>
+        <item>(UTC+03:30)</item>
+        <item>(UTC+04:00)</item>
+        <item>(UTC+04:00)</item>
+        <item>(UTC+04:00)</item>
+        <item>(UTC+04:00)</item>
+        <item>(UTC+04:00)</item>
+        <item>(UTC+04:30)</item>
+        <item>(UTC+05:00)</item>
+        <item>(UTC+05:00)</item>
+        <item>(UTC+05:00)</item>
+        <item>(UTC+05:30)</item>
+        <item>(UTC+05:30)</item>
+        <item>(UTC+05:45)</item>
+        <item>(UTC+06:00)</item>
+        <item>(UTC+06:00)</item>
+        <item>(UTC+06:30)</item>
+        <item>(UTC+07:00)</item>
+        <item>(UTC+07:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+08:00)</item>
+        <item>(UTC+09:00)</item>
+        <item>(UTC+09:00)</item>
+        <item>(UTC+09:00)</item>
+        <item>(UTC+09:30)</item>
+        <item>(UTC+09:30)</item>
+        <item>(UTC+10:00)</item>
+        <item>(UTC+10:00)</item>
+        <item>(UTC+10:00)</item>
+        <item>(UTC+10:00)</item>
+        <item>(UTC+10:00)</item>
+        <item>(UTC+11:00)</item>
+        <item>(UTC+12:00)</item>
+        <item>(UTC+12:00)</item>
+        <item>(UTC+12:00)</item>
+        <item>(UTC+13:00)</item>
+    </array>
+    <array name="WeekSelector">
+        <item>First</item>
+        <item>Second</item>
+        <item>Third</item>
+        <item>Fourth</item>
+        <item>Last</item>
+    </array>
+    <array name="cast_expanded_controller_default_control_buttons">
+        <item>@id/cast_button_type_closed_caption</item>
+        <item>@id/cast_button_type_skip_previous</item>
+        <item>@id/cast_button_type_skip_next</item>
+        <item>@id/cast_button_type_mute_toggle</item>
+    </array>
+    <array name="cast_mini_controller_default_control_buttons">
+        <item>@id/cast_button_type_empty</item>
+        <item>@id/cast_button_type_empty</item>
+        <item>@id/cast_button_type_play_pause_toggle</item>
+    </array>
+    <array name="config_ModelList">
+        <item>Record</item>
+        <item>Video</item>
+        <item>DateTime</item>
+        <item>Change password</item>
+        <item>Motion detection</item>
+        <item>Information</item>
+        <item>Network</item>
+        <item>System settings</item>
+        <item>Disk management</item>
+    </array>
+    <array name="config_cms_ProtocolCase">
+        <item />
+        <item>TTX_Private</item>
+        <item>JT808_2019</item>
+    </array>
+    <array name="config_cms_ProtocolName">
+        <item>None</item>
+        <item>CMSV6</item>
+        <item>JTT808/2019</item>
+    </array>
+    <array name="config_cms_VisitTypeCase">
+        <item>IP</item>
+        <item>Domain</item>
+    </array>
+    <array name="config_cms_VisitTypeName">
+        <item>IP</item>
+        <item>Domain</item>
+    </array>
+    <array name="config_diskManage_DiskStatusSelector">
+        <item>None</item>
+        <item>Has not format</item>
+        <item>Formatting</item>
+        <item>Unmount</item>
+        <item>Disk full</item>
+        <item>Normal</item>
+        <item>Recording</item>
+        <item>Read|Write error</item>
+    </array>
+    <array name="config_diskManage_StorageConfigMode">
+        <item>Auto</item>
+        <item>Custom</item>
+    </array>
+    <array name="config_diskManage_overWrite_OmSelector">
+        <item>by capacity</item>
+        <item>by days</item>
+        <item>Never</item>
+    </array>
+    <array name="config_netWork_ModelDatas">
+        <item>LAN</item>
+        <item>Port</item>
+        <item>DDNS</item>
+        <item>E-MAIL</item>
+        <item>FTP upload</item>
+        <item>UPnP</item>
+    </array>
+    <array name="config_network_email_interval_selector">
+        <item>Immediately</item>
+        <item>30s</item>
+        <item>1min</item>
+        <item>3min</item>
+        <item>5min</item>
+        <item>10min</item>
+    </array>
+    <array name="config_network_email_ssl_selector">
+        <item>None</item>
+        <item>SSL/TLS</item>
+    </array>
+    <array name="config_record_rm_rmSelector">
+        <item>Always</item>
+        <item>Schedule</item>
+    </array>
+    <array name="config_record_schedule_rtSelector">
+        <item>Normal</item>
+        <item>Alarm</item>
+    </array>
+    <array name="config_sys_time_DateFormat">
+        <item>YYYY/MM/DD</item>
+        <item>DD/MM/YYYY</item>
+        <item>MM/DD/YYYY</item>
+    </array>
+    <array name="config_sys_time_NtpServerName">
+        <item>pool.ntp.org</item>
+        <item>time.windows.com</item>
+    </array>
+    <array name="config_sys_time_TimeFormat">
+        <item>12H</item>
+        <item>24H</item>
+    </array>
+    <array name="config_sys_time_TimeZoneCase">
+        <item>-720</item>
+        <item>-660</item>
+        <item>-600</item>
+        <item>-540</item>
+        <item>-480</item>
+        <item>-420</item>
+        <item>-360</item>
+        <item>-300</item>
+        <item>-240</item>
+        <item>-180</item>
+        <item>-120</item>
+        <item>-60</item>
+        <item>@null</item>
+        <item>60</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>300</item>
+        <item>360</item>
+        <item>420</item>
+        <item>480</item>
+        <item>540</item>
+        <item>600</item>
+        <item>660</item>
+        <item>720</item>
+    </array>
+    <array name="config_sys_time_TimeZoneLongName">
+        <item>(GMT-12:00)International Date Line West</item>
+        <item>(GMT-11:00)Samoa</item>
+        <item>(GMT-10:00)Hawaii</item>
+        <item>(GMT-09:00)Alaska</item>
+        <item>(GMT-08:00)Pacific Time(U.S. and Canada)</item>
+        <item>(GMT-07:00)Chihuahua, La Paz, Mazatlan</item>
+        <item>(GMT-06:00)Guadalajiara, Mexico City, Monterrey</item>
+        <item>(GMT-05:00)Bogota, Lima, Quito</item>
+        <item>(GMT-04:00)Atlantic Time(Canada)</item>
+        <item>(GMT-03:00)Brasilia</item>
+        <item>(GMT-02:00)Coordination time -02</item>
+        <item>(GMT-01:00)Cape Verde Islands</item>
+        <item>(GMT=00:00)Dublin, Edinburgh, Lisbon, London</item>
+        <item>(GMT+01:00)Amsterdam, Berlin, Bemier, Rome, Stockholm, Vienna</item>
+        <item>(GMT+02:00)Amman</item>
+        <item>(GMT+03:00)Baghdad</item>
+        <item>(GMT+04:00)Abu Dhabi, Muscat</item>
+        <item>(GMT+05:00)Tashkent</item>
+        <item>(GMT+06:00)Astana, Dhaka</item>
+        <item>(GMT+07:00)Krasnoyarsk</item>
+        <item>(GMT+08:00)Beijing, Chongqing, Hong Kong, Urumqi</item>
+        <item>(GMT+09:00)Osaka, Sapporo, Tokyo</item>
+        <item>(GMT+10:00)Brisbane</item>
+        <item>(GMT+11:00)Magadan, Solomon Lslands, New Caledonia</item>
+        <item>(GMT+12:00)Auckland, Wellington</item>
+    </array>
+    <array name="config_sys_time_TimeZoneShortName">
+        <item>(GMT-12:00)West 12</item>
+        <item>(GMT-11:00)West 11</item>
+        <item>(GMT-10:00)West 10</item>
+        <item>(GMT-09:00)West 9</item>
+        <item>(GMT-08:00)West 8</item>
+        <item>(GMT-07:00)West 7</item>
+        <item>(GMT-06:00)West 6</item>
+        <item>(GMT-05:00)West 5</item>
+        <item>(GMT-04:00)West 4</item>
+        <item>(GMT-03:00)West 3</item>
+        <item>(GMT-02:00)West 2</item>
+        <item>(GMT-01:00)West 1</item>
+        <item>(GMT=00:00)GMT</item>
+        <item>(GMT+01:00)East 1</item>
+        <item>(GMT+02:00)East 2</item>
+        <item>(GMT+03:00)East 3</item>
+        <item>(GMT+04:00)East 4</item>
+        <item>(GMT+05:00)East 5</item>
+        <item>(GMT+06:00)East 6</item>
+        <item>(GMT+07:00)East 7</item>
+        <item>(GMT+08:00)East 8</item>
+        <item>(GMT+09:00)East 9</item>
+        <item>(GMT+10:00)East 10</item>
+        <item>(GMT+11:00)East 11</item>
+        <item>(GMT+12:00)East 12</item>
+    </array>
+    <array name="config_sys_time_ZoneOffsetCase">
+        <item>@null</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+    </array>
+    <array name="config_sys_time_ZoneOffsetName">
+        <item>+0</item>
+        <item>+15</item>
+        <item>+30</item>
+        <item>+45</item>
+    </array>
+    <array name="config_systemInfo_InfoDatas">
+        <item>Device name</item>
+        <item>Device ID</item>
+        <item>Serial NO.</item>
+        <item>Firmware version</item>
+        <item>MAC</item>
+    </array>
+    <array name="config_systemSet_reset_ResetSelector">
+        <item>System</item>
+        <item>Display</item>
+        <item>Maintenance</item>
+        <item>Alarm</item>
+        <item>COMM</item>
+        <item>Data/Time</item>
+        <item>Record</item>
+        <item>UserSet</item>
+        <item>Network</item>
+        <item>Remote device</item>
+    </array>
+    <array name="config_systemSet_videoFormat_VfSelector">
+        <item>PAL</item>
+        <item>NTSC</item>
+    </array>
+    <array name="config_xgNet_AuthTypeCase">
+        <item>None</item>
+        <item>CHAP</item>
+        <item>PAP</item>
+    </array>
+    <array name="config_xgNet_AuthTypeName">
+        <item>None</item>
+        <item>CHAP</item>
+        <item>PAP</item>
+    </array>
+    <array name="config_xgNet_ModeCase">
+        <item>Hybrid</item>
+        <item>2G</item>
+        <item>3G_WCDMA</item>
+        <item>3G_EVDO</item>
+        <item>3G_TD_SCDMA</item>
+        <item>4G_LTE</item>
+    </array>
+    <array name="config_xgNet_ModeName">
+        <item>Hybrid</item>
+        <item>2G</item>
+        <item>3G_WCDMA</item>
+        <item>3G_EVDO</item>
+        <item>3G_TD_SCDMA</item>
+        <item>4G_LTE</item>
+    </array>
+    <array name="play_search_disk_type_case">
+        <item>@null</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </array>
+    <array name="play_search_disk_type_name">
+        <item>All</item>
+        <item>Hdd0</item>
+        <item>Hdd1</item>
+        <item>Sd0</item>
+        <item>Sd1</item>
+        <item>Usb0</item>
+        <item>Usb1</item>
+    </array>
+    <array name="play_search_record_type_case">
+        <item>@null</item>
+        <item>1</item>
+        <item>2</item>
+    </array>
+    <array name="play_search_record_type_name">
+        <item>All</item>
+        <item>Normal</item>
+        <item>Alarm</item>
+    </array>
+</resources>

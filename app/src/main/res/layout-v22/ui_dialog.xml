@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:layout_gravity="center" android:layout_width="@dimen/dp_240" android:layout_height="wrap_content" app:cardBackgroundColor="@color/white" app:cardCornerRadius="@dimen/dialog_ui_round_size" app:cardElevation="0px">
+    <LinearLayout android:orientation="vertical" android:id="@+id/ll_ui_container" android:paddingTop="@dimen/dp_20" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.hjq.widget.view.SmartTextView android:textSize="@dimen/sp_16" android:textStyle="bold" android:textColor="#333333" android:layout_gravity="center_horizontal" android:id="@+id/tv_ui_title" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <View android:background="@color/common_line_color" android:layout_width="match_parent" android:layout_height="@dimen/line_size" android:layout_marginTop="@dimen/dp_10"/>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <com.hjq.widget.view.SmartTextView android:textSize="@dimen/sp_14" android:textColor="@color/common_cancel_text_color" android:gravity="center" android:id="@+id/tv_ui_cancel" android:background="@drawable/transparent_selector" android:paddingTop="@dimen/dp_15" android:paddingBottom="@dimen/dp_15" android:focusable="true" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/common_cancel" android:layout_weight="1" android:paddingVertical="@dimen/dp_15"/>
+            <View android:id="@+id/v_ui_line" android:background="@color/common_line_color" android:layout_width="@dimen/line_size" android:layout_height="match_parent"/>
+            <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/sp_14" android:textColor="@color/common_confirm_text_color" android:gravity="center" android:id="@+id/tv_ui_confirm" android:background="@drawable/transparent_selector" android:paddingTop="@dimen/dp_15" android:paddingBottom="@dimen/dp_15" android:focusable="true" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/common_confirm" android:layout_weight="1" android:paddingVertical="@dimen/dp_15"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

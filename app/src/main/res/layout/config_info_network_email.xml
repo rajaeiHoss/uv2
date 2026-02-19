@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <ScrollView android:id="@+id/network_email_sv_content" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="10dp" android:layout_marginRight="10dp">
+            <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_network_email_Email" style="@style/TvParentLeft"/>
+                    <Button android:id="@+id/network_email_btn_email" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_network_email_Sstg" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/network_email_tv_sstg" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_MailServer" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_smtp" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_port_Title" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_port" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_network_email_Safelink" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/network_email_tv_safelink" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_Username" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_username" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_Password" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_pwd" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" android:inputType="textPassword" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_Recipient" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_recipient" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_Copysend" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_copysend1" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_Copysend" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_copysend2" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_Copysend" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_copysend3" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_network_email_Copysend" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/network_email_et_copysend4" android:text="" android:maxLength="40" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <Button android:id="@+id/network_email_btn_save" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+</LinearLayout>

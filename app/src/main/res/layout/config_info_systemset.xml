@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/systemset_sv_content" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout_alignParentTop="true">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+            <RelativeLayout android:id="@+id/systemset_rl_videoformat" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_systemSet_VideoFormat" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/systemset_tv_videoformat" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/systemset_rl_reset" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_systemSet_Reset" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/systemset_tv_reset" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/systemset_btn_reboot" android:text="@string/config_systemSet_Reboot" android:layout_below="@+id/systemset_sv_content" style="@style/ButtonParent"/>
+</RelativeLayout>

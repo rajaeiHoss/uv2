@@ -1,0 +1,230 @@
+package org.jivesoftware.smackx;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.jivesoftware.smack.Connection;
+import org.jivesoftware.smack.PacketCollector;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.SmackConfiguration;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.PacketIDFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Registration;
+import org.jivesoftware.smack.util.StringUtils;
+import org.jivesoftware.smackx.packet.DiscoverInfo;
+
+public class Gateway {
+    /* access modifiers changed from: private */
+    public Connection connection;
+    /* access modifiers changed from: private */
+    public String entityJID;
+    private DiscoverInfo.Identity identity;
+    private DiscoverInfo info;
+    private Registration registerInfo;
+    /* access modifiers changed from: private */
+    public Roster roster;
+    private ServiceDiscoveryManager sdManager;
+
+    Gateway(Connection connection2, String str) {
+        this.connection = connection2;
+        this.roster = connection2.getRoster();
+        this.sdManager = ServiceDiscoveryManager.getInstanceFor(connection2);
+        this.entityJID = str;
+    }
+
+    Gateway(Connection connection2, String str, DiscoverInfo discoverInfo, DiscoverInfo.Identity identity2) {
+        this(connection2, str);
+        this.info = discoverInfo;
+        this.identity = identity2;
+    }
+
+    private void discoverInfo() throws XMPPException {
+        DiscoverInfo discoverInfo = this.sdManager.discoverInfo(this.entityJID);
+        this.info = discoverInfo;
+        Iterator<DiscoverInfo.Identity> identities = discoverInfo.getIdentities();
+        while (identities.hasNext()) {
+            DiscoverInfo.Identity next = identities.next();
+            if (next.getCategory().equalsIgnoreCase("gateway")) {
+                this.identity = next;
+                return;
+            }
+        }
+    }
+
+    private DiscoverInfo.Identity getIdentity() throws XMPPException {
+        if (this.identity == null) {
+            discoverInfo();
+        }
+        return this.identity;
+    }
+
+    private Registration getRegisterInfo() {
+        if (this.registerInfo == null) {
+            refreshRegisterInfo();
+        }
+        return this.registerInfo;
+    }
+
+    private void refreshRegisterInfo() {
+        Registration registration = new Registration();
+        registration.setFrom(this.connection.getUser());
+        registration.setType(IQ.Type.GET);
+        registration.setTo(this.entityJID);
+        PacketCollector createPacketCollector = this.connection.createPacketCollector(new PacketIDFilter(registration.getPacketID()));
+        this.connection.sendPacket(registration);
+        Packet nextResult = createPacketCollector.nextResult((long) SmackConfiguration.getPacketReplyTimeout());
+        createPacketCollector.cancel();
+        if ((nextResult instanceof Registration) && nextResult.getError() == null) {
+            this.registerInfo = (Registration) nextResult;
+        }
+    }
+
+    public boolean canRegister() throws XMPPException {
+        if (this.info == null) {
+            discoverInfo();
+        }
+        return this.info.containsFeature("jabber:iq:register");
+    }
+
+    public List<String> getRequiredFields() {
+        return getRegisterInfo().getRequiredFields();
+    }
+
+    public String getName() throws XMPPException {
+        if (this.identity == null) {
+            discoverInfo();
+        }
+        return this.identity.getName();
+    }
+
+    public String getType() throws XMPPException {
+        if (this.identity == null) {
+            discoverInfo();
+        }
+        return this.identity.getType();
+    }
+
+    public boolean isRegistered() throws XMPPException {
+        return getRegisterInfo().isRegistered();
+    }
+
+    public String getField(String str) {
+        return getRegisterInfo().getField(str);
+    }
+
+    public List<String> getFieldNames() {
+        return getRegisterInfo().getFieldNames();
+    }
+
+    public String getUsername() {
+        return getField("username");
+    }
+
+    public String getPassword() {
+        return getField("password");
+    }
+
+    public String getInstructions() {
+        return getRegisterInfo().getInstructions();
+    }
+
+    public void register(String str, String str2, Map<String, String> map) throws XMPPException {
+        if (!getRegisterInfo().isRegistered()) {
+            Registration registration = new Registration();
+            registration.setFrom(this.connection.getUser());
+            registration.setTo(this.entityJID);
+            registration.setType(IQ.Type.SET);
+            registration.setUsername(str);
+            registration.setPassword(str2);
+            for (String next : map.keySet()) {
+                registration.addAttribute(next, map.get(next));
+            }
+            PacketCollector createPacketCollector = this.connection.createPacketCollector(new PacketIDFilter(registration.getPacketID()));
+            this.connection.sendPacket(registration);
+            Packet nextResult = createPacketCollector.nextResult((long) SmackConfiguration.getPacketReplyTimeout());
+            createPacketCollector.cancel();
+            if (nextResult == null || !(nextResult instanceof IQ)) {
+                throw new XMPPException("Packet reply timeout");
+            }
+            IQ iq = (IQ) nextResult;
+            if (iq.getError() != null) {
+                throw new XMPPException(iq.getError());
+            } else if (iq.getType() != IQ.Type.ERROR) {
+                this.connection.addPacketListener(new GatewayPresenceListener(), new PacketTypeFilter(Presence.class));
+                this.roster.createEntry(this.entityJID, getIdentity().getName(), new String[0]);
+            } else {
+                throw new XMPPException(iq.getError());
+            }
+        } else {
+            throw new IllegalStateException("You are already registered with this gateway");
+        }
+    }
+
+    public void register(String str, String str2) throws XMPPException {
+        register(str, str2, new HashMap());
+    }
+
+    public void unregister() throws XMPPException {
+        Registration registration = new Registration();
+        registration.setFrom(this.connection.getUser());
+        registration.setTo(this.entityJID);
+        registration.setType(IQ.Type.SET);
+        registration.setRemove(true);
+        PacketCollector createPacketCollector = this.connection.createPacketCollector(new PacketIDFilter(registration.getPacketID()));
+        this.connection.sendPacket(registration);
+        Packet nextResult = createPacketCollector.nextResult((long) SmackConfiguration.getPacketReplyTimeout());
+        createPacketCollector.cancel();
+        if (nextResult == null || !(nextResult instanceof IQ)) {
+            throw new XMPPException("Packet reply timeout");
+        }
+        IQ iq = (IQ) nextResult;
+        if (iq.getError() != null) {
+            throw new XMPPException(iq.getError());
+        } else if (iq.getType() != IQ.Type.ERROR) {
+            this.roster.removeEntry(this.roster.getEntry(this.entityJID));
+        } else {
+            throw new XMPPException(iq.getError());
+        }
+    }
+
+    public void login() {
+        login(new Presence(Presence.Type.available));
+    }
+
+    public void login(Presence presence) {
+        presence.setType(Presence.Type.available);
+        presence.setTo(this.entityJID);
+        presence.setFrom(this.connection.getUser());
+        this.connection.sendPacket(presence);
+    }
+
+    public void logout() {
+        Presence presence = new Presence(Presence.Type.unavailable);
+        presence.setTo(this.entityJID);
+        presence.setFrom(this.connection.getUser());
+        this.connection.sendPacket(presence);
+    }
+
+    private class GatewayPresenceListener implements PacketListener {
+        private GatewayPresenceListener() {
+        }
+
+        public void processPacket(Packet packet) {
+            if (packet instanceof Presence) {
+                Presence presence = (Presence) packet;
+                if (Gateway.this.entityJID.equals(presence.getFrom()) && Gateway.this.roster.contains(presence.getFrom()) && presence.getType().equals(Presence.Type.subscribe)) {
+                    Presence presence2 = new Presence(Presence.Type.subscribed);
+                    presence2.setTo(presence.getFrom());
+                    presence2.setFrom(StringUtils.parseBareAddress(Gateway.this.connection.getUser()));
+                    Gateway.this.connection.sendPacket(presence2);
+                }
+            }
+        }
+    }
+}

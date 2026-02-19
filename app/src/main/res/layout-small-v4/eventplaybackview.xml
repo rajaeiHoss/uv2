@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:id="@+id/remoteplay_mainwnd" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/eventplayback_title" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:layout_gravity="left|center_vertical|center_horizontal|center" android:id="@+id/eventplayback_title_button_cancel" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cancel"/>
+        <TextView android:textSize="16sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/eventplayback_title_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/eventplayback"/>
+    </FrameLayout>
+    <com.streamax.client.VideoGroup android:gravity="center" android:layout_gravity="center" android:id="@+id/eventplayback_videogroup" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_weight="1">
+        <ProgressBar android:layout_gravity="center" android:id="@+id/eventplayback_busyprogress" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_centerVertical="true" style="?android:attr/progressBarStyleLarge"/>
+    </com.streamax.client.VideoGroup>
+    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/eventplayback_progress" android:layout_width="match_parent" android:layout_height="100px">
+        <TextView android:textSize="24px" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center_vertical" android:id="@+id/eventplayback_starttime_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/inittime"/>
+        <SeekBar android:layout_gravity="center" android:id="@+id/eventplayback_progressbar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:max="100" android:progress="0" android:secondaryProgress="0" android:layout_weight="0.75" style="?android:attr/progressBarStyleHorizontal"/>
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <TextView android:textSize="24px" android:textColor="#ffffff" android:layout_gravity="center_vertical" android:id="@+id/eventplayback_progress_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/inittime" android:layout_weight="0.25"/>
+            <TextView android:textSize="24px" android:textColor="#ffffff" android:gravity="center" android:id="@+id/eventplayback_playrate_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/initrate" android:layout_weight="0.25"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/eventplayback_controlbar" android:background="@drawable/sliderback" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_stop" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/stop" android:layout_weight="1" android:contentDescription="@string/stop"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_slow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/slow" android:layout_weight="1" android:contentDescription="@string/slow"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_play" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/play" android:layout_weight="1" android:contentDescription="@string/play"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_fast" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/fast" android:layout_weight="1" android:contentDescription="@string/fast"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_capture" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/capture" android:layout_weight="1" android:contentDescription="@string/capture"/>
+        <ImageView android:layout_gravity="center" android:id="@+id/eventplayback_controlbar_sound" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/soundclose" android:layout_weight="1" android:contentDescription="@string/sound"/>
+    </LinearLayout>
+</LinearLayout>

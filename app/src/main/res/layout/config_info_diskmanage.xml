@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:orientation="vertical" android:id="@+id/disk_ll_content" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/disk_rl_storageConfigMode" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_StorageConfig" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/disk_tv_storageConfigMode" android:layout_marginRight="5dp" android:text="" android:layout_alignParentRight="true" style="@style/TvParentRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:layout_height="wrap_content" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/disk_rl_dev_serial" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_ID" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/disk_tv_id" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_SdcardStatus" style="@style/TvParentLeft"/>
+                <TextView android:textSize="16sp" android:textColor="#88000000" android:gravity="center_vertical" android:id="@+id/disk_tv_status" android:padding="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="" android:singleLine="true" android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_CapacityTotalFree" style="@style/TvParentLeft"/>
+                <TextView android:textSize="16sp" android:textColor="#88000000" android:gravity="center_vertical" android:id="@+id/disk_tv_capacity" android:padding="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:text="" android:singleLine="true" android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:id="@+id/disk_ll_maybeHide" android:layout_height="wrap_content" android:layout_marginTop="15dp" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/disk_rl_overwrite" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_OverWrite" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/disk_tv_method" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View android:id="@+id/disk_view_days" android:visibility="gone" style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/disk_rl_days" android:visibility="gone" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_MaxDays" style="@style/TvParentLeft"/>
+                <TextView android:textSize="16sp" android:textColor="#88000000" android:gravity="center_vertical" android:id="@+id/disk_tv_days" android:padding="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:singleLine="true" android:layout_alignParentRight="true" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/disk_rl_disk_format" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_diskManage_DiskFormat" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/disk_tv_diskFormat" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

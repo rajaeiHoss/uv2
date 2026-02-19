@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/network_port_sv_content" android:background="#999999" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_port_MediaPort" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:textColor="#000000" android:id="@+id/network_port_et_mediaport" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_port_WebPort" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:textColor="#000000" android:id="@+id/network_port_et_webport" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_port_RtspPort" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:textColor="#000000" android:id="@+id/network_port_et_rtspport" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+            <View android:visibility="gone" style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="20dp" android:layout_marginRight="15dp">
+                <TextView android:text="@string/config_network_port_HttpsPort" style="@style/NetworkTvLeft"/>
+                <com.streamax.view.VsEditView android:textColor="#000000" android:id="@+id/network_port_et_httpsport" android:text="" android:maxLength="5" android:inputType="number" style="@style/NetworkEtRight"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/network_port_btn_save" android:layout_marginTop="10dp" android:text="@string/config_Save" android:layout_below="@+id/network_port_sv_content" style="@style/ButtonParent"/>
+    <ProgressBar android:id="@+id/network_port_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

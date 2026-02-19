@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/config_sys_time_sv_content" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+                <RelativeLayout android:id="@+id/config_sys_time_rl_dateFormat" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_DateFormat" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_sys_time_tv_dateformat" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_sys_time_rl_timeFormat" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_TimeFormat" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_sys_time_tv_timeFormat" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_sys_time_rl_timeZone" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_TimeZone" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_sys_time_tv_timeZone" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_sys_time_rl_zoneOffset" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_sys_time_ZoneOffset" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_sys_time_tv_zoneOffset" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_sys_time_GpsSync" style="@style/TvParentLeft"/>
+                    <Button android:id="@+id/config_sys_time_btn_gpsStatus" android:background="@drawable/switch_close" android:layout_width="37dp" android:layout_height="20dp" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_AutoUpdate" style="@style/TvParentLeft"/>
+                    <Button android:id="@+id/config_sys_time_btn_ntpStatus" android:background="@drawable/switch_close" android:layout_width="37dp" android:layout_height="20dp" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_sys_time_rl_ntpServer" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_TimeServer" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_sys_time_tv_ntp_server" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <TextView android:id="@+id/config_sys_time_tv_ntp_server_name" android:text="" style="@style/DateTimeTv"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/config_sys_time_btn_save" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+</RelativeLayout>

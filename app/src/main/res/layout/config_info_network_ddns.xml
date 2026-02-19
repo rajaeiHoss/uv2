@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <Button android:id="@+id/network_ddns_btn_save" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    <ProgressBar android:id="@+id/network_ddns_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+    <ScrollView android:id="@+id/network_ddns_sv_content" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout_alignParentTop="true">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_network_ddns_DDNS" style="@style/TvParentLeft"/>
+                <Button android:id="@+id/network_ddns_btn_ddns" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/network_ddns_server_rl_server" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_network_ddns_Server" style="@style/TvParentLeft"/>
+                <com.streamax.view.VsTextView android:id="@+id/network_ddns_server_tv_server" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="vertical" android:id="@+id/network_ddns_info1_ll" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <RelativeLayout android:id="@+id/network_ddns_info1_rl_default" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_network_ddns_Default" style="@style/TvParentLeft"/>
+                    <Button android:id="@+id/network_ddns_info1_btn_default" android:background="@drawable/switch_close" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <LinearLayout android:orientation="vertical" android:id="@+id/network_ddns_info1_ll_addrport" android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <View style="@style/ViewLineParent"/>
+                    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                        <TextView android:textSize="16sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_network_ddns_ServerAddress" android:singleLine="true" style="@style/NetworkTvLeft"/>
+                        <com.streamax.view.VsEditView android:textSize="16sp" android:textColor="#999999" android:gravity="center_vertical" android:id="@+id/network_ddns_info1_et_saddr" android:background="@drawable/corners_bg_edittext" android:paddingLeft="5dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:text="" android:singleLine="true"/>
+                    </LinearLayout>
+                    <View style="@style/ViewLineParent"/>
+                    <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                        <TextView android:textSize="16sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_network_ddns_ServerPort" android:singleLine="true" style="@style/NetworkTvLeft"/>
+                        <com.streamax.view.VsEditView android:textSize="16sp" android:textColor="#999999" android:gravity="center_vertical" android:id="@+id/network_ddns_info1_et_sport" android:background="@drawable/corners_bg_edittext" android:paddingLeft="5dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:text="" android:singleLine="true" android:maxLength="5" android:inputType="number"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout android:orientation="vertical" android:id="@+id/network_ddns_info2_ll" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                    <TextView android:textSize="16sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_network_ddns_HostName" android:singleLine="true" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:textSize="16sp" android:textColor="#999999" android:gravity="center_vertical" android:id="@+id/network_ddns_info2_et_hostname" android:background="@drawable/corners_bg_edittext" android:paddingLeft="5dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:text="" android:singleLine="true" android:maxLength="30"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                    <TextView android:textSize="16sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_Username" android:singleLine="true" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:textSize="16sp" android:textColor="#999999" android:gravity="center_vertical" android:id="@+id/network_ddns_info2_et_username" android:background="@drawable/corners_bg_edittext" android:paddingLeft="5dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:text="" android:singleLine="true" android:maxLength="30"/>
+                </LinearLayout>
+                <View style="@style/ViewLineParent"/>
+                <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+                    <TextView android:textSize="16sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_Password" android:singleLine="true" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:textSize="16sp" android:textColor="#999999" android:gravity="center_vertical" android:id="@+id/network_ddns_info2_et_password" android:background="@drawable/corners_bg_edittext" android:paddingLeft="5dp" android:paddingTop="5dp" android:paddingRight="10dp" android:paddingBottom="5dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:layout_marginBottom="5dp" android:text="" android:singleLine="true" android:maxLength="30" android:inputType="textPassword"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

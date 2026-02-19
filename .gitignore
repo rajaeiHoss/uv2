@@ -1,0 +1,36 @@
+# OS / IDE
+.DS_Store
+.idea/
+*.iml
+
+# Local machine / secrets
+local.properties
+
+# Gradle caches & outputs
+.gradle/
+.gradle-user/
+build/
+**/build/
+gradle-dist/
+
+# Local logs and temp artifacts
+logs/
+tmp_*.png
+tmp_*.xml
+uidump.xml
+
+# Large local archives
+gradle-*-bin.zip
+
+# Local offline Maven mirrors (too large for VCS)
+local-maven/
+local-maven-repo/
+local-maven-repo2/
+
+# APK/AAB outputs
+*.apk
+*.aab
+
+# Optional native crash / mapping artifacts
+*.hprof
+decompiled/sources/com/t/

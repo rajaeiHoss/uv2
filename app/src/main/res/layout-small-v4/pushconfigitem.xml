@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:gravity="center_vertical" android:orientation="horizontal" android:background="#ffffffff" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView android:id="@+id/pushconfigdevimg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/dvronline" android:contentDescription="@string/app_name"/>
+    <TextView android:textStyle="bold" android:textColor="#000000" android:id="@+id/pushconfigtv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/app_name" android:layout_weight="1"/>
+    <ToggleButton android:id="@+id/pushitemswitch" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+</LinearLayout>

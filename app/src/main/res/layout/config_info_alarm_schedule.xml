@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+            <RelativeLayout android:id="@+id/config_alarm_schedule_rl_date" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_Date" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_schedule_tv_date" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <LinearLayout android:orientation="vertical" android:id="@+id/config_alarm_schedule_ll_plan" android:layout_width="match_parent" android:layout_height="wrap_content">
+                <com.streamax.view.RlView android:id="@+id/config_alarm_schedule_rl_plan" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Plan" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_alarm_schedule_tv_plan" android:text="" style="@style/TvRecordRight"/>
+                </com.streamax.view.RlView>
+                <View style="@style/ViewLineParent"/>
+                <com.streamax.view.RlView android:id="@+id/config_alarm_schedule_rl_starttime" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_StartTime" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_alarm_schedule_tv_starttime" android:text="" style="@style/TvRecordRight"/>
+                </com.streamax.view.RlView>
+                <View android:id="@+id/config_alarm_view_to_hide" style="@style/ViewLineParent"/>
+                <com.streamax.view.RlView android:id="@+id/config_alarm_schedule_rl_endTime" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_EndTime" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_alarm_schedule_tv_endtime" android:text="" style="@style/TvRecordRight"/>
+                </com.streamax.view.RlView>
+            </LinearLayout>
+        </LinearLayout>
+        <Button android:id="@+id/config_alarm_schedule_btn_delete" android:layout_marginBottom="10dp" android:text="@string/config_Delete" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+        <Button android:id="@+id/config_alarm_schedule_btn_add" android:layout_marginBottom="10dp" android:text="@string/config_Add" android:layout_above="@+id/config_alarm_schedule_btn_delete" style="@style/ButtonParent"/>
+    </RelativeLayout>
+    <ProgressBar android:id="@+id/config_alarm_schedule_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

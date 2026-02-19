@@ -1,0 +1,16 @@
+package com.google.android.gms.internal;
+
+import android.os.IInterface;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
+import com.google.android.gms.common.api.Status;
+
+public interface zzauu extends IInterface {
+    void zza(Status status) throws RemoteException;
+
+    void zza(Status status, ParcelFileDescriptor parcelFileDescriptor) throws RemoteException;
+
+    void zza(Status status, boolean z) throws RemoteException;
+
+    void zza(zzaug zzaug) throws RemoteException;
+}

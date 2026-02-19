@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" app:cardBackgroundColor="@color/black85" app:cardCornerRadius="@dimen/dp_15" app:cardElevation="0px">
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:padding="@dimen/dp_10" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="@dimen/dp_110" android:minHeight="@dimen/dp_110">
+        <com.airbnb.lottie.LottieAnimationView android:layout_width="@dimen/dp_70" android:layout_height="@dimen/dp_70" app:lottie_autoPlay="true" app:lottie_loop="true" app:lottie_rawRes="@raw/progress"/>
+        <com.hjq.widget.view.SmartTextView android:textSize="@dimen/sp_14" android:textColor="@color/white" android:id="@+id/tv_wait_message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/dp_15" android:layout_marginTop="@dimen/dp_5" android:layout_marginRight="@dimen/dp_15" android:text="@string/common_loading" android:maxLines="3" android:layout_marginHorizontal="@dimen/dp_15"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

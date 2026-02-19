@@ -1,0 +1,95 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.zycs.UView"
+        minSdk 21
+        targetSdk 30
+        versionCode 1041
+        versionName "1.0.41"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    namespace "com.zycs.UView"
+
+    androidResources {
+        additionalParameters += ["--stable-ids", "${rootProject.projectDir}/app/stable-ids.txt"]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    // Compile the decompiled sources while reusing the extracted resources.
+    sourceSets {
+        main {
+            manifest.srcFile "${rootProject.projectDir}/app/src/main/AndroidManifest.xml"
+            res.srcDirs = ["${rootProject.projectDir}/app/src/main/res"]
+            assets.srcDirs = ["${rootProject.projectDir}/app/src/main/assets"]
+            jniLibs.srcDirs = ["${rootProject.projectDir}/app/src/main/jniLibs"]
+            java.srcDirs = [
+                "src/main/java",
+                "${rootProject.projectDir}/decompiled/sources"
+            ]
+            java.exclude(
+                "com/zycs/UView/R.java",
+                "com/zycs/UView/BuildConfig.java",
+                "**/*Kt*.java",
+                "kotlin/**",
+                "kotlinx/**",
+                "freemarker/**",
+                "com/google/gson/**",
+                "google/gson/**",
+                "com/google/android/gms/internal/zzfla.java",
+                "com/google/android/gms/internal/zzflb.java",
+                "com/google/android/gms/internal/zzflc.java",
+                "com/google/android/gms/internal/zzflf.java",
+                "com/google/android/gms/internal/zzflg.java",
+                "com/google/android/gms/internal/zzflh.java",
+                "com/google/android/gms/internal/zzfkz.java",
+                "google/android/gms/internal/zzfla.java",
+                "google/android/gms/internal/zzflb.java",
+                "google/android/gms/internal/zzflc.java",
+                "google/android/gms/internal/zzflf.java",
+                "google/android/gms/internal/zzflg.java",
+                "google/android/gms/internal/zzflh.java",
+                "google/android/gms/internal/zzfkz.java"
+            )
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy.force(
+        "org.jetbrains.kotlin:kotlin-stdlib:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22",
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
+    )
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    implementation "com.google.code.gson:gson:2.8.9"
+}

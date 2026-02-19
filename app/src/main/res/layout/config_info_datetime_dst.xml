@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Enable" style="@style/TvParentLeft"/>
+                    <com.streamax.view.IvView android:id="@+id/config_datetime_dst_iv_enable" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_mode" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Mode" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_mode" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_offset" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_dateTime_dst_Offset" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_offset" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+            </LinearLayout>
+            <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:text="@string/config_FROM"/>
+            <LinearLayout android:orientation="vertical" android:id="@+id/config_datetime_dst_ll_startmwdhms" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="5dp" android:layout_marginRight="10dp" android:layout_marginBottom="10dp">
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_startmonth" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Month" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_startmonth" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_startweek" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Week" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_startweek" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_startday" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Day" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_startday" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <TextView android:id="@+id/config_datetime_dst_tv_starttime" style="@style/DateTimeTv"/>
+            </LinearLayout>
+            <LinearLayout android:orientation="vertical" android:id="@+id/config_datetime_dst_ll_startdatetime" android:background="@drawable/corners_bg_parent" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="5dp" android:layout_marginRight="10dp" android:layout_marginBottom="10dp">
+                <com.streamax.view.VsTextView android:id="@+id/config_datetime_dst_tv_startdatetime" style="@style/DateTimeTv"/>
+            </LinearLayout>
+            <TextView android:textSize="18sp" android:textColor="#000000" android:gravity="center_vertical" android:paddingTop="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:text="@string/config_TO"/>
+            <LinearLayout android:orientation="vertical" android:id="@+id/config_datetime_dst_ll_endmwdhms" android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="5dp" android:layout_marginRight="10dp" android:layout_marginBottom="10dp">
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_endmonth" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Month" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_endmonth" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_endweek" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Week" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_endweek" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <RelativeLayout android:id="@+id/config_datetime_dst_rl_endday" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_Day" style="@style/TvParentLeft"/>
+                    <TextView android:id="@+id/config_datetime_dst_tv_endday" android:text="" style="@style/TvRecordRight"/>
+                </RelativeLayout>
+                <View style="@style/ViewLineParent"/>
+                <TextView android:id="@+id/config_datetime_dst_tv_endtime" android:text="" style="@style/DateTimeTv"/>
+            </LinearLayout>
+            <LinearLayout android:orientation="vertical" android:id="@+id/config_datetime_dst_ll_enddatetime" android:background="@drawable/corners_bg_parent" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginTop="5dp" android:layout_marginRight="10dp" android:layout_marginBottom="10dp">
+                <com.streamax.view.VsTextView android:id="@+id/config_datetime_dst_tv_enddatetime" style="@style/DateTimeTv"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <ProgressBar android:id="@+id/config_datetime_dst_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

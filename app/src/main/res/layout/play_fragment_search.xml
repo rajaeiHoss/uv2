@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:id="@+id/play_framelayout" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="5dp">
+        <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="50dp">
+            <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" style="@style/LinearLayoutParent">
+                <RelativeLayout android:id="@+id/play_search_rl_channel" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/channel" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_channel" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/play_search_rl_record_type" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_record_RecordType" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_record_type" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/play_search_rl_disk_type" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/disk_type" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_disk_type" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/play_search_rl_date" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/date" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_date" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/play_search_rl_start_time" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_StartTime" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_start_time" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/play_search_rl_end_time" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_EndTime" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/play_search_tv_end_time" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <ProgressBar android:layout_gravity="center" android:id="@+id/play_search_busy" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/CustomProgressBar"/>
+            </LinearLayout>
+        </ScrollView>
+        <Button android:id="@+id/play_search_button_search" android:text="@string/search" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+    </RelativeLayout>
+</LinearLayout>

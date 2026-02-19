@@ -1,0 +1,39 @@
+package com.kenai.jbosh;
+
+import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+final class RequestIDSequence {
+    private static final int INCREMENT_BITS = 32;
+    private static final Lock LOCK = new ReentrantLock();
+    private static final long MASK = 9007199254740991L;
+    private static final int MAX_BITS = 53;
+    private static final long MAX_INITIAL = 9007194959773696L;
+    private static final long MIN_INCREMENTS = 4294967296L;
+    private static final SecureRandom RAND = new SecureRandom();
+    private AtomicLong nextRequestID;
+
+    RequestIDSequence() {
+        this.nextRequestID = new AtomicLong();
+        this.nextRequestID = new AtomicLong(generateInitialValue());
+    }
+
+    public long getNextRID() {
+        return this.nextRequestID.getAndIncrement();
+    }
+
+    private long generateInitialValue() {
+        long nextLong;
+        LOCK.lock();
+        do {
+            try {
+                nextLong = RAND.nextLong() & MASK;
+            } finally {
+                LOCK.unlock();
+            }
+        } while (nextLong > MAX_INITIAL);
+        return nextLong;
+    }
+}

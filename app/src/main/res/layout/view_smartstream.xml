@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:orientation="vertical" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/smartstream_fl_title" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:layout_gravity="left|center_vertical|center_horizontal|center" android:id="@+id/smartstream_title_btn_back" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/config_back"/>
+        <TextView android:textSize="20sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/smartstream_title_tv_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/system"/>
+    </FrameLayout>
+    <RelativeLayout android:id="@+id/smartstream_rl_switch" android:background="#ffffff" android:padding="10dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp">
+        <TextView android:textSize="16sp" android:textColor="#000000" android:id="@+id/smartstream_tv_switch" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/config_SmartStream" android:layout_centerVertical="true"/>
+        <ImageView android:id="@+id/smartstream_iv_switch" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+    <ListView android:id="@+id/smartstream_lv" android:background="#ffffff" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dp" android:divider="#000000" android:dividerHeight="0.5dp"/>
+</LinearLayout>

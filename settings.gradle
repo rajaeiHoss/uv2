@@ -1,0 +1,6 @@
+rootProject.name = "uview"
+include(":app-clean")
+def includeAppModule = providers.gradleProperty("includeApp").orNull == "true"
+if (includeAppModule) {
+    include(":app")
+}

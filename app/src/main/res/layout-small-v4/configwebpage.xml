@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout android:gravity="center" android:layout_gravity="center" android:orientation="horizontal" android:id="@+id/configwebpage_title_addressinfo" android:background="@drawable/top" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <Button android:textColor="#ffffff" android:layout_gravity="left|center_vertical|center_horizontal|center" android:id="@+id/configwebpage_title_settings" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/configure"/>
+        <TextView android:textSize="16sp" android:textColor="#ffffff" android:gravity="center" android:layout_gravity="center" android:id="@+id/configwebpage_title_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/configure"/>
+        <Button android:textColor="#ffffff" android:layout_gravity="right|center_vertical|center_horizontal|center" android:id="@+id/configwebpage_title_back" android:background="@drawable/topbarbtnbg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/refresh"/>
+    </FrameLayout>
+    <FrameLayout android:background="#3323272c" android:layout_width="match_parent" android:layout_height="match_parent">
+        <WebView android:id="@+id/configwebpage_webview" android:layout_width="match_parent" android:layout_height="match_parent"/>
+        <ProgressBar android:layout_gravity="center" android:id="@+id/configwebpage_busyprogress" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_centerVertical="true" style="?android:attr/progressBarStyleLarge"/>
+    </FrameLayout>
+</LinearLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:aapt="http://schemas.android.com/aapt" android:background="#999999" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:background="@drawable/corners_bg_parent" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_marginLeft="10dp" android:layout_marginTop="10dp" android:layout_marginRight="10dp" android:layout_alignParentTop="true">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="10dp">
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_record_channel" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_Record" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_record_channel" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_snap_channel" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_Snapshot" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_snap_channel" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_SendEmail" style="@style/TvParentLeft"/>
+                <com.streamax.view.IvView android:id="@+id/config_alarm_trigger_iv_email" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_AlarmOutput" style="@style/TvParentLeft"/>
+                <com.streamax.view.IvView android:id="@+id/config_alarm_trigger_iv_alarm_output" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_FTPUpload" style="@style/TvParentLeft"/>
+                <com.streamax.view.IvView android:id="@+id/config_alarm_trigger_iv_ftp_upload" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_Push" style="@style/TvParentLeft"/>
+                <com.streamax.view.IvView android:id="@+id/config_alarm_trigger_iv_msg_push" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="15dp" android:src="@drawable/switch_close" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_alarm_output_duration" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_AlarmOutputDuration" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_alarm_output_duration" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_buzzer" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_Buzzer" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_buzzer" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_fullscreen_channel" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_PopupScreen" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_fullscreen_channel" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_prerecord" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_PreRecord" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_prerecord" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+            <View style="@style/ViewLineParent"/>
+            <RelativeLayout android:id="@+id/config_alarm_trigger_rl_delay_record" style="@style/RelativeLayoutParent">
+                <TextView android:text="@string/config_alarm_trigger_PostRecord" style="@style/TvParentLeft"/>
+                <TextView android:id="@+id/config_alarm_trigger_tv_delay_record" android:text="" style="@style/TvRecordRight"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+    <ProgressBar android:id="@+id/alarm_trigger_pb_load" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true"/>
+</RelativeLayout>

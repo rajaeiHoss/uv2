@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+    <ScrollView android:id="@+id/config_datetime_sv_content" android:background="@color/pickerview_bg_topbar" android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" style="@style/LinearLayoutParent">
+                <RelativeLayout style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_xgNet_Enable" style="@style/TvParentLeft"/>
+                    <Button android:id="@+id/config_xgNet_btn_enable" android:background="@drawable/switch_close" android:layout_width="37dp" android:layout_height="20dp" android:layout_marginRight="15dp" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_xgNet_rl_mode" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_xgNet_Mode" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/config_xgNet_tv_mode" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_xgNet_Apn" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_xgNet_et_apn" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_xgNet_CenterNum" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_xgNet_et_centerNum" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_xgNet_User" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_xgNet_et_user" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_marginRight="15dp">
+                    <TextView android:text="@string/config_xgNet_Password" style="@style/NetworkTvLeft"/>
+                    <com.streamax.view.VsEditView android:id="@+id/config_xgNet_et_password" android:text="" android:maxLength="30" android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~`!@#$%^&amp;*()-_=+[]{};:&lt;,&gt;.?" android:inputType="textPassword" style="@style/NetworkEtRight"/>
+                </LinearLayout>
+                <View android:background="#cccccc" android:layout_width="match_parent" android:layout_height="0.5dp"/>
+                <RelativeLayout android:id="@+id/config_xgNet_rl_authType" style="@style/RelativeLayoutParent">
+                    <TextView android:text="@string/config_xgNet_AuthType" style="@style/TvParentLeft"/>
+                    <com.streamax.view.VsTextView android:id="@+id/config_xgNet_tv_authType" android:text="" style="@style/TvArrowsRight"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <Button android:id="@+id/config_xgNet_btn_save" android:text="@string/config_Save" android:layout_alignParentBottom="true" style="@style/ButtonParent"/>
+</RelativeLayout>

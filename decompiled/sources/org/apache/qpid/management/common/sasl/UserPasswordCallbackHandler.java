@@ -1,0 +1,51 @@
+package org.apache.qpid.management.common.sasl;
+
+import java.io.IOException;
+import org.apache.harmony.javax.security.auth.callback.Callback;
+import org.apache.harmony.javax.security.auth.callback.CallbackHandler;
+import org.apache.harmony.javax.security.auth.callback.NameCallback;
+import org.apache.harmony.javax.security.auth.callback.PasswordCallback;
+import org.apache.harmony.javax.security.auth.callback.UnsupportedCallbackException;
+
+public class UserPasswordCallbackHandler implements CallbackHandler {
+    private char[] pwchars;
+    private String user;
+
+    public UserPasswordCallbackHandler(String str, String str2) {
+        this.user = str;
+        this.pwchars = str2.toCharArray();
+    }
+
+    public void handle(Callback[] callbackArr) throws IOException, UnsupportedCallbackException {
+        for (int i = 0; i < callbackArr.length; i++) {
+            if (callbackArr[i] instanceof NameCallback) {
+                ((NameCallback) callbackArr[i]).setName(this.user);
+            } else if (callbackArr[i] instanceof PasswordCallback) {
+                ((PasswordCallback) callbackArr[i]).setPassword(this.pwchars);
+            } else {
+                throw new UnsupportedCallbackException(callbackArr[i]);
+            }
+        }
+    }
+
+    private void clearPassword() {
+        if (this.pwchars != null) {
+            int i = 0;
+            while (true) {
+                char[] cArr = this.pwchars;
+                if (i < cArr.length) {
+                    cArr[i] = 0;
+                    i++;
+                } else {
+                    this.pwchars = null;
+                    return;
+                }
+            }
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void finalize() {
+        clearPassword();
+    }
+}
