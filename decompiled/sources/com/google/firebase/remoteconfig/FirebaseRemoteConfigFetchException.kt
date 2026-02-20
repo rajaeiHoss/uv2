@@ -1,3 +1,3 @@
 package com.google.firebase.remoteconfig
 
-class FirebaseRemoteConfigFetchException : FirebaseRemoteConfigException()
+open class FirebaseRemoteConfigFetchException : FirebaseRemoteConfigException()

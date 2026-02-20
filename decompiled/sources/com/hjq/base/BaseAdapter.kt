@@ -49,6 +49,10 @@ abstract class BaseAdapter<VH : RecyclerView.ViewHolder>(context: Context?) :
     }
 
     abstract inner class ViewHolder : RecyclerView.ViewHolder, View.OnClickListener, View.OnLongClickListener {
+        constructor(baseAdapter: BaseAdapter<*>, layoutId: Int) : this(
+            LayoutInflater.from(baseAdapter.getContext()).inflate(layoutId, baseAdapter.getRecyclerView(), false)
+        )
+
         constructor(layoutId: Int) : this(
             LayoutInflater.from(getContext()).inflate(layoutId, mRecyclerView, false)
         )

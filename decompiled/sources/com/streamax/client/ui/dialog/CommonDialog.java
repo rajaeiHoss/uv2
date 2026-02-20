@@ -10,7 +10,7 @@ import com.zycs.UView.R;
 
 public final class CommonDialog {
 
-    public static class Builder<B extends Builder<?>> extends BaseDialog.Builder<B> {
+    public static class Builder<B extends Builder<B>> extends BaseDialog.Builder<B> {
         private boolean mAutoDismiss = true;
         private final TextView mCancelView;
         private final TextView mConfirmView;

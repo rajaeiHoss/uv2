@@ -2,7 +2,7 @@ package com.dvr.net
 
 import android.util.Log
 
-class RemoteFileInfo {
+open class RemoteFileInfo {
     @JvmField
     var FileTime: String? = null
 

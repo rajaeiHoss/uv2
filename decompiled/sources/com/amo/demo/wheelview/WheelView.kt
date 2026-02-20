@@ -24,6 +24,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class WheelView : View {
+    @JvmField
     var TEXT_SIZE: Int = 0
     private val ITEM_OFFSET: Int = TEXT_SIZE / 5
     private val MESSAGE_JUSTIFY: Int = 1

@@ -1,3 +1,3 @@
 package com.google.firebase.auth
 
-class zzh
+open class zzh

@@ -50,7 +50,7 @@ abstract class BaseActivity : AppCompatActivity(),
         initData()
     }
 
-    protected fun initLayout() {
+    protected open fun initLayout() {
         if (getLayoutId() > 0) {
             setContentView(getLayoutId())
             initSoftKeyboard()
