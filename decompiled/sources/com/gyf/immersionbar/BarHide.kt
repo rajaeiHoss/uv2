@@ -1,6 +1,6 @@
-package com.gyf.immersionbar;
+package com.gyf.immersionbar
 
-public enum BarHide {
+enum class BarHide {
     FLAG_HIDE_STATUS_BAR,
     FLAG_HIDE_NAVIGATION_BAR,
     FLAG_HIDE_BAR,
