@@ -108,11 +108,11 @@ internal class ImmersionDelegate : Runnable {
         if (immersionBar != null && immersionBar.activity != null) {
             val activity = immersionBar.activity
             val barConfig = BarConfig(activity)
-            mBarProperties!!.setStatusBarHeight(barConfig.statusBarHeight)
+            mBarProperties!!.setStatusBarHeight(barConfig.getStatusBarHeight())
             mBarProperties!!.setNavigationBar(barConfig.hasNavigationBar())
-            mBarProperties!!.setNavigationBarHeight(barConfig.navigationBarHeight)
-            mBarProperties!!.setNavigationBarWidth(barConfig.navigationBarWidth)
-            mBarProperties!!.setActionBarHeight(barConfig.actionBarHeight)
+            mBarProperties!!.setNavigationBarHeight(barConfig.getNavigationBarHeight())
+            mBarProperties!!.setNavigationBarWidth(barConfig.getNavigationBarWidth())
+            mBarProperties!!.setActionBarHeight(barConfig.getActionBarHeight())
             val hasNotchScreen = NotchUtils.hasNotchScreen(activity)
             mBarProperties!!.setNotchScreen(hasNotchScreen)
             if (hasNotchScreen && mNotchHeight == 0) {
