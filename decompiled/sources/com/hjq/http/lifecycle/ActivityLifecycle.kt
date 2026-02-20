@@ -25,9 +25,8 @@ class ActivityLifecycle(
         }
     }
 
-    override fun getLifecycle(): Lifecycle {
-        return mLifecycle
-    }
+    override val lifecycle: Lifecycle
+        get() = mLifecycle
 
     override fun onStateChanged(lifecycleOwner: LifecycleOwner, event: Lifecycle.Event) {
         mLifecycle.handleLifecycleEvent(event)

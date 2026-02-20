@@ -172,9 +172,8 @@ open class BaseDialog : AppCompatDialog,
         super.dismiss()
     }
 
-    override fun getLifecycle(): Lifecycle {
-        return mLifecycle
-    }
+    override val lifecycle: Lifecycle
+        get() = mLifecycle
 
     override fun setOnShowListener(listener: DialogInterface.OnShowListener?) {
         if (listener != null) {

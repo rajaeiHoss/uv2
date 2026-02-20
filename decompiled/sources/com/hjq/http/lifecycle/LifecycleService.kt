@@ -8,9 +8,8 @@ import androidx.lifecycle.LifecycleRegistry
 abstract class LifecycleService : Service(), LifecycleOwner {
     private val mLifecycle: LifecycleRegistry = LifecycleRegistry(this)
 
-    override fun getLifecycle(): Lifecycle {
-        return mLifecycle
-    }
+    override val lifecycle: Lifecycle
+        get() = mLifecycle
 
     override fun onCreate() {
         super.onCreate()
