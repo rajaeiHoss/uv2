@@ -512,9 +512,9 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         new Thread(this.mCalendarRunnable).start();
     }
 
-    public void UpdateCalendar(int i, int i2) {
-        this.mYear = i;
-        this.mMonth = i2;
+    public void UpdateCalendar(int year, int month) {
+        this.mYear = year;
+        this.mMonth = month;
         this.mFileList.mRemoteFileInfo = null;
         this.mFileList.mRemoteFileList.clear();
         if (this.mCalendarRunnable == null) {
@@ -529,12 +529,12 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         });
     }
 
-    public void SearchDay(int i, int i2, int i3) {
+    public void SearchDay(int year, int month, int day) {
         if (this.mBusyView.getVisibility() != 0) {
-            this.mYear = i;
-            this.mMonth = i2;
-            this.mDay = i3;
-            this.mFileList.SetHeader(String.format("%04d-%02d-%02d", new Object[]{Integer.valueOf(i), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay)}));
+            this.mYear = year;
+            this.mMonth = month;
+            this.mDay = day;
+            this.mFileList.SetHeader(String.format("%04d-%02d-%02d", new Object[]{Integer.valueOf(year), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay)}));
             if (this.mSearchFileList == null) {
                 this.mSearchFileList = new SearchFileListRunnable();
             }

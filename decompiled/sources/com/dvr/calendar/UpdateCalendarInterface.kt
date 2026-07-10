@@ -1,7 +1,7 @@
 package com.dvr.calendar
 
 interface UpdateCalendarInterface {
-    fun SearchDay(i: Int, i2: Int, i3: Int)
+    fun SearchDay(year: Int, month: Int, day: Int)
 
-    fun UpdateCalendar(i: Int, i2: Int)
+    fun UpdateCalendar(year: Int, month: Int)
 }

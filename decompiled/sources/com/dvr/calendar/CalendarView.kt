@@ -86,9 +86,9 @@ class CalendarView @JvmOverloads constructor(
     }
 
     init {
-        val i = resources.displayMetrics.widthPixels / 7
-        iDayCellSize = i
-        iTotalWidth = i * 7
+        val dayCellSize = resources.displayMetrics.widthPixels / 7
+        iDayCellSize = dayCellSize
+        iTotalWidth = dayCellSize * 7
     }
 
     fun LoadViews() {
@@ -101,17 +101,17 @@ class CalendarView @JvmOverloads constructor(
         updateCalendar()
     }
 
-    private fun createLayout(i: Int): LinearLayout {
+    private fun createLayout(orientation: Int): LinearLayout {
         val linearLayout = LinearLayout(mContext)
         linearLayout.layoutParams = LayoutParams(-2, -2)
-        linearLayout.orientation = i
+        linearLayout.orientation = orientation
         return linearLayout
     }
 
-    private fun createButton(str: String, i: Int, i2: Int): Button {
+    private fun createButton(text: String, width: Int, height: Int): Button {
         val button = Button(mContext)
-        button.text = str
-        button.layoutParams = LayoutParams(i, i2)
+        button.text = text
+        button.layoutParams = LayoutParams(width, height)
         return button
     }
 
@@ -158,7 +158,7 @@ class CalendarView @JvmOverloads constructor(
 
     private fun generateCalendarRow(): View {
         val createLayout = createLayout(0)
-        for (i in 0 until 7) {
+        for (dayIndex in 0 until 7) {
             val dateWidgetDayCell = DateWidgetDayCell(mContext, iDayCellSize, iDayCellSize)
             dateWidgetDayCell.setItemClick(mOnDayCellClick)
             days.add(dateWidgetDayCell)
@@ -169,9 +169,9 @@ class CalendarView @JvmOverloads constructor(
 
     private fun generateCalendarHeader(): View {
         val createLayout = createLayout(0)
-        for (i in 0 until 7) {
+        for (dayIndex in 0 until 7) {
             val dateWidgetDayHeader = DateWidgetDayHeader(mContext, iDayCellSize, 20)
-            dateWidgetDayHeader.setData(DayStyle.getWeekDay(i, iFirstDayOfWeek))
+            dateWidgetDayHeader.setData(DayStyle.getWeekDay(dayIndex, iFirstDayOfWeek))
             createLayout.addView(dateWidgetDayHeader)
         }
         return createLayout
@@ -180,7 +180,7 @@ class CalendarView @JvmOverloads constructor(
     private fun generateCalendar(linearLayout: LinearLayout) {
         linearLayout.addView(generateCalendarHeader())
         days.clear()
-        for (i in 0 until 6) {
+        for (rowIndex in 0 until 6) {
             linearLayout.addView(generateCalendarRow())
         }
     }
@@ -202,12 +202,12 @@ class CalendarView @JvmOverloads constructor(
 
     fun updateCalendar() {
         MainCalendar.timeInMillis = FirstDateOfMonthCalendar.timeInMillis
-        for (i in 0 until days.size) {
+        for (dayIndex in 0 until days.size) {
             val year = MainCalendar.get(1)
             val month = MainCalendar.get(2)
             val day = MainCalendar.get(5)
             val weekDay = MainCalendar.get(7)
-            val dateWidgetDayCell = days[i]
+            val dateWidgetDayCell = days[dayIndex]
 
             val isToday = ToadyCalendar.get(1) == year && ToadyCalendar.get(2) == month && ToadyCalendar.get(5) == day
             var isHoliday = weekDay == 7 || weekDay == 1

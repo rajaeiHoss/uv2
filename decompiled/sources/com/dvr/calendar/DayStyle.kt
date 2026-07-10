@@ -54,26 +54,26 @@ class DayStyle {
         val vecStrWeekDayNames: Array<String?> = getWeekDayNames()
 
         @JvmStatic
-        fun getColorBkg(z: Boolean, z2: Boolean): Int = if (z2) iColorBkgToday else if (z) iColorBkgHoliday else iColorBkg
+        fun getColorBkg(isHoliday: Boolean, isToday: Boolean): Int = if (isToday) iColorBkgToday else if (isHoliday) iColorBkgHoliday else iColorBkg
 
         @JvmStatic
-        fun getColorFrameHeader(z: Boolean): Int = if (z) iColorFrameHeaderHoliday else iColorFrameHeader
+        fun getColorFrameHeader(isHoliday: Boolean): Int = if (isHoliday) iColorFrameHeaderHoliday else iColorFrameHeader
 
         @JvmStatic
-        fun getColorText(z: Boolean, z2: Boolean): Int = if (z2) iColorTextToday else if (z) iColorTextHoliday else iColorText
+        fun getColorText(isHoliday: Boolean, isToday: Boolean): Int = if (isToday) iColorTextToday else if (isHoliday) iColorTextHoliday else iColorText
 
         @JvmStatic
-        fun getColorTextHeader(z: Boolean): Int = if (z) iColorTextHeaderHoliday else iColorTextHeader
+        fun getColorTextHeader(isHoliday: Boolean): Int = if (isHoliday) iColorTextHeaderHoliday else iColorTextHeader
 
         @JvmStatic
-        fun getWeekDay(i: Int, i2: Int): Int {
-            val i3 = if (i2 == 2) {
-                val week = i + 2
+        fun getWeekDay(dayIndex: Int, firstDayOfWeek: Int): Int {
+            val mondayBasedWeekDay = if (firstDayOfWeek == 2) {
+                val week = dayIndex + 2
                 if (week > 7) 1 else week
             } else {
                 -1
             }
-            return if (i2 == 1) i + 1 else i3
+            return if (firstDayOfWeek == 1) dayIndex + 1 else mondayBasedWeekDay
         }
 
         private fun getWeekDayNames(): Array<String?> {
@@ -89,6 +89,6 @@ class DayStyle {
         }
 
         @JvmStatic
-        fun getWeekDayName(i: Int): String? = vecStrWeekDayNames[i]
+        fun getWeekDayName(weekDay: Int): String? = vecStrWeekDayNames[weekDay]
     }
 }

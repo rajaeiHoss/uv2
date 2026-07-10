@@ -31,10 +31,10 @@ class BluetoothChat(@JvmField var mContext: Context) {
                 val bluetoothDevice = intent.getParcelableExtra<BluetoothDevice>("android.bluetooth.device.extra.DEVICE") ?: return
                 if (bluetoothDevice.bondState != 12) {
                     Log.v(TAG, "bond state = ${bluetoothDevice.bondState} name =${bluetoothDevice.name}")
-                    var i = 0
-                    while (i < mBluetoothDeviceList.size) {
-                        if (bluetoothDevice.address.compareTo(mBluetoothDeviceList[i].address) != 0) {
-                            i++
+                    var index = 0
+                    while (index < mBluetoothDeviceList.size) {
+                        if (bluetoothDevice.address.compareTo(mBluetoothDeviceList[index].address) != 0) {
+                            index++
                         } else {
                             return
                         }
@@ -101,10 +101,10 @@ class BluetoothChat(@JvmField var mContext: Context) {
             mBluetoothDeviceList.addAll(bondedDevices)
         }
         btAdapter.startDiscovery()
-        var i = 0
+        var waitAttempts = 0
         while (!mbReturn[RET_INDEX_DISCOVERY]) {
-            val i2 = i + 1
-            if (i >= 50) {
+            val nextAttempt = waitAttempts + 1
+            if (waitAttempts >= 50) {
                 break
             }
             try {
@@ -112,7 +112,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            i = i2
+            waitAttempts = nextAttempt
         }
         return 0
     }
@@ -142,17 +142,17 @@ class BluetoothChat(@JvmField var mContext: Context) {
             if (!result) {
                 return -1
             }
-            var i = 0
+            var waitAttempts = 0
             while (true) {
                 if (mbReturn[RET_INDEX_CRATEBOND]) {
                     break
                 }
-                val i2 = i + 1
-                if (i >= 200) {
+                val nextAttempt = waitAttempts + 1
+                if (waitAttempts >= 200) {
                     break
                 }
                 Thread.sleep(100)
-                i = i2
+                waitAttempts = nextAttempt
             }
             if (!mbReturn[RET_INDEX_CRATEBOND]) -1 else 0
         } catch (e: Exception) {
@@ -259,7 +259,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
 
         override fun run() {
             Log.v(TAG, "[InterComandThread] start")
-            val bArr = ByteArray(1024)
+            val readBuffer = ByteArray(1024)
             val inputStream: InputStream? = try {
                 socket.inputStream
             } catch (e: IOException) {
@@ -268,13 +268,13 @@ class BluetoothChat(@JvmField var mContext: Context) {
             }
 
             val streamBuffer = StreamBuffer(1024)
-            val bArr2 = ByteArray(1024)
-            val iArr = IntArray(1)
+            val frameBuffer = ByteArray(1024)
+            val frameLength = IntArray(1)
 
             while (!mbExit && mBluetoothSocket != null && mBluetoothSocket!!.isConnected) {
                 try {
                     val read = if (inputStream != null && inputStream.available() > 0) {
-                        inputStream.read(bArr)
+                        inputStream.read(readBuffer)
                     } else {
                         try {
                             Thread.sleep(100)
@@ -285,16 +285,16 @@ class BluetoothChat(@JvmField var mContext: Context) {
                     }
                     Log.v(TAG, "read end bytes= $read")
                     if (read > 0) {
-                        streamBuffer.AddData(bArr, read)
-                        while (streamBuffer.GetFrame(bArr2, iArr)) {
+                        streamBuffer.AddData(readBuffer, read)
+                        while (streamBuffer.GetFrame(frameBuffer, frameLength)) {
                             Log.v(TAG, "GetFrame = true")
                             try {
-                                val jsonObject = JSONObject(String(bArr2, Charsets.UTF_8))
+                                val jsonObject = JSONObject(String(frameBuffer, Charsets.UTF_8))
                                 val cmd = jsonObject.getString("CMD")
                                 if (cmd.compareTo("res-account") == 0) {
                                     val array = jsonObject.getJSONArray("PARAM")
-                                    for (i in 0 until array.length()) {
-                                        val item = array.getJSONObject(i)
+                                    for (index in 0 until array.length()) {
+                                        val item = array.getJSONObject(index)
                                         val username = item.getString("USER")
                                         val password = item.getString("PWD")
                                         val role = item.getInt("ROLE")
@@ -304,7 +304,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
                                     }
                                     val retBuf = mbyteReturn[RET_INDEX_REQACCOUNT]
                                     if (retBuf != null) {
-                                        System.arraycopy(bArr2, 0, retBuf, 0, iArr[0])
+                                        System.arraycopy(frameBuffer, 0, retBuf, 0, frameLength[0])
                                         mbReturn[RET_INDEX_REQACCOUNT] = true
                                     }
                                 } else if (cmd.compareTo("res-saveadmin") == 0) {
@@ -313,7 +313,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
                                     Log.v(TAG, "nCRC =$crc nResult =$result")
                                     val retBuf = mbyteReturn[RET_INDEX_REQSAVEADMIN]
                                     if (retBuf != null) {
-                                        System.arraycopy(bArr2, 0, retBuf, 0, iArr[0])
+                                        System.arraycopy(frameBuffer, 0, retBuf, 0, frameLength[0])
                                         mbReturn[RET_INDEX_REQSAVEADMIN] = true
                                     }
                                 }
@@ -349,10 +349,10 @@ class BluetoothChat(@JvmField var mContext: Context) {
             val outputStream = socket.outputStream
             outputStream.write((req.toString() + '#').toByteArray())
 
-            var i = 0
+            var waitAttempts = 0
             while (!mbReturn[RET_INDEX_REQACCOUNT]) {
-                val i2 = i + 1
-                if (i >= 30) {
+                val nextAttempt = waitAttempts + 1
+                if (waitAttempts >= 30) {
                     break
                 }
                 try {
@@ -360,7 +360,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
                 } catch (e: InterruptedException) {
                     e.printStackTrace()
                 }
-                i = i2
+                waitAttempts = nextAttempt
             }
 
             if (!mbReturn[RET_INDEX_REQACCOUNT]) {
@@ -393,15 +393,15 @@ class BluetoothChat(@JvmField var mContext: Context) {
         }
     }
 
-    fun SendWifiInfoToDevice(str: String?, str2: String?): Int {
+    fun SendWifiInfoToDevice(ssid: String?, password: String?): Int {
         val socket = mBluetoothSocket ?: return -1
         val jsonObject = JSONObject()
         try {
             jsonObject.put("MODULE", "DISCOVERY")
             jsonObject.put("MAGIC", "RM_475A4AA5")
             val wifiObj = JSONObject()
-            wifiObj.put("ESSID", str)
-            wifiObj.put("PWD", str2)
+            wifiObj.put("ESSID", ssid)
+            wifiObj.put("PWD", password)
             wifiObj.put("IPMODE", 1)
             wifiObj.put("APEN", 1)
             wifiObj.put("ENABLE", 1)
@@ -421,7 +421,7 @@ class BluetoothChat(@JvmField var mContext: Context) {
         }
     }
 
-    fun SaveUserInfoToDevice(str: String?, str2: String?): Int {
+    fun SaveUserInfoToDevice(username: String?, password: String?): Int {
         mbReturn[RET_INDEX_REQSAVEADMIN] = false
         mbyteReturn[RET_INDEX_REQSAVEADMIN] = ByteArray(1024)
         val socket = mBluetoothSocket ?: return -1
@@ -431,8 +431,8 @@ class BluetoothChat(@JvmField var mContext: Context) {
             jsonObject.put("CMD", "req-saveadmin")
             jsonObject.put("CRC", 0)
             val param = JSONObject()
-            param.put("USER", str)
-            param.put("PWD", str2)
+            param.put("USER", username)
+            param.put("PWD", password)
             jsonObject.put("PARAM", param)
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -445,10 +445,10 @@ class BluetoothChat(@JvmField var mContext: Context) {
             e.printStackTrace()
         }
 
-        var i = 0
+        var waitAttempts = 0
         while (!mbReturn[RET_INDEX_REQSAVEADMIN]) {
-            val i2 = i + 1
-            if (i >= 30) {
+            val nextAttempt = waitAttempts + 1
+            if (waitAttempts >= 30) {
                 break
             }
             try {
@@ -456,17 +456,17 @@ class BluetoothChat(@JvmField var mContext: Context) {
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            i = i2
+            waitAttempts = nextAttempt
         }
 
         if (!mbReturn[RET_INDEX_REQSAVEADMIN]) {
             return -1
         }
 
-        val str3 = String(mbyteReturn[RET_INDEX_REQSAVEADMIN] ?: ByteArray(0), Charsets.UTF_8)
+        val responseText = String(mbyteReturn[RET_INDEX_REQSAVEADMIN] ?: ByteArray(0), Charsets.UTF_8)
 
         return try {
-            val response = JSONObject(str3)
+            val response = JSONObject(responseText)
             if (response.getString("CMD").compareTo("res-saveadmin") == 0) {
                 val crc = response.getInt("CRC")
                 val result = response.getInt("RESULT")

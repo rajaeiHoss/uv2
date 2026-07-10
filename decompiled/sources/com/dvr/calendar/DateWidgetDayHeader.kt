@@ -8,7 +8,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
 
-class DateWidgetDayHeader(context: Context, i: Int, i2: Int) : View(context) {
+class DateWidgetDayHeader(context: Context, width: Int, height: Int) : View(context) {
     private var bHoliday = false
     private var iWeekDay = -1
 
@@ -19,13 +19,13 @@ class DateWidgetDayHeader(context: Context, i: Int, i2: Int) : View(context) {
     private val rect = RectF()
 
     init {
-        layoutParams = LinearLayout.LayoutParams(i, i2)
+        layoutParams = LinearLayout.LayoutParams(width, height)
     }
 
-    fun setData(i: Int) {
-        iWeekDay = i
+    fun setData(weekDay: Int) {
+        iWeekDay = weekDay
         bHoliday = false
-        if (i == 7 || i == 1) {
+        if (weekDay == 7 || weekDay == 1) {
             bHoliday = true
         }
     }

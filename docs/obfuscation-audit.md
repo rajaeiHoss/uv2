@@ -60,11 +60,11 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 13 |
-| `str`, `str2`, ... | 87 |
-| `bArr`, `bArr2`, ... | 14 |
-| `i2`, `j2`, ... | 74 |
-| `z`, `z2`, ... | 57 |
-| App-owned files with at least one generic identifier | 122 |
+| `str`, `str2`, ... | 85 |
+| `bArr`, `bArr2`, ... | 12 |
+| `i2`, `j2`, ... | 67 |
+| `z`, `z2`, ... | 55 |
+| App-owned files with at least one generic identifier | 115 |
 
 Top app-owned cleanup targets by generic identifier count:
 
@@ -95,8 +95,8 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 113 | 11,372 |
-| `decompiled/sources/com/dvr` | 9 | 537 |
+| `decompiled/sources/com/streamax` | 113 | 11,366 |
+| `decompiled/sources/com/dvr` | 2 | 443 |
 
 ## Kotlin Generic Parameter Names
 
@@ -106,12 +106,10 @@ Converted Kotlin files still include some generic parameter names. These are saf
 | --- | ---: |
 | `com/google/android` | 22 |
 | `com/hjq/http` | 22 |
-| `com/dvr/calendar` | 5 |
 | `com/amo/demo` | 4 |
 | `org/jivesoftware/smackx` | 3 |
 | `org/jivesoftware/smack` | 3 |
 | `com/wifi/net` | 3 |
-| `com/dvr/bluetooth` | 2 |
 | `com/kenai/jbosh` | 1 |
 | `com/pickview/listener` | 1 |
 | `com/wifi/ui` | 1 |
@@ -129,14 +127,9 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 ## Next Safe Chunk
 
-A safe next chunk is to clean the remaining app-owned Kotlin parameter names in smaller UI/data files:
+A safe next chunk is to clean the remaining app-owned Kotlin parameter names in native-wrapper files, without changing JNI method names or signatures:
 
-- `decompiled/sources/com/dvr/calendar/CalendarView.kt`
-- `decompiled/sources/com/dvr/calendar/DateWidgetDayCell.kt`
-- `decompiled/sources/com/dvr/calendar/DateWidgetDayHeader.kt`
-- `decompiled/sources/com/dvr/calendar/DayStyle.kt`
-- `decompiled/sources/com/dvr/calendar/UpdateCalendarInterface.kt`
-- `decompiled/sources/com/dvr/bluetooth/BluetoothChat.kt`
-- `decompiled/sources/com/dvr/bluetooth/StreamBuffer.kt`
+- `decompiled/sources/com/dvr/net/DvrNet.kt`
+- `decompiled/sources/com/dvr/avstream/AVStream.kt`
 
-After those, the next higher-impact cleanup target is still the Java-heavy playback UI, starting with `VideoContainer.java`.
+After those, the next higher-impact cleanup target is the Java-heavy playback UI, starting with `VideoContainer.java`.

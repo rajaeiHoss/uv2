@@ -15,7 +15,7 @@ import android.view.animation.AlphaAnimation
 import android.widget.LinearLayout
 import java.util.Calendar
 
-class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
+class DateWidgetDayCell(context: Context, width: Int, height: Int) : View(context) {
     private var bHoliday = false
     private var bIsActiveMonth = false
     private var bRecordFileDay = false
@@ -36,31 +36,31 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
 
     init {
         isFocusable = true
-        layoutParams = LinearLayout.LayoutParams(i, i2)
+        layoutParams = LinearLayout.LayoutParams(width, height)
     }
 
     fun getSelected(): Boolean = bSelected
 
-    override fun setSelected(z: Boolean) {
-        if (bSelected != z) {
-            bSelected = z
+    override fun setSelected(selected: Boolean) {
+        if (bSelected != selected) {
+            bSelected = selected
             invalidate()
         }
     }
 
-    fun SetRecordDay(z: Boolean) {
-        bRecordFileDay = z
+    fun SetRecordDay(hasRecord: Boolean) {
+        bRecordFileDay = hasRecord
         invalidate()
     }
 
-    fun setData(i: Int, i2: Int, i3: Int, z: Boolean, z2: Boolean, i4: Int) {
-        iDateYear = i
-        iDateMonth = i2
-        iDateDay = i3
-        sDate = i3.toString()
-        bIsActiveMonth = iDateMonth == i4
-        bToday = z
-        bHoliday = z2
+    fun setData(year: Int, month: Int, day: Int, isToday: Boolean, isHoliday: Boolean, activeMonth: Int) {
+        iDateYear = year
+        iDateMonth = month
+        iDateDay = day
+        sDate = day.toString()
+        bIsActiveMonth = iDateMonth == activeMonth
+        bToday = isToday
+        bHoliday = isHoliday
     }
 
     fun setItemClick(onItemClick: OnItemClick?) {
@@ -69,22 +69,22 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
 
     private fun getTextHeight(): Int = (-pt.ascent() + pt.descent()).toInt()
 
-    override fun onKeyDown(i: Int, keyEvent: KeyEvent): Boolean {
-        val onKeyDown = super.onKeyDown(i, keyEvent)
-        if (i == 23 || i == 66) {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        val onKeyDown = super.onKeyDown(keyCode, event)
+        if (keyCode == 23 || keyCode == 66) {
             doItemClick()
         }
         return onKeyDown
     }
 
-    override fun onKeyUp(i: Int, keyEvent: KeyEvent): Boolean = super.onKeyUp(i, keyEvent)
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean = super.onKeyUp(keyCode, event)
 
     fun doItemClick() {
         itemClick?.OnClick(this)
     }
 
-    override fun onFocusChanged(z: Boolean, i: Int, rect2: Rect?) {
-        super.onFocusChanged(z, i, rect2)
+    override fun onFocusChanged(hasFocus: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        super.onFocusChanged(hasFocus, direction, previouslyFocusedRect)
         invalidate()
     }
 
@@ -106,8 +106,8 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
         drawDayNumber(canvas, isViewFocused)
     }
 
-    private fun DrawRecordInfo(canvas: Canvas, z: Boolean) {
-        if (z) {
+    private fun DrawRecordInfo(canvas: Canvas, hasRecord: Boolean) {
+        if (hasRecord) {
             pt.shader = LinearGradient(
                 rect.left,
                 0.0f,
@@ -128,7 +128,7 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
         canvas.drawRect(rect, pt)
     }
 
-    fun drawDayNumber(canvas: Canvas, z: Boolean) {
+    fun drawDayNumber(canvas: Canvas, focused: Boolean) {
         pt.typeface = null as Typeface?
         pt.isAntiAlias = true
         pt.shader = null
@@ -142,12 +142,12 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
         val textHeight = rect.bottom.toInt() + (-pt.ascent()).toInt() - getTextHeight()
         val width = measureText - ((rect.width().toInt() shr 1) - (pt.measureText(sDate).toInt() shr 1))
         val height = textHeight - ((rect.height().toInt() shr 1) - (getTextHeight() shr 1))
-        val z2 = bSelected
-        if (z2 || z) {
-            if (z2) {
+        val selected = bSelected
+        if (selected || focused) {
+            if (selected) {
                 pt.color = DayStyle.iColorTextSelected
             }
-            if (z) {
+            if (focused) {
                 pt.color = DayStyle.iColorTextFocused
             }
         } else {
@@ -163,20 +163,20 @@ class DateWidgetDayCell(context: Context, i: Int, i2: Int) : View(context) {
     fun IsViewFocused(): Boolean = isFocused || bTouchedDown
 
     override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
-        var z = false
+        var handled = false
         if (motionEvent.action == 0) {
             bTouchedDown = true
             invalidate()
             startAlphaAnimIn(this)
-            z = true
+            handled = true
         }
         if (motionEvent.action == 3) {
             bTouchedDown = false
             invalidate()
-            z = true
+            handled = true
         }
         if (motionEvent.action != 1) {
-            return z
+            return handled
         }
         bTouchedDown = false
         invalidate()
