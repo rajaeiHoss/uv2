@@ -387,17 +387,17 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         toastFailure();
     }
 
-    public void updateDateForRecordChannel(List<Integer> list) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForRecordChannel(List<Integer> selectedChannels) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AR");
-                if (jSONObject2 != null) {
-                    int i = 0;
-                    for (int i2 = 0; i2 < list.size(); i2++) {
-                        i |= 1 << list.get(i2).intValue();
+                JSONObject recordObj = aproObj.getJSONObject("AR");
+                if (recordObj != null) {
+                    int channelMask = 0;
+                    for (int selectionIndex = 0; selectionIndex < selectedChannels.size(); selectionIndex++) {
+                        channelMask |= 1 << selectedChannels.get(selectionIndex).intValue();
                     }
-                    jSONObject2.put("CH", i);
+                    recordObj.put("CH", channelMask);
                     NetPresenter.getDefault().setConfig(this);
                 }
             } catch (JSONException unused) {
@@ -405,17 +405,17 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForSnapChannel(List<Integer> list) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForSnapChannel(List<Integer> selectedChannels) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("SPS");
-                if (jSONObject2 != null) {
-                    int i = 0;
-                    for (int i2 = 0; i2 < list.size(); i2++) {
-                        i |= 1 << list.get(i2).intValue();
+                JSONObject snapObj = aproObj.getJSONObject("SPS");
+                if (snapObj != null) {
+                    int channelMask = 0;
+                    for (int selectionIndex = 0; selectionIndex < selectedChannels.size(); selectionIndex++) {
+                        channelMask |= 1 << selectedChannels.get(selectionIndex).intValue();
                     }
-                    jSONObject2.put("CH", i);
+                    snapObj.put("CH", channelMask);
                     NetPresenter.getDefault().setConfig(this);
                 }
             } catch (JSONException unused) {
@@ -423,34 +423,15 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForOutputDuration(int i) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForOutputDuration(int selectedIndex) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AS");
-                if (jSONObject2 != null) {
-                    int i2 = -1;
-                    if (i == 0) {
-                        i2 = 5;
-                    } else if (i == 1) {
-                        i2 = 10;
-                    } else if (i == 2) {
-                        i2 = 30;
-                    } else if (i == 3) {
-                        i2 = 60;
-                    } else if (i == 4) {
-                        i2 = 180;
-                    } else if (i == 5) {
-                        i2 = Strategy.TTL_SECONDS_DEFAULT;
-                    } else if (i == 6) {
-                        i2 = 600;
-                    } else if (i == 7) {
-                        i2 = MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR;
-                    } else if (i == 8) {
-                        i2 = 1800;
-                    }
-                    if (i2 >= 0) {
-                        jSONObject2.put("SOT", i2);
+                JSONObject outputObj = aproObj.getJSONObject("AS");
+                if (outputObj != null) {
+                    int durationSeconds = getOutputDurationSeconds(selectedIndex);
+                    if (durationSeconds >= 0) {
+                        outputObj.put("SOT", durationSeconds);
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -459,34 +440,15 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForBuzzer(int i) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForBuzzer(int selectedIndex) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AB");
-                if (jSONObject2 != null) {
-                    int i2 = -1;
-                    if (i == 0) {
-                        i2 = 0;
-                    } else if (i == 1) {
-                        i2 = 10;
-                    } else if (i == 2) {
-                        i2 = 30;
-                    } else if (i == 3) {
-                        i2 = 60;
-                    } else if (i == 4) {
-                        i2 = 180;
-                    } else if (i == 5) {
-                        i2 = Strategy.TTL_SECONDS_DEFAULT;
-                    } else if (i == 6) {
-                        i2 = 600;
-                    } else if (i == 7) {
-                        i2 = MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR;
-                    } else if (i == 8) {
-                        i2 = 1800;
-                    }
-                    if (i2 >= 0) {
-                        jSONObject2.put("BT", i2);
+                JSONObject buzzerObj = aproObj.getJSONObject("AB");
+                if (buzzerObj != null) {
+                    int buzzerSeconds = getBuzzerSeconds(selectedIndex);
+                    if (buzzerSeconds >= 0) {
+                        buzzerObj.put("BT", buzzerSeconds);
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -495,13 +457,13 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForFullScreen(int i) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForFullScreen(int channelIndex) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AFS");
-                if (jSONObject2 != null) {
-                    jSONObject2.put("CHL", i);
+                JSONObject fullScreenObj = aproObj.getJSONObject("AFS");
+                if (fullScreenObj != null) {
+                    fullScreenObj.put("CHL", channelIndex);
                     NetPresenter.getDefault().setConfig(this);
                 }
             } catch (JSONException unused) {
@@ -509,22 +471,15 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForPreRecord(int i) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForPreRecord(int selectedIndex) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AR");
-                if (jSONObject2 != null) {
-                    int i2 = -1;
-                    if (i == 0) {
-                        i2 = 0;
-                    } else if (i == 1) {
-                        i2 = 5;
-                    } else if (i == 2) {
-                        i2 = 10;
-                    }
-                    if (i2 >= 0) {
-                        jSONObject2.put("PRS", i2);
+                JSONObject recordObj = aproObj.getJSONObject("AR");
+                if (recordObj != null) {
+                    int preRecordSeconds = getPreRecordSeconds(selectedIndex);
+                    if (preRecordSeconds >= 0) {
+                        recordObj.put("PRS", preRecordSeconds);
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -533,32 +488,15 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void updateDateForDelayRecord(int i) {
-        JSONObject jSONObject = this.mAproObj;
-        if (jSONObject != null) {
+    public void updateDateForDelayRecord(int selectedIndex) {
+        JSONObject aproObj = this.mAproObj;
+        if (aproObj != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AR");
-                if (jSONObject2 != null) {
-                    int i2 = -1;
-                    if (i == 0) {
-                        i2 = 10;
-                    } else if (i == 1) {
-                        i2 = 30;
-                    } else if (i == 2) {
-                        i2 = 60;
-                    } else if (i == 3) {
-                        i2 = 180;
-                    } else if (i == 4) {
-                        i2 = Strategy.TTL_SECONDS_DEFAULT;
-                    } else if (i == 5) {
-                        i2 = 600;
-                    } else if (i == 6) {
-                        i2 = MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR;
-                    } else if (i == 7) {
-                        i2 = 1800;
-                    }
-                    if (i2 >= 0) {
-                        jSONObject2.put("DRS", i2);
+                JSONObject recordObj = aproObj.getJSONObject("AR");
+                if (recordObj != null) {
+                    int delaySeconds = getDelayRecordSeconds(selectedIndex);
+                    if (delaySeconds >= 0) {
+                        recordObj.put("DRS", delaySeconds);
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -567,29 +505,61 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForRecordChannel")) {
-            updateDateForRecordChannel(list);
-        } else if (str.equals("SelectFragmentForSnapChannel")) {
-            updateDateForSnapChannel(list);
-        } else if (str.equals("SelectFragmentForOutputDuration")) {
-            if (list.size() > 0) {
-                updateDateForOutputDuration(list.get(0).intValue());
+    private int getOutputDurationSeconds(int selectedIndex) {
+        int[] durations = {5, 10, 30, 60, 180, Strategy.TTL_SECONDS_DEFAULT, 600, MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR, 1800};
+        if (selectedIndex < 0 || selectedIndex >= durations.length) {
+            return -1;
+        }
+        return durations[selectedIndex];
+    }
+
+    private int getBuzzerSeconds(int selectedIndex) {
+        int[] durations = {0, 10, 30, 60, 180, Strategy.TTL_SECONDS_DEFAULT, 600, MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR, 1800};
+        if (selectedIndex < 0 || selectedIndex >= durations.length) {
+            return -1;
+        }
+        return durations[selectedIndex];
+    }
+
+    private int getPreRecordSeconds(int selectedIndex) {
+        int[] durations = {0, 5, 10};
+        if (selectedIndex < 0 || selectedIndex >= durations.length) {
+            return -1;
+        }
+        return durations[selectedIndex];
+    }
+
+    private int getDelayRecordSeconds(int selectedIndex) {
+        int[] durations = {10, 30, 60, 180, Strategy.TTL_SECONDS_DEFAULT, 600, MediaPlayer2.MEDIA_INFO_TIMED_TEXT_ERROR, 1800};
+        if (selectedIndex < 0 || selectedIndex >= durations.length) {
+            return -1;
+        }
+        return durations[selectedIndex];
+    }
+
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForRecordChannel")) {
+            updateDateForRecordChannel(selectedIndexes);
+        } else if (fragmentTag.equals("SelectFragmentForSnapChannel")) {
+            updateDateForSnapChannel(selectedIndexes);
+        } else if (fragmentTag.equals("SelectFragmentForOutputDuration")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForOutputDuration(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForBuzzer")) {
-            if (list.size() > 0) {
-                updateDateForBuzzer(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForBuzzer")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForBuzzer(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForFullScreen")) {
-            if (list.size() > 0) {
-                updateDateForFullScreen(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForFullScreen")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForFullScreen(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForPreRecord")) {
-            if (list.size() > 0) {
-                updateDateForPreRecord(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForPreRecord")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForPreRecord(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForDelayRecord") && list.size() > 0) {
-            updateDateForDelayRecord(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForDelayRecord") && selectedIndexes.size() > 0) {
+            updateDateForDelayRecord(selectedIndexes.get(0).intValue());
         }
     }
 }
