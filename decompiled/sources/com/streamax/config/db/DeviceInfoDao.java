@@ -30,90 +30,90 @@ public class DeviceInfoDao {
         return insert != -1;
     }
 
-    public int getCurrentChannel(String str) {
+    public int getCurrentChannel(String deviceIp) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{str}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{deviceIp}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() == 0 || !query.moveToNext()) {
                 query.close();
             } else {
-                int i = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentChannel));
+                int currentChannel = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentChannel));
                 query.close();
                 readableDatabase.close();
-                return i;
+                return currentChannel;
             }
         }
         readableDatabase.close();
         return 0;
     }
 
-    public int getCurrentDay(String str, int i) {
+    public int getCurrentDay(String deviceIp, int channel) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{str, "" + i}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{deviceIp, "" + channel}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() == 0 || !query.moveToNext()) {
                 query.close();
             } else {
-                int i2 = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentDay));
+                int currentDay = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentDay));
                 query.close();
                 readableDatabase.close();
-                return i2;
+                return currentDay;
             }
         }
         readableDatabase.close();
         return 0;
     }
 
-    public int getCurrentPlay(String str, int i, int i2) {
+    public int getCurrentPlay(String deviceIp, int channel, int day) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{str, "" + i, "" + i2}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{deviceIp, "" + channel, "" + day}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() == 0 || !query.moveToNext()) {
                 query.close();
             } else {
-                int i3 = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentPlan));
+                int currentPlan = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentPlan));
                 query.close();
                 readableDatabase.close();
-                return i3;
+                return currentPlan;
             }
         }
         readableDatabase.close();
         return 0;
     }
 
-    public int getCurrentTotalChannel(String str) {
+    public int getCurrentTotalChannel(String deviceIp) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{str}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{deviceIp}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() == 0 || !query.moveToNext()) {
                 query.close();
             } else {
-                int i = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentTotalChannel));
+                int totalChannel = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentTotalChannel));
                 query.close();
                 readableDatabase.close();
-                return i;
+                return totalChannel;
             }
         }
         readableDatabase.close();
         return 0;
     }
 
-    public int getCurrentTotalPlan(String str, int i, int i2) {
+    public int getCurrentTotalPlan(String deviceIp, int channel, int day) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?dbCurrentChannel=? anddbCurrentDay=?", new String[]{str, "" + i, "" + i2}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?dbCurrentChannel=? anddbCurrentDay=?", new String[]{deviceIp, "" + channel, "" + day}, (String) null, (String) null, "id asc");
         if (query == null || query.getCount() == 0 || !query.moveToNext()) {
             readableDatabase.close();
             return 1;
         }
-        int i3 = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentTotalPlan));
+        int totalPlan = query.getInt(query.getColumnIndex(DatabaseConfig.DeviceInfoTable.dbCurrentTotalPlan));
         query.close();
         readableDatabase.close();
-        return i3;
+        return totalPlan;
     }
 
-    public boolean queryCurrentDeviceIp(String str) {
+    public boolean queryCurrentDeviceIp(String deviceIp) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{str}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=?", new String[]{deviceIp}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() != 0) {
                 query.close();
@@ -126,9 +126,9 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean queryCurrentChannel(String str, int i) {
+    public boolean queryCurrentChannel(String deviceIp, int channel) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{str, "" + i}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{deviceIp, "" + channel}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() != 0) {
                 query.close();
@@ -141,9 +141,9 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean queryCurrentDay(String str, int i, int i2) {
+    public boolean queryCurrentDay(String deviceIp, int channel, int day) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{str, "" + i, "" + i2}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{deviceIp, "" + channel, "" + day}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() != 0) {
                 query.close();
@@ -156,9 +156,9 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean queryCurrentPlay(String str, int i, int i2, int i3) {
+    public boolean queryCurrentPlay(String deviceIp, int channel, int day, int plan) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
-        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=? anddbCurrentPlan=?", new String[]{str, "" + i, "" + i2, "" + i3}, (String) null, (String) null, "id asc");
+        Cursor query = readableDatabase.query(DatabaseConfig.TableName, (String[]) null, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=? anddbCurrentPlan=?", new String[]{deviceIp, "" + channel, "" + day, "" + plan}, (String) null, (String) null, "id asc");
         if (query != null) {
             if (query.getCount() != 0) {
                 query.close();
@@ -171,11 +171,11 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean updateCurrentChannel(String str, int i) {
+    public boolean updateCurrentChannel(String deviceIp, int channel) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentChannel, Integer.valueOf(i));
-        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?", new String[]{str});
+        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentChannel, Integer.valueOf(channel));
+        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?", new String[]{deviceIp});
         readableDatabase.close();
         if (update > 0) {
             return true;
@@ -183,11 +183,11 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean updateCurrentDay(String str, int i, int i2) {
+    public boolean updateCurrentDay(String deviceIp, int channel, int day) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentDay, Integer.valueOf(i2));
-        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{str, "" + i});
+        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentDay, Integer.valueOf(day));
+        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=? anddbCurrentChannel=?", new String[]{deviceIp, "" + channel});
         readableDatabase.close();
         if (update > 0) {
             return true;
@@ -195,11 +195,11 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean updateCurrentPlay(String str, int i, int i2, int i3) {
+    public boolean updateCurrentPlay(String deviceIp, int channel, int day, int plan) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentPlan, Integer.valueOf(i3));
-        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{str, "" + i, "" + i2});
+        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentPlan, Integer.valueOf(plan));
+        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=? anddbCurrentChannel=? anddbCurrentDay=?", new String[]{deviceIp, "" + channel, "" + day});
         readableDatabase.close();
         if (update > 0) {
             return true;
@@ -207,11 +207,11 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean updateCurrentTotalChannel(String str, int i) {
+    public boolean updateCurrentTotalChannel(String deviceIp, int totalChannel) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentTotalChannel, Integer.valueOf(i));
-        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?", new String[]{str});
+        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentTotalChannel, Integer.valueOf(totalChannel));
+        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?", new String[]{deviceIp});
         readableDatabase.close();
         if (update > 0) {
             return true;
@@ -219,11 +219,11 @@ public class DeviceInfoDao {
         return false;
     }
 
-    public boolean updateCurrentTotalPlan(String str, int i, int i2, int i3) {
+    public boolean updateCurrentTotalPlan(String deviceIp, int channel, int day, int totalPlan) {
         SQLiteDatabase readableDatabase = this.mHelper.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentTotalPlan, Integer.valueOf(i3));
-        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?dbCurrentChannel=? anddbCurrentDay=?", new String[]{str, "" + i, "" + i2});
+        contentValues.put(DatabaseConfig.DeviceInfoTable.dbCurrentTotalPlan, Integer.valueOf(totalPlan));
+        int update = readableDatabase.update(DatabaseConfig.TableName, contentValues, "dbDeviceIp=?dbCurrentChannel=? anddbCurrentDay=?", new String[]{deviceIp, "" + channel, "" + day});
         readableDatabase.close();
         if (update > 0) {
             return true;
