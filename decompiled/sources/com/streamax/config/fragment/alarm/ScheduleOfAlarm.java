@@ -102,60 +102,59 @@ public class ScheduleOfAlarm extends ConfigFragment implements TimeUtils.TimePic
         refreshUi(true);
     }
 
-    public void refreshUi(boolean z) {
+    public void refreshUi(boolean mergeDuplicatePlans) {
         JSONArray mergeDuplicates;
         if (this.mRSIArr != null) {
             LogUtils.e("ScheduleOfAlarm", "refreshUi 0 , mRSIArr: " + this.mRSIArr.toString());
             try {
-                List<String> strDatas = getStrDatas(R.array.DaySelector);
-                JSONArray jSONArray = this.mRSIArr;
-                if (jSONArray == null) {
+                List<String> dayLabels = getStrDatas(R.array.DaySelector);
+                JSONArray daySchedules = this.mRSIArr;
+                if (daySchedules == null) {
                     return;
                 }
-                if (jSONArray.length() == strDatas.size()) {
+                if (daySchedules.length() == dayLabels.size()) {
                     this.mListStrDay.clear();
                     this.mListIntDay.clear();
-                    if (this.mDay < strDatas.size()) {
-                        this.mTvDay.setText(strDatas.get(this.mDay));
-                        this.mListStrDay.addAll(strDatas);
+                    int currentDay = this.mDay;
+                    if (currentDay >= 0 && currentDay < dayLabels.size()) {
+                        this.mTvDay.setText(dayLabels.get(this.mDay));
+                        this.mListStrDay.addAll(dayLabels);
                         this.mListIntDay.add(new Integer(this.mDay));
                     }
-                    JSONArray jSONArray2 = this.mRSIArr.getJSONArray(this.mDay);
-                    if (jSONArray2 != null) {
-                        if (z && (mergeDuplicates = mergeDuplicates(new JSONArray(jSONArray2.toString()))) != null) {
+                    JSONArray currentDayPlans = this.mRSIArr.getJSONArray(this.mDay);
+                    if (currentDayPlans != null) {
+                        if (mergeDuplicatePlans && (mergeDuplicates = mergeDuplicates(new JSONArray(currentDayPlans.toString()))) != null) {
                             this.mRSIArr.put(this.mDay, mergeDuplicates);
                         }
-                        ArrayList arrayList = new ArrayList();
-                        ArrayList arrayList2 = new ArrayList();
-                        int i = 0;
-                        for (int i2 = 0; i2 < jSONArray2.length(); i2++) {
+                        ArrayList planList = new ArrayList();
+                        ArrayList planLabels = new ArrayList();
+                        int visiblePlanCount = 0;
+                        for (int planIndex = 0; planIndex < currentDayPlans.length(); planIndex++) {
                             PlanInfo planInfo = new PlanInfo();
-                            planInfo.start = jSONArray2.getJSONObject(i2).getInt("S");
-                            planInfo.end = jSONArray2.getJSONObject(i2).getInt("E");
+                            planInfo.start = currentDayPlans.getJSONObject(planIndex).getInt("S");
+                            planInfo.end = currentDayPlans.getJSONObject(planIndex).getInt("E");
                             if (planInfo.start < planInfo.end) {
-                                arrayList.add(planInfo);
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("");
-                                i++;
-                                sb.append(i);
-                                arrayList2.add(sb.toString());
+                                planList.add(planInfo);
+                                visiblePlanCount++;
+                                planLabels.add("" + visiblePlanCount);
                             }
                         }
                         this.mListStrPIdx.clear();
                         this.mListIntPIdx.clear();
-                        int i3 = this.mPIdx;
-                        if (i3 >= 0 && i3 < arrayList2.size()) {
+                        int currentPlanIndex = this.mPIdx;
+                        if (currentPlanIndex >= 0 && currentPlanIndex < planLabels.size()) {
                             TextView textView = this.mTvPIdx;
                             textView.setText("" + (this.mPIdx + 1));
-                            this.mListStrPIdx.addAll(arrayList2);
+                            this.mListStrPIdx.addAll(planLabels);
                             this.mListIntPIdx.add(new Integer(this.mPIdx));
                         }
-                        if (arrayList.size() > 0) {
+                        if (planList.size() > 0) {
                             this.mLlPlan.setVisibility(0);
-                            int i4 = this.mPIdx;
-                            if (i4 >= 0 && i4 < arrayList.size()) {
-                                this.mTvStart.setText(parse2String_86399(((PlanInfo) arrayList.get(this.mPIdx)).start));
-                                this.mTvEnd.setText(parse2String_86399(((PlanInfo) arrayList.get(this.mPIdx)).end));
+                            int selectedPlanIndex = this.mPIdx;
+                            if (selectedPlanIndex >= 0 && selectedPlanIndex < planList.size()) {
+                                PlanInfo selectedPlan = (PlanInfo) planList.get(this.mPIdx);
+                                this.mTvStart.setText(parse2String_86399(selectedPlan.start));
+                                this.mTvEnd.setText(parse2String_86399(selectedPlan.end));
                                 return;
                             }
                             return;
@@ -210,18 +209,13 @@ public class ScheduleOfAlarm extends ConfigFragment implements TimeUtils.TimePic
     }
 
     public void addPlan() {
-        JSONArray jSONArray = this.mRSIArr;
-        if (jSONArray != null) {
+        JSONArray dayScheduleArray = this.mRSIArr;
+        if (dayScheduleArray != null) {
             try {
-                JSONArray jSONArray2 = jSONArray.getJSONArray(this.mDay);
-                if (jSONArray2 != null) {
-                    int i = 0;
-                    for (int i2 = 0; i2 < jSONArray2.length(); i2++) {
-                        if (jSONArray2.getJSONObject(i2).getInt("S") <= jSONArray2.getJSONObject(i2).getInt("E")) {
-                            i++;
-                        }
-                    }
-                    if (i >= 8) {
+                JSONArray currentDayPlans = dayScheduleArray.getJSONArray(this.mDay);
+                if (currentDayPlans != null) {
+                    int validPlanCount = countValidPlans(currentDayPlans);
+                    if (validPlanCount >= 8) {
                         toastSf((int) R.string.planTotalMoreThanEight);
                         return;
                     }
@@ -236,34 +230,29 @@ public class ScheduleOfAlarm extends ConfigFragment implements TimeUtils.TimePic
     }
 
     public void deletePlan() {
-        JSONArray jSONArray = this.mRSIArr;
-        if (jSONArray != null) {
+        JSONArray dayScheduleArray = this.mRSIArr;
+        if (dayScheduleArray != null) {
             try {
-                JSONArray jSONArray2 = jSONArray.getJSONArray(this.mDay);
-                if (jSONArray2 != null) {
-                    int i = 0;
-                    for (int i2 = 0; i2 < jSONArray2.length(); i2++) {
-                        if (jSONArray2.getJSONObject(i2).getInt("S") <= jSONArray2.getJSONObject(i2).getInt("E")) {
-                            i++;
-                        }
-                    }
-                    if (i > 0) {
-                        if (i == 1) {
+                JSONArray currentDayPlans = dayScheduleArray.getJSONArray(this.mDay);
+                if (currentDayPlans != null) {
+                    int validPlanCount = countValidPlans(currentDayPlans);
+                    if (validPlanCount > 0) {
+                        if (validPlanCount == 1) {
                             this.mPIdx = 0;
-                            int i3 = jSONArray2.getJSONObject(0).getInt("S");
-                            if (i3 != jSONArray2.getJSONObject(0).getInt("E") || i3 != 0) {
-                                jSONArray2.getJSONObject(0).put("S", 0);
-                                jSONArray2.getJSONObject(0).put("E", 0);
+                            int startTime = currentDayPlans.getJSONObject(0).getInt("S");
+                            if (startTime != currentDayPlans.getJSONObject(0).getInt("E") || startTime != 0) {
+                                currentDayPlans.getJSONObject(0).put("S", 0);
+                                currentDayPlans.getJSONObject(0).put("E", 0);
                                 NetPresenter.getDefault().setConfig(this);
                                 return;
                             }
                             return;
                         }
-                        int i4 = this.mPIdx;
-                        if (i4 + 1 == i) {
-                            this.mPIdx = i4 - 1;
+                        int selectedPlanIndex = this.mPIdx;
+                        if (selectedPlanIndex + 1 == validPlanCount) {
+                            this.mPIdx = selectedPlanIndex - 1;
                         }
-                        jSONArray2.remove(i4);
+                        currentDayPlans.remove(selectedPlanIndex);
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -369,137 +358,122 @@ public class ScheduleOfAlarm extends ConfigFragment implements TimeUtils.TimePic
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForDay")) {
+    private int countValidPlans(JSONArray plans) throws JSONException {
+        int count = 0;
+        for (int planIndex = 0; planIndex < plans.length(); planIndex++) {
+            if (plans.getJSONObject(planIndex).getInt("S") <= plans.getJSONObject(planIndex).getInt("E")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void saveSelect(String tag, List<Integer> list) {
+        if (tag.equals("SelectFragmentForDay")) {
             if (list.size() > 0) {
                 updateDateForDay(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForPIdx") && list.size() > 0) {
+        } else if (tag.equals("SelectFragmentForPIdx") && list.size() > 0) {
             updateDateForPlan(list.get(0).intValue());
         }
     }
 
-    public JSONArray mergeDuplicates(JSONArray jSONArray) {
-        JSONArray jSONArray2 = jSONArray;
-        if (jSONArray2 == null) {
+    public JSONArray mergeDuplicates(JSONArray plans) {
+        if (plans == null) {
             return null;
         }
-        int i = 0;
-        while (true) {
-            byte[] bArr = this.mDayValue;
-            if (i < bArr.length) {
-                bArr[i] = -1;
-                i++;
-            } else {
-                break;
-            }
+        for (int second = 0; second < this.mDayValue.length; second++) {
+            this.mDayValue[second] = -1;
         }
-        int length = jSONArray.length();
-        if (length <= 1) {
-            return jSONArray2;
+        int planCount = plans.length();
+        if (planCount <= 1) {
+            return plans;
         }
         try {
-            for (int i2 = 0; i2 < length; i2++) {
-                JSONObject jSONObject = jSONArray2.getJSONObject(i2);
-                int i3 = jSONObject.getInt("S");
-                int i4 = jSONObject.getInt("E");
-                LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 0, s: " + i3 + ", e: " + i4);
-                while (i3 <= i4) {
-                    if (i3 < 86400) {
-                        this.mDayValue[i3] = 1;
+            for (int planIndex = 0; planIndex < planCount; planIndex++) {
+                JSONObject plan = plans.getJSONObject(planIndex);
+                int startTime = plan.getInt("S");
+                int endTime = plan.getInt("E");
+                LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 0, s: " + startTime + ", e: " + endTime);
+                for (int second = startTime; second <= endTime; second++) {
+                    if (second < 86400) {
+                        this.mDayValue[second] = 1;
                     }
-                    i3++;
                 }
             }
         } catch (JSONException unused) {
             return null;
         }
-        ArrayList arrayList = new ArrayList();
-        int i5 = 0;
-        int i6 = -1;
-        byte b = 0;
-        while (true) {
-            if (i5 >= 86400) {
-                break;
-            }
-            if (i6 == -1) {
-                byte[] bArr2 = this.mDayValue;
-                if (bArr2[i5] == 1) {
-                    b = bArr2[i5];
-                    LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 1, start: " + i5);
-                    i6 = i5;
+        ArrayList mergedPlans = new ArrayList();
+        int segmentStart = -1;
+        for (int second = 0; second < 86400; second++) {
+            if (this.mDayValue[second] == 1) {
+                if (segmentStart == -1) {
+                    LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 1, start: " + second);
+                    segmentStart = second;
                 }
-            }
-            if (i6 != -1) {
-                if (this.mDayValue[i5] != b) {
-                    int i7 = i5 - 1;
-                    if (i6 < i7) {
-                        PlanInfo planInfo = new PlanInfo();
-                        planInfo.start = i6;
-                        planInfo.end = i7;
-                        arrayList.add(planInfo);
-                        LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 2, start: " + i6 + ", end: " + i7 + ", mDayValue[m]: " + this.mDayValue[i5]);
-                    }
-                    b = this.mDayValue[i5];
-                    i6 = -1;
+            } else if (segmentStart != -1) {
+                int segmentEnd = second - 1;
+                if (segmentStart < segmentEnd) {
+                    PlanInfo planInfo = new PlanInfo();
+                    planInfo.start = segmentStart;
+                    planInfo.end = segmentEnd;
+                    mergedPlans.add(planInfo);
+                    LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 2, start: " + segmentStart + ", end: " + segmentEnd + ", mDayValue[m]: " + this.mDayValue[second]);
                 }
-            }
-            int i8 = i5 + 1;
-            if (i8 != 86400 || i6 == -1) {
-                i5 = i8;
-            } else if (i6 < i5) {
-                PlanInfo planInfo2 = new PlanInfo();
-                planInfo2.start = i6;
-                planInfo2.end = i5;
-                arrayList.add(planInfo2);
-                LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 3, start: " + i6 + ", end: " + i5 + ", mDayValue[m]: " + this.mDayValue[i5]);
+                segmentStart = -1;
             }
         }
-        LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 5, size: " + arrayList.size());
-        if (arrayList.size() <= 0) {
+        if (segmentStart != -1 && segmentStart < 86399) {
+            PlanInfo planInfo = new PlanInfo();
+            planInfo.start = segmentStart;
+            planInfo.end = 86399;
+            mergedPlans.add(planInfo);
+            LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 3, find 3, start: " + segmentStart + ", end: 86399");
+        }
+        LogUtils.e("ScheduleOfAlarm", "mergeDuplicates 5, size: " + mergedPlans.size());
+        if (mergedPlans.size() <= 0) {
             return null;
         }
-        JSONArray jSONArray3 = new JSONArray();
-        for (int i9 = 0; i9 < arrayList.size(); i9++) {
-            JSONObject jSONObject2 = new JSONObject();
+        JSONArray mergedArray = new JSONArray();
+        for (int planIndex = 0; planIndex < mergedPlans.size(); planIndex++) {
+            JSONObject planObj = new JSONObject();
             try {
-                jSONObject2.put("S", ((PlanInfo) arrayList.get(i9)).start);
-                jSONObject2.put("E", ((PlanInfo) arrayList.get(i9)).end);
-                jSONArray3.put(jSONObject2);
+                PlanInfo planInfo = (PlanInfo) mergedPlans.get(planIndex);
+                planObj.put("S", planInfo.start);
+                planObj.put("E", planInfo.end);
+                mergedArray.put(planObj);
             } catch (JSONException unused2) {
                 return null;
             }
         }
-        return jSONArray3;
+        return mergedArray;
     }
 
-    public void savePlan(int i, int i2, int i3) {
-        int i4;
-        JSONArray jSONArray = this.mRSIArr;
-        if (jSONArray != null) {
+    public void savePlan(int startTime, int endTime, int planType) {
+        JSONArray dayScheduleArray = this.mRSIArr;
+        if (dayScheduleArray != null) {
             try {
-                JSONArray jSONArray2 = jSONArray.getJSONArray(this.mDay);
-                if (jSONArray2 != null) {
-                    int i5 = 0;
-                    for (int i6 = 0; i6 < jSONArray2.length(); i6++) {
-                        if (jSONArray2.getJSONObject(i6).getInt("S") <= jSONArray2.getJSONObject(i6).getInt("E")) {
-                            i5++;
+                JSONArray currentDayPlans = dayScheduleArray.getJSONArray(this.mDay);
+                if (currentDayPlans != null) {
+                    int validPlanCount = countValidPlans(currentDayPlans);
+                    LogUtils.e("ScheduleOfAlarm", "savePlan 1, count: " + validPlanCount + ", start: " + startTime + ", end: " + endTime);
+                    if (validPlanCount == 1) {
+                        int existingStart = currentDayPlans.getJSONObject(0).getInt("S");
+                        if (existingStart == currentDayPlans.getJSONObject(0).getInt("E") && existingStart == 0) {
+                            JSONObject existingPlan = currentDayPlans.getJSONObject(0);
+                            existingPlan.put("S", startTime);
+                            existingPlan.put("E", endTime);
+                            NetPresenter.getDefault().setConfig(this);
+                            return;
                         }
                     }
-                    LogUtils.e("ScheduleOfAlarm", "savePlan 1, count: " + i5 + ", start: " + i + ", end: " + i2);
-                    if (i5 == 1 && (i4 = jSONArray2.getJSONObject(0).getInt("S")) == jSONArray2.getJSONObject(0).getInt("E") && i4 == 0) {
-                        JSONObject jSONObject = jSONArray2.getJSONObject(0);
-                        jSONObject.put("S", i);
-                        jSONObject.put("E", i2);
-                        NetPresenter.getDefault().setConfig(this);
-                        return;
-                    }
-                    JSONArray jSONArray3 = new JSONArray(jSONArray2.toString());
-                    JSONObject jSONObject2 = new JSONObject();
-                    jSONObject2.put("S", i);
-                    jSONObject2.put("E", i2);
-                    jSONArray3.put(jSONObject2);
-                    JSONArray mergeDuplicates = mergeDuplicates(jSONArray3);
+                    JSONArray updatedPlans = new JSONArray(currentDayPlans.toString());
+                    JSONObject newPlan = new JSONObject();
+                    newPlan.put("S", startTime);
+                    newPlan.put("E", endTime);
+                    updatedPlans.put(newPlan);
+                    JSONArray mergeDuplicates = mergeDuplicates(updatedPlans);
                     if (mergeDuplicates != null) {
                         if (mergeDuplicates.length() > 8) {
                             toastSf((int) R.string.planTotalMoreThanEight);
