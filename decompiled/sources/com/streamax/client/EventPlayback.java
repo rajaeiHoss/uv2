@@ -74,23 +74,23 @@ public class EventPlayback extends LinearLayout {
         this.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
                 ViewHolder viewholder = (ViewHolder) view.getTag();
-                String str = viewholder.playbacktime;
-                int i2 = viewholder.playbackchannel;
+                String playbackTime = viewholder.playbacktime;
+                int playbackChannel = viewholder.playbackchannel;
                 Intent intent = new Intent(EventPlayback.this.mContext, EventPlaybackActivity.class);
                 Calendar instance = Calendar.getInstance();
-                instance.set(1, Integer.valueOf(str.substring(0, 4)).intValue());
-                instance.set(2, Integer.valueOf(str.substring(5, 7)).intValue() - 1);
-                instance.set(5, Integer.valueOf(str.substring(8, 10)).intValue());
-                instance.set(11, Integer.valueOf(str.substring(11, 13)).intValue());
-                instance.set(12, Integer.valueOf(str.substring(14, 16)).intValue());
-                instance.set(13, Integer.valueOf(str.substring(17, 19)).intValue());
+                instance.set(1, Integer.valueOf(playbackTime.substring(0, 4)).intValue());
+                instance.set(2, Integer.valueOf(playbackTime.substring(5, 7)).intValue() - 1);
+                instance.set(5, Integer.valueOf(playbackTime.substring(8, 10)).intValue());
+                instance.set(11, Integer.valueOf(playbackTime.substring(11, 13)).intValue());
+                instance.set(12, Integer.valueOf(playbackTime.substring(14, 16)).intValue());
+                instance.set(13, Integer.valueOf(playbackTime.substring(17, 19)).intValue());
                 intent.putExtra("year", Integer.valueOf(instance.get(1)));
                 intent.putExtra("month", Integer.valueOf(instance.get(2) + 1));
                 intent.putExtra("day", Integer.valueOf(instance.get(5)));
                 intent.putExtra("hour", Integer.valueOf(instance.get(11)));
                 intent.putExtra("minute", Integer.valueOf(instance.get(12)));
                 intent.putExtra("second", Integer.valueOf(instance.get(13)));
-                intent.putExtra("channel", viewholder.playbackchannel);
+                intent.putExtra("channel", playbackChannel);
                 intent.putExtra("alarmtype", viewholder.alarmtype);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DatabaseConfig.TableName, EventPlayback.this.mDevInfo);
@@ -147,14 +147,14 @@ public class EventPlayback extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    public List<Map<String, Object>> getData(String str) {
+    public List<Map<String, Object>> getData(String serialNumber) {
         ArrayList arrayList = new ArrayList();
         if (this.mApp.mWebService == null) {
             this.mApp.mWebService = new WebService(MyApp.LastServerHostName, MyApp.username, MyApp.password);
         }
         List<AlarmInfo> list = null;
         try {
-            list = this.mApp.mWebService.getAlarmBySerialNum(str, 20);
+            list = this.mApp.mWebService.getAlarmBySerialNum(serialNumber, 20);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -180,23 +180,23 @@ public class EventPlayback extends LinearLayout {
             } else {
                 hashMap.put("name", this.mContext.getString(R.string.gatetrigger));
             }
-            String str2 = this.mContext.getString(R.string.channel) + ":";
+            String channelLabel = this.mContext.getString(R.string.channel) + ":";
             alarmInfo.alarmChannel.trim();
             int intValue2 = (alarmInfo.alarmChannel == null || alarmInfo.alarmChannel.length() <= 0) ? 0 : Integer.valueOf(alarmInfo.alarmChannel).intValue();
-            int i2 = -1;
-            for (int i3 = 0; i3 < 32; i3++) {
-                if ((((1 << i3) & intValue2) >> i3) == 1) {
-                    str2 = str2 + Integer.valueOf(i3 + 1).toString() + " ";
-                    if (i2 == -1) {
-                        i2 = i3;
+            int firstPlaybackChannel = -1;
+            for (int channelIndex = 0; channelIndex < 32; channelIndex++) {
+                if ((((1 << channelIndex) & intValue2) >> channelIndex) == 1) {
+                    channelLabel = channelLabel + Integer.valueOf(channelIndex + 1).toString() + " ";
+                    if (firstPlaybackChannel == -1) {
+                        firstPlaybackChannel = channelIndex;
                     }
                 }
             }
-            hashMap.put("channel", str2);
+            hashMap.put("channel", channelLabel);
             hashMap.put("time", this.mContext.getString(R.string.time) + ":" + alarmInfo.alarmTime);
             hashMap.put("playbacktime", alarmInfo.alarmTime);
             hashMap.put("alarmtype", alarmInfo.alarmType);
-            hashMap.put("playbackchannel", Integer.valueOf(i2));
+            hashMap.put("playbackchannel", Integer.valueOf(firstPlaybackChannel));
             arrayList.add(hashMap);
         }
         return arrayList;
@@ -236,7 +236,7 @@ public class EventPlayback extends LinearLayout {
         }
 
         public void run() {
-            String str;
+            String serialNumber;
             EventPlayback.this.mbusyView.post(new Runnable() {
                 public void run() {
                     EventPlayback.this.mbusyView.setVisibility(0);
@@ -258,14 +258,14 @@ public class EventPlayback extends LinearLayout {
             }
             this.mDvrNet = new DvrNet();
             if (MyApp.loginType != 0) {
-                str = EventPlayback.this.mDevInfo.mRemark;
+                serialNumber = EventPlayback.this.mDevInfo.mRemark;
             } else if (!EventPlayback.this.mDevInfo.mDevIp.contains(".") || EventPlayback.this.mDevInfo.mMediaPort <= 0) {
-                str = EventPlayback.this.mDevInfo.mDevIp;
+                serialNumber = EventPlayback.this.mDevInfo.mDevIp;
             } else {
                 Map<String, Object> GetDeviceHandle = this.mDvrNet.GetDeviceHandle(EventPlayback.this.mDevInfo.mDevIp, EventPlayback.this.mDevInfo.mMediaPort, EventPlayback.this.mDevInfo.mUsername, EventPlayback.this.mDevInfo.mPwd, EventPlayback.this.getLocalMacAddress());
                 ((Integer) GetDeviceHandle.get("errorcode")).intValue();
                 int intValue = ((Integer) GetDeviceHandle.get("errorcode")).intValue();
-                str = (String) GetDeviceHandle.get("serialnum");
+                serialNumber = (String) GetDeviceHandle.get("serialnum");
                 this.mDvrNet.CloseDeviceHandle();
                 this.mDvrNet = null;
                 if (intValue != 0) {
@@ -299,7 +299,7 @@ public class EventPlayback extends LinearLayout {
                 EventPlayback.this.mData.clear();
             }
             EventPlayback eventPlayback = EventPlayback.this;
-            eventPlayback.mData = eventPlayback.getData(str);
+            eventPlayback.mData = eventPlayback.getData(serialNumber);
             EventPlayback.this.mListView.post(new Runnable() {
                 public void run() {
                     EventPlayback.this.mAlarmAdapter.notifyDataSetChanged();
@@ -317,11 +317,11 @@ public class EventPlayback extends LinearLayout {
     public void popMenu(View view, View view2) {
         new DisplayMetrics();
         DisplayMetrics displayMetrics = this.mContext.getResources().getDisplayMetrics();
-        int i = displayMetrics.widthPixels;
-        int i2 = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
         PopupWindow popupWindow = this.pop;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow2 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow2;
             popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setTouchInterceptor(new View.OnTouchListener() {
@@ -341,7 +341,7 @@ public class EventPlayback extends LinearLayout {
             this.pop = null;
         } else {
             this.pop = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow3 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow3;
             popupWindow3.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setOutsideTouchable(false);
@@ -351,10 +351,10 @@ public class EventPlayback extends LinearLayout {
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String fallbackMacAddress = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) this.mContext.getApplicationContext().getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return fallbackMacAddress;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -362,10 +362,10 @@ public class EventPlayback extends LinearLayout {
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return fallbackMacAddress;
         }
         String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        return replace.length() > 0 ? replace : fallbackMacAddress;
     }
 
     public class ViewHolder {
