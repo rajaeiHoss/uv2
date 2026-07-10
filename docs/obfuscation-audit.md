@@ -59,7 +59,7 @@ App-owned source files do not have obfuscated file names, but many still contain
 
 | Identifier family | App-owned files hit |
 | --- | ---: |
-| `r0`, `r1`, ... | 5 |
+| `r0`, `r1`, ... | 4 |
 | `str`, `str2`, ... | 80 |
 | `bArr`, `bArr2`, ... | 10 |
 | `i2`, `j2`, ... | 59 |
@@ -70,7 +70,6 @@ Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/LiveViewUi.java` | 215 |
 | `decompiled/sources/com/streamax/proxy/ConnDeviceProxy.java` | 182 |
 | `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java` | 159 |
 | `decompiled/sources/com/streamax/config/fragment/alarm/TriggerOfAlarm.java` | 146 |
@@ -82,6 +81,7 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/client/ui/devlist/ui/DevGroupFragment.java` | 101 |
 | `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java` | 94 |
 | `decompiled/sources/com/streamax/client/PlayFragmentSearch.java` | 91 |
+| `decompiled/sources/com/streamax/client/LiveViewUi.java` | 84 |
 | `decompiled/sources/com/streamax/view/CustomSurfaceView.java` | 77 |
 | `decompiled/sources/com/streamax/config/proxy/ThreadPoolProxy.java` | 60 |
 | `decompiled/sources/com/streamax/config/fragment/FragmentCMS.java` | 59 |
@@ -95,7 +95,7 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 106 | 3,431 |
+| `decompiled/sources/com/streamax` | 106 | 3,300 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, and cleaned the render/zoom/touch locals in `VideoView.java`. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, and `VideoView.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 159 hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, cleaned the render/zoom/touch locals in `VideoView.java`, and simplified `LiveViewUi` surface visibility while removing its stale `SwitchChannelRunnable` JADX dump. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, and `VideoView.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 159 hits and `LiveViewUi.java` is down from 215 to 84 hits.
 
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/client/LiveViewUi.java`
 - `decompiled/sources/com/streamax/proxy/ConnDeviceProxy.java`
 - `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java`
 - `decompiled/sources/com/streamax/config/fragment/alarm/TriggerOfAlarm.java`
+- `decompiled/sources/com/streamax/client/WebService.java`
 
 Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.

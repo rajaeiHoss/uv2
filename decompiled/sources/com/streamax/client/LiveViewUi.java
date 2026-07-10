@@ -137,7 +137,7 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     public TextView mtvVideoInformation;
     public PopupWindow pop;
 
-    public void SetPtzState(boolean z) {
+    public void SetPtzState(boolean enabled) {
     }
 
     public void onDismiss() {
@@ -146,10 +146,10 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     public void run() {
     }
 
-    public void setPlayStatus(int i) {
+    public void setPlayStatus(int status) {
     }
 
-    public void setPtz(int i, int i2) {
+    public void setPtz(int direction, int speed) {
     }
 
     /* access modifiers changed from: protected */
@@ -177,9 +177,9 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     }
 
     public void onEventMainThread(ClickFullEvent clickFullEvent) {
-        boolean z = !this.landscape;
-        this.landscape = z;
-        if (z) {
+        boolean fullscreen = !this.landscape;
+        this.landscape = fullscreen;
+        if (fullscreen) {
             setRequestedOrientation(0);
             setVideoGroupMax(true);
             return;
@@ -191,11 +191,11 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     public void popMenu(View view, View view2) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int i = displayMetrics.widthPixels;
-        int i2 = displayMetrics.heightPixels;
+        int popupWidth = displayMetrics.widthPixels;
+        int popupHeight = displayMetrics.heightPixels;
         PopupWindow popupWindow = this.pop;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow2 = new PopupWindow(view, popupWidth / 2, popupHeight / 2, true);
             this.pop = popupWindow2;
             popupWindow2.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setTouchInterceptor(new View.OnTouchListener() {
@@ -215,7 +215,7 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
             this.pop = null;
         } else {
             this.pop = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow3 = new PopupWindow(view, popupWidth / 2, popupHeight / 2, true);
             this.pop = popupWindow3;
             popupWindow3.setBackgroundDrawable(this.mContext.getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setOutsideTouchable(false);
@@ -267,14 +267,14 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                 }
             }
 
-            public boolean shouldOverrideUrlLoading(WebView webView, String str) {
-                if (webView == null || str == null) {
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                if (webView == null || url == null) {
                     return false;
                 }
-                if (!str.startsWith("http") && !str.startsWith("https")) {
+                if (!url.startsWith("http") && !url.startsWith("https")) {
                     return true;
                 }
-                webView.loadUrl(str);
+                webView.loadUrl(url);
                 return true;
             }
         });
@@ -466,8 +466,8 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         }
     }
 
-    public void setVideoGroupMax(boolean z) {
-        if (z) {
+    public void setVideoGroupMax(boolean maximized) {
+        if (maximized) {
             getWindow().getDecorView().setSystemUiVisibility(4);
             this.mTitlebar.setVisibility(8);
             ViewGroup.LayoutParams layoutParams = this.mPreviewLayout.getLayoutParams();
@@ -492,10 +492,10 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         this.mScrollView.setVisibility(0);
     }
 
-    public void SetStreamDecodeState(int i, boolean z) {
+    public void SetStreamDecodeState(int streamIndex, boolean enabled) {
         AVStream[] aVStreamArr = this.mAVStream;
-        if (aVStreamArr[i] != null) {
-            aVStreamArr[i].SetStreamDecodeState(z);
+        if (aVStreamArr[streamIndex] != null) {
+            aVStreamArr[streamIndex].SetStreamDecodeState(enabled);
         }
     }
 
@@ -1027,14 +1027,6 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         public SwitchChannelRunnable() {
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:17:0x004b, code lost:
-            if (r0 == 3) goto L_0x004e;
-         */
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x008a, code lost:
-            if (r10.this$0.mViewInfoArray[r10.this$0.mVideoGroup.getFocusView()].getNet().nDevClass == 2) goto L_0x004e;
-         */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x0099  */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
         public void run() {
             while (true) {
                 while (!LiveViewUi.this.mbSwitch) {
@@ -1213,22 +1205,22 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         }
     }
 
-    public void setSurfaceListener(int i) {
-        for (int i2 = 0; i2 < i; i2++) {
-            this.mVideoGroup.getVideoView(i2).setCallBack(this, i2);
+    public void setSurfaceListener(int viewCount) {
+        for (int viewIndex = 0; viewIndex < viewCount; viewIndex++) {
+            this.mVideoGroup.getVideoView(viewIndex).setCallBack(this, viewIndex);
         }
     }
 
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3, int i4) {
-        Log.e("surfaceChanged", "" + i4);
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height, int videoIndex) {
+        Log.e("surfaceChanged", "" + videoIndex);
     }
 
-    public void surfaceCreated(SurfaceHolder surfaceHolder, int i) {
-        Log.e("surfaceCreated", "" + i);
+    public void surfaceCreated(SurfaceHolder surfaceHolder, int videoIndex) {
+        Log.e("surfaceCreated", "" + videoIndex);
     }
 
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder, int i) {
-        Log.e("surfaceDestroyed", "" + i);
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder, int videoIndex) {
+        Log.e("surfaceDestroyed", "" + videoIndex);
     }
 
     public void setSurfaceVisibility() {
@@ -1236,146 +1228,49 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         int curViewCount = this.mVideoGroup.getCurViewCount();
         int firstIndex = this.mVideoGroup.getFirstIndex();
         if (curViewCount == 4) {
-            if (firstIndex == 0) {
-                for (int i = 0; i < initViewCount; i++) {
-                    if (i < 0 || i > 3) {
-                        isVisible(i, false);
-                    } else {
-                        isVisible(i, true);
-                    }
-                }
-            } else if (firstIndex == 4) {
-                for (int i2 = 0; i2 < initViewCount; i2++) {
-                    if (i2 < 4 || i2 > 7) {
-                        isVisible(i2, false);
-                    } else {
-                        isVisible(i2, true);
-                    }
-                }
-            } else if (firstIndex == 8) {
-                for (int i3 = 0; i3 < initViewCount; i3++) {
-                    if (i3 < 8 || i3 > 11) {
-                        isVisible(i3, false);
-                    } else {
-                        isVisible(i3, true);
-                    }
-                }
-            } else if (firstIndex == 12) {
-                for (int i4 = 0; i4 < initViewCount; i4++) {
-                    if (i4 < 12 || i4 > 15) {
-                        isVisible(i4, false);
-                    } else {
-                        isVisible(i4, true);
-                    }
-                }
-            } else if (firstIndex == 16) {
-                for (int i5 = 0; i5 < initViewCount; i5++) {
-                    if (i5 < 16 || i5 > 19) {
-                        isVisible(i5, false);
-                    } else {
-                        isVisible(i5, true);
-                    }
-                }
-            } else if (firstIndex == 20) {
-                for (int i6 = 0; i6 < initViewCount; i6++) {
-                    if (i6 < 20 || i6 > 23) {
-                        isVisible(i6, false);
-                    } else {
-                        isVisible(i6, true);
-                    }
-                }
-            } else if (firstIndex == 24) {
-                for (int i7 = 0; i7 < initViewCount; i7++) {
-                    if (i7 < 24 || i7 > 27) {
-                        isVisible(i7, false);
-                    } else {
-                        isVisible(i7, true);
-                    }
-                }
-            } else if (firstIndex == 28) {
-                for (int i8 = 0; i8 < initViewCount; i8++) {
-                    if (i8 < 28 || i8 > 31) {
-                        isVisible(i8, false);
-                    } else {
-                        isVisible(i8, true);
-                    }
-                }
+            if (firstIndex >= 0 && firstIndex <= 28 && firstIndex % 4 == 0) {
+                setVisibleRange(initViewCount, firstIndex, firstIndex + 3);
             }
         } else if (curViewCount == 9) {
-            if (firstIndex == 0) {
-                for (int i9 = 0; i9 < initViewCount; i9++) {
-                    if (i9 < 0 || i9 > 8) {
-                        isVisible(i9, false);
-                    } else {
-                        isVisible(i9, true);
-                    }
-                }
-            } else if (firstIndex == 7) {
-                for (int i10 = 0; i10 < initViewCount; i10++) {
-                    if (i10 < 7 || i10 > 15) {
-                        isVisible(i10, false);
-                    } else {
-                        isVisible(i10, true);
-                    }
-                }
-            } else if (firstIndex == 9) {
-                for (int i11 = 0; i11 < initViewCount; i11++) {
-                    if (i11 < 9 || i11 > 17) {
-                        isVisible(i11, false);
-                    } else {
-                        isVisible(i11, true);
-                    }
-                }
-            } else if (firstIndex == 18) {
-                for (int i12 = 0; i12 < initViewCount; i12++) {
-                    if (i12 < 18 || i12 > 26) {
-                        isVisible(i12, false);
-                    } else {
-                        isVisible(i12, true);
-                    }
-                }
+            if (firstIndex == 0 || firstIndex == 7 || firstIndex == 9 || firstIndex == 18) {
+                setVisibleRange(initViewCount, firstIndex, firstIndex + 8);
             } else if (firstIndex == 27) {
-                for (int i13 = 0; i13 < initViewCount; i13++) {
-                    if ((i13 < 27 || i13 > 31) && (i13 < 0 || i13 > 3)) {
-                        isVisible(i13, false);
-                    } else {
-                        isVisible(i13, true);
-                    }
-                }
+                setWrappedVisibleRange(initViewCount, 27, 3);
             }
-        } else if (curViewCount != 16) {
-        } else {
+        } else if (curViewCount == 16) {
             if (firstIndex == 0) {
-                for (int i14 = 0; i14 < initViewCount; i14++) {
-                    if (i14 < 0 || i14 > 15) {
-                        isVisible(i14, false);
-                    } else {
-                        isVisible(i14, true);
-                    }
-                }
+                setVisibleRange(initViewCount, 0, 15);
             } else if (firstIndex == 16) {
-                for (int i15 = 0; i15 < initViewCount; i15++) {
-                    if (i15 < 16 || i15 > 31) {
-                        isVisible(i15, false);
-                    } else {
-                        isVisible(i15, true);
-                    }
-                }
+                setVisibleRange(initViewCount, 16, 31);
             }
         }
     }
 
-    public void isVisible(final int i, boolean z) {
-        if (z) {
+    private void setVisibleRange(int initViewCount, int firstIndex, int lastIndex) {
+        for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+            isVisible(viewIndex, viewIndex >= firstIndex && viewIndex <= lastIndex);
+        }
+    }
+
+    private void setWrappedVisibleRange(int initViewCount, int firstIndex, int lastIndex) {
+        int maxIndex = CHANNEL_NUMBER - 1;
+        for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+            boolean visible = (viewIndex >= firstIndex && viewIndex <= maxIndex) || viewIndex <= lastIndex;
+            isVisible(viewIndex, visible);
+        }
+    }
+
+    public void isVisible(final int viewIndex, boolean visible) {
+        if (visible) {
             this.mVideoGroup.post(new Runnable() {
                 public void run() {
-                    LiveViewUi.this.mVideoGroup.getVideoView(i).setVisibility(0);
+                    LiveViewUi.this.mVideoGroup.getVideoView(viewIndex).setVisibility(0);
                 }
             });
         } else {
             this.mVideoGroup.post(new Runnable() {
                 public void run() {
-                    LiveViewUi.this.mVideoGroup.getVideoView(i).setVisibility(8);
+                    LiveViewUi.this.mVideoGroup.getVideoView(viewIndex).setVisibility(8);
                 }
             });
         }
