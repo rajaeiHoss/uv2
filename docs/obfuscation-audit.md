@@ -59,18 +59,17 @@ App-owned source files do not have obfuscated file names, but many still contain
 
 | Identifier family | App-owned files hit |
 | --- | ---: |
-| `r0`, `r1`, ... | 12 |
+| `r0`, `r1`, ... | 11 |
 | `str`, `str2`, ... | 83 |
 | `bArr`, `bArr2`, ... | 10 |
 | `i2`, `j2`, ... | 64 |
 | `z`, `z2`, ... | 52 |
-| App-owned files with at least one generic identifier | 113 |
+| App-owned files with at least one generic identifier | 112 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 707 |
 | `decompiled/sources/com/streamax/client/VideoGroup.java` | 620 |
 | `decompiled/sources/com/streamax/client/widget/PlayerView.java` | 518 |
 | `decompiled/sources/com/streamax/client/VideoContainer.java` | 476 |
@@ -90,12 +89,13 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java` | 94 |
 | `decompiled/sources/com/streamax/client/PlayFragmentSearch.java` | 91 |
 | `decompiled/sources/com/streamax/view/CustomSurfaceView.java` | 77 |
+| `decompiled/sources/com/streamax/config/proxy/ThreadPoolProxy.java` | 60 |
 
 Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 113 | 6,872 |
+| `decompiled/sources/com/streamax` | 112 | 6,165 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunk cleaned executable/local identifiers in `RealPlayActivity.java` outside the large decompiler dump, reducing that file from 909 to 707 generic hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java` and removed its non-executable `SwitchChannelRunnable` decompiler dump. `RealPlayActivity.java` no longer has generic identifier hits under this audit scan.
 
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/client/RealPlayActivity.java`
 - `decompiled/sources/com/streamax/client/VideoGroup.java`
 - `decompiled/sources/com/streamax/client/widget/PlayerView.java`
 - `decompiled/sources/com/streamax/client/VideoContainer.java`
+- `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java`
 
-Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `RealPlayActivity.java` now only keeps the high-count `r0/r1` block inside the `SwitchChannelRunnable` decompiler dump; handle that dump as a separate safety-tested chunk. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
+Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
