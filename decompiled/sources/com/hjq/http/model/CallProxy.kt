@@ -31,13 +31,11 @@ class CallProxy(call: Call) : Call {
         mCall.cancel()
     }
 
-    override fun isExecuted(): Boolean {
-        return mCall.isExecuted
-    }
+    override val isExecuted: Boolean
+        get() = mCall.isExecuted
 
-    override fun isCanceled(): Boolean {
-        return mCall.isCanceled
-    }
+    override val isCanceled: Boolean
+        get() = mCall.isCanceled
 
     override fun timeout(): Timeout {
         return mCall.timeout()
