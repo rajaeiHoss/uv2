@@ -161,9 +161,9 @@ public class DevAddFragment extends BaseFragment {
         }
     }
 
-    public void onActivityResult(int i, int i2, Intent intent) {
-        super.onActivityResult(i, i2, intent);
-        if (i == 0 && i2 == -1) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == 0 && resultCode == -1) {
             this.mEtDevIp.setText(intent.getStringExtra("RESULT"));
         }
     }
@@ -190,29 +190,29 @@ public class DevAddFragment extends BaseFragment {
                     }
                     int chCount = this.mDao.getChCount(this.mGroupNameDatas.get(0), this.mDevId);
                     if (chCount < saveData.mChCounts) {
-                        for (int i2 = 0; i2 < this.mGroupNameDatas.size(); i2++) {
-                            int i3 = 0;
-                            while (i3 < saveData.mChCounts) {
-                                if (i3 < chCount) {
+                        for (int groupIndex = 0; groupIndex < this.mGroupNameDatas.size(); groupIndex++) {
+                            int channelIndex = 0;
+                            while (channelIndex < saveData.mChCounts) {
+                                if (channelIndex < chCount) {
                                     this.mDao.updateDevNameById(this.mDevId, saveData.mDevName);
-                                    i3 = chCount - 1;
+                                    channelIndex = chCount - 1;
                                 } else {
-                                    this.mDao.add(this.mGroupNameDatas.get(i2), this.mDevId, saveData.mDevName, i3, 0);
+                                    this.mDao.add(this.mGroupNameDatas.get(groupIndex), this.mDevId, saveData.mDevName, channelIndex, 0);
                                 }
-                                i3++;
+                                channelIndex++;
                             }
                         }
                     } else if (chCount > saveData.mChCounts) {
-                        for (int i4 = 0; i4 < this.mGroupNameDatas.size(); i4++) {
-                            int i5 = 0;
-                            while (i5 < chCount) {
-                                if (i5 < saveData.mChCounts) {
+                        for (int groupIndex = 0; groupIndex < this.mGroupNameDatas.size(); groupIndex++) {
+                            int channelIndex = 0;
+                            while (channelIndex < chCount) {
+                                if (channelIndex < saveData.mChCounts) {
                                     this.mDao.updateDevNameById(this.mDevId, saveData.mDevName);
-                                    i5 = saveData.mChCounts - 1;
+                                    channelIndex = saveData.mChCounts - 1;
                                 } else {
-                                    this.mDao.delete(this.mDevId, i5);
+                                    this.mDao.delete(this.mDevId, channelIndex);
                                 }
-                                i5++;
+                                channelIndex++;
                             }
                         }
                     } else {
@@ -240,9 +240,9 @@ public class DevAddFragment extends BaseFragment {
                     this.mGroupNameDatas.add(groupBean.dbGroupName);
                 }
             }
-            for (int i2 = 0; i2 < this.mGroupNameDatas.size(); i2++) {
-                for (int i3 = 0; i3 < devInfoBean.mChCounts; i3++) {
-                    this.mDao.add(this.mGroupNameDatas.get(i2), this.mDevId, devInfoBean.mDevName, i3, 0);
+            for (int groupIndex = 0; groupIndex < this.mGroupNameDatas.size(); groupIndex++) {
+                for (int channelIndex = 0; channelIndex < devInfoBean.mChCounts; channelIndex++) {
+                    this.mDao.add(this.mGroupNameDatas.get(groupIndex), this.mDevId, devInfoBean.mDevName, channelIndex, 0);
                 }
             }
         }
@@ -277,7 +277,7 @@ public class DevAddFragment extends BaseFragment {
         devInfoBean.mWebPort = Integer.valueOf(trimString(this.mEtWebPort)).intValue();
         devInfoBean.mUsername = trimString(this.mEtUsername);
         devInfoBean.mPwd = trimString(this.mEtPwd);
-        int i2 = 0;
+        int detectedChannelCount = 0;
         switch (this.segChannelCount.getCheckedRadioButtonId()) {
             case R.id.channel_16_text /*2131361987*/:
                 i = 16;
@@ -300,14 +300,14 @@ public class DevAddFragment extends BaseFragment {
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, devInfoBean, this.mApp);
                 if (connDeviceProxy != null && Integer.valueOf(connDeviceProxy.get("errorcode").toString()).intValue() == 0) {
-                    i2 = Integer.valueOf(connDeviceProxy.get("channel").toString()).intValue();
+                    detectedChannelCount = Integer.valueOf(connDeviceProxy.get("channel").toString()).intValue();
                 }
-                if (i2 == 0) {
+                if (detectedChannelCount == 0) {
                     ToastSf.toastSf((Activity) this.mActivity, getString(R.string.getchannelcountfailed));
-                    i2 = 1;
+                    detectedChannelCount = 1;
                 }
                 dvrNet.CloseDeviceHandle();
-                i = i2;
+                i = detectedChannelCount;
                 break;
             default:
                 i = 0;
