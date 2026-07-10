@@ -27,20 +27,20 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
         public static final int HEADER_PUSHED_UP = 2;
         public static final int HEADER_VISIBLE = 1;
 
-        void configHeader(View view, int i, int i2, int i3);
+        void configHeader(View view, int groupPosition, int childPosition, int alpha);
 
-        int getGroupClickState(int i);
+        int getGroupClickState(int groupPosition);
 
-        int getHeaderState(int i, int i2);
+        int getHeaderState(int groupPosition, int childPosition);
 
-        void setGroupClickState(int i, int i2);
+        void setGroupClickState(int groupPosition, int state);
     }
 
-    public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i2, long j) {
+    public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
         return true;
     }
 
-    public void onScrollStateChanged(AbsListView absListView, int i) {
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
     }
 
     public CustomExpandLv(Context context, AttributeSet attributeSet) {
@@ -95,19 +95,19 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
                 float y2 = motionEvent.getY();
                 float abs = Math.abs(x - this.mDownX);
                 float abs2 = Math.abs(y2 - this.mDownY);
-                int i = this.mHeaderViewWidth;
-                if (x <= ((float) (i - 63))) {
-                    int i2 = this.mHeaderViewHeight;
-                    if (y2 <= ((float) i2) && abs <= ((float) (i - 63)) && abs2 <= ((float) i2)) {
+                int headerWidth = this.mHeaderViewWidth;
+                if (x <= ((float) (headerWidth - 63))) {
+                    int headerHeight = this.mHeaderViewHeight;
+                    if (y2 <= ((float) headerHeight) && abs <= ((float) (headerWidth - 63)) && abs2 <= ((float) headerHeight)) {
                         if (this.mHeaderView != null) {
                             headerViewClick();
                         }
                         return true;
                     }
                 }
-                if (x > ((float) (i - 63))) {
-                    int i3 = this.mHeaderViewHeight;
-                    if (y2 <= ((float) i3) && abs > ((float) (i - 63)) && abs2 <= ((float) i3)) {
+                if (x > ((float) (headerWidth - 63))) {
+                    int headerHeight = this.mHeaderViewHeight;
+                    if (y2 <= ((float) headerHeight) && abs > ((float) (headerWidth - 63)) && abs2 <= ((float) headerHeight)) {
                         return true;
                     }
                 }
@@ -121,31 +121,31 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
         this.mAdapter = (HeaderAdapter) expandableListAdapter;
     }
 
-    public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long j) {
-        if (this.mAdapter.getGroupClickState(i) == 0) {
-            this.mAdapter.setGroupClickState(i, 1);
-            expandableListView.expandGroup(i);
-        } else if (this.mAdapter.getGroupClickState(i) == 1) {
-            this.mAdapter.setGroupClickState(i, 0);
-            expandableListView.collapseGroup(i);
+    public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long id) {
+        if (this.mAdapter.getGroupClickState(groupPosition) == 0) {
+            this.mAdapter.setGroupClickState(groupPosition, 1);
+            expandableListView.expandGroup(groupPosition);
+        } else if (this.mAdapter.getGroupClickState(groupPosition) == 1) {
+            this.mAdapter.setGroupClickState(groupPosition, 0);
+            expandableListView.collapseGroup(groupPosition);
         }
         return true;
     }
 
     /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         View view = this.mHeaderView;
         if (view != null) {
-            measureChild(view, i, i2);
+            measureChild(view, widthMeasureSpec, heightMeasureSpec);
             this.mHeaderViewWidth = this.mHeaderView.getMeasuredWidth();
             this.mHeaderViewHeight = this.mHeaderView.getMeasuredHeight();
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         long expandableListPosition = getExpandableListPosition(getFirstVisiblePosition());
         int packedPositionGroup = ExpandableListView.getPackedPositionGroup(expandableListPosition);
         int packedPositionChild = ExpandableListView.getPackedPositionChild(expandableListPosition);
@@ -154,20 +154,20 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
         if (!(view == null || this.mAdapter == null || headerState == this.mOldState)) {
             this.mOldState = headerState;
             view.layout(0, 0, this.mHeaderViewWidth, this.mHeaderViewHeight);
-            this.mT = (i2 * 2) + this.mHeaderViewHeight;
+            this.mT = (top * 2) + this.mHeaderViewHeight;
         }
         configHeaderView(packedPositionGroup, packedPositionChild);
     }
 
-    public void configHeaderView(int i, int i2) {
+    public void configHeaderView(int groupPosition, int childPosition) {
         HeaderAdapter headerAdapter;
-        int i3;
+        int headerTop;
         if (this.mHeaderView != null && (headerAdapter = this.mAdapter) != null && ((ExpandableListAdapter) headerAdapter).getGroupCount() != 0) {
-            int headerState = this.mAdapter.getHeaderState(i, i2);
+            int headerState = this.mAdapter.getHeaderState(groupPosition, childPosition);
             if (headerState != 0) {
-                int i4 = 255;
+                int alpha = 255;
                 if (headerState == 1) {
-                    this.mAdapter.configHeader(this.mHeaderView, i, i2, 255);
+                    this.mAdapter.configHeader(this.mHeaderView, groupPosition, childPosition, 255);
                     if (this.mHeaderView.getTop() != 0) {
                         this.mHeaderView.layout(0, 0, this.mHeaderViewWidth, this.mHeaderViewHeight);
                     }
@@ -176,14 +176,14 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
                     int bottom = getChildAt(0).getBottom();
                     int height = this.mHeaderView.getHeight();
                     if (bottom < height) {
-                        i3 = bottom - height;
-                        i4 = ((height + i3) * 255) / height;
+                        headerTop = bottom - height;
+                        alpha = ((height + headerTop) * 255) / height;
                     } else {
-                        i3 = 0;
+                        headerTop = 0;
                     }
-                    this.mAdapter.configHeader(this.mHeaderView, i, i2, i4);
-                    if (this.mHeaderView.getTop() != i3) {
-                        this.mHeaderView.layout(0, i3, this.mHeaderViewWidth, this.mHeaderViewHeight + i3);
+                    this.mAdapter.configHeader(this.mHeaderView, groupPosition, childPosition, alpha);
+                    if (this.mHeaderView.getTop() != headerTop) {
+                        this.mHeaderView.layout(0, headerTop, this.mHeaderViewWidth, this.mHeaderViewHeight + headerTop);
                     }
                     this.mHeaderViewVisible = true;
                 }
@@ -201,8 +201,8 @@ public class CustomExpandLv extends ExpandableListView implements AbsListView.On
         }
     }
 
-    public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-        long expandableListPosition = getExpandableListPosition(i);
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        long expandableListPosition = getExpandableListPosition(firstVisibleItem);
         configHeaderView(ExpandableListView.getPackedPositionGroup(expandableListPosition), ExpandableListView.getPackedPositionChild(expandableListPosition));
     }
 }
