@@ -35,8 +35,8 @@ public class TimeBar extends View {
         super(context, attributeSet);
     }
 
-    public TimeBar(Context context, AttributeSet attributeSet, int i) {
-        super(context, attributeSet, i);
+    public TimeBar(Context context, AttributeSet attributeSet, int defStyleAttr) {
+        super(context, attributeSet, defStyleAttr);
     }
 
     /* access modifiers changed from: protected */
@@ -45,66 +45,66 @@ public class TimeBar extends View {
         this.mWidth = getWidth();
         this.mHeight = getHeight();
         canvas.drawColor(-16776961);
-        int i = 0;
-        int[] iArr = {-16711936, -65536, Color.rgb(38, 38, 38)};
-        int i2 = this.mWidth;
-        int i3 = this.mHeight;
-        while (i < i2) {
+        int segmentX = 0;
+        int[] segmentColors = {-16711936, -65536, Color.rgb(38, 38, 38)};
+        int width = this.mWidth;
+        int height = this.mHeight;
+        while (segmentX < width) {
             int nextInt = this.randrom.nextInt(3);
             this.mPaint.setStyle(Paint.Style.FILL);
-            this.mPaint.setColor(iArr[nextInt]);
-            i += 50;
-            canvas.drawRect(new RectF((float) i, (float) (i3 - 64), (float) i, (float) i3), this.mPaint);
+            this.mPaint.setColor(segmentColors[nextInt]);
+            segmentX += 50;
+            canvas.drawRect(new RectF((float) segmentX, (float) (height - 64), (float) segmentX, (float) height), this.mPaint);
         }
         drawTimeScale(canvas);
         drawCursor(canvas);
     }
 
     public void drawCursor(Canvas canvas) {
-        int i = this.mWidth;
-        int i2 = this.mHeight;
+        int width = this.mWidth;
+        int height = this.mHeight;
         this.mPaint.setStyle(Paint.Style.FILL);
         this.mPaint.setColor(InputDeviceCompat.SOURCE_ANY);
-        int i3 = i / 2;
-        canvas.drawRect(new RectF((float) (i3 - 2), 5.0f, (float) (i3 + 2), (float) i2), this.mPaint);
+        int cursorX = width / 2;
+        canvas.drawRect(new RectF((float) (cursorX - 2), 5.0f, (float) (cursorX + 2), (float) height), this.mPaint);
         this.mPaint.setStyle(Paint.Style.FILL);
         this.mPaint.setColor(-1);
         this.mPaint.setTextAlign(Paint.Align.CENTER);
         this.mPaint.setTextSize(32.0f);
         this.mPaint.setTextScaleX(2.0f);
-        canvas.drawText("2013-12-11 16:20:02", (float) i3, 160.0f, this.mPaint);
+        canvas.drawText("2013-12-11 16:20:02", (float) cursorX, 160.0f, this.mPaint);
     }
 
     public void drawTimeScale(Canvas canvas) {
-        int i = this.mWidth;
-        int i2 = this.mHeight;
-        int i3 = i / 48;
+        int width = this.mWidth;
+        int height = this.mHeight;
+        int tickSpacing = width / 48;
         this.mPaint.setStyle(Paint.Style.FILL);
         this.mPaint.setColor(DayStyle.iColorTextHeader);
         this.mPaint.setTextAlign(Paint.Align.CENTER);
         this.mPaint.setTextSize(16.0f);
         this.mPaint.setTextScaleX(2.0f);
-        float f = (float) (i2 - 90);
-        canvas.drawLine(0.0f, f, (float) (i * 4), f, this.mPaint);
-        for (int i4 = 0; i4 <= 144; i4++) {
-            if (i4 % 6 == 0) {
-                int i5 = i3 * i4;
-                RectF rectF = new RectF((float) (i5 - 3), (float) (i2 - 120), (float) (i5 + 3), f);
-                canvas.drawText(String.format("%02d:00", new Object[]{Integer.valueOf(i4 / 6)}), (float) i5, (float) (i2 - 130), this.mPaint);
+        float scaleY = (float) (height - 90);
+        canvas.drawLine(0.0f, scaleY, (float) (width * 4), scaleY, this.mPaint);
+        for (int tickIndex = 0; tickIndex <= 144; tickIndex++) {
+            if (tickIndex % 6 == 0) {
+                int tickX = tickSpacing * tickIndex;
+                RectF rectF = new RectF((float) (tickX - 3), (float) (height - 120), (float) (tickX + 3), scaleY);
+                canvas.drawText(String.format("%02d:00", new Object[]{Integer.valueOf(tickIndex / 6)}), (float) tickX, (float) (height - 130), this.mPaint);
                 canvas.drawRect(rectF, this.mPaint);
-            } else if (i4 % 3 == 0) {
-                int i6 = i3 * i4;
-                canvas.drawRect(new RectF((float) (i6 - 3), (float) (i2 + MediaPlayer2.MEDIA_ERROR_TIMED_OUT), (float) (i6 + 3), f), this.mPaint);
-            } else if (i4 % 1 == 0) {
-                int i7 = i3 * i4;
-                canvas.drawRect(new RectF((float) (i7 - 2), (float) (i2 - 100), (float) (i7 + 2), f), this.mPaint);
+            } else if (tickIndex % 3 == 0) {
+                int tickX = tickSpacing * tickIndex;
+                canvas.drawRect(new RectF((float) (tickX - 3), (float) (height + MediaPlayer2.MEDIA_ERROR_TIMED_OUT), (float) (tickX + 3), scaleY), this.mPaint);
+            } else if (tickIndex % 1 == 0) {
+                int tickX = tickSpacing * tickIndex;
+                canvas.drawRect(new RectF((float) (tickX - 2), (float) (height - 100), (float) (tickX + 2), scaleY), this.mPaint);
             }
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onScrollChanged(int i, int i2, int i3, int i4) {
-        super.onScrollChanged(i, i2, i3, i4);
+    public void onScrollChanged(int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        super.onScrollChanged(scrollX, scrollY, oldScrollX, oldScrollY);
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
