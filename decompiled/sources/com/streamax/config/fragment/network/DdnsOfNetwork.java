@@ -18,6 +18,7 @@ import com.zycs.UView.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,227 +86,85 @@ public class DdnsOfNetwork extends ConfigFragment implements BaseListener.GetLis
         getConfig();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x011e A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0120 A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0130 A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x0131 A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0139 A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x013f A[Catch:{ JSONException -> 0x0199 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0146 A[Catch:{ JSONException -> 0x0199 }] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private boolean usesAccountDdnsFields(int ddnsType) {
+        return ddnsType == DDNS_TYPE_3322 || ddnsType == DDNS_TYPE_DYNDNS || ddnsType == DDNS_TYPE_DNSEXIT || ddnsType == DDNS_TYPE_NOIP
+                || ddnsType == DDNS_TYPE_CHANGEIP;
+    }
+
     public void refreshUi() {
-        /*
-            r11 = this;
-            java.lang.String r0 = "DdnsOfNetwork"
-            java.lang.String r1 = "refreshUi 1"
-            com.streamax.utils.LogUtils.e((java.lang.String) r0, (java.lang.String) r1)
-            org.json.JSONObject r0 = r11.mDDNSRes
-            if (r0 != 0) goto L_0x000c
-            return
-        L_0x000c:
-            java.lang.String r1 = "NWSM"
-            org.json.JSONObject r0 = r0.getJSONObject(r1)     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSRes     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "GETDDNSLIST"
-            org.json.JSONArray r1 = r1.getJSONArray(r2)     // Catch:{ JSONException -> 0x0199 }
-            if (r0 == 0) goto L_0x0198
-            if (r1 != 0) goto L_0x0020
-            goto L_0x0198
-        L_0x0020:
-            java.lang.String r2 = "DDNS"
-            org.json.JSONObject r0 = r0.getJSONObject(r2)     // Catch:{ JSONException -> 0x0199 }
-            r11.mDDNSObj = r0     // Catch:{ JSONException -> 0x0199 }
-            if (r0 != 0) goto L_0x002b
-            return
-        L_0x002b:
-            java.lang.String r2 = "DDNSSWITCH"
-            int r0 = r0.getInt(r2)     // Catch:{ JSONException -> 0x0199 }
-            android.widget.Button r2 = r11.mBtnDdns     // Catch:{ JSONException -> 0x0199 }
-            r3 = 2131231390(0x7f08029e, float:1.807886E38)
-            r4 = 2131231391(0x7f08029f, float:1.8078862E38)
-            if (r0 != 0) goto L_0x003f
-            r5 = 2131231390(0x7f08029e, float:1.807886E38)
-            goto L_0x0042
-        L_0x003f:
-            r5 = 2131231391(0x7f08029f, float:1.8078862E38)
-        L_0x0042:
-            r2.setBackgroundResource(r5)     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r2 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r5 = "DDNSTYPE"
-            int r2 = r2.getInt(r5)     // Catch:{ JSONException -> 0x0199 }
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r5 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            r5.clear()     // Catch:{ JSONException -> 0x0199 }
-            r5 = 0
-            r6 = 0
-        L_0x0054:
-            int r7 = r1.length()     // Catch:{ JSONException -> 0x0199 }
-            if (r6 >= r7) goto L_0x0092
-            org.json.JSONObject r7 = r1.getJSONObject(r6)     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r8 = "TYPE"
-            java.lang.String r8 = r7.getString(r8)     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r9 = "SELECT"
-            java.lang.String r9 = r7.getString(r9)     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r10 = "VALUE"
-            int r7 = r7.getInt(r10)     // Catch:{ JSONException -> 0x0199 }
-            boolean r10 = r8.isEmpty()     // Catch:{ JSONException -> 0x0199 }
-            if (r10 != 0) goto L_0x008f
-            java.lang.String r10 = "false"
-            boolean r9 = r9.equalsIgnoreCase(r10)     // Catch:{ JSONException -> 0x0199 }
-            if (r9 != 0) goto L_0x008f
-            if (r7 >= 0) goto L_0x0081
-            goto L_0x008f
-        L_0x0081:
-            com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc r9 = new com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc     // Catch:{ JSONException -> 0x0199 }
-            r9.<init>()     // Catch:{ JSONException -> 0x0199 }
-            r9.name = r8     // Catch:{ JSONException -> 0x0199 }
-            r9.value = r7     // Catch:{ JSONException -> 0x0199 }
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r7 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            r7.add(r9)     // Catch:{ JSONException -> 0x0199 }
-        L_0x008f:
-            int r6 = r6 + 1
-            goto L_0x0054
-        L_0x0092:
-            java.util.ArrayList<java.lang.String> r1 = r11.mListStrServers     // Catch:{ JSONException -> 0x0199 }
-            r1.clear()     // Catch:{ JSONException -> 0x0199 }
-            java.util.List<java.lang.Integer> r1 = r11.mListIntServers     // Catch:{ JSONException -> 0x0199 }
-            r1.clear()     // Catch:{ JSONException -> 0x0199 }
-            r1 = -1
-            java.lang.String r6 = ""
-            r8 = r6
-            r7 = 0
-        L_0x00a1:
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r9 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            int r9 = r9.size()     // Catch:{ JSONException -> 0x0199 }
-            if (r7 >= r9) goto L_0x00d2
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r9 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            java.lang.Object r9 = r9.get(r7)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc r9 = (com.streamax.config.fragment.network.DdnsOfNetwork.ServerDesc) r9     // Catch:{ JSONException -> 0x0199 }
-            int r9 = r9.value     // Catch:{ JSONException -> 0x0199 }
-            if (r9 != r2) goto L_0x00c0
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r1 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            java.lang.Object r1 = r1.get(r7)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc r1 = (com.streamax.config.fragment.network.DdnsOfNetwork.ServerDesc) r1     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r8 = r1.name     // Catch:{ JSONException -> 0x0199 }
-            r1 = r7
-        L_0x00c0:
-            java.util.ArrayList<java.lang.String> r9 = r11.mListStrServers     // Catch:{ JSONException -> 0x0199 }
-            java.util.List<com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc> r10 = r11.mServerListDatas     // Catch:{ JSONException -> 0x0199 }
-            java.lang.Object r10 = r10.get(r7)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.config.fragment.network.DdnsOfNetwork$ServerDesc r10 = (com.streamax.config.fragment.network.DdnsOfNetwork.ServerDesc) r10     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r10 = r10.name     // Catch:{ JSONException -> 0x0199 }
-            r9.add(r10)     // Catch:{ JSONException -> 0x0199 }
-            int r7 = r7 + 1
-            goto L_0x00a1
-        L_0x00d2:
-            if (r1 < 0) goto L_0x00de
-            java.util.List<java.lang.Integer> r7 = r11.mListIntServers     // Catch:{ JSONException -> 0x0199 }
-            java.lang.Integer r9 = new java.lang.Integer     // Catch:{ JSONException -> 0x0199 }
-            r9.<init>(r1)     // Catch:{ JSONException -> 0x0199 }
-            r7.add(r9)     // Catch:{ JSONException -> 0x0199 }
-        L_0x00de:
-            com.streamax.view.VsTextView r1 = r11.mTvServer     // Catch:{ JSONException -> 0x0199 }
-            r1.setText(r8)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.view.VsTextView r1 = r11.mTvServer     // Catch:{ JSONException -> 0x0199 }
-            r7 = 1
-            if (r0 != r7) goto L_0x00ea
-            r8 = 1
-            goto L_0x00eb
-        L_0x00ea:
-            r8 = 0
-        L_0x00eb:
-            r1.setEnabled(r8)     // Catch:{ JSONException -> 0x0199 }
-            int r1 = DDNS_TYPE_3322     // Catch:{ JSONException -> 0x0199 }
-            r8 = 8
-            if (r2 == r1) goto L_0x0110
-            int r1 = DDNS_TYPE_DYNDNS     // Catch:{ JSONException -> 0x0199 }
-            if (r2 == r1) goto L_0x0110
-            int r1 = DDNS_TYPE_DNSEXIT     // Catch:{ JSONException -> 0x0199 }
-            if (r2 == r1) goto L_0x0110
-            int r1 = DDNS_TYPE_NOIP     // Catch:{ JSONException -> 0x0199 }
-            if (r2 == r1) goto L_0x0110
-            int r1 = DDNS_TYPE_CHANGEIP     // Catch:{ JSONException -> 0x0199 }
-            if (r2 != r1) goto L_0x0105
-            goto L_0x0110
-        L_0x0105:
-            android.widget.LinearLayout r1 = r11.mLlInfo1     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r5)     // Catch:{ JSONException -> 0x0199 }
-            android.widget.LinearLayout r1 = r11.mLlInfo2     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r8)     // Catch:{ JSONException -> 0x0199 }
-            goto L_0x011a
-        L_0x0110:
-            android.widget.LinearLayout r1 = r11.mLlInfo1     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r8)     // Catch:{ JSONException -> 0x0199 }
-            android.widget.LinearLayout r1 = r11.mLlInfo2     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r5)     // Catch:{ JSONException -> 0x0199 }
-        L_0x011a:
-            android.widget.Button r1 = r11.mBtnDefault     // Catch:{ JSONException -> 0x0199 }
-            if (r0 != r7) goto L_0x0120
-            r2 = 1
-            goto L_0x0121
-        L_0x0120:
-            r2 = 0
-        L_0x0121:
-            r1.setEnabled(r2)     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "DE81"
-            int r1 = r1.getInt(r2)     // Catch:{ JSONException -> 0x0199 }
-            android.widget.Button r2 = r11.mBtnDefault     // Catch:{ JSONException -> 0x0199 }
-            if (r1 != 0) goto L_0x0131
-            goto L_0x0134
-        L_0x0131:
-            r3 = 2131231391(0x7f08029f, float:1.8078862E38)
-        L_0x0134:
-            r2.setBackgroundResource(r3)     // Catch:{ JSONException -> 0x0199 }
-            if (r1 != 0) goto L_0x013f
-            android.widget.LinearLayout r1 = r11.mLlAddrPort     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r5)     // Catch:{ JSONException -> 0x0199 }
-            goto L_0x0144
-        L_0x013f:
-            android.widget.LinearLayout r1 = r11.mLlAddrPort     // Catch:{ JSONException -> 0x0199 }
-            r1.setVisibility(r8)     // Catch:{ JSONException -> 0x0199 }
-        L_0x0144:
-            if (r0 != 0) goto L_0x0147
-            r5 = 1
-        L_0x0147:
-            com.streamax.view.VsEditView r0 = r11.mEtAddr     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "SNAME"
-            java.lang.String r1 = r1.getString(r2)     // Catch:{ JSONException -> 0x0199 }
-            r11.setTvEnableAndContent(r0, r5, r1)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.view.VsEditView r0 = r11.mEtPort     // Catch:{ JSONException -> 0x0199 }
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ JSONException -> 0x0199 }
-            r1.<init>()     // Catch:{ JSONException -> 0x0199 }
-            r1.append(r6)     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r2 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r3 = "PORT"
-            int r2 = r2.getInt(r3)     // Catch:{ JSONException -> 0x0199 }
-            r1.append(r2)     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r1 = r1.toString()     // Catch:{ JSONException -> 0x0199 }
-            r11.setTvEnableAndContent(r0, r5, r1)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.view.VsEditView r0 = r11.mEtHostName     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "HOSTNAME"
-            java.lang.String r1 = r1.getString(r2)     // Catch:{ JSONException -> 0x0199 }
-            r11.setTvEnableAndContent(r0, r5, r1)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.view.VsEditView r0 = r11.mEtUserName     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "USERID"
-            java.lang.String r1 = r1.getString(r2)     // Catch:{ JSONException -> 0x0199 }
-            r11.setTvEnableAndContent(r0, r5, r1)     // Catch:{ JSONException -> 0x0199 }
-            com.streamax.view.VsEditView r0 = r11.mEtPassword     // Catch:{ JSONException -> 0x0199 }
-            org.json.JSONObject r1 = r11.mDDNSObj     // Catch:{ JSONException -> 0x0199 }
-            java.lang.String r2 = "PWD"
-            java.lang.String r1 = r1.getString(r2)     // Catch:{ JSONException -> 0x0199 }
-            r11.setTvEnableAndContent(r0, r5, r1)     // Catch:{ JSONException -> 0x0199 }
-            goto L_0x019c
-        L_0x0198:
-            return
-        L_0x0199:
-            r11.showErrorFragment()
-        L_0x019c:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.config.fragment.network.DdnsOfNetwork.refreshUi():void");
+        LogUtils.e("DdnsOfNetwork", "refreshUi 1");
+        JSONObject ddnsResponse = this.mDDNSRes;
+        if (ddnsResponse == null) {
+            return;
+        }
+        try {
+            JSONObject networkSettings = ddnsResponse.getJSONObject("NWSM");
+            JSONArray serverList = this.mDDNSRes.getJSONArray("GETDDNSLIST");
+            if (networkSettings == null || serverList == null) {
+                return;
+            }
+            this.mDDNSObj = networkSettings.getJSONObject("DDNS");
+            if (this.mDDNSObj == null) {
+                return;
+            }
+            int ddnsSwitch = this.mDDNSObj.getInt("DDNSSWITCH");
+            this.mBtnDdns.setBackgroundResource(ddnsSwitch == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+            int ddnsType = this.mDDNSObj.getInt("DDNSTYPE");
+
+            this.mServerListDatas.clear();
+            for (int serverIndex = 0; serverIndex < serverList.length(); serverIndex++) {
+                JSONObject serverObj = serverList.getJSONObject(serverIndex);
+                String serverName = serverObj.getString("TYPE");
+                String serverSelect = serverObj.getString("SELECT");
+                int serverValue = serverObj.getInt("VALUE");
+                if (!serverName.isEmpty() && !serverSelect.equalsIgnoreCase("false") && serverValue >= 0) {
+                    ServerDesc serverDesc = new ServerDesc();
+                    serverDesc.name = serverName;
+                    serverDesc.value = serverValue;
+                    this.mServerListDatas.add(serverDesc);
+                }
+            }
+
+            this.mListStrServers.clear();
+            this.mListIntServers.clear();
+            int selectedServerIndex = -1;
+            String selectedServerName = "";
+            for (int serverIndex = 0; serverIndex < this.mServerListDatas.size(); serverIndex++) {
+                ServerDesc serverDesc = this.mServerListDatas.get(serverIndex);
+                if (serverDesc.value == ddnsType) {
+                    selectedServerIndex = serverIndex;
+                    selectedServerName = serverDesc.name;
+                }
+                this.mListStrServers.add(serverDesc.name);
+            }
+            if (selectedServerIndex >= 0) {
+                this.mListIntServers.add(Integer.valueOf(selectedServerIndex));
+            }
+
+            this.mTvServer.setText(selectedServerName);
+            this.mTvServer.setEnabled(ddnsSwitch == 1);
+            if (usesAccountDdnsFields(ddnsType)) {
+                this.mLlInfo1.setVisibility(8);
+                this.mLlInfo2.setVisibility(0);
+            } else {
+                this.mLlInfo1.setVisibility(0);
+                this.mLlInfo2.setVisibility(8);
+            }
+
+            this.mBtnDefault.setEnabled(ddnsSwitch == 1);
+            int defaultServerSwitch = this.mDDNSObj.getInt("DE81");
+            this.mBtnDefault.setBackgroundResource(defaultServerSwitch == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+            this.mLlAddrPort.setVisibility(defaultServerSwitch == 0 ? 0 : 8);
+
+            int editDisabled = ddnsSwitch == 0 ? 1 : 0;
+            setTvEnableAndContent(this.mEtAddr, editDisabled, this.mDDNSObj.getString("SNAME"));
+            setTvEnableAndContent(this.mEtPort, editDisabled, "" + this.mDDNSObj.getInt("PORT"));
+            setTvEnableAndContent(this.mEtHostName, editDisabled, this.mDDNSObj.getString("HOSTNAME"));
+            setTvEnableAndContent(this.mEtUserName, editDisabled, this.mDDNSObj.getString("USERID"));
+            setTvEnableAndContent(this.mEtPassword, editDisabled, this.mDDNSObj.getString("PWD"));
+        } catch (JSONException unused) {
+            showErrorFragment();
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -431,9 +290,9 @@ public class DdnsOfNetwork extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mDDNSRes = new JSONObject(str);
+            this.mDDNSRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -480,8 +339,8 @@ public class DdnsOfNetwork extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForServers") && list.size() > 0) {
+    public void saveSelect(String fragmentName, List<Integer> list) {
+        if (fragmentName.equals("SelectFragmentForServers") && list.size() > 0) {
             updateDateForServers(list.get(0).intValue());
         }
     }
