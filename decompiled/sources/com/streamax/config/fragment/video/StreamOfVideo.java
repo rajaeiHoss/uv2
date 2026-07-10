@@ -94,164 +94,71 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x005b  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x006b A[EDGE_INSN: B:38:0x006b->B:35:0x006b ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0068 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0064 A[SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int frameRate2Index(int r9, int r10) {
-        /*
-            r8 = this;
-            org.json.JSONObject r0 = r8.mStreamVpObj
-            r1 = -1
-            if (r0 != 0) goto L_0x0006
-            return r1
-        L_0x0006:
-            java.lang.String r2 = "RSFR"
-            org.json.JSONArray r0 = r0.getJSONArray(r2)     // Catch:{ JSONException -> 0x006b }
-            if (r0 != 0) goto L_0x000f
-            return r1
-        L_0x000f:
-            r2 = 0
-            r3 = 0
-        L_0x0011:
-            int r4 = r0.length()     // Catch:{ JSONException -> 0x006b }
-            if (r3 >= r4) goto L_0x006b
-            org.json.JSONObject r4 = r0.getJSONObject(r3)     // Catch:{ JSONException -> 0x006b }
-            if (r4 != 0) goto L_0x001e
-            goto L_0x0068
-        L_0x001e:
-            java.lang.String r5 = "RST"
-            int r5 = r4.getInt(r5)     // Catch:{ JSONException -> 0x006b }
-            if (r9 == r5) goto L_0x0027
-            goto L_0x0068
-        L_0x0027:
-            java.lang.String r5 = "FR"
-            java.lang.String r4 = r4.getString(r5)     // Catch:{ JSONException -> 0x006b }
-            r5 = 1
-            if (r4 == 0) goto L_0x0056
-            java.lang.String r6 = "-"
-            java.lang.String[] r4 = r4.split(r6)     // Catch:{ JSONException -> 0x006b }
-            int r6 = r4.length     // Catch:{ JSONException -> 0x006b }
-            if (r6 <= r5) goto L_0x0056
-            r6 = r4[r2]     // Catch:{ JSONException -> 0x006b }
-            boolean r6 = r6.isEmpty()     // Catch:{ JSONException -> 0x006b }
-            if (r6 != 0) goto L_0x0056
-            r6 = r4[r5]     // Catch:{ JSONException -> 0x006b }
-            boolean r6 = r6.isEmpty()     // Catch:{ JSONException -> 0x006b }
-            if (r6 != 0) goto L_0x0056
-            r6 = r4[r2]     // Catch:{ JSONException -> 0x006b }
-            int r6 = java.lang.Integer.parseInt(r6)     // Catch:{ JSONException -> 0x006b }
-            r4 = r4[r5]     // Catch:{ JSONException -> 0x006b }
-            int r4 = java.lang.Integer.parseInt(r4)     // Catch:{ JSONException -> 0x006b }
-            goto L_0x0058
-        L_0x0056:
-            r4 = 1
-            r6 = 1
-        L_0x0058:
-            r7 = r6
-        L_0x0059:
-            if (r7 > r4) goto L_0x0064
-            if (r10 != r7) goto L_0x0061
-            int r7 = r7 - r6
-            r1 = r7
-            r4 = 1
-            goto L_0x0065
-        L_0x0061:
-            int r7 = r7 + 1
-            goto L_0x0059
-        L_0x0064:
-            r4 = 0
-        L_0x0065:
-            if (r4 != r5) goto L_0x0068
-            goto L_0x006b
-        L_0x0068:
-            int r3 = r3 + 1
-            goto L_0x0011
-        L_0x006b:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.config.fragment.video.StreamOfVideo.frameRate2Index(int, int):int");
+    private int[] parseFrameRateRange(String frameRateRange) {
+        if (frameRateRange != null) {
+            String[] parts = frameRateRange.split("-");
+            if (parts.length > 1 && !parts[0].isEmpty() && !parts[1].isEmpty()) {
+                int minFrameRate = Integer.parseInt(parts[0]);
+                int maxFrameRate = Integer.parseInt(parts[1]);
+                return new int[]{minFrameRate, maxFrameRate};
+            }
+        }
+        return new int[]{1, 1};
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x005b  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x006b A[EDGE_INSN: B:38:0x006b->B:35:0x006b ?: BREAK  , SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0068 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0064 A[SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int index2FrameRate(int r9, int r10) {
-        /*
-            r8 = this;
-            org.json.JSONObject r0 = r8.mStreamVpObj
-            r1 = -1
-            if (r0 != 0) goto L_0x0006
-            return r1
-        L_0x0006:
-            java.lang.String r2 = "RSFR"
-            org.json.JSONArray r0 = r0.getJSONArray(r2)     // Catch:{ JSONException -> 0x006b }
-            if (r0 != 0) goto L_0x000f
-            return r1
-        L_0x000f:
-            r2 = 0
-            r3 = 0
-        L_0x0011:
-            int r4 = r0.length()     // Catch:{ JSONException -> 0x006b }
-            if (r3 >= r4) goto L_0x006b
-            org.json.JSONObject r4 = r0.getJSONObject(r3)     // Catch:{ JSONException -> 0x006b }
-            if (r4 != 0) goto L_0x001e
-            goto L_0x0068
-        L_0x001e:
-            java.lang.String r5 = "RST"
-            int r5 = r4.getInt(r5)     // Catch:{ JSONException -> 0x006b }
-            if (r9 == r5) goto L_0x0027
-            goto L_0x0068
-        L_0x0027:
-            java.lang.String r5 = "FR"
-            java.lang.String r4 = r4.getString(r5)     // Catch:{ JSONException -> 0x006b }
-            r5 = 1
-            if (r4 == 0) goto L_0x0056
-            java.lang.String r6 = "-"
-            java.lang.String[] r4 = r4.split(r6)     // Catch:{ JSONException -> 0x006b }
-            int r6 = r4.length     // Catch:{ JSONException -> 0x006b }
-            if (r6 <= r5) goto L_0x0056
-            r6 = r4[r2]     // Catch:{ JSONException -> 0x006b }
-            boolean r6 = r6.isEmpty()     // Catch:{ JSONException -> 0x006b }
-            if (r6 != 0) goto L_0x0056
-            r6 = r4[r5]     // Catch:{ JSONException -> 0x006b }
-            boolean r6 = r6.isEmpty()     // Catch:{ JSONException -> 0x006b }
-            if (r6 != 0) goto L_0x0056
-            r6 = r4[r2]     // Catch:{ JSONException -> 0x006b }
-            int r6 = java.lang.Integer.parseInt(r6)     // Catch:{ JSONException -> 0x006b }
-            r4 = r4[r5]     // Catch:{ JSONException -> 0x006b }
-            int r4 = java.lang.Integer.parseInt(r4)     // Catch:{ JSONException -> 0x006b }
-            goto L_0x0058
-        L_0x0056:
-            r4 = 1
-            r6 = 1
-        L_0x0058:
-            r7 = r6
-        L_0x0059:
-            if (r7 >= r4) goto L_0x0064
-            if (r10 != r7) goto L_0x0061
-            int r7 = r7 + r6
-            r1 = r7
-            r4 = 1
-            goto L_0x0065
-        L_0x0061:
-            int r7 = r7 + 1
-            goto L_0x0059
-        L_0x0064:
-            r4 = 0
-        L_0x0065:
-            if (r4 != r5) goto L_0x0068
-            goto L_0x006b
-        L_0x0068:
-            int r3 = r3 + 1
-            goto L_0x0011
-        L_0x006b:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.config.fragment.video.StreamOfVideo.index2FrameRate(int, int):int");
+    public int frameRate2Index(int resolution, int frameRate) {
+        JSONObject streamVpObj = this.mStreamVpObj;
+        if (streamVpObj == null) {
+            return -1;
+        }
+        try {
+            JSONArray resolutionFrameRates = streamVpObj.getJSONArray("RSFR");
+            if (resolutionFrameRates == null) {
+                return -1;
+            }
+            for (int entryIndex = 0; entryIndex < resolutionFrameRates.length(); entryIndex++) {
+                JSONObject frameRateObj = resolutionFrameRates.getJSONObject(entryIndex);
+                if (frameRateObj != null && resolution == frameRateObj.getInt("RST")) {
+                    int[] frameRateRange = parseFrameRateRange(frameRateObj.getString("FR"));
+                    int minFrameRate = frameRateRange[0];
+                    int maxFrameRate = frameRateRange[1];
+                    for (int candidateFrameRate = minFrameRate; candidateFrameRate <= maxFrameRate; candidateFrameRate++) {
+                        if (frameRate == candidateFrameRate) {
+                            return candidateFrameRate - minFrameRate;
+                        }
+                    }
+                }
+            }
+            return -1;
+        } catch (JSONException unused) {
+            return -1;
+        }
+    }
+
+    public int index2FrameRate(int resolution, int frameRateIndex) {
+        JSONObject streamVpObj = this.mStreamVpObj;
+        if (streamVpObj == null || frameRateIndex < 0) {
+            return -1;
+        }
+        try {
+            JSONArray resolutionFrameRates = streamVpObj.getJSONArray("RSFR");
+            if (resolutionFrameRates == null) {
+                return -1;
+            }
+            for (int entryIndex = 0; entryIndex < resolutionFrameRates.length(); entryIndex++) {
+                JSONObject frameRateObj = resolutionFrameRates.getJSONObject(entryIndex);
+                if (frameRateObj != null && resolution == frameRateObj.getInt("RST")) {
+                    int[] frameRateRange = parseFrameRateRange(frameRateObj.getString("FR"));
+                    int minFrameRate = frameRateRange[0];
+                    int maxFrameRate = frameRateRange[1];
+                    int frameRate = minFrameRate + frameRateIndex;
+                    return frameRate <= maxFrameRate ? frameRate : -1;
+                }
+            }
+            return -1;
+        } catch (JSONException unused) {
+            return -1;
+        }
     }
 
     public int encType2Index(int i) {
@@ -384,106 +291,40 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x0079 A[Catch:{ JSONException -> 0x00bb }] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void configureFrameRate() {
-        /*
-            r14 = this;
-            java.lang.String r0 = "FR"
-            java.lang.String r1 = "RST"
-            org.json.JSONObject r2 = r14.mStreamObj
-            if (r2 == 0) goto L_0x00bb
-            org.json.JSONObject r3 = r14.mStreamVpObj
-            if (r3 != 0) goto L_0x000e
-            goto L_0x00bb
-        L_0x000e:
-            r3 = -1
-            int r2 = r2.getInt(r1)     // Catch:{ JSONException -> 0x00bb }
-            org.json.JSONObject r4 = r14.mStreamObj     // Catch:{ JSONException -> 0x00bb }
-            int r4 = r4.getInt(r0)     // Catch:{ JSONException -> 0x00bb }
-            org.json.JSONObject r5 = r14.mStreamVpObj     // Catch:{ JSONException -> 0x00bb }
-            java.lang.String r6 = "RSFR"
-            org.json.JSONArray r5 = r5.getJSONArray(r6)     // Catch:{ JSONException -> 0x00bb }
-            if (r5 != 0) goto L_0x0024
-            return
-        L_0x0024:
-            r6 = 0
-            r7 = 0
-        L_0x0026:
-            int r8 = r5.length()     // Catch:{ JSONException -> 0x00bb }
-            if (r7 >= r8) goto L_0x00bb
-            org.json.JSONObject r8 = r5.getJSONObject(r7)     // Catch:{ JSONException -> 0x00bb }
-            if (r8 != 0) goto L_0x0034
-            goto L_0x00b7
-        L_0x0034:
-            int r9 = r8.getInt(r1)     // Catch:{ JSONException -> 0x00bb }
-            if (r2 == r9) goto L_0x003c
-            goto L_0x00b7
-        L_0x003c:
-            java.lang.String r8 = r8.getString(r0)     // Catch:{ JSONException -> 0x00bb }
-            r9 = 1
-            if (r8 == 0) goto L_0x006b
-            java.lang.String r10 = "-"
-            java.lang.String[] r8 = r8.split(r10)     // Catch:{ JSONException -> 0x00bb }
-            int r10 = r8.length     // Catch:{ JSONException -> 0x00bb }
-            if (r10 <= r9) goto L_0x006b
-            r10 = r8[r6]     // Catch:{ JSONException -> 0x00bb }
-            boolean r10 = r10.isEmpty()     // Catch:{ JSONException -> 0x00bb }
-            if (r10 != 0) goto L_0x006b
-            r10 = r8[r9]     // Catch:{ JSONException -> 0x00bb }
-            boolean r10 = r10.isEmpty()     // Catch:{ JSONException -> 0x00bb }
-            if (r10 != 0) goto L_0x006b
-            r10 = r8[r6]     // Catch:{ JSONException -> 0x00bb }
-            int r10 = java.lang.Integer.parseInt(r10)     // Catch:{ JSONException -> 0x00bb }
-            r8 = r8[r9]     // Catch:{ JSONException -> 0x00bb }
-            int r9 = java.lang.Integer.parseInt(r8)     // Catch:{ JSONException -> 0x00bb }
-            r8 = r9
-            r9 = r10
-            goto L_0x006c
-        L_0x006b:
-            r8 = 1
-        L_0x006c:
-            java.util.ArrayList<java.lang.String> r10 = r14.mListStrFrameRate     // Catch:{ JSONException -> 0x00bb }
-            r10.clear()     // Catch:{ JSONException -> 0x00bb }
-            java.util.List<java.lang.Integer> r10 = r14.mListIntFrameRate     // Catch:{ JSONException -> 0x00bb }
-            r10.clear()     // Catch:{ JSONException -> 0x00bb }
-            r10 = r9
-        L_0x0077:
-            if (r10 > r8) goto L_0x0096
-            if (r4 != r10) goto L_0x007d
-            int r3 = r10 - r9
-        L_0x007d:
-            java.util.ArrayList<java.lang.String> r11 = r14.mListStrFrameRate     // Catch:{ JSONException -> 0x00bb }
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ JSONException -> 0x00bb }
-            r12.<init>()     // Catch:{ JSONException -> 0x00bb }
-            java.lang.String r13 = ""
-            r12.append(r13)     // Catch:{ JSONException -> 0x00bb }
-            r12.append(r10)     // Catch:{ JSONException -> 0x00bb }
-            java.lang.String r12 = r12.toString()     // Catch:{ JSONException -> 0x00bb }
-            r11.add(r12)     // Catch:{ JSONException -> 0x00bb }
-            int r10 = r10 + 1
-            goto L_0x0077
-        L_0x0096:
-            if (r3 < 0) goto L_0x00b7
-            java.util.ArrayList<java.lang.String> r8 = r14.mListStrFrameRate     // Catch:{ JSONException -> 0x00bb }
-            int r8 = r8.size()     // Catch:{ JSONException -> 0x00bb }
-            if (r3 >= r8) goto L_0x00b7
-            android.widget.TextView r8 = r14.mTvFrameRate     // Catch:{ JSONException -> 0x00bb }
-            java.util.ArrayList<java.lang.String> r9 = r14.mListStrFrameRate     // Catch:{ JSONException -> 0x00bb }
-            java.lang.Object r9 = r9.get(r3)     // Catch:{ JSONException -> 0x00bb }
-            java.lang.CharSequence r9 = (java.lang.CharSequence) r9     // Catch:{ JSONException -> 0x00bb }
-            r8.setText(r9)     // Catch:{ JSONException -> 0x00bb }
-            java.util.List<java.lang.Integer> r8 = r14.mListIntFrameRate     // Catch:{ JSONException -> 0x00bb }
-            java.lang.Integer r9 = new java.lang.Integer     // Catch:{ JSONException -> 0x00bb }
-            r9.<init>(r3)     // Catch:{ JSONException -> 0x00bb }
-            r8.add(r9)     // Catch:{ JSONException -> 0x00bb }
-        L_0x00b7:
-            int r7 = r7 + 1
-            goto L_0x0026
-        L_0x00bb:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.config.fragment.video.StreamOfVideo.configureFrameRate():void");
+        if (this.mStreamObj != null && this.mStreamVpObj != null) {
+            try {
+                int resolution = this.mStreamObj.getInt("RST");
+                int currentFrameRate = this.mStreamObj.getInt("FR");
+                JSONArray resolutionFrameRates = this.mStreamVpObj.getJSONArray("RSFR");
+                if (resolutionFrameRates == null) {
+                    return;
+                }
+                for (int entryIndex = 0; entryIndex < resolutionFrameRates.length(); entryIndex++) {
+                    JSONObject frameRateObj = resolutionFrameRates.getJSONObject(entryIndex);
+                    if (frameRateObj != null && resolution == frameRateObj.getInt("RST")) {
+                        int selectedIndex = -1;
+                        int[] frameRateRange = parseFrameRateRange(frameRateObj.getString("FR"));
+                        int minFrameRate = frameRateRange[0];
+                        int maxFrameRate = frameRateRange[1];
+                        this.mListStrFrameRate.clear();
+                        this.mListIntFrameRate.clear();
+                        for (int frameRate = minFrameRate; frameRate <= maxFrameRate; frameRate++) {
+                            if (currentFrameRate == frameRate) {
+                                selectedIndex = frameRate - minFrameRate;
+                            }
+                            this.mListStrFrameRate.add("" + frameRate);
+                        }
+                        if (selectedIndex >= 0 && selectedIndex < this.mListStrFrameRate.size()) {
+                            this.mTvFrameRate.setText(this.mListStrFrameRate.get(selectedIndex));
+                            this.mListIntFrameRate.add(new Integer(selectedIndex));
+                        }
+                        return;
+                    }
+                }
+            } catch (JSONException unused) {
+            }
+        }
     }
 
     public void configureEncType() {
