@@ -107,123 +107,33 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
         if (this.mAproObj != null) {
             LogUtils.e("TriggerOfAlarm", "refreshUi1 , mAproObj: " + this.mAproObj.toString());
             try {
-                JSONObject jSONObject = this.mAproObj.getJSONObject("AR");
-                if (jSONObject != null) {
-                    int i = jSONObject.getInt("CH");
-                    this.mListStrRecordChannel.clear();
-                    this.mListIntRecordChannel.clear();
-                    int i2 = 0;
-                    while (i2 < this.mCurChTotal) {
-                        ArrayList<String> arrayList = this.mListStrRecordChannel;
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("CH");
-                        int i3 = i2 + 1;
-                        sb.append(i3);
-                        arrayList.add(sb.toString());
-                        if (((i >> i2) & 1) == 1) {
-                            this.mListIntRecordChannel.add(new Integer(i2));
-                        }
-                        i2 = i3;
-                    }
-                    JSONObject jSONObject2 = this.mAproObj.getJSONObject("SPS");
-                    if (jSONObject2 != null) {
-                        int i4 = jSONObject2.getInt("CH");
-                        this.mListStrSnapChannel.clear();
-                        this.mListIntSnapChannel.clear();
-                        int i5 = 0;
-                        while (i5 < this.mCurChTotal) {
-                            ArrayList<String> arrayList2 = this.mListStrSnapChannel;
-                            StringBuilder sb2 = new StringBuilder();
-                            sb2.append("CH");
-                            int i6 = i5 + 1;
-                            sb2.append(i6);
-                            arrayList2.add(sb2.toString());
-                            if (((i4 >> i5) & 1) == 1) {
-                                this.mListIntSnapChannel.add(new Integer(i5));
-                            }
-                            i5 = i6;
-                        }
-                        JSONObject jSONObject3 = this.mAproObj.getJSONObject("AE");
-                        if (jSONObject3 != null) {
-                            int i7 = jSONObject3.getInt("BSE");
-                            IvView ivView = this.mIvEmail;
-                            int i8 = R.drawable.switch_close;
-                            ivView.SetImageResource(i7 == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                            JSONObject jSONObject4 = this.mAproObj.getJSONObject("AS");
-                            if (jSONObject4 != null) {
-                                this.mIvAlarmOutput.SetImageResource(jSONObject4.getInt("SOID") == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                                JSONObject jSONObject5 = this.mAproObj.getJSONObject("FTPUP");
-                                if (jSONObject5 != null) {
-                                    this.mIvFtpUpload.SetImageResource(jSONObject5.getInt("EN") == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                                    JSONObject jSONObject6 = this.mAproObj.getJSONObject("PUS");
-                                    if (jSONObject6 != null) {
-                                        int i9 = jSONObject6.getInt("EN");
-                                        IvView ivView2 = this.mIvMsgPush;
-                                        if (i9 != 0) {
-                                            i8 = R.drawable.switch_open;
-                                        }
-                                        ivView2.SetImageResource(i8);
-                                        int i10 = jSONObject4.getInt("SOT");
-                                        this.mListStrOutputDuration.clear();
-                                        this.mListIntOutputDuration.clear();
-                                        int i11 = i10 == 5 ? 0 : i10 == 10 ? 1 : i10 == 30 ? 2 : i10 == 60 ? 3 : i10 == 180 ? 4 : i10 == 300 ? 5 : i10 == 600 ? 6 : i10 == 900 ? 7 : i10 == 1800 ? 8 : -1;
-                                        List<String> strDatas = getStrDatas(R.array.AlarmOutputDurationSelector);
-                                        if (i11 >= 0 && i11 < strDatas.size()) {
-                                            this.mTvOutputDuration.setText(strDatas.get(i11));
-                                            this.mListStrOutputDuration.addAll(strDatas);
-                                            this.mListIntOutputDuration.add(new Integer(i11));
-                                        }
-                                        JSONObject jSONObject7 = this.mAproObj.getJSONObject("AB");
-                                        if (jSONObject7 != null) {
-                                            int i12 = jSONObject7.getInt("BT");
-                                            this.mListStrBuzzer.clear();
-                                            this.mListIntBuzzer.clear();
-                                            int i13 = i12 == 0 ? 0 : i12 == 10 ? 1 : i12 == 30 ? 2 : i12 == 60 ? 3 : i12 == 180 ? 4 : i12 == 300 ? 5 : i12 == 600 ? 6 : i12 == 900 ? 7 : i12 == 1800 ? 8 : -1;
-                                            List<String> strDatas2 = getStrDatas(R.array.BuzzerSelector);
-                                            if (i13 >= 0 && i13 < strDatas2.size()) {
-                                                this.mTvBuzzer.setText(strDatas2.get(i13));
-                                                this.mListStrBuzzer.addAll(strDatas2);
-                                                this.mListIntBuzzer.add(new Integer(i13));
-                                            }
-                                            JSONObject jSONObject8 = this.mAproObj.getJSONObject("AFS");
-                                            if (jSONObject8 != null) {
-                                                int i14 = jSONObject8.getInt("CHL");
-                                                this.mListStrFullScreen.clear();
-                                                this.mListIntFullScreen.clear();
-                                                this.mListStrFullScreen.add(UiUtils.getString(R.string.config_none));
-                                                int i15 = 0;
-                                                while (i15 < this.mCurChTotal) {
-                                                    ArrayList<String> arrayList3 = this.mListStrFullScreen;
-                                                    StringBuilder sb3 = new StringBuilder();
-                                                    sb3.append("CH");
-                                                    i15++;
-                                                    sb3.append(i15);
-                                                    arrayList3.add(sb3.toString());
-                                                }
-                                                if (i14 >= 0 && i14 < this.mListStrFullScreen.size()) {
-                                                    this.mTvFullScreenCh.setText(this.mListStrFullScreen.get(i14));
-                                                    this.mListIntFullScreen.add(new Integer(i14));
-                                                }
-                                                int i16 = jSONObject.getInt("PRS");
-                                                this.mListStrPreRecord.clear();
-                                                this.mListIntPreRecord.clear();
-                                                int i17 = i16 == 0 ? 0 : i16 == 5 ? 1 : i16 == 10 ? 2 : -1;
-                                                List<String> strDatas3 = getStrDatas(R.array.PreRecordSelector);
-                                                if (i17 >= 0 && i17 < strDatas3.size()) {
-                                                    this.mTvPreRecord.setText(strDatas3.get(i17));
-                                                    this.mListStrPreRecord.addAll(strDatas3);
-                                                    this.mListIntPreRecord.add(new Integer(i17));
-                                                }
-                                                int i18 = jSONObject.getInt("DRS");
-                                                this.mListStrDelayRecord.clear();
-                                                this.mListIntDelayRecord.clear();
-                                                int i19 = i18 == 10 ? 0 : i18 == 30 ? 1 : i18 == 60 ? 2 : i18 == 180 ? 3 : i18 == 300 ? 4 : i18 == 600 ? 5 : i18 == 900 ? 6 : i18 == 1800 ? 7 : -1;
-                                                List<String> strDatas4 = getStrDatas(R.array.DelayRecordSelector);
-                                                if (i19 >= 0 && i19 < strDatas4.size()) {
-                                                    this.mTvDelayRecord.setText(strDatas4.get(i19));
-                                                    this.mListStrDelayRecord.addAll(strDatas4);
-                                                    this.mListIntDelayRecord.add(new Integer(i19));
-                                                }
+                JSONObject recordObj = this.mAproObj.getJSONObject("AR");
+                if (recordObj != null) {
+                    configureChannelChoices(recordObj.getInt("CH"), this.mListStrRecordChannel, this.mListIntRecordChannel);
+                    JSONObject snapObj = this.mAproObj.getJSONObject("SPS");
+                    if (snapObj != null) {
+                        configureChannelChoices(snapObj.getInt("CH"), this.mListStrSnapChannel, this.mListIntSnapChannel);
+                        JSONObject emailObj = this.mAproObj.getJSONObject("AE");
+                        if (emailObj != null) {
+                            this.mIvEmail.SetImageResource(getSwitchResource(emailObj.getInt("BSE")));
+                            JSONObject outputObj = this.mAproObj.getJSONObject("AS");
+                            if (outputObj != null) {
+                                this.mIvAlarmOutput.SetImageResource(getSwitchResource(outputObj.getInt("SOID")));
+                                JSONObject ftpObj = this.mAproObj.getJSONObject("FTPUP");
+                                if (ftpObj != null) {
+                                    this.mIvFtpUpload.SetImageResource(getSwitchResource(ftpObj.getInt("EN")));
+                                    JSONObject pushObj = this.mAproObj.getJSONObject("PUS");
+                                    if (pushObj != null) {
+                                        this.mIvMsgPush.SetImageResource(getSwitchResource(pushObj.getInt("EN")));
+                                        applyChoice(outputDurationToIndex(outputObj.getInt("SOT")), getStrDatas(R.array.AlarmOutputDurationSelector), this.mTvOutputDuration, this.mListStrOutputDuration, this.mListIntOutputDuration);
+                                        JSONObject buzzerObj = this.mAproObj.getJSONObject("AB");
+                                        if (buzzerObj != null) {
+                                            applyChoice(buzzerToIndex(buzzerObj.getInt("BT")), getStrDatas(R.array.BuzzerSelector), this.mTvBuzzer, this.mListStrBuzzer, this.mListIntBuzzer);
+                                            JSONObject fullScreenObj = this.mAproObj.getJSONObject("AFS");
+                                            if (fullScreenObj != null) {
+                                                configureFullScreenChoices(fullScreenObj.getInt("CHL"));
+                                                applyChoice(preRecordToIndex(recordObj.getInt("PRS")), getStrDatas(R.array.PreRecordSelector), this.mTvPreRecord, this.mListStrPreRecord, this.mListIntPreRecord);
+                                                applyChoice(delayRecordToIndex(recordObj.getInt("DRS")), getStrDatas(R.array.DelayRecordSelector), this.mTvDelayRecord, this.mListStrDelayRecord, this.mListIntDelayRecord);
                                             }
                                         }
                                     }
@@ -235,6 +145,60 @@ public class TriggerOfAlarm extends ConfigFragment implements BaseListener.SetLi
             } catch (JSONException unused) {
             }
         }
+    }
+
+    private void configureChannelChoices(int channelMask, ArrayList<String> labelList, List<Integer> selectedList) {
+        labelList.clear();
+        selectedList.clear();
+        for (int channelIndex = 0; channelIndex < this.mCurChTotal; channelIndex++) {
+            labelList.add("CH" + (channelIndex + 1));
+            if (((channelMask >> channelIndex) & 1) == 1) {
+                selectedList.add(new Integer(channelIndex));
+            }
+        }
+    }
+
+    private int getSwitchResource(int enabled) {
+        return enabled == 0 ? R.drawable.switch_close : R.drawable.switch_open;
+    }
+
+    private void applyChoice(int selectedIndex, List<String> labelSource, TextView textView, ArrayList<String> labelList, List<Integer> selectedList) {
+        labelList.clear();
+        selectedList.clear();
+        if (selectedIndex >= 0 && selectedIndex < labelSource.size()) {
+            textView.setText(labelSource.get(selectedIndex));
+            labelList.addAll(labelSource);
+            selectedList.add(new Integer(selectedIndex));
+        }
+    }
+
+    private void configureFullScreenChoices(int selectedChannel) {
+        this.mListStrFullScreen.clear();
+        this.mListIntFullScreen.clear();
+        this.mListStrFullScreen.add(UiUtils.getString(R.string.config_none));
+        for (int channelIndex = 0; channelIndex < this.mCurChTotal; channelIndex++) {
+            this.mListStrFullScreen.add("CH" + (channelIndex + 1));
+        }
+        if (selectedChannel >= 0 && selectedChannel < this.mListStrFullScreen.size()) {
+            this.mTvFullScreenCh.setText(this.mListStrFullScreen.get(selectedChannel));
+            this.mListIntFullScreen.add(new Integer(selectedChannel));
+        }
+    }
+
+    private int outputDurationToIndex(int duration) {
+        return duration == 5 ? 0 : duration == 10 ? 1 : duration == 30 ? 2 : duration == 60 ? 3 : duration == 180 ? 4 : duration == 300 ? 5 : duration == 600 ? 6 : duration == 900 ? 7 : duration == 1800 ? 8 : -1;
+    }
+
+    private int buzzerToIndex(int duration) {
+        return duration == 0 ? 0 : duration == 10 ? 1 : duration == 30 ? 2 : duration == 60 ? 3 : duration == 180 ? 4 : duration == 300 ? 5 : duration == 600 ? 6 : duration == 900 ? 7 : duration == 1800 ? 8 : -1;
+    }
+
+    private int preRecordToIndex(int duration) {
+        return duration == 0 ? 0 : duration == 5 ? 1 : duration == 10 ? 2 : -1;
+    }
+
+    private int delayRecordToIndex(int duration) {
+        return duration == 10 ? 0 : duration == 30 ? 1 : duration == 60 ? 2 : duration == 180 ? 3 : duration == 300 ? 4 : duration == 600 ? 5 : duration == 900 ? 6 : duration == 1800 ? 7 : -1;
     }
 
     /* access modifiers changed from: protected */
