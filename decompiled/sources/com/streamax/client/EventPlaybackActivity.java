@@ -165,17 +165,17 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
         this.mtvStartTime = (TextView) findViewById(R.id.eventplayback_starttime_text);
         this.mSeekBar = (SeekBar) findViewById(R.id.eventplayback_progressbar);
         this.image = (ImageView) findViewById(R.id.eventplayback_controlbar_sound);
-        int i2 = 60;
-        int i = this.mApp.mStartTime;
+        int seekWindowSeconds = 60;
+        int startWindowMinutes = this.mApp.mStartTime;
         if (this.mApp.mStartTime == 0) {
             if (this.mApp.mEndTime != 0) {
-                i2 = this.mApp.mEndTime;
+                seekWindowSeconds = this.mApp.mEndTime;
             }
-            this.mSeekBar.setMax(i2);
+            this.mSeekBar.setMax(seekWindowSeconds);
             this.mSeekBar.setProgress(0);
             this.mSeekBar.setSecondaryProgress(0);
             this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 }
 
                 public void onStartTrackingTouch(SeekBar seekBar) {
@@ -255,16 +255,16 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                                 return;
                             case R.id.eventplayback_controlbar_slow /*2131362385*/:
                                 if (EventPlaybackActivity.this.mDvrNet != null) {
-                                    int i2 = EventPlaybackActivity.this.mSpeed;
-                                    if (i2 == -4) {
+                                    int currentSpeed = EventPlaybackActivity.this.mSpeed;
+                                    if (currentSpeed == -4) {
                                         EventPlaybackActivity.this.mSpeed = 1;
-                                    } else if (i2 == -2) {
+                                    } else if (currentSpeed == -2) {
                                         EventPlaybackActivity.this.mSpeed = -4;
-                                    } else if (i2 == 4) {
+                                    } else if (currentSpeed == 4) {
                                         EventPlaybackActivity.this.mSpeed = 2;
-                                    } else if (i2 == 1) {
+                                    } else if (currentSpeed == 1) {
                                         EventPlaybackActivity.this.mSpeed = -2;
-                                    } else if (i2 != 2) {
+                                    } else if (currentSpeed != 2) {
                                         EventPlaybackActivity.this.mSpeed = -2;
                                     } else {
                                         EventPlaybackActivity.this.mSpeed = 1;
@@ -353,14 +353,14 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                 }
             };
         } else if (this.mApp.mEndTime == 0) {
-            i = this.mApp.mStartTime;
+            startWindowMinutes = this.mApp.mStartTime;
         } else {
-            i2 = (this.mApp.mStartTime * 60) + (this.mApp.mEndTime * 60);
-            this.mSeekBar.setMax(i2);
+            seekWindowSeconds = (this.mApp.mStartTime * 60) + (this.mApp.mEndTime * 60);
+            this.mSeekBar.setMax(seekWindowSeconds);
             this.mSeekBar.setProgress(0);
             this.mSeekBar.setSecondaryProgress(0);
             this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 }
 
                 public void onStartTrackingTouch(SeekBar seekBar) {
@@ -440,16 +440,16 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                                 return;
                             case R.id.eventplayback_controlbar_slow /*2131362385*/:
                                 if (EventPlaybackActivity.this.mDvrNet != null) {
-                                    int i2 = EventPlaybackActivity.this.mSpeed;
-                                    if (i2 == -4) {
+                                    int currentSpeed = EventPlaybackActivity.this.mSpeed;
+                                    if (currentSpeed == -4) {
                                         EventPlaybackActivity.this.mSpeed = 1;
-                                    } else if (i2 == -2) {
+                                    } else if (currentSpeed == -2) {
                                         EventPlaybackActivity.this.mSpeed = -4;
-                                    } else if (i2 == 4) {
+                                    } else if (currentSpeed == 4) {
                                         EventPlaybackActivity.this.mSpeed = 2;
-                                    } else if (i2 == 1) {
+                                    } else if (currentSpeed == 1) {
                                         EventPlaybackActivity.this.mSpeed = -2;
-                                    } else if (i2 != 2) {
+                                    } else if (currentSpeed != 2) {
                                         EventPlaybackActivity.this.mSpeed = -2;
                                     } else {
                                         EventPlaybackActivity.this.mSpeed = 1;
@@ -538,12 +538,12 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                 }
             };
         }
-        i2 = (i * 60) + 30;
-        this.mSeekBar.setMax(i2);
+        seekWindowSeconds = (startWindowMinutes * 60) + 30;
+        this.mSeekBar.setMax(seekWindowSeconds);
         this.mSeekBar.setProgress(0);
         this.mSeekBar.setSecondaryProgress(0);
         this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -623,16 +623,16 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                             return;
                         case R.id.eventplayback_controlbar_slow /*2131362385*/:
                             if (EventPlaybackActivity.this.mDvrNet != null) {
-                                int i2 = EventPlaybackActivity.this.mSpeed;
-                                if (i2 == -4) {
+                                int currentSpeed = EventPlaybackActivity.this.mSpeed;
+                                if (currentSpeed == -4) {
                                     EventPlaybackActivity.this.mSpeed = 1;
-                                } else if (i2 == -2) {
+                                } else if (currentSpeed == -2) {
                                     EventPlaybackActivity.this.mSpeed = -4;
-                                } else if (i2 == 4) {
+                                } else if (currentSpeed == 4) {
                                     EventPlaybackActivity.this.mSpeed = 2;
-                                } else if (i2 == 1) {
+                                } else if (currentSpeed == 1) {
                                     EventPlaybackActivity.this.mSpeed = -2;
-                                } else if (i2 != 2) {
+                                } else if (currentSpeed != 2) {
                                     EventPlaybackActivity.this.mSpeed = -2;
                                 } else {
                                     EventPlaybackActivity.this.mSpeed = 1;
@@ -722,45 +722,44 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
         };
     }
 
-    public void popImageViewer(List<Map<String, Object>> list) {
-        List<Map<String, Object>> list2 = list;
-        if (list.size() != 0) {
-            this.mbmpList = list2;
-            int size = list.size();
+    public void popImageViewer(List<Map<String, Object>> captures) {
+        if (captures.size() != 0) {
+            this.mbmpList = captures;
+            int captureCount = captures.size();
             this.mpopViewer = this.mInflater.inflate(R.layout.captureimageviewer, (ViewGroup) null);
-            LinearLayout linearLayout = new LinearLayout(this.mContext);
-            linearLayout.setOrientation(1);
-            linearLayout.setGravity(17);
-            linearLayout.setBackgroundColor(Color.argb(200, 40, 40, 40));
-            int i = 0;
-            linearLayout.setPadding(0, 0, 0, 0);
+            LinearLayout imageGrid = new LinearLayout(this.mContext);
+            imageGrid.setOrientation(1);
+            imageGrid.setGravity(17);
+            imageGrid.setBackgroundColor(Color.argb(200, 40, 40, 40));
+            int noPadding = 0;
+            imageGrid.setPadding(0, 0, 0, 0);
             new LinearLayout.LayoutParams(-2, -2).weight = 1.0f;
-            int i2 = 0;
+            int rowIndex = 0;
             while (true) {
-                double d = (double) i2;
-                double d2 = (double) size;
-                if (d < Math.sqrt(d2)) {
-                    LinearLayout linearLayout2 = new LinearLayout(this.mContext);
-                    linearLayout2.setOrientation(i);
-                    linearLayout2.setPadding(i, i, i, i);
-                    int i3 = 0;
+                double row = (double) rowIndex;
+                double gridSize = Math.sqrt((double) captureCount);
+                if (row < gridSize) {
+                    LinearLayout imageRow = new LinearLayout(this.mContext);
+                    imageRow.setOrientation(noPadding);
+                    imageRow.setPadding(noPadding, noPadding, noPadding, noPadding);
+                    int columnIndex = 0;
                     while (true) {
-                        double d3 = (double) i3;
-                        if (d3 >= Math.sqrt(d2)) {
+                        double column = (double) columnIndex;
+                        if (column >= gridSize) {
                             break;
                         }
-                        String obj = list2.get((int) ((Math.sqrt(d2) * d) + d3)).get("path").toString();
+                        String path = captures.get((int) ((gridSize * row) + column)).get("path").toString();
                         ImageView imageView = new ImageView(this.mContext);
-                        imageView.setImageBitmap(BitmapFactory.decodeFile(obj));
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(path));
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        linearLayout2.addView(imageView);
-                        i3++;
+                        imageRow.addView(imageView);
+                        columnIndex++;
                     }
-                    linearLayout.addView(linearLayout2);
-                    i2++;
-                    i = 0;
+                    imageGrid.addView(imageRow);
+                    rowIndex++;
+                    noPadding = 0;
                 } else {
-                    ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(linearLayout);
+                    ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(imageGrid);
                     this.mPopupCapture = null;
                     PopupWindow popupWindow = new PopupWindow(this.mpopViewer, -1, -1, true);
                     this.mPopupCapture = popupWindow;
@@ -775,10 +774,10 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                     });
                     this.mpopViewer.findViewById(R.id.preview_capture_cancel).setOnClickListener(new View.OnClickListener() {
                         public void onClick(View view) {
-                            for (int i = 0; i < EventPlaybackActivity.this.mbmpList.size(); i++) {
-                                String obj = EventPlaybackActivity.this.mbmpList.get(i).get("path").toString();
-                                if (obj != null) {
-                                    new File(obj).delete();
+                            for (int captureIndex = 0; captureIndex < EventPlaybackActivity.this.mbmpList.size(); captureIndex++) {
+                                String path = EventPlaybackActivity.this.mbmpList.get(captureIndex).get("path").toString();
+                                if (path != null) {
+                                    new File(path).delete();
                                 }
                             }
                             EventPlaybackActivity.this.mPopupCapture.dismiss();
@@ -793,13 +792,13 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
     public void popMenu(View view, View view2) {
         new DisplayMetrics();
         DisplayMetrics displayMetrics = this.mContext.getResources().getDisplayMetrics();
-        int i = displayMetrics.widthPixels;
-        int i2 = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
         PopupWindow popupWindow = this.pop;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i / 2, i2 / 2, true);
-            this.pop = popupWindow2;
-            popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
+            PopupWindow newPopup = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
+            this.pop = newPopup;
+            newPopup.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setTouchInterceptor(new View.OnTouchListener() {
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     if (motionEvent.getAction() != 4) {
@@ -817,9 +816,9 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
             this.pop = null;
         } else {
             this.pop = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i / 2, i2 / 2, true);
-            this.pop = popupWindow3;
-            popupWindow3.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
+            PopupWindow newPopup = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
+            this.pop = newPopup;
+            newPopup.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setOutsideTouchable(false);
             this.pop.showAsDropDown(view2, 1, 0);
             this.pop.update();
@@ -827,22 +826,22 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
     }
 
     public List<Map<String, Object>> CaptureImage() {
-        String str = Environment.getExternalStorageDirectory() + "/streaming/capture/";
-        ArrayList arrayList = new ArrayList();
+        String captureDir = Environment.getExternalStorageDirectory() + "/streaming/capture/";
+        ArrayList captures = new ArrayList();
         DvrNet dvrNet = this.mDvrNet;
         if (dvrNet != null) {
-            BitmapFileInfo[] MultiPlayCaptureBitmap = dvrNet.MultiPlayCaptureBitmap(str);
-            if (MultiPlayCaptureBitmap == null) {
+            BitmapFileInfo[] captureFiles = dvrNet.MultiPlayCaptureBitmap(captureDir);
+            if (captureFiles == null) {
                 return null;
             }
-            for (int i = 0; i < MultiPlayCaptureBitmap.length; i++) {
-                HashMap hashMap = new HashMap();
-                hashMap.put("channel", Integer.valueOf(MultiPlayCaptureBitmap[i].nChannel));
-                hashMap.put("path", MultiPlayCaptureBitmap[i].FilePath);
-                arrayList.add(hashMap);
+            for (int captureIndex = 0; captureIndex < captureFiles.length; captureIndex++) {
+                HashMap capture = new HashMap();
+                capture.put("channel", Integer.valueOf(captureFiles[captureIndex].nChannel));
+                capture.put("path", captureFiles[captureIndex].FilePath);
+                captures.add(capture);
             }
         }
-        return arrayList;
+        return captures;
     }
 
     public void SetConfiguration(Configuration configuration) {
@@ -896,14 +895,14 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                             i = ((Integer) map.get("errorcode")).intValue();
                         }
                         if (i != 0) {
-                            int i2 = 0;
+                            int natWaitAttempts = 0;
                             while (EventPlaybackActivity.this.mApp != null && !TextUtils.isEmpty(EventPlaybackActivity.this.mApp.mUdtServerIp) && (EventPlaybackActivity.this.mApp.mUdtServerIp.isEmpty() || EventPlaybackActivity.this.mApp.mUdtServerPort == 0)) {
-                                int i3 = i2 + 1;
-                                if (i2 >= 50) {
+                                int nextAttempt = natWaitAttempts + 1;
+                                if (natWaitAttempts >= 50) {
                                     break;
                                 }
                                 SystemClock.sleep(100);
-                                i2 = i3;
+                                natWaitAttempts = nextAttempt;
                             }
                             map = ConnDeviceProxy.connDeviceByNAT(EventPlaybackActivity.this.mDvrNet, devInfoBean, EventPlaybackActivity.this.mApp);
                             if (map != null) {
@@ -911,14 +910,14 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                             }
                         }
                         if (i != 0) {
-                            int i4 = 0;
+                            int messageWaitAttempts = 0;
                             while (EventPlaybackActivity.this.mApp != null && !TextUtils.isEmpty(EventPlaybackActivity.this.mApp.mMsgServerIp) && (EventPlaybackActivity.this.mApp.mMsgServerIp.isEmpty() || EventPlaybackActivity.this.mApp.mMsgServerPort == 0)) {
-                                int i5 = i4 + 1;
-                                if (i4 >= 50) {
+                                int nextAttempt = messageWaitAttempts + 1;
+                                if (messageWaitAttempts >= 50) {
                                     break;
                                 }
                                 SystemClock.sleep(100);
-                                i4 = i5;
+                                messageWaitAttempts = nextAttempt;
                             }
                             map = EventPlaybackActivity.this.mDvrNet.GetDeviceHandle(EventPlaybackActivity.this.mApp.mMsgServerIp, EventPlaybackActivity.this.mApp.mMsgServerPort, EventPlaybackActivity.this.mApp.mGtServerIp, 17891, 124, devInfoBean.mDevIp, devInfoBean.mUsername, devInfoBean.mPwd);
                             ((Integer) map.get("errorcode")).intValue();
@@ -931,17 +930,17 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                     }
                     if (map == null || map.get("errorcode").toString().compareTo("0") == 0) {
                         if (EventPlaybackActivity.this.mApp.mPushInfo.nAlarmType == 4) {
-                            int[] iArr = new int[1];
-                            EventPlaybackActivity.this.mDvrNet.GetIOLinkageAlarmChannel(EventPlaybackActivity.this.mApp.mPushInfo.channel, iArr);
-                            int i6 = 0;
+                            int[] linkageChannels = new int[1];
+                            EventPlaybackActivity.this.mDvrNet.GetIOLinkageAlarmChannel(EventPlaybackActivity.this.mApp.mPushInfo.channel, linkageChannels);
+                            int channelIndex = 0;
                             while (true) {
-                                if (i6 >= 32) {
+                                if (channelIndex >= 32) {
                                     break;
-                                } else if ((iArr[0] & (1 << i6)) > 0) {
-                                    EventPlaybackActivity.this.mChannel = i6;
+                                } else if ((linkageChannels[0] & (1 << channelIndex)) > 0) {
+                                    EventPlaybackActivity.this.mChannel = channelIndex;
                                     break;
                                 } else {
-                                    i6++;
+                                    channelIndex++;
                                 }
                             }
                         } else {
@@ -1005,17 +1004,17 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
                     message2.sendToTarget();
                     return;
                 } else if (EventPlaybackActivity.this.mAlarmType == 4) {
-                    int[] iArr2 = new int[1];
-                    EventPlaybackActivity.this.mDvrNet.GetIOLinkageAlarmChannel(EventPlaybackActivity.this.mChannel, iArr2);
-                    int i7 = 0;
+                    int[] linkageChannels = new int[1];
+                    EventPlaybackActivity.this.mDvrNet.GetIOLinkageAlarmChannel(EventPlaybackActivity.this.mChannel, linkageChannels);
+                    int channelIndex = 0;
                     while (true) {
-                        if (i7 >= 32) {
+                        if (channelIndex >= 32) {
                             break;
-                        } else if ((iArr2[0] & (1 << i7)) > 0) {
-                            EventPlaybackActivity.this.mChannel = i7;
+                        } else if ((linkageChannels[0] & (1 << channelIndex)) > 0) {
+                            EventPlaybackActivity.this.mChannel = channelIndex;
                             break;
                         } else {
-                            i7++;
+                            channelIndex++;
                         }
                     }
                 }
@@ -1052,43 +1051,43 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
         }
     }
 
-    public void WriteIn(int i, int i2, byte[] bArr, int i3, int i4) {
+    public void WriteIn(int channel, int frameType, byte[] frameData, int width, int height) {
         VideoView videoView;
         if (this.mVideoGroup.GetLayoutMode() == 1) {
             videoView = this.mVideoGroup.getVideoView(0);
         } else {
-            videoView = this.mVideoGroup.getVideoView(i);
+            videoView = this.mVideoGroup.getVideoView(channel);
         }
         if (videoView != null) {
-            videoView.writeIn(bArr, i3, i4);
+            videoView.writeIn(frameData, width, height);
         }
     }
 
-    public void Seek(int i, int i2) {
+    public void Seek(int maxDurationSeconds, int seekSecond) {
         if (this.mDvrNet != null) {
             if (this.mApp.mStartTime == 0) {
                 if (this.mHour == 0 && this.mMinute == 0 && this.mSecond < 30) {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), Integer.valueOf((i2 % 3600) / 60), 0});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), Integer.valueOf((seekSecond % 3600) / 60), 0});
                 } else {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), Integer.valueOf((i2 % 3600) / 60), Integer.valueOf((i2 % 60) - 30)});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), Integer.valueOf((seekSecond % 3600) / 60), Integer.valueOf((seekSecond % 60) - 30)});
                 }
             } else if (this.mApp.mStartTime == 1) {
                 if (this.mHour != 0 || this.mMinute >= 1) {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), Integer.valueOf(((i2 % 3600) / 60) - 1), Integer.valueOf(i2 % 60)});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), Integer.valueOf(((seekSecond % 3600) / 60) - 1), Integer.valueOf(seekSecond % 60)});
                 } else {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), 0, 0});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), 0, 0});
                 }
             } else if (this.mApp.mStartTime == 2) {
                 if (this.mHour != 0 || this.mMinute >= 2) {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), Integer.valueOf(((i2 % 3600) / 60) - 2), Integer.valueOf(i2 % 60)});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), Integer.valueOf(((seekSecond % 3600) / 60) - 2), Integer.valueOf(seekSecond % 60)});
                 } else {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), 0, 0});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), 0, 0});
                 }
             } else if (this.mApp.mStartTime == 3) {
                 if (this.mHour != 0 || this.mMinute >= 3) {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), Integer.valueOf(((i2 % 3600) / 60) - 3), Integer.valueOf(i2 % 60)});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), Integer.valueOf(((seekSecond % 3600) / 60) - 3), Integer.valueOf(seekSecond % 60)});
                 } else {
-                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 3600), 0, 0});
+                    this.szTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(seekSecond / 3600), 0, 0});
                 }
             }
             this.mDvrNet.MultiPlaySeek(this.szTime);
@@ -1115,10 +1114,10 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String defaultMac = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) this.mContext.getApplicationContext().getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return defaultMac;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -1126,10 +1125,10 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return defaultMac;
         }
-        String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        String normalizedMac = macAddress.replace(":", "-");
+        return normalizedMac.length() > 0 ? normalizedMac : defaultMac;
     }
 
     public void MultiplayCallback(long nativeHandle, int channel, int codecType, int frameType, byte[] frameData, int width, int height, int playbackSecond) {
@@ -1138,29 +1137,29 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
             this.mTimeValues = playbackSecond;
             this.mtvTime.post(new Runnable() {
                 public void run() {
-                    int i;
-                    int i2 = EventPlaybackActivity.this.mTimeValues / 3600;
-                    int i3 = (EventPlaybackActivity.this.mTimeValues - (i2 * 3600)) / 60;
-                    int i4 = EventPlaybackActivity.this.mTimeValues % 60;
-                    int i5 = 30;
+                    int preRollSeconds;
+                    int currentHour = EventPlaybackActivity.this.mTimeValues / 3600;
+                    int currentMinute = (EventPlaybackActivity.this.mTimeValues - (currentHour * 3600)) / 60;
+                    int currentSecond = EventPlaybackActivity.this.mTimeValues % 60;
+                    int endWindowSeconds = 30;
                     if (EventPlaybackActivity.this.mApp.mStartTime == 0) {
-                        i = 30;
+                        preRollSeconds = 30;
                     } else {
-                        i = EventPlaybackActivity.this.mApp.mStartTime * 60;
+                        preRollSeconds = EventPlaybackActivity.this.mApp.mStartTime * 60;
                     }
-                    int i6 = EventPlaybackActivity.this.mBaseValues - i;
-                    String format = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(i6 / 3600), Integer.valueOf((i6 % 3600) / 60), Integer.valueOf(i6 % 60)});
-                    String format2 = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
-                    EventPlaybackActivity.this.mtvStartTime.setText(format);
-                    EventPlaybackActivity.this.mtvTime.setText(format2);
-                    int i7 = EventPlaybackActivity.this.mTimeValues - i6;
-                    if (i7 != EventPlaybackActivity.this.mSeekBar.getProgress() && !EventPlaybackActivity.this.mTracking) {
-                        EventPlaybackActivity.this.mSeekBar.setProgress(i7);
+                    int playbackStartSecond = EventPlaybackActivity.this.mBaseValues - preRollSeconds;
+                    String startText = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(playbackStartSecond / 3600), Integer.valueOf((playbackStartSecond % 3600) / 60), Integer.valueOf(playbackStartSecond % 60)});
+                    String currentText = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(currentHour), Integer.valueOf(currentMinute), Integer.valueOf(currentSecond)});
+                    EventPlaybackActivity.this.mtvStartTime.setText(startText);
+                    EventPlaybackActivity.this.mtvTime.setText(currentText);
+                    int seekProgress = EventPlaybackActivity.this.mTimeValues - playbackStartSecond;
+                    if (seekProgress != EventPlaybackActivity.this.mSeekBar.getProgress() && !EventPlaybackActivity.this.mTracking) {
+                        EventPlaybackActivity.this.mSeekBar.setProgress(seekProgress);
                     }
                     if (EventPlaybackActivity.this.mApp.mEndTime != 0) {
-                        i5 = EventPlaybackActivity.this.mApp.mEndTime * 60;
+                        endWindowSeconds = EventPlaybackActivity.this.mApp.mEndTime * 60;
                     }
-                    if (EventPlaybackActivity.this.mTimeValues - EventPlaybackActivity.this.mBaseValues >= i5) {
+                    if (EventPlaybackActivity.this.mTimeValues - EventPlaybackActivity.this.mBaseValues >= endWindowSeconds) {
                         Message message = new Message();
                         message.what = 1;
                         message.setTarget(EventPlaybackActivity.this.mHandlerMessage);
