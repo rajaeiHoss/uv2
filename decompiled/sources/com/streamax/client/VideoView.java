@@ -170,55 +170,52 @@ public class VideoView extends ImageView {
         this.mRedPaint.setStrokeWidth((float) this.mLineWidth);
     }
 
-    public void setAdas(boolean z) {
-        this.mbAdas = Boolean.valueOf(z);
+    public void setAdas(boolean enabled) {
+        this.mbAdas = Boolean.valueOf(enabled);
         invalidate();
     }
 
-    public void setVideoInfo(int i, int i2) {
-        if (i > 0 && i2 > 0) {
-            this.mVideoWidth = i;
-            this.mVideoHeight = i2;
+    public void setVideoInfo(int videoWidth, int videoHeight) {
+        if (videoWidth > 0 && videoHeight > 0) {
+            this.mVideoWidth = videoWidth;
+            this.mVideoHeight = videoHeight;
         }
     }
 
-    public void setAdasHorizon(int i) {
-        this.mAdasHorizon = i;
+    public void setAdasHorizon(int horizon) {
+        this.mAdasHorizon = horizon;
         invalidate();
     }
 
-    public void setAdasVertical(int i) {
-        this.mAdasVertical = i;
+    public void setAdasVertical(int vertical) {
+        this.mAdasVertical = vertical;
         invalidate();
     }
 
-    public void setBkColor(int i) {
-        this.mBkColor = i;
+    public void setBkColor(int color) {
+        this.mBkColor = color;
     }
 
-    public void setFocusState(boolean z) {
-        this.mbFocus = z;
+    public void setFocusState(boolean focused) {
+        this.mbFocus = focused;
         postInvalidate();
     }
 
-    public void setDragState(boolean z) {
-        this.mbDrag = z;
+    public void setDragState(boolean dragging) {
+        this.mbDrag = dragging;
         postInvalidate();
     }
 
-    public void setOsdState(boolean z) {
-        this.mbOsd = z;
+    public void setOsdState(boolean enabled) {
+        this.mbOsd = enabled;
         postInvalidate();
     }
 
-    public void setMax(boolean z) {
-        this.mbMax = z;
+    public void setMax(boolean maximized) {
+        this.mbMax = maximized;
         postInvalidate();
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(7:16|17|18|19|20|21|22) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:18:0x0038 */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void writeIn(byte[] data, int width, int height) {
         if (data == null || width <= 0 || height <= 0) {
             return;
@@ -245,61 +242,6 @@ public class VideoView extends ImageView {
         postInvalidate();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0075, code lost:
-        if (r9.mMatrix != null) goto L_0x007e;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0077, code lost:
-        r9.mMatrix = new android.graphics.Matrix();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:33:0x0080, code lost:
-        if (r9.mPoint != null) goto L_0x0089;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:34:0x0082, code lost:
-        r9.mPoint = new android.graphics.PointF();
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:36:0x008e, code lost:
-        if (r9.mScales < 0.0f) goto L_0x0104;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0090, code lost:
-        r0 = ((float) (getWidth() - 2)) / ((float) r9.mWidth);
-        r1 = ((float) (getHeight() - 2)) / ((float) r9.mHeight);
-        r2 = r9.mScales;
-        r3 = r0 * r2;
-        r2 = r2 * r1;
-        r4 = r9.mTranslate.x / r3;
-        r5 = r9.mTranslate.y / r2;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x00ba, code lost:
-        if (r3 <= r0) goto L_0x00db;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00bc, code lost:
-        r9.mPoint.x = (((r3 - r0) * ((float) r9.mWidth)) / (r3 * 2.0f)) + r4;
-        r9.mPoint.y = (((r2 - r1) * ((float) r9.mHeight)) / (2.0f * r2)) + r5;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:40:0x00db, code lost:
-        r9.mPoint.x = (((r0 - r3) * ((float) r9.mWidth)) / (r3 * 2.0f)) + r4;
-        r9.mPoint.y = (((r1 - r2) * ((float) r9.mHeight)) / (2.0f * r2)) + r5;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x00f7, code lost:
-        r9.mMatrix.setScale(r3, r2, r9.mPoint.x, r9.mPoint.y);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0104, code lost:
-        r10.drawColor(r9.mBkColor);
-        r0 = r9.mVideoBit;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x010b, code lost:
-        if (r0 == null) goto L_0x0113;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x010d, code lost:
-        r10.drawBitmap(r0, r9.mMatrix, (android.graphics.Paint) null);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:45:0x0113, code lost:
-        doPaint(r10);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:46:0x0116, code lost:
-        return;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void deDraw(android.graphics.Canvas canvas) {
         synchronized (this.mOneFrame) {
             if (this.mOneFrame.data == null || this.mOneFrame.data.length <= 0 || this.mOneFrame.width == 0 || this.mOneFrame.height == 0) {
@@ -353,20 +295,19 @@ public class VideoView extends ImageView {
         doPaint(canvas);
     }
 
-    public void setDigitalZoomIn(float f) {
-        float f2 = f;
+    public void setDigitalZoomIn(float scaleFactor) {
         Log.e("mode", "" + this.mode);
         if (this.mode == 2) {
             Log.e("mScales", "" + this.mScales);
-            float f3 = this.mScales;
-            this.mScalesRecode = f3;
-            this.mScales = f3 * f2;
+            float previousScale = this.mScales;
+            this.mScalesRecode = previousScale;
+            this.mScales = previousScale * scaleFactor;
             Log.e("setDigitalZoomIn", "setDigitalZoomIn");
             this.left = getLeft();
             this.top = getTop();
             this.bottom = getBottom();
             this.right = getRight();
-            Log.e("scale", "" + f2);
+            Log.e("scale", "" + scaleFactor);
             Log.e("mScales", "" + this.mScales);
             Log.e("mScalesRecode", "" + this.mScalesRecode);
             Log.e("getWidth()", "" + getWidth());
@@ -379,12 +320,12 @@ public class VideoView extends ImageView {
                     Log.e("mScales>mScalesRecode", "yes");
                     if (getWidth() > this.screenWidth * 4 || getHeight() > this.fatherView_H * 4) {
                         this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScales - 1.0f))) / 40.0d));
-                        int i = this.screenWidth;
-                        this.left = (int) (FirebaseRemoteConfig.DEFAULT_VALUE_FOR_DOUBLE - (((double) i) * 1.5d));
-                        this.right = (int) (((double) i) * 2.5d);
-                        int i2 = this.fatherView_H;
-                        this.top = (int) (FirebaseRemoteConfig.DEFAULT_VALUE_FOR_DOUBLE - (((double) i2) * 1.5d));
-                        this.bottom = (int) (((double) i2) * 2.5d);
+                        int screenWidthValue = this.screenWidth;
+                        this.left = (int) (FirebaseRemoteConfig.DEFAULT_VALUE_FOR_DOUBLE - (((double) screenWidthValue) * 1.5d));
+                        this.right = (int) (((double) screenWidthValue) * 2.5d);
+                        int fatherHeightValue = this.fatherView_H;
+                        this.top = (int) (FirebaseRemoteConfig.DEFAULT_VALUE_FOR_DOUBLE - (((double) fatherHeightValue) * 1.5d));
+                        this.bottom = (int) (((double) fatherHeightValue) * 2.5d);
                         if (this.mScalesMax <= 1.0f) {
                             this.mScalesMax = this.mScalesRecodeMax;
                         }
@@ -399,35 +340,35 @@ public class VideoView extends ImageView {
                         Log.e("mScales > 1", sb.toString());
                         return;
                     }
-                    float f4 = this.mScalesMax;
-                    if (f4 > 1.0f) {
-                        float f5 = f4 * f2;
-                        this.mScalesMax = f5;
-                        this.mScales = f5;
+                    float maxScale = this.mScalesMax;
+                    if (maxScale > 1.0f) {
+                        float newMaxScale = maxScale * scaleFactor;
+                        this.mScalesMax = newMaxScale;
+                        this.mScales = newMaxScale;
                         this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScales - 1.0f))) / 40.0d));
                     } else {
-                        float f6 = this.mScalesRecodeMax;
-                        if (f6 > 1.0f) {
+                        float recordedMaxScale = this.mScalesRecodeMax;
+                        if (recordedMaxScale > 1.0f) {
                             this.mScalesMax = 1.0f;
-                            float f7 = f6 * f2;
-                            this.mScalesRecodeMax = f7;
-                            this.mScales = f7;
+                            float newRecordedMaxScale = recordedMaxScale * scaleFactor;
+                            this.mScalesRecodeMax = newRecordedMaxScale;
+                            this.mScales = newRecordedMaxScale;
                             this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScalesRecodeMax - 1.0f))) / 40.0d));
                         } else {
-                            float f8 = this.mScales;
-                            this.length = (float) ((int) (((double) (((float) getHeight()) * (f8 - 1.0f))) / 40.0d));
-                            this.mScalesRecodeMax = f8;
+                            float scaleForLength = this.mScales;
+                            this.length = (float) ((int) (((double) (((float) getHeight()) * (scaleForLength - 1.0f))) / 40.0d));
+                            this.mScalesRecodeMax = scaleForLength;
                         }
                     }
-                    int i3 = this.left - 20;
-                    this.left = i3;
-                    int i4 = this.right + 20;
-                    this.right = i4;
-                    int i5 = this.bottom + 20;
-                    this.bottom = i5;
-                    int i6 = this.top - 20;
-                    this.top = i6;
-                    setPosition(i3, i6, i4, i5);
+                    int newLeft = this.left - 20;
+                    this.left = newLeft;
+                    int newRight = this.right + 20;
+                    this.right = newRight;
+                    int newBottom = this.bottom + 20;
+                    this.bottom = newBottom;
+                    int newTop = this.top - 20;
+                    this.top = newTop;
+                    setPosition(newLeft, newTop, newRight, newBottom);
                     Log.e("mScales > 1", "length:" + this.length + ",left:" + this.left + ",top:" + this.top + ",right:" + this.right + ",bottom:" + this.bottom);
                     StringBuilder sb2 = new StringBuilder();
                     sb2.append("mScalesMax:");
@@ -444,18 +385,18 @@ public class VideoView extends ImageView {
                     if (this.left >= 0) {
                         this.left = 0;
                     }
-                    int i7 = this.right;
-                    int i8 = this.screenWidth;
-                    if (i7 <= i8) {
-                        this.right = i8;
+                    int currentRight = this.right;
+                    int screenWidthLimit = this.screenWidth;
+                    if (currentRight <= screenWidthLimit) {
+                        this.right = screenWidthLimit;
                     }
                     if (this.top >= 0) {
                         this.top = 0;
                     }
-                    int i9 = this.bottom;
-                    int i10 = this.fatherView_H;
-                    if (i9 <= i10) {
-                        this.bottom = i10;
+                    int currentBottom = this.bottom;
+                    int fatherHeightLimit = this.fatherView_H;
+                    if (currentBottom <= fatherHeightLimit) {
+                        this.bottom = fatherHeightLimit;
                     }
                     setPosition(this.left, this.top, this.right, this.bottom);
                     Log.e("getWidth() < screenWidth", "left:" + this.left + ",top:" + this.top + ",right:" + this.right + ",bottom:" + this.bottom);
@@ -470,44 +411,44 @@ public class VideoView extends ImageView {
                     return;
                 }
                 Log.e("mScalesMax", "" + this.mScalesMax);
-                float f9 = this.mScalesMax;
-                if (f9 > 1.0f) {
-                    float f10 = f9 * f2;
-                    this.mScalesMax = f10;
-                    this.mScales = f10;
+                float maxScale = this.mScalesMax;
+                if (maxScale > 1.0f) {
+                    float newMaxScale = maxScale * scaleFactor;
+                    this.mScalesMax = newMaxScale;
+                    this.mScales = newMaxScale;
                     this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScalesMax - 1.0f))) / 40.0d));
                 } else {
-                    float f11 = this.mScalesRecodeMax;
-                    if (f11 > 1.0f) {
-                        float f12 = f11 * f2;
-                        this.mScalesRecodeMax = f12;
-                        this.mScales = f12;
+                    float recordedMaxScale = this.mScalesRecodeMax;
+                    if (recordedMaxScale > 1.0f) {
+                        float newRecordedMaxScale = recordedMaxScale * scaleFactor;
+                        this.mScalesRecodeMax = newRecordedMaxScale;
+                        this.mScales = newRecordedMaxScale;
                         this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScalesRecodeMax - 1.0f))) / 40.0d));
                     } else {
                         this.length = (float) ((int) (((double) (((float) getHeight()) * (this.mScales - 1.0f))) / 40.0d));
                     }
                 }
-                int i11 = this.left + 20;
-                this.left = i11;
-                int i12 = this.right - 20;
-                this.right = i12;
-                int i13 = this.bottom - 20;
-                this.bottom = i13;
-                int i14 = this.top + 20;
-                this.top = i14;
-                if (i11 >= 0) {
+                int newLeft = this.left + 20;
+                this.left = newLeft;
+                int newRight = this.right - 20;
+                this.right = newRight;
+                int newBottom = this.bottom - 20;
+                this.bottom = newBottom;
+                int newTop = this.top + 20;
+                this.top = newTop;
+                if (newLeft >= 0) {
                     this.left = 0;
                 }
-                int i15 = this.screenWidth;
-                if (i12 <= i15) {
-                    this.right = i15;
+                int screenWidthLimit = this.screenWidth;
+                if (newRight <= screenWidthLimit) {
+                    this.right = screenWidthLimit;
                 }
-                if (i14 >= 0) {
+                if (newTop >= 0) {
                     this.top = 0;
                 }
-                int i16 = this.fatherView_H;
-                if (i13 <= i16) {
-                    this.bottom = i16;
+                int fatherHeightLimit = this.fatherView_H;
+                if (newBottom <= fatherHeightLimit) {
+                    this.bottom = fatherHeightLimit;
                 }
                 setPosition(this.left, this.top, this.right, this.bottom);
                 Log.e("mScales <= 1", "length:" + this.length + ",left:" + this.left + ",top:" + this.top + ",right:" + this.right + ",bottom:" + this.bottom);
@@ -546,42 +487,41 @@ public class VideoView extends ImageView {
         Log.e("resetDigitalScales", "resetDigitalScales");
     }
 
-    public void setDigitalTranslate(float f, float f2) {
+    public void setDigitalTranslate(float deltaX, float deltaY) {
         if (this.mTranslate == null) {
             this.mTranslate = new PointF();
         }
-        this.mTranslate.offset(f, f2);
+        this.mTranslate.offset(deltaX, deltaY);
         invalidate();
     }
 
     public void drawAdas(Canvas canvas) {
-        int i;
-        int i2;
         int width = getWidth();
         int height = getHeight();
-        float f = (float) width;
-        float f2 = f / 2.0f;
-        float f3 = (float) height;
-        float f4 = f3 / 2.0f;
-        int i3 = this.mCrossLine;
-        Canvas canvas2 = canvas;
-        canvas2.drawLine(f2 - ((float) i3), f4, f2 + ((float) i3), f4, this.mGreenPaint);
-        int i4 = this.mCrossLine;
-        canvas.drawLine(f2, f4 - ((float) i4), f2, f4 + ((float) i4), this.mGreenPaint);
-        float f5 = f3 / 3.0f;
-        float f6 = (float) (width - 1);
-        canvas2.drawLine(1.0f, f5, f6, f5, this.mYellowPaint);
-        float f7 = (2.0f * f3) / 3.0f;
-        canvas.drawLine(1.0f, f7, f6, f7, this.mYellowPaint);
-        int i5 = this.mAdasVertical;
-        if (i5 >= 0 && i5 <= (i2 = this.mVideoWidth)) {
-            float f8 = (((float) i5) / ((float) i2)) * f;
-            canvas.drawLine(f8, 1.0f, f8, (float) (height - 1), this.mBluePaint);
+        float widthFloat = (float) width;
+        float centerX = widthFloat / 2.0f;
+        float heightFloat = (float) height;
+        float centerY = heightFloat / 2.0f;
+        int crossLine = this.mCrossLine;
+        canvas.drawLine(centerX - ((float) crossLine), centerY, centerX + ((float) crossLine), centerY, this.mGreenPaint);
+        int crossLineVertical = this.mCrossLine;
+        canvas.drawLine(centerX, centerY - ((float) crossLineVertical), centerX, centerY + ((float) crossLineVertical), this.mGreenPaint);
+        float firstGuideY = heightFloat / 3.0f;
+        float maxX = (float) (width - 1);
+        canvas.drawLine(1.0f, firstGuideY, maxX, firstGuideY, this.mYellowPaint);
+        float secondGuideY = (2.0f * heightFloat) / 3.0f;
+        canvas.drawLine(1.0f, secondGuideY, maxX, secondGuideY, this.mYellowPaint);
+        int adasVertical = this.mAdasVertical;
+        int videoWidth = this.mVideoWidth;
+        if (adasVertical >= 0 && adasVertical <= videoWidth) {
+            float adasVerticalX = (((float) adasVertical) / ((float) videoWidth)) * widthFloat;
+            canvas.drawLine(adasVerticalX, 1.0f, adasVerticalX, (float) (height - 1), this.mBluePaint);
         }
-        int i6 = this.mAdasHorizon;
-        if (i6 >= 0 && i6 <= (i = this.mVideoHeight)) {
-            float f9 = (((float) i6) / ((float) i)) * f3;
-            canvas.drawLine(1.0f, f9, f6, f9, this.mRedPaint);
+        int adasHorizon = this.mAdasHorizon;
+        int videoHeight = this.mVideoHeight;
+        if (adasHorizon >= 0 && adasHorizon <= videoHeight) {
+            float adasHorizonY = (((float) adasHorizon) / ((float) videoHeight)) * heightFloat;
+            canvas.drawLine(1.0f, adasHorizonY, maxX, adasHorizonY, this.mRedPaint);
         }
     }
 
@@ -658,11 +598,11 @@ public class VideoView extends ImageView {
 
     public void onTouchMove(MotionEvent motionEvent) {
         Log.e("onTouchMove", "onTouchMove");
-        if (this.mode == 1) {
-            int left2 = getLeft();
-            int right2 = getRight();
-            int top2 = getTop();
-            int bottom2 = getBottom();
+        if (this.mode == MODE_DRAG) {
+            int currentLeft = getLeft();
+            int currentRight = getRight();
+            int currentTop = getTop();
+            int currentBottom = getBottom();
             this.distanceX = (int) (motionEvent.getRawX() - ((float) this.current_x));
             this.distanceY = (int) (motionEvent.getRawY() - ((float) this.current_y));
             Log.e("distanceX", "" + this.distanceX);
@@ -670,60 +610,60 @@ public class VideoView extends ImageView {
             Log.e("touchSlop", "" + touchSlop);
             Log.e("getDistance", "" + getDistance((float) this.distanceX, (float) this.distanceY));
             if (touchSlop <= getDistance((float) this.distanceX, (float) this.distanceY)) {
-                int i = this.distanceX;
-                int i2 = left2 + i;
-                int i3 = right2 + i;
-                int i4 = this.distanceY;
-                int i5 = bottom2 + i4;
-                int i6 = top2 + i4;
-                int i7 = 0;
+                int horizontalDelta = this.distanceX;
+                int nextLeft = currentLeft + horizontalDelta;
+                int nextRight = currentRight + horizontalDelta;
+                int verticalDelta = this.distanceY;
+                int nextBottom = currentBottom + verticalDelta;
+                int nextTop = currentTop + verticalDelta;
+                int boundedTop = 0;
                 if (this.isControl_Horizal) {
-                    if (i2 >= 0) {
-                        i3 = getWidth();
-                        i2 = 0;
+                    if (nextLeft >= 0) {
+                        nextRight = getWidth();
+                        nextLeft = 0;
                     }
-                    int i8 = this.screenWidth;
-                    if (i3 <= i8) {
-                        i2 = i8 - getWidth();
-                        i3 = this.screenWidth;
+                    int screenWidthLimit = this.screenWidth;
+                    if (nextRight <= screenWidthLimit) {
+                        nextLeft = screenWidthLimit - getWidth();
+                        nextRight = this.screenWidth;
                     }
                 } else {
-                    i2 = getLeft();
-                    i3 = getRight();
+                    nextLeft = getLeft();
+                    nextRight = getRight();
                 }
                 if (this.isControl_Vertical) {
-                    if (i6 > 0) {
-                        i5 = getHeight();
-                        i6 = 0;
+                    if (nextTop > 0) {
+                        nextBottom = getHeight();
+                        nextTop = 0;
                     }
-                    int i9 = this.start_Bottom;
-                    if (i5 <= i9) {
-                        i6 = this.fatherView_H - getWidth();
-                        i5 = i9;
+                    int startBottom = this.start_Bottom;
+                    if (nextBottom <= startBottom) {
+                        nextTop = this.fatherView_H - getWidth();
+                        nextBottom = startBottom;
                     }
                 } else {
-                    i6 = getTop();
-                    i5 = getBottom();
+                    nextTop = getTop();
+                    nextBottom = getBottom();
                 }
                 if (this.isControl_Horizal || this.isControl_Vertical) {
-                    if (i2 >= 0) {
-                        i2 = 0;
+                    if (nextLeft >= 0) {
+                        nextLeft = 0;
                     }
-                    int i10 = this.screenWidth;
-                    if (i3 <= i10) {
-                        i3 = i10;
+                    int screenWidthLimit = this.screenWidth;
+                    if (nextRight <= screenWidthLimit) {
+                        nextRight = screenWidthLimit;
                     }
-                    if (i6 < 0) {
-                        i7 = i6;
+                    if (nextTop < 0) {
+                        boundedTop = nextTop;
                     }
-                    int i11 = this.fatherView_H;
-                    if (i5 <= i11) {
-                        i5 = i11;
+                    int fatherHeight = this.fatherView_H;
+                    if (nextBottom <= fatherHeight) {
+                        nextBottom = fatherHeight;
                     }
-                    setPosition(i2, i7, i3, i5);
+                    setPosition(nextLeft, boundedTop, nextRight, nextBottom);
                     Log.e("isControl_Horizal", "" + this.isControl_Horizal);
                     Log.e("isControl_Vertical", "" + this.isControl_Vertical);
-                    Log.e("setPosition", i2 + "," + i7 + "," + i3 + "," + i5);
+                    Log.e("setPosition", nextLeft + "," + boundedTop + "," + nextRight + "," + nextBottom);
                 }
                 this.current_x = (int) motionEvent.getRawX();
                 this.current_y = (int) motionEvent.getRawY();
@@ -760,34 +700,34 @@ public class VideoView extends ImageView {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         Log.e("onLayout", "onLayout");
     }
 
-    private void setPosition(int i, int i2, int i3, int i4) {
-        layout(i, i2, i3, i4);
+    private void setPosition(int left, int top, int right, int bottom) {
+        layout(left, top, right, bottom);
     }
 
-    public void setFatherW_H(int i, int i2) {
-        this.fatherView_W = i;
-        this.fatherView_H = i2;
+    public void setFatherW_H(int fatherWidth, int fatherHeight) {
+        this.fatherView_W = fatherWidth;
+        this.fatherView_H = fatherHeight;
     }
 
-    private float getDistance(float f, float f2) {
-        return (float) Math.sqrt((double) ((f * f) + (f2 * f2)));
+    private float getDistance(float deltaX, float deltaY) {
+        return (float) Math.sqrt((double) ((deltaX * deltaX) + (deltaY * deltaY)));
     }
 
-    public void setFatherW_H(int i, int i2, int i3, int i4, int i5, int i6) {
+    public void setFatherW_H(int startLeft, int startTop, int startRight, int startBottom, int initialWidth, int initialHeight) {
         if (this.start_Top == -1) {
-            this.fatherView_W = i2;
-            this.fatherView_H = i4;
-            this.start_Top = i2;
-            this.start_Left = i;
-            this.start_Right = i3;
-            this.start_Bottom = i4;
-            this.initViewWidth = i5;
-            this.initViewHeight = i6;
+            this.fatherView_W = startTop;
+            this.fatherView_H = startBottom;
+            this.start_Top = startTop;
+            this.start_Left = startLeft;
+            this.start_Right = startRight;
+            this.start_Bottom = startBottom;
+            this.initViewWidth = initialWidth;
+            this.initViewHeight = initialHeight;
         }
     }
 }
