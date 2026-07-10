@@ -136,7 +136,7 @@ A safe next chunk is to clean converted Kotlin parameter names in app-owned file
 - `decompiled/sources/com/streamax/client/AudioTrackInterface.kt`
 - `decompiled/sources/com/streamax/client/DownFileInterface.kt`
 - `decompiled/sources/com/streamax/client/FilePlaybackInterface.kt`
-- `decompiled/sources/com/streamax/client/remoteplayinterface.kt`
+- `decompiled/sources/com/streamax/client/RemotePlayInterface.kt`
 - `decompiled/sources/com/streamax/config/fragment/OneNumberEditInterface.kt`
 
 This keeps the next rename pass small and low-risk before touching large Java files such as `VideoContainer.java`.

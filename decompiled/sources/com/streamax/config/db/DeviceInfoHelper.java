@@ -11,7 +11,7 @@ public class DeviceInfoHelper extends SQLiteOpenHelper {
     }
 
     public DeviceInfoHelper(Context context) {
-        super(context, DatebaseConfig.DatabaseName, (SQLiteDatabase.CursorFactory) null, 1);
+        super(context, DatabaseConfig.DatabaseName, (SQLiteDatabase.CursorFactory) null, 1);
     }
 
     public void onCreate(SQLiteDatabase sQLiteDatabase) {

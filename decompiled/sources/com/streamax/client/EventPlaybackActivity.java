@@ -35,7 +35,7 @@ import com.dvr.net.DvrNet;
 import com.dvr.net.MessageCallback;
 import com.dvr.net.MultiplaybackInterface;
 import com.streamax.Configs;
-import com.streamax.config.db.DatebaseConfig;
+import com.streamax.config.db.DatabaseConfig;
 import com.streamax.proxy.ConnDeviceProxy;
 import com.zycs.UView.R;
 import java.io.File;
@@ -111,7 +111,7 @@ public class EventPlaybackActivity extends Activity implements MultiplaybackInte
         }
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        this.mDevInfo = (DevInfoBean) intent.getSerializableExtra(DatebaseConfig.TableName);
+        this.mDevInfo = (DevInfoBean) intent.getSerializableExtra(DatabaseConfig.TableName);
         if (extras != null) {
             this.mYear = extras.getInt("year");
             this.mMonth = extras.getInt("month");

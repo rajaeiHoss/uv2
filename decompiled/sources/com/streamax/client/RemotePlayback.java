@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 // Remote playback UI: calendar search, file list, and playback controls.
-public class RemotePlayback extends LinearLayout implements UpdateCalendarInterface, remoteplayinterface {
+public class RemotePlayback extends LinearLayout implements UpdateCalendarInterface, RemotePlayInterface {
     public MyApp mApp;
     public AuTrack mAudioTrack;
     public Button mBtnSelect;
@@ -136,7 +136,7 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         this.mFileList = (RemoteFileList) findViewById(R.id.remotefilelist);
         this.mFileLayout = (FrameLayout) findViewById(R.id.remotefile);
         this.mFileList.setRemotePlayback(this);
-        this.mFileList.SetRemoteplayInterface(this);
+        this.mFileList.setRemotePlayInterface(this);
         CalendarView calendarView = (CalendarView) this.mFileList.GetCalendarView();
         this.mCalendarView = calendarView;
         calendarView.SetUpdateCalendarInterface(this);
@@ -548,15 +548,15 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         }
     }
 
-    public void startRemotePlay(int i, int i2, int i3, int i4, int i5, int i6, int i7) {
+    public void startRemotePlay(int year, int month, int day, int hour, int minute, int second, int channel) {
         Intent intent = new Intent(this.mContext, RemotePlaybackActivity.class);
-        intent.putExtra("year", Integer.valueOf(i).toString());
-        intent.putExtra("month", Integer.valueOf(i2).toString());
-        intent.putExtra("day", Integer.valueOf(i3).toString());
-        intent.putExtra("hour", Integer.valueOf(i4).toString());
-        intent.putExtra("minute", Integer.valueOf(i5).toString());
-        intent.putExtra("second", Integer.valueOf(i6).toString());
-        intent.putExtra("channel", i7);
+        intent.putExtra("year", Integer.valueOf(year).toString());
+        intent.putExtra("month", Integer.valueOf(month).toString());
+        intent.putExtra("day", Integer.valueOf(day).toString());
+        intent.putExtra("hour", Integer.valueOf(hour).toString());
+        intent.putExtra("minute", Integer.valueOf(minute).toString());
+        intent.putExtra("second", Integer.valueOf(second).toString());
+        intent.putExtra("channel", channel);
         this.mContext.startActivity(intent);
     }
 }

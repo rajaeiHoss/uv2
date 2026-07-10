@@ -50,7 +50,7 @@ public class RemoteFileList extends ListView {
     public RemoteFileInfo[] mRemoteFileInfo;
     public List<RemoteFileInfo> mRemoteFileList;
     public RemotePlayback mRemotePlayback;
-    public remoteplayinterface mRemoteplayInterface;
+    public RemotePlayInterface mRemotePlayInterface;
     public Button mbtnSelectRecTime;
     public TextView mtvHeader;
 
@@ -60,7 +60,7 @@ public class RemoteFileList extends ListView {
 
     public RemoteFileList(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        this.mRemoteplayInterface = null;
+        this.mRemotePlayInterface = null;
         this.mRemoteFileList = new ArrayList();
         this.mContext = context;
         FindViews();
@@ -139,8 +139,8 @@ public class RemoteFileList extends ListView {
         return linearLayout;
     }
 
-    public void SetRemoteplayInterface(remoteplayinterface remoteplayinterface) {
-        this.mRemoteplayInterface = remoteplayinterface;
+    public void setRemotePlayInterface(RemotePlayInterface remotePlayInterface) {
+        this.mRemotePlayInterface = remotePlayInterface;
     }
 
     public View GetCalendarView() {
@@ -371,8 +371,8 @@ public class RemoteFileList extends ListView {
             public void onClick(View view) {
                 new DecimalFormat("00");
                 RemoteFileList.this.dialog.dismiss();
-                if (RemoteFileList.this.mRemoteplayInterface != null) {
-                    RemoteFileList.this.mRemoteplayInterface.startRemotePlay(yearView.getCurrentItem() + RemoteFileList.START_YEAR, monthView.getCurrentItem() + 1, dayView.getCurrentItem() + 1, hourView.getCurrentItem(), minView.getCurrentItem(), wheelView6.getCurrentItem(), chnView.getCurrentItem());
+                if (RemoteFileList.this.mRemotePlayInterface != null) {
+                    RemoteFileList.this.mRemotePlayInterface.startRemotePlay(yearView.getCurrentItem() + RemoteFileList.START_YEAR, monthView.getCurrentItem() + 1, dayView.getCurrentItem() + 1, hourView.getCurrentItem(), minView.getCurrentItem(), wheelView6.getCurrentItem(), chnView.getCurrentItem());
                 }
             }
         };

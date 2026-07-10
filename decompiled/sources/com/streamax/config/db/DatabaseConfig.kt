@@ -1,6 +1,6 @@
 package com.streamax.config.db
 
-interface DatebaseConfig {
+interface DatabaseConfig {
     companion object {
         const val DatabaseName: String = "DeviceInfo.db"
         const val TableName: String = "DeviceInfo"

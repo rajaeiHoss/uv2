@@ -25,7 +25,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.dvr.net.DvrNet;
 import com.streamax.Configs;
-import com.streamax.config.db.DatebaseConfig;
+import com.streamax.config.db.DatabaseConfig;
 import com.streamax.utils.LogUtils;
 import com.zycs.UView.R;
 import java.util.ArrayList;
@@ -93,7 +93,7 @@ public class EventPlayback extends LinearLayout {
                 intent.putExtra("channel", viewholder.playbackchannel);
                 intent.putExtra("alarmtype", viewholder.alarmtype);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(DatebaseConfig.TableName, EventPlayback.this.mDevInfo);
+                bundle.putSerializable(DatabaseConfig.TableName, EventPlayback.this.mDevInfo);
                 intent.putExtras(bundle);
                 EventPlayback.this.mContext.startActivity(intent);
             }
