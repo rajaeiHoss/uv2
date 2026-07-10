@@ -82,119 +82,91 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
     }
 
     public void refreshUi() {
-        String str;
-        String str2;
-        String str3;
-        String str4;
-        String str5;
-        String str6;
-        int i;
-        String str7;
         if (this.mEmailRes != null) {
             LogUtils.e("EmailOfNetwork", "setSuccess 2, mEmailRes: " + this.mEmailRes.toString());
             try {
-                JSONObject jSONObject = this.mEmailRes.getJSONObject("NWSM");
-                if (jSONObject != null) {
-                    JSONObject jSONObject2 = jSONObject.getJSONObject("EMAIL");
-                    this.mEmailObj = jSONObject2;
-                    if (jSONObject2 != null) {
-                        int i2 = jSONObject2.getInt("EMAILSWITCH");
-                        int i3 = this.mEmailObj.getInt("SENDINTERVAL");
-                        String string = this.mEmailObj.getString("SMTPSERVER");
-                        int i4 = this.mEmailObj.getInt("SSERVERPORT");
-                        int i5 = this.mEmailObj.getInt("SSLSWITCH");
-                        String string2 = this.mEmailObj.getString("SENDERNAME");
-                        String string3 = this.mEmailObj.getString("SENDERPWD");
-                        JSONArray jSONArray = this.mEmailObj.getJSONArray("RECVLIST");
-                        if (jSONArray != null) {
-                            if (jSONArray.length() >= 1) {
-                                str7 = jSONArray.getString(0);
-                            } else {
-                                str7 = "";
-                            }
-                            if (jSONArray.length() >= 2) {
-                                str2 = jSONArray.getString(1);
-                            } else {
-                                str2 = "";
-                            }
-                            if (jSONArray.length() >= 3) {
-                                str = jSONArray.getString(2);
-                            } else {
-                                str = "";
-                            }
-                            if (jSONArray.length() >= 4) {
-                                str3 = jSONArray.getString(3);
-                            } else {
-                                str3 = "";
-                            }
-                            String str8 = str7;
-                            if (jSONArray.length() >= 5) {
-                                str5 = jSONArray.getString(4);
-                            } else {
-                                str5 = "";
-                            }
-                            str4 = str8;
-                        } else {
-                            str5 = "";
-                            str4 = str5;
-                            str3 = str4;
-                            str2 = str3;
-                            str = str2;
-                        }
-                        this.mBtnEmail.setBackgroundResource(i2 == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                        int i6 = i2 == 0 ? 1 : 0;
-                        String str9 = str5;
-                        this.mTvSstg.SetEnabled(i2 == 1);
-                        this.mListStrInterval.clear();
-                        this.mListIntInterval.clear();
-                        List<String> strDatas = getStrDatas(R.array.config_network_email_interval_selector);
-                        int size = strDatas.size() - 1;
-                        if (i3 == 0) {
-                            str6 = str3;
-                            i = 0;
-                        } else {
-                            int i7 = size;
-                            if (i3 <= 0 || i3 > 30) {
-                                str6 = str3;
-                                i = (i3 <= 30 || i3 > 60) ? (i3 <= 60 || i3 > 180) ? (i3 <= 180 || i3 > 300) ? (i3 <= 300 || i3 > 600) ? i7 : 5 : 4 : 3 : 2;
-                            } else {
-                                str6 = str3;
-                                i = 1;
-                            }
-                        }
-                        if (i >= 0 && i < strDatas.size()) {
-                            this.mTvSstg.setText(strDatas.get(i));
-                            this.mListStrInterval.addAll(strDatas);
-                            this.mListIntInterval.add(new Integer(i));
-                        }
-                        setTvEnableAndContent(this.mEtSmtp, i6, string);
-                        setTvEnableAndContent(this.mEtPort, i6, "" + i4);
-                        VsTextView vsTextView = this.mTvSSL;
-                        boolean z = true;
-                        if (i2 != 1) {
-                            z = false;
-                        }
-                        vsTextView.SetEnabled(z);
-                        this.mListStrSSL.clear();
-                        this.mListIntSSL.clear();
-                        List<String> strDatas2 = getStrDatas(R.array.config_network_email_ssl_selector);
-                        if (i5 >= 0 && i5 < strDatas2.size()) {
-                            this.mTvSSL.setText(strDatas2.get(i5));
-                            this.mListStrSSL.addAll(strDatas2);
-                            this.mListIntSSL.add(new Integer(i5));
-                        }
-                        setTvEnableAndContent(this.mEtName, i6, string2);
-                        setTvEnableAndContent(this.mEtPwd, i6, string3);
-                        setTvEnableAndContent(this.mEtCc0, i6, str4);
-                        setTvEnableAndContent(this.mEtCc1, i6, str2);
-                        setTvEnableAndContent(this.mEtCc2, i6, str);
-                        setTvEnableAndContent(this.mEtCc3, i6, str6);
-                        setTvEnableAndContent(this.mEtCc4, i6, str9);
+                JSONObject networkConfig = this.mEmailRes.getJSONObject("NWSM");
+                if (networkConfig == null) {
+                    return;
+                }
+                this.mEmailObj = networkConfig.getJSONObject("EMAIL");
+                if (this.mEmailObj != null) {
+                    int emailSwitch = this.mEmailObj.getInt("EMAILSWITCH");
+                    int sendInterval = this.mEmailObj.getInt("SENDINTERVAL");
+                    String smtpServer = this.mEmailObj.getString("SMTPSERVER");
+                    int smtpPort = this.mEmailObj.getInt("SSERVERPORT");
+                    int sslSwitch = this.mEmailObj.getInt("SSLSWITCH");
+                    String senderName = this.mEmailObj.getString("SENDERNAME");
+                    String senderPassword = this.mEmailObj.getString("SENDERPWD");
+                    JSONArray recipients = this.mEmailObj.getJSONArray("RECVLIST");
+                    String primaryRecipient = getRecipient(recipients, 0);
+                    String copyRecipient1 = getRecipient(recipients, 1);
+                    String copyRecipient2 = getRecipient(recipients, 2);
+                    String copyRecipient3 = getRecipient(recipients, 3);
+                    String copyRecipient4 = getRecipient(recipients, 4);
+                    this.mBtnEmail.setBackgroundResource(emailSwitch == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                    int editEnableFlag = emailSwitch == 0 ? 1 : 0;
+                    this.mTvSstg.SetEnabled(emailSwitch == 1);
+                    this.mListStrInterval.clear();
+                    this.mListIntInterval.clear();
+                    List<String> intervalLabels = getStrDatas(R.array.config_network_email_interval_selector);
+                    int intervalIndex = getIntervalIndex(sendInterval, intervalLabels.size() - 1);
+                    if (intervalIndex >= 0 && intervalIndex < intervalLabels.size()) {
+                        this.mTvSstg.setText(intervalLabels.get(intervalIndex));
+                        this.mListStrInterval.addAll(intervalLabels);
+                        this.mListIntInterval.add(Integer.valueOf(intervalIndex));
                     }
+                    setTvEnableAndContent(this.mEtSmtp, editEnableFlag, smtpServer);
+                    setTvEnableAndContent(this.mEtPort, editEnableFlag, "" + smtpPort);
+                    this.mTvSSL.SetEnabled(emailSwitch == 1);
+                    this.mListStrSSL.clear();
+                    this.mListIntSSL.clear();
+                    List<String> sslLabels = getStrDatas(R.array.config_network_email_ssl_selector);
+                    if (sslSwitch >= 0 && sslSwitch < sslLabels.size()) {
+                        this.mTvSSL.setText(sslLabels.get(sslSwitch));
+                        this.mListStrSSL.addAll(sslLabels);
+                        this.mListIntSSL.add(Integer.valueOf(sslSwitch));
+                    }
+                    setTvEnableAndContent(this.mEtName, editEnableFlag, senderName);
+                    setTvEnableAndContent(this.mEtPwd, editEnableFlag, senderPassword);
+                    setTvEnableAndContent(this.mEtCc0, editEnableFlag, primaryRecipient);
+                    setTvEnableAndContent(this.mEtCc1, editEnableFlag, copyRecipient1);
+                    setTvEnableAndContent(this.mEtCc2, editEnableFlag, copyRecipient2);
+                    setTvEnableAndContent(this.mEtCc3, editEnableFlag, copyRecipient3);
+                    setTvEnableAndContent(this.mEtCc4, editEnableFlag, copyRecipient4);
                 }
             } catch (JSONException unused) {
             }
         }
+    }
+
+    private String getRecipient(JSONArray recipients, int recipientIndex) throws JSONException {
+        if (recipients == null || recipients.length() <= recipientIndex) {
+            return "";
+        }
+        return recipients.getString(recipientIndex);
+    }
+
+    private int getIntervalIndex(int sendInterval, int fallbackIndex) {
+        if (sendInterval == 0) {
+            return 0;
+        }
+        if (sendInterval > 0 && sendInterval <= 30) {
+            return 1;
+        }
+        if (sendInterval > 30 && sendInterval <= 60) {
+            return 2;
+        }
+        if (sendInterval > 60 && sendInterval <= 180) {
+            return 3;
+        }
+        if (sendInterval > 180 && sendInterval <= Strategy.TTL_SECONDS_DEFAULT) {
+            return 4;
+        }
+        if (sendInterval > Strategy.TTL_SECONDS_DEFAULT && sendInterval <= 600) {
+            return 5;
+        }
+        return fallbackIndex;
     }
 
     /* access modifiers changed from: protected */
@@ -270,22 +242,22 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
             toastSf((int) R.string.PortIsError);
             return false;
         }
-        JSONObject jSONObject = this.mEmailObj;
-        if (jSONObject == null) {
+        JSONObject emailConfig = this.mEmailObj;
+        if (emailConfig == null) {
             return false;
         }
         try {
-            jSONObject.put("SMTPSERVER", getString(this.mEtSmtp));
+            emailConfig.put("SMTPSERVER", getString(this.mEtSmtp));
             this.mEmailObj.put("SSERVERPORT", Integer.parseInt(getString(this.mEtPort)));
             this.mEmailObj.put("SENDERNAME", getString(this.mEtName));
             this.mEmailObj.put("SENDERPWD", getString(this.mEtPwd));
-            JSONArray jSONArray = this.mEmailObj.getJSONArray("RECVLIST");
-            if (jSONArray != null) {
-                jSONArray.put(0, getString(this.mEtCc0));
-                jSONArray.put(1, getString(this.mEtCc1));
-                jSONArray.put(2, getString(this.mEtCc2));
-                jSONArray.put(3, getString(this.mEtCc3));
-                jSONArray.put(4, getString(this.mEtCc4));
+            JSONArray recipients = this.mEmailObj.getJSONArray("RECVLIST");
+            if (recipients != null) {
+                recipients.put(0, getString(this.mEtCc0));
+                recipients.put(1, getString(this.mEtCc1));
+                recipients.put(2, getString(this.mEtCc2));
+                recipients.put(3, getString(this.mEtCc3));
+                recipients.put(4, getString(this.mEtCc4));
             }
             return true;
         } catch (JSONException unused) {
@@ -301,19 +273,19 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("EMAIL", "?");
-            jSONObject.put("NWSM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject request = new JSONObject();
+            JSONObject networkConfig = new JSONObject();
+            networkConfig.put("EMAIL", "?");
+            request.put("NWSM", networkConfig);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mEmailRes = new JSONObject(str);
+            this.mEmailRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -321,11 +293,11 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mEmailRes;
-        if (jSONObject == null) {
+        JSONObject emailResponse = this.mEmailRes;
+        if (emailResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return emailResponse.toString();
     }
 
     public void setSuccess() {
@@ -337,23 +309,23 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
         toastFailure();
     }
 
-    public void updateDateForInterval(int i) {
-        JSONObject jSONObject = this.mEmailObj;
-        if (jSONObject != null) {
-            int i2 = 600;
-            if (i == 0) {
-                i2 = 0;
-            } else if (i == 1) {
-                i2 = 30;
-            } else if (i == 2) {
-                i2 = 60;
-            } else if (i == 3) {
-                i2 = 180;
-            } else if (i == 4) {
-                i2 = Strategy.TTL_SECONDS_DEFAULT;
+    public void updateDateForInterval(int selectedIndex) {
+        JSONObject emailConfig = this.mEmailObj;
+        if (emailConfig != null) {
+            int sendInterval = 600;
+            if (selectedIndex == 0) {
+                sendInterval = 0;
+            } else if (selectedIndex == 1) {
+                sendInterval = 30;
+            } else if (selectedIndex == 2) {
+                sendInterval = 60;
+            } else if (selectedIndex == 3) {
+                sendInterval = 180;
+            } else if (selectedIndex == 4) {
+                sendInterval = Strategy.TTL_SECONDS_DEFAULT;
             }
             try {
-                jSONObject.put("SENDINTERVAL", i2);
+                emailConfig.put("SENDINTERVAL", sendInterval);
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -361,11 +333,11 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
         }
     }
 
-    public void updateDateForSSL(int i) {
-        JSONObject jSONObject = this.mEmailObj;
-        if (jSONObject != null) {
+    public void updateDateForSSL(int selectedIndex) {
+        JSONObject emailConfig = this.mEmailObj;
+        if (emailConfig != null) {
             try {
-                jSONObject.put("SSLSWITCH", i);
+                emailConfig.put("SSLSWITCH", selectedIndex);
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -373,13 +345,13 @@ public class EmailOfNetwork extends ConfigFragment implements BaseListener.GetLi
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForInterval")) {
-            if (list.size() > 0) {
-                updateDateForInterval(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForInterval")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForInterval(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForSSL") && list.size() > 0) {
-            updateDateForSSL(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForSSL") && selectedIndexes.size() > 0) {
+            updateDateForSSL(selectedIndexes.get(0).intValue());
         }
     }
 }

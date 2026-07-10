@@ -60,17 +60,16 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 2 |
-| `str`, `str2`, ... | 74 |
+| `str`, `str2`, ... | 73 |
 | `bArr`, `bArr2`, ... | 7 |
-| `i2`, `j2`, ... | 54 |
-| `z`, `z2`, ... | 43 |
-| App-owned files with at least one generic identifier | 99 |
+| `i2`, `j2`, ... | 53 |
+| `z`, `z2`, ... | 42 |
+| App-owned files with at least one generic identifier | 98 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java` | 94 |
 | `decompiled/sources/com/streamax/client/PlayFragmentSearch.java` | 91 |
 | `decompiled/sources/com/streamax/client/LiveViewUi.java` | 84 |
 | `decompiled/sources/com/streamax/view/CustomSurfaceView.java` | 77 |
@@ -90,12 +89,13 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/client/RemoteFileList.java` | 39 |
 | `decompiled/sources/com/streamax/client/EventPlayback.java` | 37 |
 | `decompiled/sources/com/streamax/config/fragment/WebViewFragment.java` | 33 |
+| `decompiled/sources/com/streamax/client/ConfigPageActivity.java` | 32 |
 
 Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 99 | 2,212 |
+| `decompiled/sources/com/streamax` | 98 | 2,118 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers and copy-channel compatibility flow in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, cleaned the render/zoom/touch locals in `VideoView.java`, simplified `LiveViewUi` surface visibility while removing its stale `SwitchChannelRunnable` JADX dump, reconstructed `ConnDeviceProxy.connDeviceByAuto`, simplified `TriggerOfAlarm.refreshUi`, cleaned `WebService.java` SOAP/CSV parsing locals, reconstructed `CustomImageView.writeIn`, clarified `PlanOfRecord` schedule merge logic, fixed the Ai Cal round-menu direction mapping plus `CalibrationActivity` vertical-line refresh, clarified `ScheduleOfAlarm` schedule merging, cleaned `EventPlaybackActivity.java` playback/capture locals, and clarified `DevGroupFragment.java` group/channel save flow. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, `VideoView.java`, `ConnDeviceProxy.java`, `WebService.java`, `CustomImageView.java`, `PlanOfRecord.java`, `ScheduleOfAlarm.java`, `EventPlaybackActivity.java`, and `DevGroupFragment.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 70 hits, `LiveViewUi.java` is down from 215 to 84 hits, `TriggerOfAlarm.java` is down from 146 to 57 hits, and `CalibrationActivity.java` is down from 40 to 31 hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers and copy-channel compatibility flow in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, cleaned the render/zoom/touch locals in `VideoView.java`, simplified `LiveViewUi` surface visibility while removing its stale `SwitchChannelRunnable` JADX dump, reconstructed `ConnDeviceProxy.connDeviceByAuto`, simplified `TriggerOfAlarm.refreshUi`, cleaned `WebService.java` SOAP/CSV parsing locals, reconstructed `CustomImageView.writeIn`, clarified `PlanOfRecord` schedule merge logic, fixed the Ai Cal round-menu direction mapping plus `CalibrationActivity` vertical-line refresh, clarified `ScheduleOfAlarm` schedule merging, cleaned `EventPlaybackActivity.java` playback/capture locals, clarified `DevGroupFragment.java` group/channel save flow, and clarified `EmailOfNetwork.java` email config parsing/saving flow. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, `VideoView.java`, `ConnDeviceProxy.java`, `WebService.java`, `CustomImageView.java`, `PlanOfRecord.java`, `ScheduleOfAlarm.java`, `EventPlaybackActivity.java`, `DevGroupFragment.java`, and `EmailOfNetwork.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 70 hits, `LiveViewUi.java` is down from 215 to 84 hits, `TriggerOfAlarm.java` is down from 146 to 57 hits, and `CalibrationActivity.java` is down from 40 to 31 hits.
 
 The next safe chunk is continued Java-heavy app UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java`
 - `decompiled/sources/com/streamax/client/PlayFragmentSearch.java`
 - `decompiled/sources/com/streamax/client/LiveViewUi.java`
 - `decompiled/sources/com/streamax/view/CustomSurfaceView.java`
+- `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java`
 
 Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.
