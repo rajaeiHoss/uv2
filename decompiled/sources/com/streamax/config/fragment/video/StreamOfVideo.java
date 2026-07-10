@@ -161,21 +161,21 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public int encType2Index(int i) {
-        JSONObject jSONObject = this.mStreamVpObj;
-        if (jSONObject == null) {
+    public int encType2Index(int encType) {
+        JSONObject streamVpObj = this.mStreamVpObj;
+        if (streamVpObj == null) {
             return -1;
         }
         try {
-            JSONArray jSONArray = jSONObject.getJSONArray("ENC");
-            if (jSONArray == null) {
+            JSONArray encTypes = streamVpObj.getJSONArray("ENC");
+            if (encTypes == null) {
                 return -1;
             }
-            for (int i2 = 0; i2 < jSONArray.length(); i2++) {
-                JSONObject jSONObject2 = jSONArray.getJSONObject(i2);
-                if (jSONObject2 != null) {
-                    if (i == jSONObject2.getInt("ET")) {
-                        return i2;
+            for (int encIndex = 0; encIndex < encTypes.length(); encIndex++) {
+                JSONObject encObj = encTypes.getJSONObject(encIndex);
+                if (encObj != null) {
+                    if (encType == encObj.getInt("ET")) {
+                        return encIndex;
                     }
                 }
             }
@@ -185,24 +185,24 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public int index2EncType(int i) {
-        JSONObject jSONObject = this.mStreamVpObj;
-        if (jSONObject == null) {
+    public int index2EncType(int encIndex) {
+        JSONObject streamVpObj = this.mStreamVpObj;
+        if (streamVpObj == null) {
             return -1;
         }
         try {
-            JSONArray jSONArray = jSONObject.getJSONArray("ENC");
-            if (jSONArray == null) {
+            JSONArray encTypes = streamVpObj.getJSONArray("ENC");
+            if (encTypes == null) {
                 return -1;
             }
-            if (i >= jSONArray.length()) {
+            if (encIndex >= encTypes.length()) {
                 return -1;
             }
-            JSONObject jSONObject2 = jSONArray.getJSONObject(i);
-            if (jSONObject2 == null) {
+            JSONObject encObj = encTypes.getJSONObject(encIndex);
+            if (encObj == null) {
                 return -1;
             }
-            return jSONObject2.getInt("ET");
+            return encObj.getInt("ET");
         } catch (JSONException unused) {
             return -1;
         }
@@ -260,30 +260,30 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
 
     public void configureResolution() {
         if (this.mStreamObj != null && this.mStreamVpObj != null) {
-            int i = -1;
+            int selectedIndex = -1;
             try {
                 this.mListStrResolution.clear();
                 this.mListIntResolution.clear();
-                int i2 = this.mStreamObj.getInt("RST");
-                JSONArray jSONArray = this.mStreamVpObj.getJSONArray("RSFR");
-                if (jSONArray != null) {
-                    List<String> strDatas = getStrDatas(R.array.RstSelector);
-                    for (int i3 = 0; i3 < jSONArray.length(); i3++) {
-                        JSONObject jSONObject = jSONArray.getJSONObject(i3);
-                        if (jSONObject != null) {
-                            int i4 = jSONObject.getInt("RST");
-                            if (i4 >= 0 && i4 < strDatas.size()) {
-                                String str = strDatas.get(i4);
-                                if (i4 == i2) {
-                                    i = i3;
+                int currentResolution = this.mStreamObj.getInt("RST");
+                JSONArray resolutionFrameRates = this.mStreamVpObj.getJSONArray("RSFR");
+                if (resolutionFrameRates != null) {
+                    List<String> resolutionLabels = getStrDatas(R.array.RstSelector);
+                    for (int entryIndex = 0; entryIndex < resolutionFrameRates.length(); entryIndex++) {
+                        JSONObject resolutionObj = resolutionFrameRates.getJSONObject(entryIndex);
+                        if (resolutionObj != null) {
+                            int resolution = resolutionObj.getInt("RST");
+                            if (resolution >= 0 && resolution < resolutionLabels.size()) {
+                                String resolutionLabel = resolutionLabels.get(resolution);
+                                if (resolution == currentResolution) {
+                                    selectedIndex = entryIndex;
                                 }
-                                this.mListStrResolution.add(str);
+                                this.mListStrResolution.add(resolutionLabel);
                             }
                         }
                     }
-                    if (i >= 0 && i < this.mListStrResolution.size()) {
-                        this.mTvResolution.setText(this.mListStrResolution.get(i));
-                        this.mListIntResolution.add(new Integer(i));
+                    if (selectedIndex >= 0 && selectedIndex < this.mListStrResolution.size()) {
+                        this.mTvResolution.setText(this.mListStrResolution.get(selectedIndex));
+                        this.mListIntResolution.add(new Integer(selectedIndex));
                     }
                 }
             } catch (JSONException unused) {
@@ -332,17 +332,17 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
             try {
                 this.mListStrEncType.clear();
                 this.mListIntEncType.clear();
-                int i = this.mStreamObj.getInt("ET");
-                int i2 = this.mStreamVpObj.getInt("ENC");
-                if (((i2 >> 0) & 1) == 1) {
+                int encType = this.mStreamObj.getInt("ET");
+                int encMask = this.mStreamVpObj.getInt("ENC");
+                if (((encMask >> 0) & 1) == 1) {
                     this.mListStrEncType.add("H264");
                 }
-                if (((i2 >> 1) & 1) == 1) {
+                if (((encMask >> 1) & 1) == 1) {
                     this.mListStrEncType.add("H265");
                 }
-                if (i >= 0 && i < this.mListStrEncType.size()) {
-                    this.mTvEncType.setText(this.mListStrEncType.get(i));
-                    this.mListIntEncType.add(new Integer(i));
+                if (encType >= 0 && encType < this.mListStrEncType.size()) {
+                    this.mTvEncType.setText(this.mListStrEncType.get(encType));
+                    this.mListIntEncType.add(new Integer(encType));
                 }
             } catch (JSONException unused) {
             }
@@ -351,37 +351,37 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
 
     public void refreshUi() {
         int length;
-        JSONObject jSONObject = this.mStreamRes;
-        if (jSONObject != null) {
+        JSONObject streamResponse = this.mStreamRes;
+        if (streamResponse != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AVSM");
-                JSONObject jSONObject3 = this.mStreamRes.getJSONObject("SPECP");
-                if (jSONObject2 == null) {
+                JSONObject avsmConfig = streamResponse.getJSONObject("AVSM");
+                JSONObject specConfig = this.mStreamRes.getJSONObject("SPECP");
+                if (avsmConfig == null) {
                     return;
                 }
-                if (jSONObject3 != null) {
-                    JSONObject jSONObject4 = jSONObject3.getJSONObject("VPCH");
-                    if (jSONObject4 != null) {
-                        int i = this.mStreamType;
-                        if (i == 0) {
-                            this.mStreamArr = jSONObject2.getJSONArray("MAIN");
-                            this.mStreamVpArr = jSONObject4.getJSONArray("MAIN");
-                        } else if (i == 1) {
-                            this.mStreamArr = jSONObject2.getJSONArray("SUB");
-                            this.mStreamVpArr = jSONObject4.getJSONArray("SUB");
-                        } else if (i == 2) {
-                            this.mStreamArr = jSONObject2.getJSONArray("MOB");
-                            this.mStreamVpArr = jSONObject4.getJSONArray("MOB");
+                if (specConfig != null) {
+                    JSONObject vpchConfig = specConfig.getJSONObject("VPCH");
+                    if (vpchConfig != null) {
+                        int streamType = this.mStreamType;
+                        if (streamType == 0) {
+                            this.mStreamArr = avsmConfig.getJSONArray("MAIN");
+                            this.mStreamVpArr = vpchConfig.getJSONArray("MAIN");
+                        } else if (streamType == 1) {
+                            this.mStreamArr = avsmConfig.getJSONArray("SUB");
+                            this.mStreamVpArr = vpchConfig.getJSONArray("SUB");
+                        } else if (streamType == 2) {
+                            this.mStreamArr = avsmConfig.getJSONArray("MOB");
+                            this.mStreamVpArr = vpchConfig.getJSONArray("MOB");
                         }
-                        JSONArray jSONArray = this.mStreamArr;
-                        if (jSONArray == null) {
+                        JSONArray streamArray = this.mStreamArr;
+                        if (streamArray == null) {
                             return;
                         }
                         if (this.mStreamVpArr != null) {
-                            if (jSONArray.length() == this.mStreamVpArr.length() && (length = this.mStreamArr.length()) > 0) {
-                                int i2 = this.mCurCh;
-                                if (i2 < length) {
-                                    this.mStreamObj = this.mStreamArr.getJSONObject(i2);
+                            if (streamArray.length() == this.mStreamVpArr.length() && (length = this.mStreamArr.length()) > 0) {
+                                int currentChannel = this.mCurCh;
+                                if (currentChannel < length) {
+                                    this.mStreamObj = this.mStreamArr.getJSONObject(currentChannel);
                                     this.mStreamVpObj = this.mStreamVpArr.getJSONObject(this.mCurCh);
                                     if (this.mStreamObj == null) {
                                         return;
@@ -390,13 +390,13 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
                                         this.mTvCh.setText("CH" + (this.mCurCh + 1));
                                         this.mListStrChannel.clear();
                                         this.mListIntChannel.clear();
-                                        int i3 = 0;
-                                        while (i3 < length) {
+                                        int channelIndex = 0;
+                                        while (channelIndex < length) {
                                             ArrayList<String> arrayList = this.mListStrChannel;
                                             StringBuilder sb = new StringBuilder();
                                             sb.append("CH");
-                                            i3++;
-                                            sb.append(i3);
+                                            channelIndex++;
+                                            sb.append(channelIndex);
                                             arrayList.add(sb.toString());
                                         }
                                         this.mListIntChannel.add(new Integer(this.mCurCh));
@@ -414,8 +414,8 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
                                             this.mVlBitRate.setVisibility(0);
                                             this.mRlBitRate.setVisibility(0);
                                             this.mTvBitRate.setVisibility(0);
-                                            int i4 = this.mStreamObj.getInt("BR");
-                                            this.mTvBitRate.setText(i4 + "kbps");
+                                            int bitRate = this.mStreamObj.getInt("BR");
+                                            this.mTvBitRate.setText(bitRate + "kbps");
                                         } else {
                                             this.mVlBitRate.setVisibility(8);
                                             this.mRlBitRate.setVisibility(8);
@@ -427,12 +427,12 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
                                             this.mVlBitMode.setVisibility(0);
                                             this.mRlBitMode.setVisibility(0);
                                             this.mTvBitMode.setVisibility(0);
-                                            int i5 = this.mStreamObj.getInt("BRM");
-                                            List<String> strDatas = getStrDatas(R.array.BrmSelector);
-                                            if (i5 >= 0 && i5 < strDatas.size()) {
-                                                this.mTvBitMode.setText(strDatas.get(i5));
-                                                this.mListStrBitMode.addAll(strDatas);
-                                                this.mListIntBitMode.add(new Integer(i5));
+                                            int bitRateMode = this.mStreamObj.getInt("BRM");
+                                            List<String> bitModeLabels = getStrDatas(R.array.BrmSelector);
+                                            if (bitRateMode >= 0 && bitRateMode < bitModeLabels.size()) {
+                                                this.mTvBitMode.setText(bitModeLabels.get(bitRateMode));
+                                                this.mListStrBitMode.addAll(bitModeLabels);
+                                                this.mListIntBitMode.add(new Integer(bitRateMode));
                                             }
                                         } else {
                                             this.mVlBitMode.setVisibility(8);
@@ -455,12 +455,12 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
                                             this.mVlQulity.setVisibility(0);
                                             this.mRlQulity.setVisibility(0);
                                             this.mTvQulity.setVisibility(0);
-                                            int i6 = this.mStreamObj.getInt("QLT") - 1;
-                                            List<String> strDatas2 = getStrDatas(R.array.QltSelector);
-                                            if (i6 >= 0 && i6 < strDatas2.size()) {
-                                                this.mTvQulity.setText(strDatas2.get(i6));
-                                                this.mListStrQulity.addAll(strDatas2);
-                                                this.mListIntQulity.add(new Integer(i6));
+                                            int qualityIndex = this.mStreamObj.getInt("QLT") - 1;
+                                            List<String> qualityLabels = getStrDatas(R.array.QltSelector);
+                                            if (qualityIndex >= 0 && qualityIndex < qualityLabels.size()) {
+                                                this.mTvQulity.setText(qualityLabels.get(qualityIndex));
+                                                this.mListStrQulity.addAll(qualityLabels);
+                                                this.mListIntQulity.add(new Integer(qualityIndex));
                                                 return;
                                             }
                                             return;
@@ -523,31 +523,31 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void pushFragmentForBitRate() {
-        int i;
-        int i2;
+        int minBitRate;
+        int maxBitRate;
         if (this.mStreamObj != null && this.mStreamVpObj != null) {
-            String string = UiUtils.getString(R.string.config_BitRateMode);
+            String title = UiUtils.getString(R.string.config_BitRateMode);
             try {
-                int i3 = this.mStreamObj.getInt("BR");
-                int i4 = this.mStreamObj.getInt("RST");
-                JSONArray jSONArray = this.mStreamVpObj.getJSONArray("RSFR");
-                if (jSONArray != null) {
-                    int i5 = 0;
+                int currentBitRate = this.mStreamObj.getInt("BR");
+                int currentResolution = this.mStreamObj.getInt("RST");
+                JSONArray resolutionFrameRates = this.mStreamVpObj.getJSONArray("RSFR");
+                if (resolutionFrameRates != null) {
+                    int entryIndex = 0;
                     while (true) {
-                        if (i5 >= jSONArray.length()) {
-                            i = 1;
-                            i2 = 1;
+                        if (entryIndex >= resolutionFrameRates.length()) {
+                            minBitRate = 1;
+                            maxBitRate = 1;
                             break;
                         }
-                        JSONObject jSONObject = jSONArray.getJSONObject(i5);
-                        if (jSONObject != null) {
-                            if (i4 == jSONObject.getInt("RST")) {
-                                String string2 = jSONObject.getString("BR");
-                                if (string2 != null) {
-                                    String[] split = string2.split("-");
-                                    if (split.length > 1 && !split[0].isEmpty() && !split[1].isEmpty()) {
-                                        i = Integer.parseInt(split[0]);
-                                        i2 = Integer.parseInt(split[1]);
+                        JSONObject rangeObj = resolutionFrameRates.getJSONObject(entryIndex);
+                        if (rangeObj != null) {
+                            if (currentResolution == rangeObj.getInt("RST")) {
+                                String bitRateRange = rangeObj.getString("BR");
+                                if (bitRateRange != null) {
+                                    String[] rangeParts = bitRateRange.split("-");
+                                    if (rangeParts.length > 1 && !rangeParts[0].isEmpty() && !rangeParts[1].isEmpty()) {
+                                        minBitRate = Integer.parseInt(rangeParts[0]);
+                                        maxBitRate = Integer.parseInt(rangeParts[1]);
                                         break;
                                     }
                                 } else {
@@ -555,10 +555,10 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
                                 }
                             }
                         }
-                        i5++;
+                        entryIndex++;
                     }
-                    if (i < i2) {
-                        pushOneNumberEditFragment(string, "OneNumberEditFragmentForBitRate", i3, i, i2);
+                    if (minBitRate < maxBitRate) {
+                        pushOneNumberEditFragment(title, "OneNumberEditFragmentForBitRate", currentBitRate, minBitRate, maxBitRate);
                     }
                 }
             } catch (JSONException unused) {
@@ -634,39 +634,39 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            int i = this.mStreamType;
-            if (i == 0) {
-                jSONObject2.put("MAIN", "?");
-            } else if (i == 1) {
-                jSONObject2.put("SUB", "?");
-            } else if (i == 2) {
-                jSONObject2.put("MOB", "?");
+            JSONObject request = new JSONObject();
+            JSONObject vpchRequest = new JSONObject();
+            int streamType = this.mStreamType;
+            if (streamType == 0) {
+                vpchRequest.put("MAIN", "?");
+            } else if (streamType == 1) {
+                vpchRequest.put("SUB", "?");
+            } else if (streamType == 2) {
+                vpchRequest.put("MOB", "?");
             }
-            JSONObject jSONObject3 = new JSONObject();
-            jSONObject3.put("VPCH", jSONObject2);
-            JSONObject jSONObject4 = new JSONObject();
-            jSONObject4.put("REP", "?");
-            int i2 = this.mStreamType;
-            if (i2 == 0) {
-                jSONObject4.put("MAIN", "?");
-            } else if (i2 == 1) {
-                jSONObject4.put("SUB", "?");
-            } else if (i2 == 2) {
-                jSONObject4.put("MOB", "?");
+            JSONObject specRequest = new JSONObject();
+            specRequest.put("VPCH", vpchRequest);
+            JSONObject avsmRequest = new JSONObject();
+            avsmRequest.put("REP", "?");
+            int currentStreamType = this.mStreamType;
+            if (currentStreamType == 0) {
+                avsmRequest.put("MAIN", "?");
+            } else if (currentStreamType == 1) {
+                avsmRequest.put("SUB", "?");
+            } else if (currentStreamType == 2) {
+                avsmRequest.put("MOB", "?");
             }
-            jSONObject.put("SPECP", jSONObject3);
-            jSONObject.put("AVSM", jSONObject4);
-            return jSONObject.toString();
+            request.put("SPECP", specRequest);
+            request.put("AVSM", avsmRequest);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mStreamRes = new JSONObject(str);
+            this.mStreamRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -674,18 +674,18 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mStreamRes;
-        if (jSONObject == null) {
+        JSONObject streamResponse = this.mStreamRes;
+        if (streamResponse == null) {
             return "";
         }
         try {
-            JSONObject jSONObject2 = jSONObject.getJSONObject("AVSM");
-            if (jSONObject2 == null) {
+            JSONObject avsmConfig = streamResponse.getJSONObject("AVSM");
+            if (avsmConfig == null) {
                 return "";
             }
-            JSONObject jSONObject3 = new JSONObject();
-            jSONObject3.put("AVSM", jSONObject2);
-            return jSONObject3.toString();
+            JSONObject request = new JSONObject();
+            request.put("AVSM", avsmConfig);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
@@ -859,33 +859,33 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         return false;
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForChannel")) {
-            if (list.size() > 0) {
-                updateDateForChannel(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForChannel")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForChannel(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForResolution")) {
-            if (list.size() > 0) {
-                updateDateForResolution(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForResolution")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForResolution(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForFrameRate")) {
-            if (list.size() > 0) {
-                updateDateForFrameRate(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForFrameRate")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForFrameRate(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForBitMode")) {
-            if (list.size() > 0) {
-                updateDateForBitMode(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForBitMode")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForBitMode(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForEncType")) {
-            if (list.size() > 0) {
-                updateDateForEncType(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForEncType")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForEncType(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForQulity")) {
-            if (list.size() > 0) {
-                updateDateForQulity(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForQulity")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForQulity(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForCopy") && list.size() > 0) {
-            updateDateForCopy(list);
+        } else if (fragmentTag.equals("SelectFragmentForCopy") && selectedIndexes.size() > 0) {
+            updateDateForCopy(selectedIndexes);
         }
     }
 
@@ -900,9 +900,9 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public void saveOneNumberEdit(String str, int i) {
-        if (str.equals("OneNumberEditFragmentForBitRate")) {
-            updateDateForBitRate(i);
+    public void saveOneNumberEdit(String fragmentTag, int value) {
+        if (fragmentTag.equals("OneNumberEditFragmentForBitRate")) {
+            updateDateForBitRate(value);
         }
     }
 }
