@@ -127,20 +127,20 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     public void run() {
     }
 
-    public void setPtz(int i, int i2) {
+    public void setPtz(int channel, int command) {
     }
 
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         this.mContext = AppProxy.getContext();
         this.mApp = (MyApp) getApplication();
-        LayoutInflater from = LayoutInflater.from(this);
-        this.mInflater = from;
-        View inflate = from.inflate(R.layout.realplaypage, (ViewGroup) null);
-        this.mRealPlay = inflate;
-        this.mStopPbLoading = (ProgressBar) inflate.findViewById(R.id.realplay_pbloading);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        this.mInflater = layoutInflater;
+        View realPlayView = layoutInflater.inflate(R.layout.realplaypage, (ViewGroup) null);
+        this.mRealPlay = realPlayView;
+        this.mStopPbLoading = (ProgressBar) realPlayView.findViewById(R.id.realplay_pbloading);
         this.mdbHelper = new DbHelper(this.mContext, DbHelper.DATABASENAME, (SQLiteDatabase.CursorFactory) null, 1);
         setContentView(this.mRealPlay);
         FindViews();
@@ -151,20 +151,20 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
             }
         }).start();
         OrientationEventListener orientationListener = new OrientationEventListener(this, 3) {
-            public void onOrientationChanged(int i) {
+            public void onOrientationChanged(int orientation) {
                 try {
-                    int i2 = Settings.System.getInt(RealPlayActivity.this.getApplication().getContentResolver(), "accelerometer_rotation");
-                    if (i != -1) {
-                        if (i != 360) {
-                            if (i != 0) {
-                                if (i == 90) {
-                                    if (i2 != 0) {
+                    int autoRotateEnabled = Settings.System.getInt(RealPlayActivity.this.getApplication().getContentResolver(), "accelerometer_rotation");
+                    if (orientation != -1) {
+                        if (orientation != 360) {
+                            if (orientation != 0) {
+                                if (orientation == 90) {
+                                    if (autoRotateEnabled != 0) {
                                         RealPlayActivity.this.setVideoGroupMax(true);
                                         return;
                                     }
                                     return;
-                                } else if (i != 180) {
-                                    if (i == 270 && i2 != 0) {
+                                } else if (orientation != 180) {
+                                    if (orientation == 270 && autoRotateEnabled != 0) {
                                         RealPlayActivity.this.setVideoGroupMax(true);
                                         return;
                                     }
@@ -174,7 +174,7 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                                 }
                             }
                         }
-                        if (i2 != 0) {
+                        if (autoRotateEnabled != 0) {
                             RealPlayActivity.this.setVideoGroupMax(false);
                         }
                     }
@@ -206,8 +206,8 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         this.mtvVideoInformation = (TextView) this.mRealPlay.findViewById(R.id.realplay_videoinformation_text);
         this.mOnClickListener = new View.OnClickListener() {
             public void onClick(View view) {
-                String str;
-                String str2;
+                String recordMessage;
+                String soundMessage;
                 switch (view.getId()) {
                     case R.id.realplay_toolbar_capture /*2131362949*/:
                         int focusChannel = RealPlayActivity.this.mVideoContainer.getFocusChannel();
@@ -249,17 +249,17 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                         if (RealPlayActivity.this.mAVStream[focusChannel3] != null) {
                             RealPlayActivity.this.mbRecordArray[focusChannel3] = !RealPlayActivity.this.mbRecordArray[focusChannel3];
                             if (RealPlayActivity.this.mbRecordArray[focusChannel3]) {
-                                str = RealPlayActivity.this.mContext.getString(R.string.startrecording);
+                                recordMessage = RealPlayActivity.this.mContext.getString(R.string.startrecording);
                                 RealPlayActivity.this.mImageRecord.setImageResource(R.drawable.record_normal);
                                 RealPlayActivity realPlayActivity2 = RealPlayActivity.this;
                                 realPlayActivity2.StartRecord(realPlayActivity2.mVideoContainer.getFocusChannel());
                             } else {
-                                str = RealPlayActivity.this.mContext.getString(R.string.stoprecording);
+                                recordMessage = RealPlayActivity.this.mContext.getString(R.string.stoprecording);
                                 RealPlayActivity.this.mImageRecord.setImageResource(R.drawable.record_unuse);
                                 RealPlayActivity realPlayActivity3 = RealPlayActivity.this;
                                 realPlayActivity3.StopRecord(realPlayActivity3.mVideoContainer.getFocusChannel());
                             }
-                            RealPlayActivity.this.mtvVideoInformation.setText(str);
+                            RealPlayActivity.this.mtvVideoInformation.setText(recordMessage);
                             return;
                         }
                         return;
@@ -268,14 +268,14 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                         if (RealPlayActivity.this.mbMute) {
                             RealPlayActivity.this.mbMute = false;
                             imageView.setImageResource(R.drawable.soundopen);
-                            str2 = RealPlayActivity.this.mContext.getString(R.string.opensound);
+                            soundMessage = RealPlayActivity.this.mContext.getString(R.string.opensound);
                         } else {
                             RealPlayActivity.this.mbMute = true;
                             imageView.setImageResource(R.drawable.soundclose);
-                            str2 = RealPlayActivity.this.mContext.getString(R.string.closesound);
+                            soundMessage = RealPlayActivity.this.mContext.getString(R.string.closesound);
                         }
                         RealPlayActivity.this.mAudioTrack.SetMute(RealPlayActivity.this.mbMute);
-                        RealPlayActivity.this.mtvVideoInformation.setText(str2);
+                        RealPlayActivity.this.mtvVideoInformation.setText(soundMessage);
                         return;
                     case R.id.realplay_toolbar_stop /*2131362953*/:
                         new Thread(new Runnable() {
@@ -318,28 +318,28 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     public void AutoPlay() {
         DevInfoBean devInfoBean;
         if (this.mApp.mbAutoPlay) {
-            for (int i = 0; i < this.mnMaxView; i++) {
-                SharedPreferences sharedPreferences = getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(i)}), 0);
-                String string = sharedPreferences.getString("info", "");
-                int i2 = sharedPreferences.getInt("channel", 0);
-                int i3 = SpUtils.getInt(Configs.Key.LoginType, -1);
-                if (!(string == null || string.length() == 0 || i3 != MyApp.loginType)) {
+            for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
+                SharedPreferences sharedPreferences = getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(viewIndex)}), 0);
+                String savedDeviceInfo = sharedPreferences.getString("info", "");
+                int savedChannel = sharedPreferences.getInt("channel", 0);
+                int savedLoginType = SpUtils.getInt(Configs.Key.LoginType, -1);
+                if (!(savedDeviceInfo == null || savedDeviceInfo.length() == 0 || savedLoginType != MyApp.loginType)) {
                     try {
                         try {
-                            DevInfoBean devInfoBean2 = (DevInfoBean) new ObjectInputStream(new ByteArrayInputStream(Base64.decode(string, 0))).readObject();
-                            devInfoBean2.PrintOut();
+                            DevInfoBean savedDevInfoBean = (DevInfoBean) new ObjectInputStream(new ByteArrayInputStream(Base64.decode(savedDeviceInfo, 0))).readObject();
+                            savedDevInfoBean.PrintOut();
                             if (MyApp.loginType == 0) {
-                                devInfoBean = this.mdbHelper.query(devInfoBean2.mDevName);
+                                devInfoBean = this.mdbHelper.query(savedDevInfoBean.mDevName);
                             } else {
                                 if (this.mApp.mWebService.mDevList.size() == 0) {
                                     this.mApp.mWebService.GetTerminalInfoAndroid(true);
                                 }
-                                devInfoBean = this.mApp.mWebService.query(devInfoBean2.mDevName);
+                                devInfoBean = this.mApp.mWebService.query(savedDevInfoBean.mDevName);
                             }
-                            if (devInfoBean2 != null) {
+                            if (savedDevInfoBean != null) {
                                 if (devInfoBean != null) {
-                                    if (devInfoBean2.mDevIp.compareTo(devInfoBean.mDevIp) == 0 && devInfoBean2.mMediaPort == devInfoBean.mMediaPort) {
-                                        StartPlay(devInfoBean.mDevId, i2, i);
+                                    if (savedDevInfoBean.mDevIp.compareTo(devInfoBean.mDevIp) == 0 && savedDevInfoBean.mMediaPort == devInfoBean.mMediaPort) {
+                                        StartPlay(devInfoBean.mDevId, savedChannel, viewIndex);
                                     }
                                 }
                             }
@@ -356,44 +356,44 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         }
     }
 
-    public void StartRecord(int i) {
+    public void StartRecord(int viewIndex) {
         if (!Environment.getExternalStorageState().equals("mounted")) {
             this.mtvVideoInformation.setText(this.mContext.getString(R.string.ExternalStorageerror));
             return;
         }
-        Calendar instance = Calendar.getInstance();
-        String format = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13))});
-        if (this.mAVStream[i] != null) {
-            String format2 = String.format("%02d.264", new Object[]{Integer.valueOf(this.mViewInfoArray[i].mChannel + 1)});
-            this.mRecordPathMap.put(Integer.valueOf(i), format + format2);
-            this.mAVStream[i].StartRecord(Configs.Key.RecordDirPath + format + format2);
-            this.mViewInfoArray[i].getNet().RequestIFrame(this.mViewInfoArray[i].mChannel, 0);
-            this.mVideoContainer.SetRecState(i, true);
+        Calendar timestamp = Calendar.getInstance();
+        String recordPrefix = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(timestamp.get(1)), Integer.valueOf(timestamp.get(2) + 1), Integer.valueOf(timestamp.get(5)), Integer.valueOf(timestamp.get(11)), Integer.valueOf(timestamp.get(12)), Integer.valueOf(timestamp.get(13))});
+        if (this.mAVStream[viewIndex] != null) {
+            String channelSuffix = String.format("%02d.264", new Object[]{Integer.valueOf(this.mViewInfoArray[viewIndex].mChannel + 1)});
+            this.mRecordPathMap.put(Integer.valueOf(viewIndex), recordPrefix + channelSuffix);
+            this.mAVStream[viewIndex].StartRecord(Configs.Key.RecordDirPath + recordPrefix + channelSuffix);
+            this.mViewInfoArray[viewIndex].getNet().RequestIFrame(this.mViewInfoArray[viewIndex].mChannel, 0);
+            this.mVideoContainer.SetRecState(viewIndex, true);
         }
     }
 
-    public void StopRecord(final int i) {
+    public void StopRecord(final int viewIndex) {
         AVStream[] aVStreamArr = this.mAVStream;
-        if (aVStreamArr[i] != null) {
-            aVStreamArr[i].StopRecord();
+        if (aVStreamArr[viewIndex] != null) {
+            aVStreamArr[viewIndex].StopRecord();
             this.mVideoContainer.post(new Runnable() {
                 public void run() {
-                    RealPlayActivity.this.mVideoContainer.SetRecState(i, false);
+                    RealPlayActivity.this.mVideoContainer.SetRecState(viewIndex, false);
                 }
             });
-            this.mbRecordArray[i] = false;
+            this.mbRecordArray[viewIndex] = false;
         }
     }
 
-    public Stack<Map<String, Object>> CaptureImage(int i) {
-        Calendar instance = Calendar.getInstance();
-        String format = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13))});
-        if (this.mAVStream[i] != null) {
+    public Stack<Map<String, Object>> CaptureImage(int viewIndex) {
+        Calendar timestamp = Calendar.getInstance();
+        String capturePrefix = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(timestamp.get(1)), Integer.valueOf(timestamp.get(2) + 1), Integer.valueOf(timestamp.get(5)), Integer.valueOf(timestamp.get(11)), Integer.valueOf(timestamp.get(12)), Integer.valueOf(timestamp.get(13))});
+        if (this.mAVStream[viewIndex] != null) {
             HashMap hashMap = new HashMap();
-            String str = Configs.Key.CaptureDirPath + format + String.format("%02d.bmp", new Object[]{Integer.valueOf(this.mViewInfoArray[i].mChannel + 1)});
-            hashMap.put("channel", Integer.valueOf(i));
-            hashMap.put("path", str);
-            if (this.mAVStream[i].Capture(str) == 0) {
+            String capturePath = Configs.Key.CaptureDirPath + capturePrefix + String.format("%02d.bmp", new Object[]{Integer.valueOf(this.mViewInfoArray[viewIndex].mChannel + 1)});
+            hashMap.put("channel", Integer.valueOf(viewIndex));
+            hashMap.put("path", capturePath);
+            if (this.mAVStream[viewIndex].Capture(capturePath) == 0) {
                 this.mBitmapStack.push(hashMap);
             }
         }
@@ -463,8 +463,8 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         }
     }
 
-    public void setVideoGroupMax(boolean z) {
-        if (z) {
+    public void setVideoGroupMax(boolean fullscreen) {
+        if (fullscreen) {
             this.mTitlebar.setVisibility(8);
             this.mVideoInfo.setVisibility(8);
             this.mToolbar.setVisibility(8);
@@ -475,40 +475,40 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         this.mToolbar.setVisibility(0);
     }
 
-    public void SetPtzState(boolean z) {
+    public void SetPtzState(boolean active) {
         ImageView imageView = (ImageView) findViewById(R.id.realplay_toolbar_ptz);
-        if (z) {
+        if (active) {
             imageView.setImageResource(R.drawable.ptz_active);
         } else {
             imageView.setImageResource(R.drawable.ptz_normal);
         }
     }
 
-    public void SetStreamDecodeState(int i, boolean z) {
+    public void SetStreamDecodeState(int viewIndex, boolean paused) {
         AVStream[] aVStreamArr = this.mAVStream;
-        if (aVStreamArr[i] != null) {
-            aVStreamArr[i].SetStreamDecodeState(z);
+        if (aVStreamArr[viewIndex] != null) {
+            aVStreamArr[viewIndex].SetStreamDecodeState(paused);
         }
     }
 
-    public void StartPlay(int i, int i2, final int i3) {
+    public void StartPlay(int deviceId, int deviceChannel, final int requestedViewIndex) {
         DevInfoBean devInfoBean;
         synchronized (lock) {
             if (MyApp.loginType == 0) {
-                devInfoBean = this.mdbHelper.query(i);
+                devInfoBean = this.mdbHelper.query(deviceId);
             } else {
-                devInfoBean = this.mApp.mWebService.query(i);
+                devInfoBean = this.mApp.mWebService.query(deviceId);
             }
             if (devInfoBean != null) {
-                int i4 = -1;
-                int channel = i3;
+                int errorCode = -1;
+                int channel = requestedViewIndex;
                 if (channel == -1) {
                     channel = this.mVideoContainer.getFocusChannel();
                 }
-                for (int i5 = 0; i5 < this.mnMaxView; i5++) {
+                for (int existingViewIndex = 0; existingViewIndex < this.mnMaxView; existingViewIndex++) {
                     SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-                    if (singleViewInfoArr[i5] != null) {
-                        if (singleViewInfoArr[i5].check(devInfoBean) && i2 == this.mViewInfoArray[i5].mChannel) {
+                    if (singleViewInfoArr[existingViewIndex] != null) {
+                        if (singleViewInfoArr[existingViewIndex].check(devInfoBean) && deviceChannel == this.mViewInfoArray[existingViewIndex].mChannel) {
                             this.mHandler.post(new Runnable() {
                                 public void run() {
                                     RealPlayActivity realPlayActivity = RealPlayActivity.this;
@@ -537,11 +537,11 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                     aVStreamArr[channel] = new AVStream();
                 }
                 DvrNet dvrNet = null;
-                for (int i6 = 0; i6 < this.mnMaxView; i6++) {
+                for (int existingViewIndex = 0; existingViewIndex < this.mnMaxView; existingViewIndex++) {
                     SingleViewInfo[] singleViewInfoArr2 = this.mViewInfoArray;
-                    if (singleViewInfoArr2[i6] != null) {
-                        if (singleViewInfoArr2[i6].check(devInfoBean)) {
-                            dvrNet = this.mViewInfoArray[i6].getNet();
+                    if (singleViewInfoArr2[existingViewIndex] != null) {
+                        if (singleViewInfoArr2[existingViewIndex].check(devInfoBean)) {
+                            dvrNet = this.mViewInfoArray[existingViewIndex].getNet();
                         }
                     }
                 }
@@ -550,9 +550,9 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                     this.mViewInfoArray[channel].setNet(new DvrNet());
                     Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(this.mViewInfoArray[channel].getNet(), devInfoBean, this.mApp);
                     if (connDeviceProxy != null) {
-                        i4 = ((Integer) connDeviceProxy.get("errorcode")).intValue();
+                        errorCode = ((Integer) connDeviceProxy.get("errorcode")).intValue();
                     }
-                    if (i4 == 0) {
+                    if (errorCode == 0) {
                         AVStream[] aVStreamArr2 = this.mAVStream;
                         if (aVStreamArr2[channel] == null) {
                             aVStreamArr2[channel] = new AVStream();
@@ -563,7 +563,7 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                         this.mAVStream[channel].GetHandle(channel);
                         this.mVideoContainer.SetPlayState(channel, true);
                         this.mViewInfoArray[channel].setDeviceInfo(devInfoBean);
-                        this.mViewInfoArray[channel].mChannel = i2;
+                        this.mViewInfoArray[channel].mChannel = deviceChannel;
                         this.mAudioTrack.mPlayer.play();
                         this.mAudioTrack.SetMute(this.mbMute);
                         if (channel == this.mVideoContainer.getFocusChannel()) {
@@ -575,28 +575,28 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                         this.mAVStream[channel].StartPlay();
                         this.mAVStream[channel].SetVideoInterface(this);
                         this.mAVStream[channel].SetAudioInterface(this.mAudioTrack);
-                        this.mViewInfoArray[channel].getNet().SetAVStream(i2, this.mAVStream[channel]);
-                        this.mViewInfoArray[channel].getNet().StartRealAv(i2, MyApp.multiStreamType);
+                        this.mViewInfoArray[channel].getNet().SetAVStream(deviceChannel, this.mAVStream[channel]);
+                        this.mViewInfoArray[channel].getNet().StartRealAv(deviceChannel, MyApp.multiStreamType);
                     } else {
-                        if (i4 == 64) {
+                        if (errorCode == 64) {
                             this.mtvVideoInformation.post(new Runnable() {
                                 public void run() {
                                     RealPlayActivity.this.mtvVideoInformation.setText(RealPlayActivity.this.mContext.getString(R.string.permissiondenied));
                                 }
                             });
-                        } else if (i4 == 63) {
+                        } else if (errorCode == 63) {
                             this.mtvVideoInformation.post(new Runnable() {
                                 public void run() {
                                     RealPlayActivity.this.mtvVideoInformation.setText(RealPlayActivity.this.mContext.getString(R.string.macillegal));
                                 }
                             });
-                        } else if (i4 == 24) {
+                        } else if (errorCode == 24) {
                             this.mtvVideoInformation.post(new Runnable() {
                                 public void run() {
                                     RealPlayActivity.this.mtvVideoInformation.setText(RealPlayActivity.this.mContext.getString(R.string.moreuseronline));
                                 }
                             });
-                        } else if (i4 == 5) {
+                        } else if (errorCode == 5) {
                             this.mtvVideoInformation.post(new Runnable() {
                                 public void run() {
                                     RealPlayActivity.this.mtvVideoInformation.setText(RealPlayActivity.this.mContext.getString(R.string.usernameorpassworderror));
@@ -619,7 +619,7 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                     }
                     this.mAVStream[channel].GetHandle(channel);
                     this.mViewInfoArray[channel].setDeviceInfo(devInfoBean);
-                    this.mViewInfoArray[channel].mChannel = i2;
+                    this.mViewInfoArray[channel].mChannel = deviceChannel;
                     if (channel == this.mVideoContainer.getFocusChannel()) {
                         this.mAudioTrack.SwitchChannels(channel);
                         this.mAVStream[channel].SetMute(true);
@@ -630,8 +630,8 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                     this.mAVStream[channel].SetVideoInterface(this);
                     this.mAVStream[channel].SetAudioInterface(this.mAudioTrack);
                     this.mAVStream[channel].StartPlay();
-                    this.mViewInfoArray[channel].getNet().SetAVStream(i2, this.mAVStream[channel]);
-                    this.mViewInfoArray[channel].getNet().StartRealAv(i2, MyApp.multiStreamType);
+                    this.mViewInfoArray[channel].getNet().SetAVStream(deviceChannel, this.mAVStream[channel]);
+                    this.mViewInfoArray[channel].getNet().StartRealAv(deviceChannel, MyApp.multiStreamType);
                 }
                 this.mVideoContainer.post(new Runnable() {
                     public void run() {
@@ -642,65 +642,65 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         }
     }
 
-    public void StopPlay(final int i) {
+    public void StopPlay(final int viewIndex) {
         synchronized (lock) {
             SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-            if (singleViewInfoArr[i] != null) {
-                if (singleViewInfoArr[i].getNet() != null) {
-                    this.mViewInfoArray[i].getNet().StopRealAv(this.mViewInfoArray[i].mChannel);
-                    boolean z = true;
-                    for (int i2 = 0; i2 < this.mnMaxView; i2++) {
-                        if (i != i2) {
+            if (singleViewInfoArr[viewIndex] != null) {
+                if (singleViewInfoArr[viewIndex].getNet() != null) {
+                    this.mViewInfoArray[viewIndex].getNet().StopRealAv(this.mViewInfoArray[viewIndex].mChannel);
+                    boolean lastViewUsingDevice = true;
+                    for (int otherViewIndex = 0; otherViewIndex < this.mnMaxView; otherViewIndex++) {
+                        if (viewIndex != otherViewIndex) {
                             SingleViewInfo[] singleViewInfoArr2 = this.mViewInfoArray;
-                            if (singleViewInfoArr2[i2] != null) {
-                                if (singleViewInfoArr2[i2].getNet() != null) {
-                                    if (this.mViewInfoArray[i2].getNet() == this.mViewInfoArray[i].getNet()) {
-                                        z = false;
+                            if (singleViewInfoArr2[otherViewIndex] != null) {
+                                if (singleViewInfoArr2[otherViewIndex].getNet() != null) {
+                                    if (this.mViewInfoArray[otherViewIndex].getNet() == this.mViewInfoArray[viewIndex].getNet()) {
+                                        lastViewUsingDevice = false;
                                     }
                                 }
                             }
                         }
                     }
-                    if (z) {
-                        this.mViewInfoArray[i].getNet().CloseDeviceHandle();
+                    if (lastViewUsingDevice) {
+                        this.mViewInfoArray[viewIndex].getNet().CloseDeviceHandle();
                     }
-                    StopRecord(i);
+                    StopRecord(viewIndex);
                     AVStream[] aVStreamArr = this.mAVStream;
-                    if (aVStreamArr[i] != null) {
-                        aVStreamArr[i].StopPlay();
-                        this.mAVStream[i].CloseHandle();
-                        this.mAVStream[i] = null;
+                    if (aVStreamArr[viewIndex] != null) {
+                        aVStreamArr[viewIndex].StopPlay();
+                        this.mAVStream[viewIndex].CloseHandle();
+                        this.mAVStream[viewIndex] = null;
                     }
                     if (this.mCurFocus) {
                         this.mVideoContainer.post(new Runnable() {
                             public void run() {
                                 RealPlayActivity.this.mVideoContainer.SetPlayState(RealPlayActivity.this.mVideoContainer.getFocusChannel(), false);
                                 RealPlayActivity.this.mtvVideoInformation.setText(RealPlayActivity.this.mContext.getString(R.string.closevideo));
-                                RealPlayActivity.this.mbRecordArray[i] = false;
+                                RealPlayActivity.this.mbRecordArray[viewIndex] = false;
                                 RealPlayActivity.this.mImageRecord.setImageResource(R.drawable.record_unuse);
-                                RealPlayActivity.this.mVideoContainer.getVideoView(i).setVisibility(4);
+                                RealPlayActivity.this.mVideoContainer.getVideoView(viewIndex).setVisibility(4);
                             }
                         });
                     }
                     this.mCurFocus = true;
-                    this.mViewInfoArray[i].reset();
+                    this.mViewInfoArray[viewIndex].reset();
                 }
             }
         }
     }
 
-    public void openSound(int i) {
-        for (int i2 = 0; i2 < this.mnMaxView; i2++) {
-            if (this.mAVStream[i2] != null) {
+    public void openSound(int activeViewIndex) {
+        for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
+            if (this.mAVStream[viewIndex] != null) {
                 SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-                if (!(singleViewInfoArr[i2] == null || singleViewInfoArr[i2].getNet() == null)) {
-                    if (i2 == i) {
-                        this.mViewInfoArray[i].getNet().SetStreamSound(this.mViewInfoArray[i].mChannel, this.mApp.mStreamType, true);
-                        this.mAVStream[i].SetMute(false);
-                        this.mAudioTrack.SwitchChannels(i);
+                if (!(singleViewInfoArr[viewIndex] == null || singleViewInfoArr[viewIndex].getNet() == null)) {
+                    if (viewIndex == activeViewIndex) {
+                        this.mViewInfoArray[activeViewIndex].getNet().SetStreamSound(this.mViewInfoArray[activeViewIndex].mChannel, this.mApp.mStreamType, true);
+                        this.mAVStream[activeViewIndex].SetMute(false);
+                        this.mAudioTrack.SwitchChannels(activeViewIndex);
                     } else {
-                        this.mAVStream[i2].SetMute(true);
-                        this.mViewInfoArray[i2].getNet().SetStreamSound(this.mViewInfoArray[i2].mChannel, this.mApp.mStreamType, false);
+                        this.mAVStream[viewIndex].SetMute(true);
+                        this.mViewInfoArray[viewIndex].getNet().SetStreamSound(this.mViewInfoArray[viewIndex].mChannel, this.mApp.mStreamType, false);
                     }
                 }
             }
@@ -708,10 +708,10 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String defaultMacAddress = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return defaultMacAddress;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -719,18 +719,18 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return defaultMacAddress;
         }
         String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        return replace.length() > 0 ? replace : defaultMacAddress;
     }
 
     /* access modifiers changed from: protected */
-    public void onActivityResult(int i, int i2, Intent intent) {
-        if (i2 == -1) {
-            this.mSelectId = intent.getIntExtra("id", -1);
-            this.mSelectChannel = intent.getIntExtra("channel", 0);
-            this.mSelectMaps.put(Integer.valueOf(this.mSelectId), Integer.valueOf(intent.getIntExtra("currentPosition", -1)));
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == -1) {
+            this.mSelectId = data.getIntExtra("id", -1);
+            this.mSelectChannel = data.getIntExtra("channel", 0);
+            this.mSelectMaps.put(Integer.valueOf(this.mSelectId), Integer.valueOf(data.getIntExtra("currentPosition", -1)));
             if (MyApp.wifiStatus) {
                 NetworkInfo activeNetworkInfo = ((ConnectivityManager) this.mContext.getSystemService("connectivity")).getActiveNetworkInfo();
                 if (activeNetworkInfo != null && "WIFI".equalsIgnoreCase(activeNetworkInfo.getTypeName())) {
@@ -750,7 +750,7 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                 }).start();
             }
         }
-        super.onActivityResult(i, i2, intent);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void fuc(int channel, int streamType, byte[] frameData, int dataLength, int width, int height) {
@@ -764,10 +764,10 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     public void onPause() {
         this.mbState = false;
         this.mAudioTrack.SetMute(true);
-        for (int i = 0; i < this.mnMaxView; i++) {
+        for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
             SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-            if (!(singleViewInfoArr[i] == null || singleViewInfoArr[i].mDevInfo == null || this.mViewInfoArray[i].getNet() == null)) {
-                this.mViewInfoArray[i].getNet().RealPlayControl(this.mViewInfoArray[i].mChannel, 0, 2);
+            if (!(singleViewInfoArr[viewIndex] == null || singleViewInfoArr[viewIndex].mDevInfo == null || this.mViewInfoArray[viewIndex].getNet() == null)) {
+                this.mViewInfoArray[viewIndex].getNet().RealPlayControl(this.mViewInfoArray[viewIndex].mChannel, 0, 2);
             }
         }
         super.onPause();
@@ -780,10 +780,10 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         if (auTrack != null) {
             auTrack.SetMute(this.mbMute);
         }
-        for (int i = 0; i < this.mnMaxView; i++) {
+        for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
             SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-            if (!(singleViewInfoArr[i] == null || singleViewInfoArr[i].mDevInfo == null || this.mViewInfoArray[i].getNet() == null)) {
-                this.mViewInfoArray[i].getNet().RealPlayControl(this.mViewInfoArray[i].mChannel, 0, 1);
+            if (!(singleViewInfoArr[viewIndex] == null || singleViewInfoArr[viewIndex].mDevInfo == null || this.mViewInfoArray[viewIndex].getNet() == null)) {
+                this.mViewInfoArray[viewIndex].getNet().RealPlayControl(this.mViewInfoArray[viewIndex].mChannel, 0, 1);
             }
         }
         super.onResume();
@@ -829,8 +829,8 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
             }
         });
         this.mInitMode = this.mVideoContainer.getInitMode();
-        for (int i = 0; i < this.mInitMode; i++) {
-            StopPlay(i);
+        for (int viewIndex = 0; viewIndex < this.mInitMode; viewIndex++) {
+            StopPlay(viewIndex);
         }
         this.mAudioTrack.mPlayer.Stop();
         this.mHandler.post(new Runnable() {
@@ -854,8 +854,8 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
             this.mDao = new GroupDaoForServer();
         }
         this.mBeanDatas = this.mDao.getGroupDatasByName(this.mGroupName);
-        for (int i = 0; i < this.mBeanDatas.size(); i++) {
-            if (this.mBeanDatas.get(i).dbFlag == 1) {
+        for (int beanIndex = 0; beanIndex < this.mBeanDatas.size(); beanIndex++) {
+            if (this.mBeanDatas.get(beanIndex).dbFlag == 1) {
                 this.mChCount++;
             }
         }
@@ -878,17 +878,17 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
                     RealPlayActivity.this.setSurfaceListener(32);
                 }
                 Log.e("mChCount", "" + RealPlayActivity.this.mChCount);
-                for (int i = 0; i < RealPlayActivity.this.mChCount; i++) {
-                    RealPlayActivity.this.mVideoContainer.getVideoView(i).setVisibility(0);
+                for (int viewIndex = 0; viewIndex < RealPlayActivity.this.mChCount; viewIndex++) {
+                    RealPlayActivity.this.mVideoContainer.getVideoView(viewIndex).setVisibility(0);
                 }
             }
         });
-        for (int i2 = 0; i2 < this.mBeanDatas.size(); i2++) {
-            GroupBean groupBean = this.mBeanDatas.get(i2);
+        for (int beanIndex = 0; beanIndex < this.mBeanDatas.size(); beanIndex++) {
+            GroupBean groupBean = this.mBeanDatas.get(beanIndex);
             if (groupBean.dbFlag == 1) {
-                int i3 = this.mK + 1;
-                this.mK = i3;
-                if (i3 < 32) {
+                int nextViewIndex = this.mK + 1;
+                this.mK = nextViewIndex;
+                if (nextViewIndex < 32) {
                     StartPlay(groupBean.dbId, groupBean.dbChannel, this.mK);
                 }
             }
@@ -902,24 +902,24 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         if (dbhelper != null) {
             dbhelper.close();
         }
-        for (int i = 0; i < this.mnMaxView; i++) {
-            if (this.mViewInfoArray[i] == null) {
-                getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(i)}), 0).edit().clear().commit();
+        for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
+            if (this.mViewInfoArray[viewIndex] == null) {
+                getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(viewIndex)}), 0).edit().clear().commit();
             } else {
                 if (this.mApp.mbAutoPlay) {
                     try {
-                        this.mViewInfoArray[i].mDevInfo.PrintOut();
-                        SharedPreferences sharedPreferences = getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(i)}), 0);
+                        this.mViewInfoArray[viewIndex].mDevInfo.PrintOut();
+                        SharedPreferences sharedPreferences = getSharedPreferences(String.format("realplay%02d", new Object[]{Integer.valueOf(viewIndex)}), 0);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        new ObjectOutputStream(byteArrayOutputStream).writeObject(this.mViewInfoArray[i].mDevInfo);
-                        String str = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
-                        sharedPreferences.edit().putInt("channel", this.mViewInfoArray[i].mChannel).commit();
-                        sharedPreferences.edit().putString("info", str).commit();
+                        new ObjectOutputStream(byteArrayOutputStream).writeObject(this.mViewInfoArray[viewIndex].mDevInfo);
+                        String encodedDeviceInfo = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+                        sharedPreferences.edit().putInt("channel", this.mViewInfoArray[viewIndex].mChannel).commit();
+                        sharedPreferences.edit().putString("info", encodedDeviceInfo).commit();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                StopPlay(i);
+                StopPlay(viewIndex);
             }
         }
         this.mAudioTrack.mPlayer.Stop();
@@ -928,13 +928,13 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     }
 
     public void SwitchPlay() {
-        for (int i = 0; i < this.mVideoContainer.getInitViewCount(); i++) {
+        for (int viewIndex = 0; viewIndex < this.mVideoContainer.getInitViewCount(); viewIndex++) {
             SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-            if (!(singleViewInfoArr[i] == null || singleViewInfoArr[i].getNet() == null || this.mViewInfoArray[i].mDevInfo == null || this.mViewInfoArray[i].getNet().mNetType == 2 || this.mVideoContainer.getVideoFrameVisibility(i) != 0)) {
+            if (!(singleViewInfoArr[viewIndex] == null || singleViewInfoArr[viewIndex].getNet() == null || this.mViewInfoArray[viewIndex].mDevInfo == null || this.mViewInfoArray[viewIndex].getNet().mNetType == 2 || this.mVideoContainer.getVideoFrameVisibility(viewIndex) != 0)) {
                 List<String> list = this.mViewIndexDatas;
-                if (!list.contains("" + i)) {
+                if (!list.contains("" + viewIndex)) {
                     List<String> list2 = this.mViewIndexDatas;
-                    list2.add("" + i);
+                    list2.add("" + viewIndex);
                 }
             }
         }
@@ -1414,20 +1414,20 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
     public void onEventMainThread(DeleteDeviceEvent deleteDeviceEvent) {
         synchronized (lock) {
             if (deleteDeviceEvent.mDeviceId != 0) {
-                for (Integer intValue : this.mSelectMaps.keySet()) {
-                    int intValue2 = intValue.intValue();
-                    if (intValue2 == deleteDeviceEvent.mDeviceId) {
-                        final int intValue3 = this.mSelectMaps.get(Integer.valueOf(intValue2)).intValue();
+                for (Integer deviceIdKey : this.mSelectMaps.keySet()) {
+                    int deviceId = deviceIdKey.intValue();
+                    if (deviceId == deleteDeviceEvent.mDeviceId) {
+                        final int selectedViewIndex = this.mSelectMaps.get(Integer.valueOf(deviceId)).intValue();
                         new Thread(new Runnable() {
                             public void run() {
                                 RealPlayActivity.this.mCurFocus = false;
-                                RealPlayActivity.this.StopPlay(intValue3);
+                                RealPlayActivity.this.StopPlay(selectedViewIndex);
                                 RealPlayActivity.this.mHandler.post(new Runnable() {
                                     public void run() {
                                         if (RealPlayActivity.this.mVideoContainer != null) {
-                                            for (int i = 0; i < RealPlayActivity.this.mVideoContainer.GetChannelList().size(); i++) {
-                                                if (i == intValue3) {
-                                                    RealPlayActivity.this.mVideoContainer.SetPlayState(i, false);
+                                            for (int viewIndex = 0; viewIndex < RealPlayActivity.this.mVideoContainer.GetChannelList().size(); viewIndex++) {
+                                                if (viewIndex == selectedViewIndex) {
+                                                    RealPlayActivity.this.mVideoContainer.SetPlayState(viewIndex, false);
                                                 }
                                             }
                                         }
@@ -1441,29 +1441,29 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         }
     }
 
-    public void setSurfaceListener(int i) {
-        for (int i2 = 0; i2 < i; i2++) {
-            this.mVideoContainer.getVideoView(i2).setCallBack(this, i2);
+    public void setSurfaceListener(int viewCount) {
+        for (int viewIndex = 0; viewIndex < viewCount; viewIndex++) {
+            this.mVideoContainer.getVideoView(viewIndex).setCallBack(this, viewIndex);
         }
     }
 
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3, int i4) {
-        Log.e("surfaceChanged", "" + i4);
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height, int channel) {
+        Log.e("surfaceChanged", "" + channel);
     }
 
-    public void surfaceCreated(SurfaceHolder surfaceHolder, int i) {
-        Log.e("surfaceCreated", "" + i);
-        if (this.mVideoContainer.getVideoFrameVisibility(i) == 0) {
+    public void surfaceCreated(SurfaceHolder surfaceHolder, int viewIndex) {
+        Log.e("surfaceCreated", "" + viewIndex);
+        if (this.mVideoContainer.getVideoFrameVisibility(viewIndex) == 0) {
             List<String> list = this.mViewIndexDatas;
-            if (!list.contains("" + i)) {
+            if (!list.contains("" + viewIndex)) {
                 List<String> list2 = this.mViewIndexDatas;
-                list2.add("" + i);
+                list2.add("" + viewIndex);
             }
         }
     }
 
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder, int i) {
-        Log.e("surfaceDestroyed", "" + i);
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder, int viewIndex) {
+        Log.e("surfaceDestroyed", "" + viewIndex);
     }
 
     public void setSurfaceVisibility() {
@@ -1472,145 +1472,145 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         int firstIndex = this.mVideoContainer.getFirstIndex();
         if (curViewCount == 4) {
             if (firstIndex == 0) {
-                for (int i = 0; i < initViewCount; i++) {
-                    if (i < 0 || i > 3) {
-                        isVisible(i, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 0 || viewIndex > 3) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 4) {
-                for (int i2 = 0; i2 < initViewCount; i2++) {
-                    if (i2 < 4 || i2 > 7) {
-                        isVisible(i2, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 4 || viewIndex > 7) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i2, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 8) {
-                for (int i3 = 0; i3 < initViewCount; i3++) {
-                    if (i3 < 8 || i3 > 11) {
-                        isVisible(i3, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 8 || viewIndex > 11) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i3, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 12) {
-                for (int i4 = 0; i4 < initViewCount; i4++) {
-                    if (i4 < 12 || i4 > 15) {
-                        isVisible(i4, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 12 || viewIndex > 15) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i4, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 16) {
-                for (int i5 = 0; i5 < initViewCount; i5++) {
-                    if (i5 < 16 || i5 > 19) {
-                        isVisible(i5, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 16 || viewIndex > 19) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i5, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 20) {
-                for (int i6 = 0; i6 < initViewCount; i6++) {
-                    if (i6 < 20 || i6 > 23) {
-                        isVisible(i6, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 20 || viewIndex > 23) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i6, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 24) {
-                for (int i7 = 0; i7 < initViewCount; i7++) {
-                    if (i7 < 24 || i7 > 27) {
-                        isVisible(i7, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 24 || viewIndex > 27) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i7, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 28) {
-                for (int i8 = 0; i8 < initViewCount; i8++) {
-                    if (i8 < 28 || i8 > 31) {
-                        isVisible(i8, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 28 || viewIndex > 31) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i8, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             }
         } else if (curViewCount == 9) {
             if (firstIndex == 0) {
-                for (int i9 = 0; i9 < initViewCount; i9++) {
-                    if (i9 < 0 || i9 > 8) {
-                        isVisible(i9, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 0 || viewIndex > 8) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i9, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 7) {
-                for (int i10 = 0; i10 < initViewCount; i10++) {
-                    if (i10 < 7 || i10 > 15) {
-                        isVisible(i10, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 7 || viewIndex > 15) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i10, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 9) {
-                for (int i11 = 0; i11 < initViewCount; i11++) {
-                    if (i11 < 9 || i11 > 17) {
-                        isVisible(i11, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 9 || viewIndex > 17) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i11, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 18) {
-                for (int i12 = 0; i12 < initViewCount; i12++) {
-                    if (i12 < 18 || i12 > 26) {
-                        isVisible(i12, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 18 || viewIndex > 26) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i12, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 27) {
-                for (int i13 = 0; i13 < initViewCount; i13++) {
-                    if ((i13 < 27 || i13 > 31) && (i13 < 0 || i13 > 3)) {
-                        isVisible(i13, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if ((viewIndex < 27 || viewIndex > 31) && (viewIndex < 0 || viewIndex > 3)) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i13, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             }
         } else if (curViewCount != 16) {
         } else {
             if (firstIndex == 0) {
-                for (int i14 = 0; i14 < initViewCount; i14++) {
-                    if (i14 < 0 || i14 > 15) {
-                        isVisible(i14, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 0 || viewIndex > 15) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i14, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             } else if (firstIndex == 16) {
-                for (int i15 = 0; i15 < initViewCount; i15++) {
-                    if (i15 < 16 || i15 > 31) {
-                        isVisible(i15, false);
+                for (int viewIndex = 0; viewIndex < initViewCount; viewIndex++) {
+                    if (viewIndex < 16 || viewIndex > 31) {
+                        isVisible(viewIndex, false);
                     } else {
-                        isVisible(i15, true);
+                        isVisible(viewIndex, true);
                     }
                 }
             }
         }
     }
 
-    public void isVisible(final int i, boolean z) {
-        if (z) {
+    public void isVisible(final int viewIndex, boolean visible) {
+        if (visible) {
             this.mVideoContainer.post(new Runnable() {
                 public void run() {
-                    RealPlayActivity.this.mVideoContainer.getVideoView(i).setVisibility(0);
+                    RealPlayActivity.this.mVideoContainer.getVideoView(viewIndex).setVisibility(0);
                 }
             });
         } else {
             this.mVideoContainer.post(new Runnable() {
                 public void run() {
-                    RealPlayActivity.this.mVideoContainer.getVideoView(i).setVisibility(8);
+                    RealPlayActivity.this.mVideoContainer.getVideoView(viewIndex).setVisibility(8);
                 }
             });
         }

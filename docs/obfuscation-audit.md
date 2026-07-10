@@ -60,17 +60,17 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 12 |
-| `str`, `str2`, ... | 84 |
+| `str`, `str2`, ... | 83 |
 | `bArr`, `bArr2`, ... | 10 |
-| `i2`, `j2`, ... | 65 |
-| `z`, `z2`, ... | 53 |
+| `i2`, `j2`, ... | 64 |
+| `z`, `z2`, ... | 52 |
 | App-owned files with at least one generic identifier | 113 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 909 |
+| `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 707 |
 | `decompiled/sources/com/streamax/client/VideoGroup.java` | 620 |
 | `decompiled/sources/com/streamax/client/widget/PlayerView.java` | 518 |
 | `decompiled/sources/com/streamax/client/VideoContainer.java` | 476 |
@@ -95,7 +95,7 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 113 | 7,074 |
+| `decompiled/sources/com/streamax` | 113 | 6,872 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,6 +125,8 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
+The latest safe chunk cleaned executable/local identifiers in `RealPlayActivity.java` outside the large decompiler dump, reducing that file from 909 to 707 generic hits.
+
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
 - `decompiled/sources/com/streamax/client/RealPlayActivity.java`
@@ -132,4 +134,4 @@ The next safe chunk is continued Java-heavy playback UI cleanup, starting with t
 - `decompiled/sources/com/streamax/client/widget/PlayerView.java`
 - `decompiled/sources/com/streamax/client/VideoContainer.java`
 
-Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
+Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `RealPlayActivity.java` now only keeps the high-count `r0/r1` block inside the `SwitchChannelRunnable` decompiler dump; handle that dump as a separate safety-tested chunk. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
