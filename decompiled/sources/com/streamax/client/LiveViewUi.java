@@ -284,18 +284,18 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     public void AutoPlay() {
         DevInfoBean devInfoBean;
         if (this.mApp.mbAutoPlay) {
-            for (int i = 0; i < this.mnMaxView; i++) {
-                SharedPreferences sharedPreferences = getSharedPreferences(String.format("preview%02d", new Object[]{Integer.valueOf(i)}), 0);
-                String string = sharedPreferences.getString("info", "");
-                int i2 = sharedPreferences.getInt("channel", 0);
-                int i3 = SpUtils.getInt(Configs.Key.LoginType, -1);
-                if (!(string == null || string.length() == 0 || i3 != MyApp.loginType)) {
+            for (int previewIndex = 0; previewIndex < this.mnMaxView; previewIndex++) {
+                SharedPreferences sharedPreferences = getSharedPreferences(String.format("preview%02d", new Object[]{Integer.valueOf(previewIndex)}), 0);
+                String savedDeviceInfo = sharedPreferences.getString("info", "");
+                int savedChannel = sharedPreferences.getInt("channel", 0);
+                int savedLoginType = SpUtils.getInt(Configs.Key.LoginType, -1);
+                if (!(savedDeviceInfo == null || savedDeviceInfo.length() == 0 || savedLoginType != MyApp.loginType)) {
                     try {
                         try {
-                            DevInfoBean devInfoBean2 = (DevInfoBean) new ObjectInputStream(new ByteArrayInputStream(Base64.decode(string, 0))).readObject();
-                            devInfoBean2.PrintOut();
+                            DevInfoBean savedDevice = (DevInfoBean) new ObjectInputStream(new ByteArrayInputStream(Base64.decode(savedDeviceInfo, 0))).readObject();
+                            savedDevice.PrintOut();
                             if (MyApp.loginType == 0) {
-                                devInfoBean = this.mdbHelper.query(devInfoBean2.mDevName);
+                                devInfoBean = this.mdbHelper.query(savedDevice.mDevName);
                             } else {
                                 if (this.mApp.mWebService == null) {
                                     this.mApp.mWebService = new WebService(MyApp.LastServerHostName, MyApp.username, MyApp.password);
@@ -303,12 +303,12 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                                 if (this.mApp.mWebService.mDevList != null && this.mApp.mWebService.mDevList.size() == 0) {
                                     this.mApp.mWebService.GetTerminalInfoAndroid(true);
                                 }
-                                devInfoBean = this.mApp.mWebService.query(devInfoBean2.mDevName);
+                                devInfoBean = this.mApp.mWebService.query(savedDevice.mDevName);
                             }
-                            if (devInfoBean2 != null) {
+                            if (savedDevice != null) {
                                 if (devInfoBean != null) {
-                                    if (devInfoBean2.mDevIp.compareTo(devInfoBean.mDevIp) == 0 && devInfoBean2.mMediaPort == devInfoBean.mMediaPort) {
-                                        StartPlay(devInfoBean.mDevId, i2, i);
+                                    if (savedDevice.mDevIp.compareTo(devInfoBean.mDevIp) == 0 && savedDevice.mMediaPort == devInfoBean.mMediaPort) {
+                                        StartPlay(devInfoBean.mDevId, savedChannel, previewIndex);
                                     }
                                 }
                             }
@@ -358,85 +358,80 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         }
     }
 
-    public List<Map<String, Object>> CaptureImage(int i, int i2) {
-        String str = Environment.getExternalStorageDirectory() + "/streaming/capture/";
+    public List<Map<String, Object>> CaptureImage(int startChannel, int channelCount) {
+        String captureDir = Environment.getExternalStorageDirectory() + "/streaming/capture/";
         Calendar instance = Calendar.getInstance();
         String format = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13))});
-        ArrayList arrayList = new ArrayList();
-        for (int i3 = i; i3 < i2 + i; i3++) {
-            if (this.mAVStream[i3] != null) {
-                HashMap hashMap = new HashMap();
-                String str2 = str + format + String.format("%02d.bmp", new Object[]{Integer.valueOf(i3 + 1)});
-                hashMap.put("channel", Integer.valueOf(i3));
-                hashMap.put("path", str2);
-                if (this.mAVStream[i3].Capture(str2) == 0) {
-                    arrayList.add(hashMap);
+        ArrayList<Map<String, Object>> captures = new ArrayList<>();
+        for (int channelIndex = startChannel; channelIndex < channelCount + startChannel; channelIndex++) {
+            if (this.mAVStream[channelIndex] != null) {
+                HashMap<String, Object> capture = new HashMap<>();
+                String capturePath = captureDir + format + String.format("%02d.bmp", new Object[]{Integer.valueOf(channelIndex + 1)});
+                capture.put("channel", Integer.valueOf(channelIndex));
+                capture.put("path", capturePath);
+                if (this.mAVStream[channelIndex].Capture(capturePath) == 0) {
+                    captures.add(capture);
                 }
             }
         }
-        return arrayList;
+        return captures;
     }
 
-    public void popImageViewer(List<Map<String, Object>> list) {
-        List<Map<String, Object>> list2 = list;
-        if (list.size() != 0) {
-            this.mbmpList = list2;
-            int size = list.size();
+    public void popImageViewer(List<Map<String, Object>> captures) {
+        if (captures.size() != 0) {
+            this.mbmpList = captures;
+            int captureCount = captures.size();
             BitmapFactory.Options options = new BitmapFactory.Options();
-            boolean z = true;
             options.inSampleSize = 1;
             options.inTempStorage = new byte[829440];
             this.mpopViewer = this.mInflater.inflate(R.layout.captureimageviewer, (ViewGroup) null);
-            LinearLayout linearLayout = new LinearLayout(this.mContext);
-            linearLayout.setOrientation(1);
-            linearLayout.setGravity(17);
-            linearLayout.setBackgroundColor(Color.argb(200, 40, 40, 40));
-            linearLayout.setPadding(0, 0, 0, 0);
+            LinearLayout imageGrid = new LinearLayout(this.mContext);
+            imageGrid.setOrientation(1);
+            imageGrid.setGravity(17);
+            imageGrid.setBackgroundColor(Color.argb(200, 40, 40, 40));
+            imageGrid.setPadding(0, 0, 0, 0);
             TableLayout.LayoutParams layoutParams = new TableLayout.LayoutParams();
-            float f = 1.0f;
             layoutParams.weight = 1.0f;
             layoutParams.height = -2;
             layoutParams.width = -2;
             layoutParams.setMargins(1, 1, 1, 1);
-            int sqrt = (int) Math.sqrt((double) (size + 1));
+            int gridSize = (int) Math.sqrt((double) (captureCount + 1));
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int i = 0;
-            while (i < sqrt) {
-                LinearLayout linearLayout2 = new LinearLayout(this.mContext);
-                linearLayout2.setOrientation(0);
-                linearLayout2.setPadding(0, 0, 0, 0);
-                linearLayout2.setBackgroundColor(DayStyle.iColorBkg);
+            int rowIndex = 0;
+            while (rowIndex < gridSize) {
+                LinearLayout imageRow = new LinearLayout(this.mContext);
+                imageRow.setOrientation(0);
+                imageRow.setPadding(0, 0, 0, 0);
+                imageRow.setBackgroundColor(DayStyle.iColorBkg);
                 TableLayout.LayoutParams layoutParams2 = new TableLayout.LayoutParams();
-                layoutParams2.weight = f;
-                layoutParams2.width = displayMetrics.widthPixels / sqrt;
-                if (this.bConfiguration == z && this.mVideoGroup.GetCurArrayMode() != 1) {
-                    layoutParams2.height = (displayMetrics.heightPixels / sqrt) - 60;
-                } else if (this.bConfiguration == z && this.mVideoGroup.GetCurArrayMode() == 1) {
-                    layoutParams2.height = (displayMetrics.heightPixels / sqrt) - 120;
+                layoutParams2.weight = 1.0f;
+                layoutParams2.width = displayMetrics.widthPixels / gridSize;
+                if (this.bConfiguration && this.mVideoGroup.GetCurArrayMode() != 1) {
+                    layoutParams2.height = (displayMetrics.heightPixels / gridSize) - 60;
+                } else if (this.bConfiguration && this.mVideoGroup.GetCurArrayMode() == 1) {
+                    layoutParams2.height = (displayMetrics.heightPixels / gridSize) - 120;
                 } else {
                     layoutParams2.height = (layoutParams2.width / 4) * 3;
                 }
-                for (int i2 = 0; i2 < sqrt; i2++) {
+                for (int columnIndex = 0; columnIndex < gridSize; columnIndex++) {
                     ImageView imageView = new ImageView(this.mContext);
-                    int i3 = (i * sqrt) + i2;
-                    if (i3 < size) {
-                        String obj = list2.get(i3).get("path").toString();
+                    int captureIndex = (rowIndex * gridSize) + columnIndex;
+                    if (captureIndex < captureCount) {
+                        String imagePath = captures.get(captureIndex).get("path").toString();
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageView.setImageBitmap(BitmapFactory.decodeFile(obj));
-                        linearLayout2.addView(imageView, layoutParams2);
+                        imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+                        imageRow.addView(imageView, layoutParams2);
                     } else {
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                         imageView.setPadding(0, 0, 0, 0);
-                        linearLayout2.addView(imageView, layoutParams2);
+                        imageRow.addView(imageView, layoutParams2);
                     }
                 }
-                linearLayout.addView(linearLayout2, layoutParams);
-                i++;
-                z = true;
-                f = 1.0f;
+                imageGrid.addView(imageRow, layoutParams);
+                rowIndex++;
             }
-            ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(linearLayout);
+            ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(imageGrid);
             this.mPopupCapture = null;
             PopupWindow popupWindow = new PopupWindow(this.mpopViewer, -1, -1, true);
             this.mPopupCapture = popupWindow;
@@ -453,10 +448,10 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
             });
             this.mpopViewer.findViewById(R.id.preview_capture_cancel).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    for (int i = 0; i < LiveViewUi.this.mbmpList.size(); i++) {
-                        String obj = LiveViewUi.this.mbmpList.get(i).get("path").toString();
-                        if (obj != null) {
-                            new File(obj).delete();
+                    for (int captureIndex = 0; captureIndex < LiveViewUi.this.mbmpList.size(); captureIndex++) {
+                        String imagePath = LiveViewUi.this.mbmpList.get(captureIndex).get("path").toString();
+                        if (imagePath != null) {
+                            new File(imagePath).delete();
                         }
                     }
                     LiveViewUi.this.mtvVideoInformation.setText(LiveViewUi.this.mContext.getString(R.string.save_cancel));
@@ -499,25 +494,25 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         }
     }
 
-    public void StartPlay(int i, int i2, final int i3) {
+    public void StartPlay(int deviceId, int sourceChannel, final int targetViewIndex) {
         DevInfoBean devInfoBean;
         this.mbPreview = true;
         synchronized (lock) {
-            int channel = i3;
-            int i4 = -1;
+            int channel = targetViewIndex;
+            int connectionErrorCode = -1;
             if (this.mDevId != -1) {
                 devInfoBean = this.mDevInfo;
             } else if (MyApp.loginType == 0) {
-                devInfoBean = this.mdbHelper.query(i);
+                devInfoBean = this.mdbHelper.query(deviceId);
             } else {
-                devInfoBean = this.mApp.mWebService.query(i);
+                devInfoBean = this.mApp.mWebService.query(deviceId);
             }
             if (devInfoBean != null) {
                 if (channel == -1) {
                     channel = this.mVideoGroup.GetFocusChannel();
                 }
                 SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-                if (singleViewInfoArr[channel] == null || !singleViewInfoArr[channel].check(devInfoBean) || i2 != this.mViewInfoArray[channel].mChannel) {
+                if (singleViewInfoArr[channel] == null || !singleViewInfoArr[channel].check(devInfoBean) || sourceChannel != this.mViewInfoArray[channel].mChannel) {
                     final int targetChannel = channel;
                     this.mVideoGroup.post(new Runnable() {
                         public void run() {
@@ -539,9 +534,9 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                     }
                     if (channel > 0) {
                         SingleViewInfo[] singleViewInfoArr3 = this.mViewInfoArray;
-                        int i5 = channel - 1;
-                        if (!(singleViewInfoArr3[i5] == null || singleViewInfoArr3[i5].getDeviceInfoBean() == null || this.mViewInfoArray[i5].getDeviceInfoBean().mDevIp == null || !this.mViewInfoArray[i5].getDeviceInfoBean().mDevIp.equals(devInfoBean.mDevIp))) {
-                            dvrNet = this.mViewInfoArray[i5].getNet();
+                        int previousChannel = channel - 1;
+                        if (!(singleViewInfoArr3[previousChannel] == null || singleViewInfoArr3[previousChannel].getDeviceInfoBean() == null || this.mViewInfoArray[previousChannel].getDeviceInfoBean().mDevIp == null || !this.mViewInfoArray[previousChannel].getDeviceInfoBean().mDevIp.equals(devInfoBean.mDevIp))) {
+                            dvrNet = this.mViewInfoArray[previousChannel].getNet();
                         }
                     }
                     if (dvrNet == null) {
@@ -549,9 +544,9 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                         this.mViewInfoArray[channel].setNet(new DvrNet());
                         Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(this.mViewInfoArray[channel].getNet(), devInfoBean, this.mApp);
                         if (connDeviceProxy != null) {
-                            i4 = ((Integer) connDeviceProxy.get("errorcode")).intValue();
+                            connectionErrorCode = ((Integer) connDeviceProxy.get("errorcode")).intValue();
                         }
-                        if (i4 == 0) {
+                        if (connectionErrorCode == 0) {
                             AVStream[] aVStreamArr2 = this.mAVStream;
                             if (aVStreamArr2[channel] == null) {
                                 aVStreamArr2[channel] = new AVStream();
@@ -559,7 +554,7 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                             this.mAVStream[channel].GetHandle(channel);
                             this.mVideoGroup.SetPlayState(channel, true);
                             this.mViewInfoArray[channel].setDeviceInfo(devInfoBean);
-                            this.mViewInfoArray[channel].mChannel = i2;
+                            this.mViewInfoArray[channel].mChannel = sourceChannel;
                             this.mAudioTrack.mPlayer.play();
                             this.mAudioTrack.SetMute(this.mbMute);
                             if (channel == this.mVideoGroup.GetFocusChannel()) {
@@ -571,29 +566,29 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                             this.mAVStream[channel].StartPlay();
                             this.mAVStream[channel].SetVideoInterface(this);
                             this.mAVStream[channel].SetAudioInterface(this.mAudioTrack);
-                            this.mViewInfoArray[channel].getNet().SetAVStream(i2, this.mAVStream[channel]);
-                            this.mViewInfoArray[channel].getNet().StartRealAv(i2, 0);
+                            this.mViewInfoArray[channel].getNet().SetAVStream(sourceChannel, this.mAVStream[channel]);
+                            this.mViewInfoArray[channel].getNet().StartRealAv(sourceChannel, 0);
                             this.mCount++;
                         } else {
-                            if (i4 == 64) {
+                            if (connectionErrorCode == 64) {
                                 this.mtvVideoInformation.post(new Runnable() {
                                     public void run() {
                                         LiveViewUi.this.mtvVideoInformation.setText(LiveViewUi.this.mContext.getString(R.string.permissiondenied));
                                     }
                                 });
-                            } else if (i4 == 63) {
+                            } else if (connectionErrorCode == 63) {
                                 this.mtvVideoInformation.post(new Runnable() {
                                     public void run() {
                                         LiveViewUi.this.mtvVideoInformation.setText(LiveViewUi.this.mContext.getString(R.string.macillegal));
                                     }
                                 });
-                            } else if (i4 == 24) {
+                            } else if (connectionErrorCode == 24) {
                                 this.mtvVideoInformation.post(new Runnable() {
                                     public void run() {
                                         LiveViewUi.this.mtvVideoInformation.setText(LiveViewUi.this.mContext.getString(R.string.moreuseronline));
                                     }
                                 });
-                            } else if (i4 == 5) {
+                            } else if (connectionErrorCode == 5) {
                                 this.mtvVideoInformation.post(new Runnable() {
                                     public void run() {
                                         LiveViewUi.this.mtvVideoInformation.setText(LiveViewUi.this.mContext.getString(R.string.usernameorpassworderror));
@@ -618,7 +613,7 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                         this.mAVStream[channel].GetHandle(channel);
                         this.mVideoGroup.SetPlayState(channel, true);
                         this.mViewInfoArray[channel].setDeviceInfo(devInfoBean);
-                        this.mViewInfoArray[channel].mChannel = i2;
+                        this.mViewInfoArray[channel].mChannel = sourceChannel;
                         if (channel == this.mVideoGroup.GetFocusChannel()) {
                             this.mAudioTrack.SwitchChannels(channel);
                             this.mAVStream[channel].SetMute(true);
@@ -628,8 +623,8 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                         this.mAVStream[channel].StartPlay();
                         this.mAVStream[channel].SetVideoInterface(this);
                         this.mAVStream[channel].SetAudioInterface(this.mAudioTrack);
-                        this.mViewInfoArray[channel].getNet().SetAVStream(i2, this.mAVStream[channel]);
-                        this.mViewInfoArray[channel].getNet().StartRealAv(i2, 0);
+                        this.mViewInfoArray[channel].getNet().SetAVStream(sourceChannel, this.mAVStream[channel]);
+                        this.mViewInfoArray[channel].getNet().StartRealAv(sourceChannel, 0);
                     }
                     this.mVideoGroup.post(new Runnable() {
                         public void run() {
@@ -648,20 +643,20 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
             if (singleViewInfoArr[i] != null) {
                 if (singleViewInfoArr[i].getNet() != null) {
                     this.mViewInfoArray[i].getNet().StopRealAv(this.mViewInfoArray[i].mChannel);
-                    boolean z = true;
-                    for (int i2 = 0; i2 < this.mnMaxView; i2++) {
-                        if (i != i2) {
+                    boolean shouldCloseDevice = true;
+                    for (int viewIndex = 0; viewIndex < this.mnMaxView; viewIndex++) {
+                        if (i != viewIndex) {
                             SingleViewInfo[] singleViewInfoArr2 = this.mViewInfoArray;
-                            if (singleViewInfoArr2[i2] != null) {
-                                if (singleViewInfoArr2[i2].getNet() != null) {
-                                    if (this.mViewInfoArray[i2].getNet() == this.mViewInfoArray[i].getNet()) {
-                                        z = false;
+                            if (singleViewInfoArr2[viewIndex] != null) {
+                                if (singleViewInfoArr2[viewIndex].getNet() != null) {
+                                    if (this.mViewInfoArray[viewIndex].getNet() == this.mViewInfoArray[i].getNet()) {
+                                        shouldCloseDevice = false;
                                     }
                                 }
                             }
                         }
                     }
-                    if (z) {
+                    if (shouldCloseDevice) {
                         this.mViewInfoArray[i].getNet().CloseDeviceHandle();
                     }
                     StopRecord(i);
@@ -698,10 +693,10 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String defaultMac = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return defaultMac;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -709,10 +704,10 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return defaultMac;
         }
-        String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        String normalizedMac = macAddress.replace(":", "-");
+        return normalizedMac.length() > 0 ? normalizedMac : defaultMac;
     }
 
     public void fuc(int channel, int streamType, byte[] frameData, int dataLength, int width, int height) {
@@ -819,8 +814,8 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         for (int i = 0; i < this.mChannel; i++) {
             if (i > 0) {
                 SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-                int i2 = i - 1;
-                if (singleViewInfoArr[i2] != null && singleViewInfoArr[i2].getConnState() == 1) {
+                int previousViewIndex = i - 1;
+                if (singleViewInfoArr[previousViewIndex] != null && singleViewInfoArr[previousViewIndex].getConnState() == 1) {
                     return;
                 }
             }
@@ -875,8 +870,8 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
             while (i < this.mChannel) {
                 if (i > 0) {
                     SingleViewInfo[] singleViewInfoArr = this.mViewInfoArray;
-                    int i2 = i - 1;
-                    if (singleViewInfoArr[i2] != null && singleViewInfoArr[i2].getConnState() == 1) {
+                    int previousViewIndex = i - 1;
+                    if (singleViewInfoArr[previousViewIndex] != null && singleViewInfoArr[previousViewIndex].getConnState() == 1) {
                         return;
                     }
                 }
@@ -908,8 +903,8 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
             this.mDao = new GroupDaoForServer();
         }
         this.mBeanDatas = this.mDao.getGroupDatasByName(this.mGroupName);
-        for (int i3 = 0; i3 < this.mBeanDatas.size(); i3++) {
-            if (this.mBeanDatas.get(i3).dbFlag == 1) {
+        for (int groupIndex = 0; groupIndex < this.mBeanDatas.size(); groupIndex++) {
+            if (this.mBeanDatas.get(groupIndex).dbFlag == 1) {
                 this.mChCount++;
             }
         }
@@ -922,20 +917,20 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
         while (i < this.mBeanDatas.size()) {
             GroupBean groupBean = this.mBeanDatas.get(i);
             if (groupBean.dbFlag == 1) {
-                int i4 = this.mTime + 1;
-                this.mTime = i4;
-                if (i4 < 32) {
+                int nextViewIndex = this.mTime + 1;
+                this.mTime = nextViewIndex;
+                if (nextViewIndex < 32) {
                     StartPlay(groupBean.dbId, groupBean.dbChannel, this.mTime);
                 } else {
-                    int i5 = this.mCount;
-                    if (i5 == 0) {
+                    int startedCount = this.mCount;
+                    if (startedCount == 0) {
                         this.mtvVideoInformation.post(new Runnable() {
                             public void run() {
                                 LiveViewUi.this.mtvVideoInformation.setText(R.string.closevideo);
                                 LiveViewUi.this.setPlayStatus(1);
                             }
                         });
-                    } else if (i5 > 0) {
+                    } else if (startedCount > 0) {
                         this.mtvVideoInformation.post(new Runnable() {
                             public void run() {
                                 LiveViewUi.this.setPlayStatus(0);
@@ -985,9 +980,9 @@ public class LiveViewUi extends Activity implements Runnable, MyCallInterface, V
                         SharedPreferences sharedPreferences = getSharedPreferences(String.format("preview%02d", new Object[]{Integer.valueOf(i)}), 0);
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         new ObjectOutputStream(byteArrayOutputStream).writeObject(this.mViewInfoArray[i].mDevInfo);
-                        String str = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
+                        String encodedInfo = new String(Base64.encode(byteArrayOutputStream.toByteArray(), 0));
                         sharedPreferences.edit().putInt("channel", this.mViewInfoArray[i].mChannel).commit();
-                        sharedPreferences.edit().putString("info", str).commit();
+                        sharedPreferences.edit().putString("info", encodedInfo).commit();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
