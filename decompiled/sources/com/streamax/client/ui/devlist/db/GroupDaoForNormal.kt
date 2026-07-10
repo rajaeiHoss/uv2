@@ -23,124 +23,124 @@ class GroupDaoForNormal : GroupDao() {
         mHelper.deleteDb()
     }
 
-    override fun add(str: String, i: Int, str2: String, i2: Int, i3: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put("dbAccount", mDbAccount)
-        contentValues.put("dbPwd", mDbPwd)
-        contentValues.put(GroupDbBean.GroupTable.dbGroupName, str)
-        contentValues.put(GroupDbBean.GroupTable.dbId, i)
-        contentValues.put(GroupDbBean.GroupTable.dbDevName, str2)
-        contentValues.put(GroupDbBean.GroupTable.dbChannel, i2)
-        contentValues.put(GroupDbBean.GroupTable.dbFlag, i3)
-        val insert = writableDatabase.insert(GroupDbBean.TableName0, null, contentValues)
-        writableDatabase.close()
-        return insert != -1L
+    override fun add(groupName: String, deviceId: Int, deviceName: String, channel: Int, flag: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val values = ContentValues()
+        values.put("dbAccount", mDbAccount)
+        values.put("dbPwd", mDbPwd)
+        values.put(GroupDbBean.GroupTable.dbGroupName, groupName)
+        values.put(GroupDbBean.GroupTable.dbId, deviceId)
+        values.put(GroupDbBean.GroupTable.dbDevName, deviceName)
+        values.put(GroupDbBean.GroupTable.dbChannel, channel)
+        values.put(GroupDbBean.GroupTable.dbFlag, flag)
+        val insertedRowId = database.insert(GroupDbBean.TableName0, null, values)
+        database.close()
+        return insertedRowId != -1L
     }
 
-    override fun delete(str: String): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val delete = writableDatabase.delete(GroupDbBean.TableName0, "dbGroupName=?", arrayOf(str))
-        writableDatabase.close()
-        return delete > 0
+    override fun delete(groupName: String): Boolean {
+        val database = mHelper.writableDatabase
+        val deletedRows = database.delete(GroupDbBean.TableName0, "dbGroupName=?", arrayOf(groupName))
+        database.close()
+        return deletedRows > 0
     }
 
-    override fun delete(i: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val delete = writableDatabase.delete(GroupDbBean.TableName0, "dbId=?", arrayOf("$i"))
-        writableDatabase.close()
-        return delete > 0
+    override fun delete(deviceId: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val deletedRows = database.delete(GroupDbBean.TableName0, "dbId=?", arrayOf("$deviceId"))
+        database.close()
+        return deletedRows > 0
     }
 
-    override fun delete(str: String, i: Int, str2: String, i2: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val delete = writableDatabase.delete(
+    override fun delete(groupName: String, deviceId: Int, deviceName: String, channel: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val deletedRows = database.delete(
             GroupDbBean.TableName0,
             "dbGroupName=? and dbId=? and dbDevName=? and dbChannel=?",
-            arrayOf(str, "$i", str2, "$i2")
+            arrayOf(groupName, "$deviceId", deviceName, "$channel")
         )
-        writableDatabase.close()
-        return delete > 0
+        database.close()
+        return deletedRows > 0
     }
 
-    override fun delete(i: Int, i2: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val delete = writableDatabase.delete(
+    override fun delete(deviceId: Int, channel: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val deletedRows = database.delete(
             GroupDbBean.TableName0,
             "dbId=? and dbChannel=?",
-            arrayOf("$i", "$i2")
+            arrayOf("$deviceId", "$channel")
         )
-        writableDatabase.close()
-        return delete > 0
+        database.close()
+        return deletedRows > 0
     }
 
-    override fun update(str: String, i: Int, str2: String, i2: Int, i3: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(GroupDbBean.GroupTable.dbFlag, i3)
-        val update = writableDatabase.update(
+    override fun update(groupName: String, deviceId: Int, deviceName: String, channel: Int, flag: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val values = ContentValues()
+        values.put(GroupDbBean.GroupTable.dbFlag, flag)
+        val updatedRows = database.update(
             GroupDbBean.TableName0,
-            contentValues,
+            values,
             "dbGroupName=? and dbId=? and dbDevName=? and dbChannel=?",
-            arrayOf(str, "$i", str2, "$i2")
+            arrayOf(groupName, "$deviceId", deviceName, "$channel")
         )
-        writableDatabase.close()
-        return update > 0
+        database.close()
+        return updatedRows > 0
     }
 
-    override fun update(str: String, str2: String): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(GroupDbBean.GroupTable.dbGroupName, str)
-        val update = writableDatabase.update(
+    override fun update(newGroupName: String, oldGroupName: String): Boolean {
+        val database = mHelper.writableDatabase
+        val values = ContentValues()
+        values.put(GroupDbBean.GroupTable.dbGroupName, newGroupName)
+        val updatedRows = database.update(
             GroupDbBean.TableName0,
-            contentValues,
+            values,
             "dbGroupName=?",
-            arrayOf(str2)
+            arrayOf(oldGroupName)
         )
-        writableDatabase.close()
-        return update > 0
+        database.close()
+        return updatedRows > 0
     }
 
-    override fun update(str: String, i: Int): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(GroupDbBean.GroupTable.dbId, i)
-        val update = writableDatabase.update(
+    override fun update(deviceName: String, deviceId: Int): Boolean {
+        val database = mHelper.writableDatabase
+        val values = ContentValues()
+        values.put(GroupDbBean.GroupTable.dbId, deviceId)
+        val updatedRows = database.update(
             GroupDbBean.TableName0,
-            contentValues,
+            values,
             "dbDevName=?",
-            arrayOf(str)
+            arrayOf(deviceName)
         )
-        writableDatabase.close()
-        return update > 0
+        database.close()
+        return updatedRows > 0
     }
 
-    override fun updateDevNameById(i: Int, str: String): Boolean {
-        val writableDatabase = mHelper.writableDatabase
-        val contentValues = ContentValues()
-        contentValues.put(GroupDbBean.GroupTable.dbDevName, str)
-        val update = writableDatabase.update(
+    override fun updateDevNameById(deviceId: Int, deviceName: String): Boolean {
+        val database = mHelper.writableDatabase
+        val values = ContentValues()
+        values.put(GroupDbBean.GroupTable.dbDevName, deviceName)
+        val updatedRows = database.update(
             GroupDbBean.TableName0,
-            contentValues,
+            values,
             "dbId=?",
-            arrayOf("$i")
+            arrayOf("$deviceId")
         )
-        writableDatabase.close()
-        return update > 0
+        database.close()
+        return updatedRows > 0
     }
 
-    override fun query(str: String): Boolean =
-        queryIsEmpty("dbGroupName=?", arrayOf(str))
+    override fun query(groupName: String): Boolean =
+        queryIsEmpty("dbGroupName=?", arrayOf(groupName))
 
-    override fun query(str: String, i: Int): Boolean =
-        queryIsEmpty("dbGroupName=? and dbFlag=?", arrayOf(str, "$i"))
+    override fun query(groupName: String, flag: Int): Boolean =
+        queryIsEmpty("dbGroupName=? and dbFlag=?", arrayOf(groupName, "$flag"))
 
-    override fun queryDevName(str: String): Boolean =
-        queryIsEmpty("dbDevName=?", arrayOf(str))
+    override fun queryDevName(deviceName: String): Boolean =
+        queryIsEmpty("dbDevName=?", arrayOf(deviceName))
 
     override fun queryDevNameByDevId(): String {
-        val query = mHelper.readableDatabase.query(
+        val cursor = mHelper.readableDatabase.query(
             GroupDbBean.TableName0,
             null,
             "dbId=?",
@@ -149,86 +149,86 @@ class GroupDaoForNormal : GroupDao() {
             null,
             "id asc"
         )
-        return if (query == null || query.count == 0 || !query.moveToNext()) "" else query.getString(1)
+        return if (cursor == null || cursor.count == 0 || !cursor.moveToNext()) "" else cursor.getString(1)
     }
 
-    override fun queryByGroupAndDevName(str: String, str2: String, i: Int): Boolean =
-        queryIsEmpty("dbGroupName=? and dbDevName=? and dbChannel=?", arrayOf(str, str2, "$i"))
+    override fun queryByGroupAndDevName(groupName: String, deviceName: String, channel: Int): Boolean =
+        queryIsEmpty("dbGroupName=? and dbDevName=? and dbChannel=?", arrayOf(groupName, deviceName, "$channel"))
 
-    override fun query(str: String, i: Int, str2: String, i2: Int): Boolean =
+    override fun query(groupName: String, deviceId: Int, deviceName: String, channel: Int): Boolean =
         queryIsEmpty(
             "dbGroupName=? and dbId=? and dbDevName=? and dbChannel=?",
-            arrayOf(str, "$i", str2, "$i2")
+            arrayOf(groupName, "$deviceId", deviceName, "$channel")
         )
 
-    override fun getChCount(str: String, i: Int): Int {
-        val readableDatabase = mHelper.readableDatabase
-        val query = readableDatabase.query(
+    override fun getChCount(groupName: String, deviceId: Int): Int {
+        val database = mHelper.readableDatabase
+        val cursor = database.query(
             GroupDbBean.TableName0,
             null,
             "dbGroupName=? and dbId=?",
-            arrayOf(str, "$i"),
+            arrayOf(groupName, "$deviceId"),
             null,
             null,
             "id asc"
         )
-        if (query != null) {
-            return query.count
+        if (cursor != null) {
+            return cursor.count
         }
         return -1
     }
 
-    override fun getGroupDatasByName(str: String): List<GroupBean> {
-        val arrayList = ArrayList<GroupBean>()
-        val readableDatabase = mHelper.readableDatabase
-        val rawQuery = readableDatabase.rawQuery("select * from GroupForNormal where dbGroupName =?", arrayOf(str))
-        if (rawQuery != null) {
-            while (rawQuery.moveToNext()) {
-                arrayList.add(rawQuery.toGroupBean())
+    override fun getGroupDatasByName(groupName: String): List<GroupBean> {
+        val groups = ArrayList<GroupBean>()
+        val database = mHelper.readableDatabase
+        val cursor = database.rawQuery("select * from GroupForNormal where dbGroupName =?", arrayOf(groupName))
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                groups.add(cursor.toGroupBean())
             }
-            rawQuery.close()
+            cursor.close()
         }
-        readableDatabase.close()
-        return arrayList
+        database.close()
+        return groups
     }
 
     override fun getGroupDatas(): List<GroupBean> {
-        val arrayList = ArrayList<GroupBean>()
-        val readableDatabase = mHelper.readableDatabase
-        val rawQuery = readableDatabase.rawQuery("select * from GroupForNormal", null)
-        if (rawQuery != null) {
-            while (rawQuery.moveToNext()) {
-                arrayList.add(rawQuery.toGroupBean())
+        val groups = ArrayList<GroupBean>()
+        val database = mHelper.readableDatabase
+        val cursor = database.rawQuery("select * from GroupForNormal", null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                groups.add(cursor.toGroupBean())
             }
-            rawQuery.close()
+            cursor.close()
         }
-        readableDatabase.close()
-        return arrayList
+        database.close()
+        return groups
     }
 
     override fun isEmpty(): Boolean {
-        val arrayList = ArrayList<GroupBean>()
-        val readableDatabase = mHelper.readableDatabase
-        val rawQuery = readableDatabase.rawQuery("select * from GroupForNormal", null)
-        if (rawQuery != null) {
-            while (rawQuery.moveToNext()) {
-                arrayList.add(rawQuery.toGroupBean())
+        val groups = ArrayList<GroupBean>()
+        val database = mHelper.readableDatabase
+        val cursor = database.rawQuery("select * from GroupForNormal", null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                groups.add(cursor.toGroupBean())
             }
-            rawQuery.close()
+            cursor.close()
         }
-        readableDatabase.close()
-        return arrayList.size <= 0
+        database.close()
+        return groups.size <= 0
     }
 
     private fun queryIsEmpty(selection: String, selectionArgs: Array<String>): Boolean {
-        val readableDatabase = mHelper.readableDatabase
-        val query = readableDatabase.query(GroupDbBean.TableName0, null, selection, selectionArgs, null, null, "id asc")
-        if (query == null || query.count != 0) {
-            readableDatabase.close()
+        val database = mHelper.readableDatabase
+        val cursor = database.query(GroupDbBean.TableName0, null, selection, selectionArgs, null, null, "id asc")
+        if (cursor == null || cursor.count != 0) {
+            database.close()
             return false
         }
-        query.close()
-        readableDatabase.close()
+        cursor.close()
+        database.close()
         return true
     }
 

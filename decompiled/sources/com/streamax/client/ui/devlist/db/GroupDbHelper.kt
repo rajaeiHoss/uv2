@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class GroupDbHelper(private val mContext: Context) :
-    SQLiteOpenHelper(mContext, GroupDbBean.GroupDbName, null, 2) {
+class GroupDbHelper(private val context: Context) :
+    SQLiteOpenHelper(context, GroupDbBean.GroupDbName, null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_GROUP_FOR_NORMAL)
@@ -13,7 +13,7 @@ class GroupDbHelper(private val mContext: Context) :
     }
 
     fun deleteDb() {
-        mContext.deleteDatabase(GroupDbBean.GroupDbName)
+        context.deleteDatabase(GroupDbBean.GroupDbName)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -1,43 +1,43 @@
 package com.streamax.client.ui.devlist.db
 
 abstract class GroupDao {
-    abstract fun add(str: String, i: Int, str2: String, i2: Int, i3: Int): Boolean
+    abstract fun add(groupName: String, deviceId: Int, deviceName: String, channel: Int, flag: Int): Boolean
 
-    abstract fun delete(i: Int): Boolean
+    abstract fun delete(deviceId: Int): Boolean
 
-    abstract fun delete(i: Int, i2: Int): Boolean
+    abstract fun delete(deviceId: Int, channel: Int): Boolean
 
-    abstract fun delete(str: String): Boolean
+    abstract fun delete(groupName: String): Boolean
 
-    abstract fun delete(str: String, i: Int, str2: String, i2: Int): Boolean
+    abstract fun delete(groupName: String, deviceId: Int, deviceName: String, channel: Int): Boolean
 
     abstract fun deleteDb()
 
-    abstract fun getChCount(str: String, i: Int): Int
+    abstract fun getChCount(groupName: String, deviceId: Int): Int
 
     abstract fun getGroupDatas(): List<GroupBean>
 
-    abstract fun getGroupDatasByName(str: String): List<GroupBean>
+    abstract fun getGroupDatasByName(groupName: String): List<GroupBean>
 
     abstract fun isEmpty(): Boolean
 
-    abstract fun query(str: String): Boolean
+    abstract fun query(groupName: String): Boolean
 
-    abstract fun query(str: String, i: Int): Boolean
+    abstract fun query(groupName: String, flag: Int): Boolean
 
-    abstract fun query(str: String, i: Int, str2: String, i2: Int): Boolean
+    abstract fun query(groupName: String, deviceId: Int, deviceName: String, channel: Int): Boolean
 
-    abstract fun queryByGroupAndDevName(str: String, str2: String, i: Int): Boolean
+    abstract fun queryByGroupAndDevName(groupName: String, deviceName: String, channel: Int): Boolean
 
-    abstract fun queryDevName(str: String): Boolean
+    abstract fun queryDevName(deviceName: String): Boolean
 
     abstract fun queryDevNameByDevId(): String
 
-    abstract fun update(str: String, i: Int): Boolean
+    abstract fun update(deviceName: String, deviceId: Int): Boolean
 
-    abstract fun update(str: String, i: Int, str2: String, i2: Int, i3: Int): Boolean
+    abstract fun update(groupName: String, deviceId: Int, deviceName: String, channel: Int, flag: Int): Boolean
 
-    abstract fun update(str: String, str2: String): Boolean
+    abstract fun update(newGroupName: String, oldGroupName: String): Boolean
 
-    abstract fun updateDevNameById(i: Int, str: String): Boolean
+    abstract fun updateDevNameById(deviceId: Int, deviceName: String): Boolean
 }
