@@ -86,88 +86,88 @@ class DvrNet {
     @JvmField
     var tc: TalkbackListener? = null
 
-    private external fun DownVideoControl(j: Long, i: Int): Int
-    private external fun DownVideoStart(j: Long, str: String?, str2: String?, i: Int, i2: Int, i3: Int, str3: String?, str4: String?, str5: String?): Int
-    private external fun DownVideoStop(j: Long, z: Boolean): Int
-    private external fun DownloadBlackBox(j: Long, i: Int, str: String?, str2: String?): Int
-    private external fun DownloadControl(j: Long, i: Int, str: String?): Int
-    private external fun ExportParam(j: Long, str: String?): Int
-    private external fun FormatStorage(j: Long, i: Int): Int
-    private external fun GetAdasCali(j: Long, i: Int, iArr: IntArray?, iArr2: IntArray?, iArr3: IntArray?, iArr4: IntArray?, iArr5: IntArray?): Int
-    private external fun GetCaptureFromRemote(j: Long, i: Int, i2: Int, i3: Int, i4: Int, i5: Int, str: String?): Int
-    private external fun GetCmsConnectStatus(j: Long): Array<ServerState?>?
-    private external fun GetConfig(j: Long, str: String?): String?
-    private external fun GetDeviceVersion(j: Long): String?
-    private external fun GetEventStatus(j: Long, i: Int, iArr: IntArray?): Int
-    private external fun GetFileSizeByTime(j: Long, i: Int, i2: Int, i3: Int, str: String?, str2: String?, i4: Int, jArr: LongArray?): Int
-    private external fun GetIOLinkageAlarmChannel(j: Long, i: Int, iArr: IntArray?): Int
-    private external fun GetIPCVers(j: Long, i: Int, strArr: Array<String?>?): Int
-    private external fun GetMotionDetection(j: Long, i: Int): String?
-    private external fun GetRemoteDeviceList(j: Long, bArr: ByteArray?): Int
-    private external fun GetRemoteDeviceList(j: Long, strArr: Array<String?>?): Int
-    private external fun GetStorageInfo(j: Long): String?
-    private external fun GetUTCTime(j: Long, iArr: IntArray?, strArr: Array<String?>?): Int
-    private external fun GetUpgradeSWVersion(j: Long): String?
-    private external fun GetUserRigth(j: Long, str: String?): String?
-    private external fun GetVerByUsed(j: Long, i: Int, strArr: Array<String?>?): Int
-    private external fun GetVideoQuality(j: Long, i: Int, iArr: IntArray?, iArr2: IntArray?, iArr3: IntArray?, iArr4: IntArray?, iArr5: IntArray?): Int
-    private external fun GetWebPort(j: Long, iArr: IntArray?): Int
-    private external fun GetYunweiInfo(j: Long, i: Int, i2: Int): String?
-    private external fun ImportParam(j: Long, str: String?): Int
-    private external fun InputTalkbackAudioData(j: Long, i: Int, bArr: ByteArray?, i2: Int): Int
-    private external fun Logout(j: Long): Int
-    private external fun MuitiPlayCapture(j: Long, str: String?): Array<Any?>?
-    private external fun MuitiPlaySetSpeed(j: Long, i: Int): Int
-    private external fun MultiPlay(j: Long, i: Int, i2: Int, i3: Int, str: String?, str2: String?, str3: String?): Int
-    private external fun MultiPlayControl(j: Long, i: Int): Int
-    private external fun MultiPlayNextFrame(j: Long): Int
-    private external fun MultiPlaySeek(j: Long, str: String?): Int
-    private external fun MultiPlaySetMute(j: Long, i: Int, z: Boolean): Int
-    private external fun MultiPlayStop(j: Long): Int
-    private external fun NetLogin(str: String?, i: Int, str2: String?, str3: String?, str4: String?, str5: String?): String?
-    private external fun PTZControl(j: Long, i: Int, i2: Int, i3: Int, i4: Int): Int
-    private external fun PTZState(j: Long, i: Int): Int
-    private external fun RealPlay(j: Long, i: Int, i2: Int): Int
-    private external fun RealPlayControl(j: Long, i: Int, i2: Int, i3: Int): Int
-    private external fun RemoteClip(j: Long, i: Int, i2: Int, str: String?, str2: String?, i3: Int, iArr: IntArray?): Int
-    private external fun RequestIFrame(j: Long, i: Int, i2: Int): Int
-    private external fun SearchAudioFileList(j: Long, i: Int, i2: Int, i3: Int, str: String?, str2: String?): Array<RemoteFileInfo?>?
-    private external fun SearchImageFileList(j: Long, i: Int, i2: Int, i3: Int, i4: Int, i5: Int, str: String?, str2: String?): Array<RemoteFileInfo?>?
-    private external fun SearchMonth(j: Long, i: Int, i2: Int, i3: Int, i4: Int, i5: Int): Array<CalendarData?>?
-    private external fun SearchVideoFileList(j: Long, i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?): Array<RemoteFileInfo?>?
-    private external fun SendCtrlCommand(j: Long, i: Int): Int
-    private external fun SetAdasCali(j: Long, i: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int): Int
-    private external fun SetConfig(j: Long, str: String?): Int
-    private external fun SetCtrlUTC(j: Long, i: Int, str: String?): Int
-    private external fun SetDevStatusParam(j: Long, i: Int, i2: Int, i3: Int, i4: Int): Int
-    private external fun SetDownload(j: Long, i: Int, i2: Int, str: String?, str2: String?, i3: Int, iArr: IntArray?): Int
-    private external fun SetGPSInfo(j: Long, str: String?): Int
-    private external fun SetGPSStateParam(j: Long, i: Int, i2: Int, i3: Int, i4: Int): Int
-    private external fun SetLock(j: Long, i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?): Int
-    private external fun SetMotionDetection(j: Long, i: Int, i2: Int, str: String?, i3: Int): Int
-    private external fun SetOverlay(j: Long, i: Int, i2: Int, str: String?, str2: String?, str3: String?, str4: String?, str5: String?): Int
-    private external fun SetRecFileBackup(j: Long, i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?, i5: Int, iArr: IntArray?): Int
-    private external fun SetRemoteUpgrade(j: Long, str: String?, str2: String?, str3: String?): Int
-    private external fun SetRestoreDefault(j: Long): Int
-    private external fun SetRestoreDefault2(j: Long, j2: Long): Int
-    private external fun SetRestoreDefault3(j: Long, jArr: LongArray?): Int
-    private external fun SetStreamSound(j: Long, i: Int, i2: Int, z: Boolean): Int
-    private external fun SetTransData(j: Long, bArr: ByteArray?, i: Int): Int
-    private external fun SetUpload(j: Long, i: Int, str: String?, str2: String?, i2: Int, iArr: IntArray?): Int
-    private external fun SetUserRigth(j: Long, i: Int, str: String?, str2: String?): Int
-    private external fun SetVideoQuality(j: Long, i: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int): Int
-    private external fun StartDeviceVideoRecord(j: Long, i: Int, i2: Int): Int
-    private external fun StartDeviceVoiceRecord(j: Long, i: Int): Int
-    private external fun StartTalk(j: Long, i: Int): Int
-    private external fun StopDeviceVideoRecord(j: Long, i: Int): Int
-    private external fun StopDeviceVoiceRecord(j: Long, i: Int): Int
-    private external fun StopDownloadBlackBox(j: Long): Int
-    private external fun StopRealPlay(j: Long, i: Int): Int
-    private external fun StopTalk(j: Long, i: Int): Int
-    private external fun StopTask(j: Long, i: Int): Int
-    private external fun TransLogin(str: String?, i: Int, str2: String?, i2: Int, i3: Int, str3: String?, str4: String?, str5: String?): String?
-    private external fun UpgradeIPCHost(j: Long, i: Int, i2: Int, i3: Int, iArr: IntArray?): Int
-    private external fun login(str: String?, i: Int, str2: String?, str3: String?, i2: Int, str4: String?): String?
+    private external fun DownVideoControl(nativeHandle: Long, control: Int): Int
+    private external fun DownVideoStart(nativeHandle: Long, destinationPath: String?, tempPath: String?, diskType: Int, channelBits: Int, downloadFormat: Int, startTime: String?, endTime: String?, fileName: String?): Int
+    private external fun DownVideoStop(nativeHandle: Long, cancel: Boolean): Int
+    private external fun DownloadBlackBox(nativeHandle: Long, dataType: Int, startTime: String?, endTime: String?): Int
+    private external fun DownloadControl(nativeHandle: Long, control: Int, position: String?): Int
+    private external fun ExportParam(nativeHandle: Long, requestJson: String?): Int
+    private external fun FormatStorage(nativeHandle: Long, fileSystem: Int): Int
+    private external fun GetAdasCali(nativeHandle: Long, channel: Int, horizonOut: IntArray?, verticalOut: IntArray?, cameraHeightOut: IntArray?, vehicleWidthOut: IntArray?, cameraToHeadOut: IntArray?): Int
+    private external fun GetCaptureFromRemote(nativeHandle: Long, captureCommand: Int, channel: Int, streamType: Int, imageFormat: Int, imageQuality: Int, outputPath: String?): Int
+    private external fun GetCmsConnectStatus(nativeHandle: Long): Array<ServerState?>?
+    private external fun GetConfig(nativeHandle: Long, requestJson: String?): String?
+    private external fun GetDeviceVersion(nativeHandle: Long): String?
+    private external fun GetEventStatus(nativeHandle: Long, eventType: Int, statusOut: IntArray?): Int
+    private external fun GetFileSizeByTime(nativeHandle: Long, diskType: Int, fileType: Int, streamType: Int, startTime: String?, endTime: String?, channelBits: Int, fileSizeOut: LongArray?): Int
+    private external fun GetIOLinkageAlarmChannel(nativeHandle: Long, channel: Int, alarmChannelOut: IntArray?): Int
+    private external fun GetIPCVers(nativeHandle: Long, channel: Int, versionOut: Array<String?>?): Int
+    private external fun GetMotionDetection(nativeHandle: Long, channel: Int): String?
+    private external fun GetRemoteDeviceList(nativeHandle: Long, outputBuffer: ByteArray?): Int
+    private external fun GetRemoteDeviceList(nativeHandle: Long, deviceListOut: Array<String?>?): Int
+    private external fun GetStorageInfo(nativeHandle: Long): String?
+    private external fun GetUTCTime(nativeHandle: Long, timezoneOut: IntArray?, utcTimeOut: Array<String?>?): Int
+    private external fun GetUpgradeSWVersion(nativeHandle: Long): String?
+    private external fun GetUserRigth(nativeHandle: Long, requestJson: String?): String?
+    private external fun GetVerByUsed(nativeHandle: Long, versionType: Int, versionOut: Array<String?>?): Int
+    private external fun GetVideoQuality(nativeHandle: Long, channel: Int, brightnessOut: IntArray?, contrastOut: IntArray?, saturationOut: IntArray?, hueOut: IntArray?, sharpnessOut: IntArray?): Int
+    private external fun GetWebPort(nativeHandle: Long, webPortOut: IntArray?): Int
+    private external fun GetYunweiInfo(nativeHandle: Long, dateType: Int, infoType: Int): String?
+    private external fun ImportParam(nativeHandle: Long, filePath: String?): Int
+    private external fun InputTalkbackAudioData(nativeHandle: Long, channel: Int, audioData: ByteArray?, dataLength: Int): Int
+    private external fun Logout(nativeHandle: Long): Int
+    private external fun MuitiPlayCapture(nativeHandle: Long, outputPath: String?): Array<Any?>?
+    private external fun MuitiPlaySetSpeed(nativeHandle: Long, speed: Int): Int
+    private external fun MultiPlay(nativeHandle: Long, diskType: Int, channelBits: Int, streamType: Int, startTime: String?, endTime: String?, fileName: String?): Int
+    private external fun MultiPlayControl(nativeHandle: Long, control: Int): Int
+    private external fun MultiPlayNextFrame(nativeHandle: Long): Int
+    private external fun MultiPlaySeek(nativeHandle: Long, seekTime: String?): Int
+    private external fun MultiPlaySetMute(nativeHandle: Long, channel: Int, muted: Boolean): Int
+    private external fun MultiPlayStop(nativeHandle: Long): Int
+    private external fun NetLogin(serverIp: String?, mediaPort: Int, deviceAddress: String?, username: String?, password: String?, localMacAddress: String?): String?
+    private external fun PTZControl(nativeHandle: Long, channel: Int, command: Int, speed: Int, preset: Int): Int
+    private external fun PTZState(nativeHandle: Long, state: Int): Int
+    private external fun RealPlay(nativeHandle: Long, channel: Int, streamType: Int): Int
+    private external fun RealPlayControl(nativeHandle: Long, channel: Int, streamType: Int, control: Int): Int
+    private external fun RemoteClip(nativeHandle: Long, channel: Int, fileType: Int, startTime: String?, endTime: String?, format: Int, resultOut: IntArray?): Int
+    private external fun RequestIFrame(nativeHandle: Long, channel: Int, streamType: Int): Int
+    private external fun SearchAudioFileList(nativeHandle: Long, diskType: Int, fileType: Int, channelBits: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>?
+    private external fun SearchImageFileList(nativeHandle: Long, diskType: Int, fileType: Int, channel: Int, imageFormat: Int, imageQuality: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>?
+    private external fun SearchMonth(nativeHandle: Long, year: Int, month: Int, channel: Int, fileType: Int, streamType: Int): Array<CalendarData?>?
+    private external fun SearchVideoFileList(nativeHandle: Long, diskType: Int, streamType: Int, fileType: Int, channelBits: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>?
+    private external fun SendCtrlCommand(nativeHandle: Long, command: Int): Int
+    private external fun SetAdasCali(nativeHandle: Long, channel: Int, horizon: Int, vertical: Int, cameraHeight: Int, vehicleWidth: Int, cameraToHead: Int): Int
+    private external fun SetConfig(nativeHandle: Long, requestJson: String?): Int
+    private external fun SetCtrlUTC(nativeHandle: Long, timezoneOffset: Int, utcTime: String?): Int
+    private external fun SetDevStatusParam(nativeHandle: Long, reportMode: Int, gpsInterval: Int, statusInterval: Int, alarmInterval: Int): Int
+    private external fun SetDownload(nativeHandle: Long, downloadType: Int, dataType: Int, startTime: String?, endTime: String?, channelBits: Int, resultOut: IntArray?): Int
+    private external fun SetGPSInfo(nativeHandle: Long, gpsInfo: String?): Int
+    private external fun SetGPSStateParam(nativeHandle: Long, reportMode: Int, distanceInterval: Int, timeInterval: Int, speedLimit: Int): Int
+    private external fun SetLock(nativeHandle: Long, lockType: Int, fileType: Int, startTimeType: Int, endTimeType: Int, startTime: String?, endTime: String?): Int
+    private external fun SetMotionDetection(nativeHandle: Long, channel: Int, enabled: Int, region: String?, sensitivity: Int): Int
+    private external fun SetOverlay(nativeHandle: Long, channel: Int, overlayType: Int, dateOverlay: String?, timeOverlay: String?, channelOverlay: String?, deviceOverlay: String?, gpsOverlay: String?): Int
+    private external fun SetRecFileBackup(nativeHandle: Long, diskType: Int, fileType: Int, streamType: Int, channelBits: Int, startTime: String?, endTime: String?, backupFormat: Int, resultOut: IntArray?): Int
+    private external fun SetRemoteUpgrade(nativeHandle: Long, filePath: String?, version: String?, options: String?): Int
+    private external fun SetRestoreDefault(nativeHandle: Long): Int
+    private external fun SetRestoreDefault2(nativeHandle: Long, resetMask: Long): Int
+    private external fun SetRestoreDefault3(nativeHandle: Long, resetMasks: LongArray?): Int
+    private external fun SetStreamSound(nativeHandle: Long, channel: Int, streamType: Int, enabled: Boolean): Int
+    private external fun SetTransData(nativeHandle: Long, payload: ByteArray?, payloadLength: Int): Int
+    private external fun SetUpload(nativeHandle: Long, uploadType: Int, filePath: String?, options: String?, channelBits: Int, resultOut: IntArray?): Int
+    private external fun SetUserRigth(nativeHandle: Long, userType: Int, username: String?, rightsJson: String?): Int
+    private external fun SetVideoQuality(nativeHandle: Long, channel: Int, brightness: Int, contrast: Int, saturation: Int, hue: Int, sharpness: Int): Int
+    private external fun StartDeviceVideoRecord(nativeHandle: Long, channel: Int, streamType: Int): Int
+    private external fun StartDeviceVoiceRecord(nativeHandle: Long, channel: Int): Int
+    private external fun StartTalk(nativeHandle: Long, channel: Int): Int
+    private external fun StopDeviceVideoRecord(nativeHandle: Long, channel: Int): Int
+    private external fun StopDeviceVoiceRecord(nativeHandle: Long, channel: Int): Int
+    private external fun StopDownloadBlackBox(nativeHandle: Long): Int
+    private external fun StopRealPlay(nativeHandle: Long, channel: Int): Int
+    private external fun StopTalk(nativeHandle: Long, channel: Int): Int
+    private external fun StopTask(nativeHandle: Long, taskType: Int): Int
+    private external fun TransLogin(messageServerIp: String?, messageServerPort: Int, gatewayServerIp: String?, gatewayPort: Int, command: Int, deviceAddress: String?, username: String?, password: String?): String?
+    private external fun UpgradeIPCHost(nativeHandle: Long, channel: Int, upgradeType: Int, fileType: Int, resultOut: IntArray?): Int
+    private external fun login(deviceIp: String?, mediaPort: Int, username: String?, password: String?, loginType: Int, localMacAddress: String?): String?
 
     init {
         nBBCount = 0
@@ -405,9 +405,9 @@ class DvrNet {
         }
     }
 
-    fun GetDeviceHandle(str: String?, i: Int, str2: String?, str3: String?, str4: String?): Map<String, Any> {
+    fun GetDeviceHandle(deviceIp: String?, mediaPort: Int, username: String?, password: String?, localMacAddress: String?): Map<String, Any> {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val response = login(str, i, str2, str3, 0, str4)
+        val response = login(deviceIp, mediaPort, username, password, 0, localMacAddress)
         val map: MutableMap<String, Any> = HashMap()
         var errorCode = -1
         try {
@@ -430,11 +430,11 @@ class DvrNet {
         return map
     }
 
-    fun GetDeviceHandle(str: String?, i: Int, str2: String?, str3: String?, str4: String?, str5: String?): Map<String, Any> {
+    fun GetDeviceHandle(serverIp: String?, mediaPort: Int, localMacAddress: String?, deviceAddress: String?, username: String?, password: String?): Map<String, Any> {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val response = NetLogin(str, i, str3, str4, str5, str2)
+        val response = NetLogin(serverIp, mediaPort, deviceAddress, username, password, localMacAddress)
         val map: MutableMap<String, Any> = HashMap()
-        Log.v(TAG, "[NetLogin]str =$response")
+        Log.v(TAG, "[NetLogin]response =$response")
         var errorCode = -1
         try {
             val obj = JSONObject(response)
@@ -457,11 +457,11 @@ class DvrNet {
         return map
     }
 
-    fun GetDeviceHandle(str: String?, i: Int, str2: String?, i2: Int, i3: Int, str3: String?, str4: String?, str5: String?): Map<String, Any> {
+    fun GetDeviceHandle(messageServerIp: String?, messageServerPort: Int, gatewayServerIp: String?, gatewayPort: Int, command: Int, deviceAddress: String?, username: String?, password: String?): Map<String, Any> {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]")
-        val response = TransLogin(str, i, str2, i2, i3, str3, str4, str5)
+        val response = TransLogin(messageServerIp, messageServerPort, gatewayServerIp, gatewayPort, command, deviceAddress, username, password)
         val map: MutableMap<String, Any> = HashMap()
-        Log.v(TAG, "[TransLogin]str =$response")
+        Log.v(TAG, "[TransLogin]response =$response")
         var errorCode = -1
         try {
             val obj = JSONObject(response)
@@ -537,54 +537,54 @@ class DvrNet {
         return 0
     }
 
-    fun StartRealAv(i: Int, i2: Int): Int {
+    fun StartRealAv(channel: Int, streamType: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        val realPlay = RealPlay(j, i, i2)
-        mRealplayChannel[i] = realPlay
+        val realPlay = RealPlay(deviceHandle, channel, streamType)
+        mRealplayChannel[channel] = realPlay
         if (realPlay == 0) {
-            mStreamTypeArray[i] = i2
+            mStreamTypeArray[channel] = streamType
         } else {
-            mStreamTypeArray[i] = -1
+            mStreamTypeArray[channel] = -1
         }
         return realPlay
     }
 
-    fun RequestIFrame(i: Int, i2: Int): Int {
+    fun RequestIFrame(channel: Int, streamType: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return RequestIFrame(j, i, i2)
+        return RequestIFrame(deviceHandle, channel, streamType)
     }
 
-    fun GetIOLinkageAlarmChannel(i: Int, iArr: IntArray?): Int {
+    fun GetIOLinkageAlarmChannel(channel: Int, alarmChannelOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetIOLinkageAlarmChannel(j, i, iArr)
+        return GetIOLinkageAlarmChannel(deviceHandle, channel, alarmChannelOut)
     }
 
-    fun GetMotionDetection(i: Int, iArr: IntArray, strArr: Array<String?>, iArr2: IntArray): Int {
+    fun GetMotionDetection(channel: Int, enabledOut: IntArray, regionOut: Array<String?>, sensitivityOut: IntArray): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return -1
         }
-        val response = GetMotionDetection(j, i)
+        val response = GetMotionDetection(deviceHandle, channel)
         Log.v(TAG, "[GetMotionDetection]response =$response")
         if (!response.isNullOrEmpty()) {
             try {
                 val obj = JSONObject(response)
-                iArr[0] = obj.getInt("EN")
-                strArr[0] = obj.getString("RGN")
-                iArr2[0] = obj.getInt("SST")
+                enabledOut[0] = obj.getInt("EN")
+                regionOut[0] = obj.getString("RGN")
+                sensitivityOut[0] = obj.getInt("SST")
                 return 0
             } catch (e: JSONException) {
                 e.printStackTrace()
@@ -593,40 +593,40 @@ class DvrNet {
         return -1
     }
 
-    fun SetMotionDetection(i: Int, i2: Int, str: String?, i3: Int): Int {
+    fun SetMotionDetection(channel: Int, enabled: Int, region: String?, sensitivity: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetMotionDetection(j, i, i2, str, i3)
+        return SetMotionDetection(deviceHandle, channel, enabled, region, sensitivity)
     }
 
-    fun GetFileSizeByTime(i: Int, i2: Int, i3: Int, str: String?, str2: String?, i4: Int, jArr: LongArray?): Int {
+    fun GetFileSizeByTime(diskType: Int, fileType: Int, streamType: Int, startTime: String?, endTime: String?, channelBits: Int, fileSizeOut: LongArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetFileSizeByTime(j, i, i2, i3, str, str2, i4, jArr)
+        return GetFileSizeByTime(deviceHandle, diskType, fileType, streamType, startTime, endTime, channelBits, fileSizeOut)
     }
 
-    fun GetCaptureFromRemote(i: Int, i2: Int, i3: Int, i4: Int, i5: Int, str: String?): Int {
+    fun GetCaptureFromRemote(captureCommand: Int, channel: Int, streamType: Int, imageFormat: Int, imageQuality: Int, outputPath: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetCaptureFromRemote(j, i, i2, i3, i4, i5, str)
+        return GetCaptureFromRemote(deviceHandle, captureCommand, channel, streamType, imageFormat, imageQuality, outputPath)
     }
 
-    fun SetOverlay(i: Int, i2: Int, str: String?, str2: String?, str3: String?, str4: String?, str5: String?): Int {
+    fun SetOverlay(channel: Int, overlayType: Int, dateOverlay: String?, timeOverlay: String?, channelOverlay: String?, deviceOverlay: String?, gpsOverlay: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetOverlay(j, i, i2, str, str2, str3, str4, str5)
+        return SetOverlay(deviceHandle, channel, overlayType, dateOverlay, timeOverlay, channelOverlay, deviceOverlay, gpsOverlay)
     }
 
     fun PTZState(): Int {
@@ -639,220 +639,220 @@ class DvrNet {
         return mPTZState
     }
 
-    fun PTZControl(i: Int, i2: Int, i3: Int): Int {
+    fun PTZControl(channel: Int, command: Int, speed: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return PTZControl(j, i, i2, i3, 0)
+        return PTZControl(deviceHandle, channel, command, speed, 0)
     }
 
-    fun GetWebPort(iArr: IntArray?): Int {
-        val j = handle
-        return if (j != 0L) {
-            GetWebPort(j, iArr)
+    fun GetWebPort(webPortOut: IntArray?): Int {
+        val deviceHandle = handle
+        return if (deviceHandle != 0L) {
+            GetWebPort(deviceHandle, webPortOut)
         } else {
             Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
             0
         }
     }
 
-    fun RealPlayControl(i: Int, i2: Int, i3: Int): Int {
+    fun RealPlayControl(channel: Int, streamType: Int, control: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        if (i2 == -1) {
-            Log.v(TAG, "[${CommonFunction._FUNC_()}]nStreamType = $i2")
+        if (streamType == -1) {
+            Log.v(TAG, "[${CommonFunction._FUNC_()}]nStreamType = $streamType")
             return 0
         }
-        val realPlayControl = RealPlayControl(j, i, i2, i3)
-        if (realPlayControl == 0 && i3 == 3) {
-            mStreamTypeArray[i] = i2
+        val realPlayControl = RealPlayControl(deviceHandle, channel, streamType, control)
+        if (realPlayControl == 0 && control == 3) {
+            mStreamTypeArray[channel] = streamType
         }
         return realPlayControl
     }
 
-    fun SetStreamSound(i: Int, i2: Int, z: Boolean): Int {
+    fun SetStreamSound(channel: Int, streamType: Int, enabled: Boolean): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetStreamSound(j, i, i2, z)
+        return SetStreamSound(deviceHandle, channel, streamType, enabled)
     }
 
-    fun StopRealAv(i: Int): Int {
+    fun StopRealAv(channel: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        val stopRealPlay = StopRealPlay(j, i)
-        mRealplayChannel[i] = -1
-        mStreamTypeArray[i] = -1
+        val stopRealPlay = StopRealPlay(deviceHandle, channel)
+        mRealplayChannel[channel] = -1
+        mStreamTypeArray[channel] = -1
         return stopRealPlay
     }
 
-    fun SearchMonth(i: Int, i2: Int, i3: Int, i4: Int, i5: Int): Array<CalendarData?>? {
+    fun SearchMonth(year: Int, month: Int, channel: Int, fileType: Int, streamType: Int): Array<CalendarData?>? {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        return if (j != 0L) {
-            SearchMonth(j, i, i2, i3, i4, i5)
+        val deviceHandle = handle
+        return if (deviceHandle != 0L) {
+            SearchMonth(deviceHandle, year, month, channel, fileType, streamType)
         } else {
             Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
             null
         }
     }
 
-    fun SetLock(i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?): Int {
+    fun SetLock(lockType: Int, fileType: Int, startTimeType: Int, endTimeType: Int, startTime: String?, endTime: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetLock(j, i, i2, i3, i4, str, str2)
+        return SetLock(deviceHandle, lockType, fileType, startTimeType, endTimeType, startTime, endTime)
     }
 
-    fun FormatStorage(i: Int): Int {
+    fun FormatStorage(fileSystem: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return FormatStorage(j, i)
+        return FormatStorage(deviceHandle, fileSystem)
     }
 
-    fun DownloadBlackBox(i: Int, str: String?, str2: String?): Int {
+    fun DownloadBlackBox(dataType: Int, startTime: String?, endTime: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return DownloadBlackBox(j, i, str, str2)
+        return DownloadBlackBox(deviceHandle, dataType, startTime, endTime)
     }
 
     fun StopDownloadBlackBox(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StopDownloadBlackBox(j)
+        return StopDownloadBlackBox(deviceHandle)
     }
 
-    fun DownloadControl(i: Int, str: String?): Int {
+    fun DownloadControl(control: Int, position: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return DownloadControl(j, i, str)
+        return DownloadControl(deviceHandle, control, position)
     }
 
-    fun MultiPlay(i: Int, i2: Int, i3: Int, str: String?, str2: String?, str3: String?): Int {
+    fun MultiPlay(diskType: Int, channelBits: Int, streamType: Int, startTime: String?, endTime: String?, fileName: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
         if (handle == 0L) {
             return 0
         }
-        Log.v(TAG, "nChannelBits =$i2")
-        return MultiPlay(handle, i, i2, i3, str, str2, str3)
+        Log.v(TAG, "nChannelBits =$channelBits")
+        return MultiPlay(handle, diskType, channelBits, streamType, startTime, endTime, fileName)
     }
 
     fun MultiPlayStop(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return MultiPlayStop(j)
+        return MultiPlayStop(deviceHandle)
     }
 
-    fun MultiPlayPause(z: Boolean): Int {
+    fun MultiPlayPause(paused: Boolean): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return if (z) {
-            MultiPlayControl(j, 2)
+        return if (paused) {
+            MultiPlayControl(deviceHandle, 2)
         } else {
-            MultiPlayControl(j, 1)
+            MultiPlayControl(deviceHandle, 1)
         }
     }
 
-    fun MultiPlaySeek(str: String?): Int {
+    fun MultiPlaySeek(seekTime: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return MultiPlaySeek(j, str)
+        return MultiPlaySeek(deviceHandle, seekTime)
     }
 
-    fun SearchVideoFileList(i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?): Array<RemoteFileInfo?>? {
+    fun SearchVideoFileList(diskType: Int, fileType: Int, streamType: Int, channelBits: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>? {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return null
         }
-        return SearchVideoFileList(j, i, i3, i2, i4, str, str2)
+        return SearchVideoFileList(deviceHandle, diskType, streamType, fileType, channelBits, startTime, endTime)
     }
 
-    fun SearchImageFileList(i: Int, i2: Int, i3: Int, i4: Int, i5: Int, str: String?, str2: String?): Array<RemoteFileInfo?>? {
+    fun SearchImageFileList(diskType: Int, fileType: Int, channel: Int, imageFormat: Int, imageQuality: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>? {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return null
         }
-        return SearchImageFileList(j, i, i2, i3, i4, i5, str, str2)
+        return SearchImageFileList(deviceHandle, diskType, fileType, channel, imageFormat, imageQuality, startTime, endTime)
     }
 
-    fun SearchAudioFileList(i: Int, i2: Int, i3: Int, str: String?, str2: String?): Array<RemoteFileInfo?>? {
+    fun SearchAudioFileList(diskType: Int, fileType: Int, channelBits: Int, startTime: String?, endTime: String?): Array<RemoteFileInfo?>? {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return null
         }
-        return SearchAudioFileList(j, i, i2, i3, str, str2)
+        return SearchAudioFileList(deviceHandle, diskType, fileType, channelBits, startTime, endTime)
     }
 
-    fun MultiPlayCaptureBitmap(str: String?): Array<BitmapFileInfo?>? {
+    fun MultiPlayCaptureBitmap(outputPath: String?): Array<BitmapFileInfo?>? {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        val multiPlayCapture = if (j == 0L) null else MuitiPlayCapture(j, str)
+        val deviceHandle = handle
+        val multiPlayCapture = if (deviceHandle == 0L) null else MuitiPlayCapture(deviceHandle, outputPath)
         if (multiPlayCapture == null) {
             return null
         }
         val bitmapFileInfoArr = arrayOfNulls<BitmapFileInfo>(multiPlayCapture.size)
-        for (i in multiPlayCapture.indices) {
-            bitmapFileInfoArr[i] = multiPlayCapture[i] as BitmapFileInfo
+        for (index in multiPlayCapture.indices) {
+            bitmapFileInfoArr[index] = multiPlayCapture[index] as BitmapFileInfo
         }
         return bitmapFileInfoArr
     }
 
-    fun MuitiPlaySetSpeed(i: Int): Int {
+    fun MuitiPlaySetSpeed(speed: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return MuitiPlaySetSpeed(j, i)
+        return MuitiPlaySetSpeed(deviceHandle, speed)
     }
 
     fun MultiPlayNextFrame(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return MultiPlayNextFrame(j)
+        return MultiPlayNextFrame(deviceHandle)
     }
 
-    fun SetAVStream(i: Int, aVStream: AVStream?) {
-        av[i] = aVStream
+    fun SetAVStream(channel: Int, stream: AVStream?) {
+        av[channel] = stream
     }
 
     fun SetMultiplayInterface(multiplaybackInterface: MultiplaybackInterface?) {
@@ -880,433 +880,433 @@ class DvrNet {
         mMessageCallback = messageCallback
     }
 
-    fun getChannelState(i: Int): Int {
-        return mRealplayChannel[i]
+    fun getChannelState(channel: Int): Int {
+        return mRealplayChannel[channel]
     }
 
-    fun getStreamType(i: Int): Int {
-        return mStreamTypeArray[i]
+    fun getStreamType(channel: Int): Int {
+        return mStreamTypeArray[channel]
     }
 
-    fun GetVideoQuality(i: Int, iArr: IntArray?, iArr2: IntArray?, iArr3: IntArray?, iArr4: IntArray?, iArr5: IntArray?): Int {
+    fun GetVideoQuality(channel: Int, brightnessOut: IntArray?, contrastOut: IntArray?, saturationOut: IntArray?, hueOut: IntArray?, sharpnessOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetVideoQuality(j, i, iArr, iArr2, iArr3, iArr4, iArr5)
+        return GetVideoQuality(deviceHandle, channel, brightnessOut, contrastOut, saturationOut, hueOut, sharpnessOut)
     }
 
-    fun SetVideoQuality(i: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int): Int {
+    fun SetVideoQuality(channel: Int, brightness: Int, contrast: Int, saturation: Int, hue: Int, sharpness: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetVideoQuality(j, i, i2, i3, i4, i5, i6)
+        return SetVideoQuality(deviceHandle, channel, brightness, contrast, saturation, hue, sharpness)
     }
 
     fun GetDeviceVersion(): String {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetDeviceVersion(j) ?: ""
+        return GetDeviceVersion(deviceHandle) ?: ""
     }
 
     fun GetUpgradeSWVersion(): String {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetUpgradeSWVersion(j) ?: ""
+        return GetUpgradeSWVersion(deviceHandle) ?: ""
     }
 
     fun SetRestoreDefault(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetRestoreDefault(j)
+        return SetRestoreDefault(deviceHandle)
     }
 
     fun StartTalk(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StartTalk(j, 0)
+        return StartTalk(deviceHandle, 0)
     }
 
-    fun InputTalkbackAudioData(bArr: ByteArray?, i: Int): Int {
-        val j = handle
-        if (j == 0L) {
+    fun InputTalkbackAudioData(audioData: ByteArray?, dataLength: Int): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return InputTalkbackAudioData(j, 0, bArr, i)
+        return InputTalkbackAudioData(deviceHandle, 0, audioData, dataLength)
     }
 
     fun StopTalk(): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StopTalk(j, 0)
+        return StopTalk(deviceHandle, 0)
     }
 
     fun GetStorageInfo(): String {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetStorageInfo(j) ?: ""
+        return GetStorageInfo(deviceHandle) ?: ""
     }
 
-    fun GetYunweiInfo(i: Int, i2: Int): String {
+    fun GetYunweiInfo(dateType: Int, infoType: Int): String {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetYunweiInfo(j, i, i2) ?: ""
+        return GetYunweiInfo(deviceHandle, dateType, infoType) ?: ""
     }
 
-    fun SetRecFileBackup(i: Int, i2: Int, i3: Int, i4: Int, str: String?, str2: String?, i5: Int, iArr: IntArray?): Int {
+    fun SetRecFileBackup(diskType: Int, fileType: Int, streamType: Int, channelBits: Int, startTime: String?, endTime: String?, backupFormat: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetRecFileBackup(j, i, i2, i3, i4, str, str2, i5, iArr)
+        return SetRecFileBackup(deviceHandle, diskType, fileType, streamType, channelBits, startTime, endTime, backupFormat, resultOut)
     }
 
-    fun OnekeyDownload(i: Int, i2: Int, iArr: IntArray?): Int {
+    fun OnekeyDownload(dataType: Int, channelBits: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetDownload(j, 1, i, "", "", i2, iArr)
+        return SetDownload(deviceHandle, 1, dataType, "", "", channelBits, resultOut)
     }
 
-    fun SetDownload(i: Int, str: String?, str2: String?, i2: Int, iArr: IntArray?): Int {
+    fun SetDownload(dataType: Int, startTime: String?, endTime: String?, channelBits: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetDownload(j, 0, i, str, str2, i2, iArr)
+        return SetDownload(deviceHandle, 0, dataType, startTime, endTime, channelBits, resultOut)
     }
 
-    fun SetUpload(i: Int, str: String?, str2: String?, i2: Int, iArr: IntArray?): Int {
+    fun SetUpload(uploadType: Int, filePath: String?, options: String?, channelBits: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetUpload(j, i, str, str2, i2, iArr)
+        return SetUpload(deviceHandle, uploadType, filePath, options, channelBits, resultOut)
     }
 
-    fun UpgradeIPCHost(i: Int, i2: Int, i3: Int, iArr: IntArray?): Int {
+    fun UpgradeIPCHost(channel: Int, upgradeType: Int, fileType: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return UpgradeIPCHost(j, i, i2, i3, iArr)
+        return UpgradeIPCHost(deviceHandle, channel, upgradeType, fileType, resultOut)
     }
 
-    fun RemoteClip(i: Int, i2: Int, str: String?, str2: String?, i3: Int, iArr: IntArray?): Int {
+    fun RemoteClip(fileType: Int, channel: Int, startTime: String?, endTime: String?, format: Int, resultOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return RemoteClip(j, i2, i, str, str2, i3, iArr)
+        return RemoteClip(deviceHandle, channel, fileType, startTime, endTime, format, resultOut)
     }
 
-    fun StopTask(i: Int): Int {
+    fun StopTask(taskType: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StopTask(j, i)
+        return StopTask(deviceHandle, taskType)
     }
 
-    fun GetEventStatus(i: Int, iArr: IntArray?): Int {
+    fun GetEventStatus(eventType: Int, statusOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetEventStatus(j, i, iArr)
+        return GetEventStatus(deviceHandle, eventType, statusOut)
     }
 
-    fun SetGPSStateParam(i: Int, i2: Int, i3: Int, i4: Int): Int {
+    fun SetGPSStateParam(reportMode: Int, distanceInterval: Int, timeInterval: Int, speedLimit: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetGPSStateParam(j, i, i2, i3, i4)
+        return SetGPSStateParam(deviceHandle, reportMode, distanceInterval, timeInterval, speedLimit)
     }
 
-    fun GetUTCTime(iArr: IntArray?, strArr: Array<String?>?): Int {
+    fun GetUTCTime(timezoneOut: IntArray?, utcTimeOut: Array<String?>?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetUTCTime(j, iArr, strArr)
+        return GetUTCTime(deviceHandle, timezoneOut, utcTimeOut)
     }
 
-    fun SetCtrlUTC(i: Int, str: String?): Int {
+    fun SetCtrlUTC(timezoneOffset: Int, utcTime: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetCtrlUTC(j, i, str)
+        return SetCtrlUTC(deviceHandle, timezoneOffset, utcTime)
     }
 
-    fun StartDeviceVideoRecord(i: Int, i2: Int): Int {
+    fun StartDeviceVideoRecord(channel: Int, streamType: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StartDeviceVideoRecord(j, i, i2)
+        return StartDeviceVideoRecord(deviceHandle, channel, streamType)
     }
 
-    fun StopDeviceVideoRecord(i: Int): Int {
+    fun StopDeviceVideoRecord(channel: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StopDeviceVideoRecord(j, i)
+        return StopDeviceVideoRecord(deviceHandle, channel)
     }
 
-    fun StartDeviceVoiceRecord(i: Int): Int {
+    fun StartDeviceVoiceRecord(channel: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StartDeviceVoiceRecord(j, i)
+        return StartDeviceVoiceRecord(deviceHandle, channel)
     }
 
-    fun StopDeviceVoiceRecord(i: Int): Int {
+    fun StopDeviceVoiceRecord(channel: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return StopDeviceVoiceRecord(j, i)
+        return StopDeviceVoiceRecord(deviceHandle, channel)
     }
 
-    fun SetDevStatusParam(i: Int, i2: Int, i3: Int, i4: Int): Int {
+    fun SetDevStatusParam(reportMode: Int, gpsInterval: Int, statusInterval: Int, alarmInterval: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetDevStatusParam(j, i, i2, i3, i4)
+        return SetDevStatusParam(deviceHandle, reportMode, gpsInterval, statusInterval, alarmInterval)
     }
 
-    fun SetRemoteUpgrade(str: String?, str2: String?, str3: String?): Int {
+    fun SetRemoteUpgrade(filePath: String?, version: String?, options: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetRemoteUpgrade(j, str, str2, str3)
+        return SetRemoteUpgrade(deviceHandle, filePath, version, options)
     }
 
-    fun SetGPSInfo(str: String?): Int {
+    fun SetGPSInfo(gpsInfo: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetGPSInfo(j, str)
+        return SetGPSInfo(deviceHandle, gpsInfo)
     }
 
-    fun SetTransData(bArr: ByteArray?, i: Int): Int {
+    fun SetTransData(payload: ByteArray?, payloadLength: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetTransData(j, bArr, i)
+        return SetTransData(deviceHandle, payload, payloadLength)
     }
 
-    fun GetIPCVers(i: Int, strArr: Array<String?>?): Int {
+    fun GetIPCVers(channel: Int, versionOut: Array<String?>?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetIPCVers(j, i, strArr)
+        return GetIPCVers(deviceHandle, channel, versionOut)
     }
 
-    fun GetVerByUsed(i: Int, strArr: Array<String?>?): Int {
+    fun GetVerByUsed(versionType: Int, versionOut: Array<String?>?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetVerByUsed(j, i, strArr)
+        return GetVerByUsed(deviceHandle, versionType, versionOut)
     }
 
-    fun GetRemoteDeviceList(strArr: Array<String?>?): Int {
+    fun GetRemoteDeviceList(deviceListOut: Array<String?>?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetRemoteDeviceList(j, strArr)
+        return GetRemoteDeviceList(deviceHandle, deviceListOut)
     }
 
-    fun GetRemoteDeviceList(bArr: ByteArray?): Int {
+    fun GetRemoteDeviceList(outputBuffer: ByteArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return GetRemoteDeviceList(j, bArr)
+        return GetRemoteDeviceList(deviceHandle, outputBuffer)
     }
 
     fun GetCmsConnectStatus(): Array<ServerState?>? {
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return null
         }
-        return GetCmsConnectStatus(j)
+        return GetCmsConnectStatus(deviceHandle)
     }
 
-    fun ImportParam(str: String?): Int {
-        val j = handle
-        if (j == 0L) {
+    fun ImportParam(filePath: String?): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return ImportParam(j, str)
+        return ImportParam(deviceHandle, filePath)
     }
 
-    fun ExportParam(str: String?): Int {
-        val j = handle
-        if (j == 0L) {
+    fun ExportParam(requestJson: String?): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return ExportParam(j, str)
+        return ExportParam(deviceHandle, requestJson)
     }
 
-    fun GetConfig(str: String?): String {
-        val j = handle
-        if (j == 0L) {
+    fun GetConfig(requestJson: String?): String {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetConfig(j, str) ?: ""
+        return GetConfig(deviceHandle, requestJson) ?: ""
     }
 
-    fun SetConfig(str: String?): Int {
-        val j = handle
-        if (j == 0L) {
+    fun SetConfig(requestJson: String?): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetConfig(j, str)
+        return SetConfig(deviceHandle, requestJson)
     }
 
-    fun GetUserRigth(str: String?): String {
-        val j = handle
-        if (j == 0L) {
+    fun GetUserRigth(requestJson: String?): String {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return ""
         }
-        return GetUserRigth(j, str) ?: ""
+        return GetUserRigth(deviceHandle, requestJson) ?: ""
     }
 
-    fun SetUserRigth(i: Int, str: String?, str2: String?): Int {
-        val j = handle
-        if (j == 0L) {
+    fun SetUserRigth(userType: Int, username: String?, rightsJson: String?): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetUserRigth(j, i, str, str2)
+        return SetUserRigth(deviceHandle, userType, username, rightsJson)
     }
 
-    fun SetRestoreDefault2(j: Long): Int {
-        val j2 = handle
-        if (j2 == 0L) {
+    fun SetRestoreDefault2(resetMask: Long): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetRestoreDefault2(j2, j)
+        return SetRestoreDefault2(deviceHandle, resetMask)
     }
 
-    fun SendCtrlCommand(i: Int): Int {
-        val j = handle
-        if (j == 0L) {
+    fun SendCtrlCommand(command: Int): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 1
         }
-        return SendCtrlCommand(j, i)
+        return SendCtrlCommand(deviceHandle, command)
     }
 
-    fun GetAdasCali(i: Int, iArr: IntArray?, iArr2: IntArray?, iArr3: IntArray?, iArr4: IntArray?, iArr5: IntArray?): Int {
+    fun GetAdasCali(channel: Int, horizonOut: IntArray?, verticalOut: IntArray?, cameraHeightOut: IntArray?, vehicleWidthOut: IntArray?, cameraToHeadOut: IntArray?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return -1
         }
-        return GetAdasCali(j, i, iArr, iArr2, iArr3, iArr4, iArr5)
+        return GetAdasCali(deviceHandle, channel, horizonOut, verticalOut, cameraHeightOut, vehicleWidthOut, cameraToHeadOut)
     }
 
-    fun SetAdasCali(i: Int, i2: Int, i3: Int, i4: Int, i5: Int, i6: Int): Int {
+    fun SetAdasCali(channel: Int, horizon: Int, vertical: Int, cameraHeight: Int, vehicleWidth: Int, cameraToHead: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return -1
         }
-        return SetAdasCali(j, i, i2, i3, i4, i5, i6)
+        return SetAdasCali(deviceHandle, channel, horizon, vertical, cameraHeight, vehicleWidth, cameraToHead)
     }
 
-    fun DownVideoStart(str: String?, str2: String?, i: Int, i2: Int, i3: Int, str3: String?, str4: String?, str5: String?): Int {
+    fun DownVideoStart(destinationPath: String?, tempPath: String?, diskType: Int, channelBits: Int, downloadFormat: Int, startTime: String?, endTime: String?, fileName: String?): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
         if (handle == 0L) {
             return 0
         }
-        Log.v(TAG, "nChannelBits =$i2")
-        return DownVideoStart(handle, str, str2, i, i2, i3, str3, str4, str5)
+        Log.v(TAG, "nChannelBits =$channelBits")
+        return DownVideoStart(handle, destinationPath, tempPath, diskType, channelBits, downloadFormat, startTime, endTime, fileName)
     }
 
-    fun DownVideoControl(i: Int): Int {
+    fun DownVideoControl(control: Int): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return DownVideoControl(j, i)
+        return DownVideoControl(deviceHandle, control)
     }
 
-    fun DownVideoStop(z: Boolean): Int {
+    fun DownVideoStop(cancel: Boolean): Int {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
-        val j = handle
-        if (j == 0L) {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return DownVideoStop(j, z)
+        return DownVideoStop(deviceHandle, cancel)
     }
 
-    fun SetRestoreDefault3(jArr: LongArray?): Int {
-        val j = handle
-        if (j == 0L) {
+    fun SetRestoreDefault3(resetMasks: LongArray?): Int {
+        val deviceHandle = handle
+        if (deviceHandle == 0L) {
             return 0
         }
-        return SetRestoreDefault3(j, jArr)
+        return SetRestoreDefault3(deviceHandle, resetMasks)
     }
 
     companion object {
@@ -1431,10 +1431,10 @@ class DvrNet {
         }
 
         @JvmStatic
-        private external fun LocalSearch(str: String?): String?
+        private external fun LocalSearch(queryId: String?): String?
 
         @JvmStatic
-        external fun SetLocalIp(str: String?): Int
+        external fun SetLocalIp(localIp: String?): Int
 
         @JvmStatic
         fun SearchLocalDevice(): Array<Device?>? {

@@ -48,30 +48,30 @@ class AVStream {
     @JvmField
     var rc: MyCallInterface? = null
 
-    external fun AVCaptureImage(j: Long, bArr: ByteArray?): Int
-    external fun AVCloseDecoder(j: Long): Int
-    external fun AVCloseFileDecoder(j: Long): Int
-    external fun AVFilePause(j: Long, i: Int): Int
-    external fun AVFileSeekPos(j: Long, i: Int): Int
-    external fun AVFileSetMute(j: Long, i: Int): Int
-    external fun AVFileSetSpeed(j: Long, i: Int): Int
-    external fun AVInputFrame(j: Long, j2: Long, i: Int, i2: Int, i3: Int, j3: Long): Int
-    external fun AVInputStream(j: Long, j2: Long, i: Int): Int
-    external fun AVMultiplayCloseDecoder(j: Long): Int
+    external fun AVCaptureImage(nativeHandle: Long, outputPath: ByteArray?): Int
+    external fun AVCloseDecoder(nativeHandle: Long): Int
+    external fun AVCloseFileDecoder(nativeHandle: Long): Int
+    external fun AVFilePause(nativeHandle: Long, paused: Int): Int
+    external fun AVFileSeekPos(nativeHandle: Long, position: Int): Int
+    external fun AVFileSetMute(nativeHandle: Long, muted: Int): Int
+    external fun AVFileSetSpeed(nativeHandle: Long, speed: Int): Int
+    external fun AVInputFrame(nativeHandle: Long, frameTimestamp: Long, dataLength: Int, width: Int, height: Int, frameId: Long): Int
+    external fun AVInputStream(nativeHandle: Long, frameTimestamp: Long, dataLength: Int): Int
+    external fun AVMultiplayCloseDecoder(nativeHandle: Long): Int
     external fun AVMultiplayDecoder(): Long
-    external fun AVMultiplayInputStream(j: Long, i: Int, i2: Int, i3: Int, j2: Long): Int
-    external fun AVMultiplayStartPlay(j: Long): Int
-    external fun AVMultiplayStopPlay(j: Long): Int
+    external fun AVMultiplayInputStream(nativeHandle: Long, frameType: Int, width: Int, height: Int, frameTimestamp: Long): Int
+    external fun AVMultiplayStartPlay(nativeHandle: Long): Int
+    external fun AVMultiplayStopPlay(nativeHandle: Long): Int
     external fun AVOpenDecoder(): Long
-    external fun AVOpenFileDecoder(bArr: ByteArray?): Long
-    external fun AVSetMute(j: Long, i: Int): Int
-    external fun AVSetPauseDecoder(j: Long, i: Int): Int
-    external fun AVStartFilePlay(j: Long): Int
-    external fun AVStartPlay(j: Long): Int
-    external fun AVStartRecord(j: Long, bArr: ByteArray?): Int
-    external fun AVStopFilePlay(j: Long): Int
-    external fun AVStopPlay(j: Long): Int
-    external fun AVStopRecord(j: Long): Int
+    external fun AVOpenFileDecoder(filePath: ByteArray?): Long
+    external fun AVSetMute(nativeHandle: Long, muted: Int): Int
+    external fun AVSetPauseDecoder(nativeHandle: Long, paused: Int): Int
+    external fun AVStartFilePlay(nativeHandle: Long): Int
+    external fun AVStartPlay(nativeHandle: Long): Int
+    external fun AVStartRecord(nativeHandle: Long, filePath: ByteArray?): Int
+    external fun AVStopFilePlay(nativeHandle: Long): Int
+    external fun AVStopPlay(nativeHandle: Long): Int
+    external fun AVStopRecord(nativeHandle: Long): Int
 
     fun DisplayOneFrame(nativeHandle: Long, frameType: Int, frameData: ByteArray?, dataLength: Int, width: Int, height: Int) {
         synchronized(this) {
@@ -102,54 +102,54 @@ class AVStream {
 
     fun CloseHandle(): Int {
         Log.v(TAG, "CloseHandle")
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        AVCloseDecoder(j)
+        AVCloseDecoder(decoderHandle)
         handle = 0
         return 0
     }
 
     fun StartPlay(): Int {
         Log.v(TAG, "StartPlay")
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVStartPlay(j)
+        return AVStartPlay(decoderHandle)
     }
 
     fun SetMute(muted: Boolean): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVSetMute(j, if (muted) 1 else 0)
+        return AVSetMute(decoderHandle, if (muted) 1 else 0)
     }
 
     fun SetStreamDecodeState(paused: Boolean): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVSetPauseDecoder(j, if (paused) 1 else 0)
+        return AVSetPauseDecoder(decoderHandle, if (paused) 1 else 0)
     }
 
     fun SetFileSetMute(channel: Int, muted: Boolean): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVFileSetMute(j, if (muted) 1 else 0)
+        return AVFileSetMute(decoderHandle, if (muted) 1 else 0)
     }
 
     fun Capture(filePath: String): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVCaptureImage(j, File(filePath).absolutePath.toByteArray())
+        return AVCaptureImage(decoderHandle, File(filePath).absolutePath.toByteArray())
     }
 
     fun InputFrame(frameTimestamp: Long, dataLength: Int, width: Int, height: Int, frameId: Long): Int {
@@ -161,19 +161,19 @@ class AVStream {
     }
 
     fun StartRecord(filePath: String): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVStartRecord(j, filePath.toByteArray())
+        return AVStartRecord(decoderHandle, filePath.toByteArray())
     }
 
     fun StopRecord(): Int {
-        val j = handle
-        if (j == 0L) {
+        val decoderHandle = handle
+        if (decoderHandle == 0L) {
             return 0
         }
-        return AVStopRecord(j)
+        return AVStopRecord(decoderHandle)
     }
 
     fun StopPlay(): Int {
@@ -216,11 +216,11 @@ class AVStream {
     }
 
     fun CloseMultiplayHandle(): Int {
-        val j = hMultiplayHandle
-        if (j == 0L) {
+        val multiplayHandle = hMultiplayHandle
+        if (multiplayHandle == 0L) {
             return 0
         }
-        return AVMultiplayCloseDecoder(j)
+        return AVMultiplayCloseDecoder(multiplayHandle)
     }
 
     fun MultiplayInputStream(frameType: Int, width: Int, height: Int, frameTimestamp: Long): Int {
@@ -232,19 +232,19 @@ class AVStream {
     }
 
     fun StartMultiplay(): Int {
-        val j = hMultiplayHandle
-        if (j == 0L) {
+        val multiplayHandle = hMultiplayHandle
+        if (multiplayHandle == 0L) {
             return 0
         }
-        return AVMultiplayStartPlay(j)
+        return AVMultiplayStartPlay(multiplayHandle)
     }
 
     fun StopMultiplay(): Int {
-        val j = hMultiplayHandle
-        if (j == 0L) {
+        val multiplayHandle = hMultiplayHandle
+        if (multiplayHandle == 0L) {
             return 0
         }
-        return AVMultiplayStopPlay(j)
+        return AVMultiplayStopPlay(multiplayHandle)
     }
 
     companion object {

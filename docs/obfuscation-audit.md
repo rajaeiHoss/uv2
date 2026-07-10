@@ -60,11 +60,11 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 13 |
-| `str`, `str2`, ... | 85 |
-| `bArr`, `bArr2`, ... | 12 |
-| `i2`, `j2`, ... | 67 |
-| `z`, `z2`, ... | 55 |
-| App-owned files with at least one generic identifier | 115 |
+| `str`, `str2`, ... | 84 |
+| `bArr`, `bArr2`, ... | 10 |
+| `i2`, `j2`, ... | 65 |
+| `z`, `z2`, ... | 54 |
+| App-owned files with at least one generic identifier | 113 |
 
 Top app-owned cleanup targets by generic identifier count:
 
@@ -75,7 +75,6 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/client/VideoGroup.java` | 620 |
 | `decompiled/sources/com/streamax/client/widget/PlayerView.java` | 518 |
 | `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java` | 472 |
-| `decompiled/sources/com/dvr/net/DvrNet.kt` | 432 |
 | `decompiled/sources/com/streamax/config/fragment/network/DdnsOfNetwork.java` | 302 |
 | `decompiled/sources/com/streamax/config/fragment/datetime/DstOfDt.java` | 288 |
 | `decompiled/sources/com/streamax/client/VideoView.java` | 217 |
@@ -90,13 +89,14 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/client/ui/devlist/ui/DevGroupFragment.java` | 101 |
 | `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java` | 94 |
 | `decompiled/sources/com/streamax/client/PlayFragmentSearch.java` | 91 |
+| `decompiled/sources/com/streamax/view/CustomSurfaceView.java` | 77 |
 
 Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
 | `decompiled/sources/com/streamax` | 113 | 11,366 |
-| `decompiled/sources/com/dvr` | 2 | 443 |
+| `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
 
@@ -104,18 +104,14 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 | Namespace | Kotlin files with generic params |
 | --- | ---: |
-| `com/google/android` | 22 |
-| `com/hjq/http` | 22 |
-| `com/amo/demo` | 4 |
+| `com/hjq/http` | 36 |
+| `com/google/android` | 17 |
 | `org/jivesoftware/smackx` | 3 |
 | `org/jivesoftware/smack` | 3 |
 | `com/wifi/net` | 3 |
 | `com/kenai/jbosh` | 1 |
-| `com/pickview/listener` | 1 |
-| `com/wifi/ui` | 1 |
-| `com/dvr/net` | 1 |
+| `com/amo/demo` | 1 |
 | `freemarker/log/LoggerFactory.kt` | 1 |
-| `com/dvr/avstream` | 1 |
 
 ## Cleanup Recommendation
 
@@ -127,9 +123,12 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 ## Next Safe Chunk
 
-A safe next chunk is to clean the remaining app-owned Kotlin parameter names in native-wrapper files, without changing JNI method names or signatures:
+All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-- `decompiled/sources/com/dvr/net/DvrNet.kt`
-- `decompiled/sources/com/dvr/avstream/AVStream.kt`
+The next safe chunk is Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-After those, the next higher-impact cleanup target is the Java-heavy playback UI, starting with `VideoContainer.java`.
+- `decompiled/sources/com/streamax/client/VideoContainer.java`
+- `decompiled/sources/com/streamax/client/RealPlayActivity.java`
+- `decompiled/sources/com/streamax/client/VideoGroup.java`
+
+Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.
