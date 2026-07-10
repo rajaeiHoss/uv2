@@ -20,6 +20,7 @@ import com.zycs.UView.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -140,108 +141,109 @@ public class DstOfDt extends ConfigFragment implements BaseListener.GetListener,
     }
 
     public void refreshUi() {
-        JSONObject jSONObject;
-        JSONObject jSONObject2 = this.mDstRes;
-        if (jSONObject2 != null) {
+        JSONObject dstResponse = this.mDstRes;
+        if (dstResponse != null) {
             try {
-                JSONObject jSONObject3 = jSONObject2.getJSONObject("DEVEMM");
-                if (jSONObject3 != null && (jSONObject = jSONObject3.getJSONObject("TIMEP")) != null) {
-                    JSONObject jSONObject4 = jSONObject.getJSONObject("DST");
-                    this.mDstObj = jSONObject4;
-                    if (jSONObject4 != null) {
-                        this.mIvEnable.SetImageResource(jSONObject4.getInt("SW") == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                        int i = this.mDstObj.getInt("DSTM");
-                        this.mListStrMode.clear();
-                        this.mListIntMode.clear();
-                        List<String> strDatas = getStrDatas(R.array.ModeSelector);
-                        int i2 = i - 1;
-                        if (i2 >= 0 && i2 < strDatas.size()) {
-                            this.mTvMode.setText(strDatas.get(i2));
-                            this.mListStrMode.addAll(strDatas);
-                            this.mListIntMode.add(new Integer(i2));
+                JSONObject deviceObj = dstResponse.getJSONObject("DEVEMM");
+                if (deviceObj != null) {
+                    JSONObject timeObj = deviceObj.getJSONObject("TIMEP");
+                    if (timeObj != null) {
+                        this.mDstObj = timeObj.getJSONObject("DST");
+                        if (this.mDstObj != null) {
+                            this.mIvEnable.SetImageResource(this.mDstObj.getInt("SW") == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                            int mode = this.mDstObj.getInt("DSTM");
+                            this.mListStrMode.clear();
+                            this.mListIntMode.clear();
+                            List<String> modeOptions = getStrDatas(R.array.ModeSelector);
+                            int modeIndex = mode - 1;
+                            if (modeIndex >= 0 && modeIndex < modeOptions.size()) {
+                                this.mTvMode.setText(modeOptions.get(modeIndex));
+                                this.mListStrMode.addAll(modeOptions);
+                                this.mListIntMode.add(new Integer(modeIndex));
+                            }
+                            int offset = this.mDstObj.getInt("DSTS");
+                            this.mListStrOffset.clear();
+                            this.mListIntOffset.clear();
+                            List<String> offsetOptions = getStrDatas(R.array.OffsetSelector);
+                            int offsetIndex = offset - 1;
+                            if (offsetIndex >= 0 && offsetIndex < offsetOptions.size()) {
+                                this.mTvOffset.setText(offsetOptions.get(offsetIndex));
+                                this.mListStrOffset.addAll(offsetOptions);
+                                this.mListIntOffset.add(new Integer(offsetIndex));
+                            }
+                            if (mode == 1) {
+                                this.mLlStart1.setVisibility(0);
+                                this.mLlStart2.setVisibility(8);
+                                int startMonth = this.mDstObj.getInt("SMON");
+                                this.mListStrStartMonth.clear();
+                                this.mListIntStartMonth.clear();
+                                List<String> monthOptions = getStrDatas(R.array.MonthSelector);
+                                if (startMonth >= 0 && startMonth < monthOptions.size()) {
+                                    this.mTvStartMonth.setText(monthOptions.get(startMonth));
+                                    this.mListStrStartMonth.addAll(monthOptions);
+                                    this.mListIntStartMonth.add(new Integer(startMonth));
+                                }
+                                int startWeek = this.mDstObj.getInt("SWEEK");
+                                this.mListStrStartWeek.clear();
+                                this.mListIntStartWeek.clear();
+                                List<String> weekOptions = getStrDatas(R.array.WeekSelector);
+                                if (startWeek >= 0 && startWeek < weekOptions.size()) {
+                                    this.mTvStartWeek.setText(weekOptions.get(startWeek));
+                                    this.mListStrStartWeek.addAll(weekOptions);
+                                    this.mListIntStartWeek.add(new Integer(startWeek));
+                                }
+                                int startDay = this.mDstObj.getInt("SWIND");
+                                this.mListStrStartDay.clear();
+                                this.mListIntStartDay.clear();
+                                List<String> dayOptions = getStrDatas(R.array.DaySelector);
+                                if (startDay >= 0 && startDay < dayOptions.size()) {
+                                    this.mTvStartDay.setText(dayOptions.get(startDay));
+                                    this.mListStrStartDay.addAll(dayOptions);
+                                    this.mListIntStartDay.add(new Integer(startDay));
+                                }
+                                this.mTvStartTime.setText(TimeUtils.parse2Str_86399(this.mDstObj.getInt("SH"), this.mDstObj.getInt("SM"), this.mDstObj.getInt("SS")));
+                            } else {
+                                this.mLlStart1.setVisibility(8);
+                                this.mLlStart2.setVisibility(0);
+                                this.mTvStartDateTime.setText(timeLong2String("yyyy-MM-dd HH:mm:ss", "GMT", this.mDstObj.getLong("STARTTIME") * 1000));
+                            }
+                            if (mode == 1) {
+                                this.mLlEnd1.setVisibility(0);
+                                this.mLlEnd2.setVisibility(8);
+                                int endMonth = this.mDstObj.getInt("EMON");
+                                this.mListStrEndMonth.clear();
+                                this.mListIntEndMonth.clear();
+                                List<String> monthOptions = getStrDatas(R.array.MonthSelector);
+                                if (endMonth >= 0 && endMonth < monthOptions.size()) {
+                                    this.mTvEndMonth.setText(monthOptions.get(endMonth));
+                                    this.mListStrEndMonth.addAll(monthOptions);
+                                    this.mListIntEndMonth.add(new Integer(endMonth));
+                                }
+                                int endWeek = this.mDstObj.getInt("EWEEK");
+                                this.mListStrEndWeek.clear();
+                                this.mListIntEndWeek.clear();
+                                List<String> weekOptions = getStrDatas(R.array.WeekSelector);
+                                if (endWeek >= 0 && endWeek < weekOptions.size()) {
+                                    this.mTvEndWeek.setText(weekOptions.get(endWeek));
+                                    this.mListStrEndWeek.addAll(weekOptions);
+                                    this.mListIntEndWeek.add(new Integer(endWeek));
+                                }
+                                int endDay = this.mDstObj.getInt("EWIND");
+                                this.mListStrEndDay.clear();
+                                this.mListIntEndDay.clear();
+                                List<String> dayOptions = getStrDatas(R.array.DaySelector);
+                                if (endDay >= 0 && endDay < dayOptions.size()) {
+                                    this.mTvEndDay.setText(dayOptions.get(endDay));
+                                    this.mListStrEndDay.addAll(dayOptions);
+                                    this.mListIntEndDay.add(new Integer(endDay));
+                                }
+                                this.mTvEndTime.setText(TimeUtils.parse2Str_86399(this.mDstObj.getInt("EH"), this.mDstObj.getInt("EM"), this.mDstObj.getInt("ES")));
+                                return;
+                            }
+                            this.mLlEnd1.setVisibility(8);
+                            this.mLlEnd2.setVisibility(0);
+                            this.mTvEndDateTime.setText(timeLong2String("yyyy-MM-dd HH:mm:ss", "GMT", this.mDstObj.getLong("ENDTIME") * 1000));
                         }
-                        int i3 = this.mDstObj.getInt("DSTS");
-                        this.mListStrOffset.clear();
-                        this.mListIntOffset.clear();
-                        List<String> strDatas2 = getStrDatas(R.array.OffsetSelector);
-                        int i4 = i3 - 1;
-                        if (i4 >= 0 && i4 < strDatas2.size()) {
-                            this.mTvOffset.setText(strDatas2.get(i4));
-                            this.mListStrOffset.addAll(strDatas2);
-                            this.mListIntOffset.add(new Integer(i4));
-                        }
-                        if (i == 1) {
-                            this.mLlStart1.setVisibility(0);
-                            this.mLlStart2.setVisibility(8);
-                            int i5 = this.mDstObj.getInt("SMON");
-                            this.mListStrStartMonth.clear();
-                            this.mListIntStartMonth.clear();
-                            List<String> strDatas3 = getStrDatas(R.array.MonthSelector);
-                            if (i5 >= 0 && i5 < strDatas3.size()) {
-                                this.mTvStartMonth.setText(strDatas3.get(i5));
-                                this.mListStrStartMonth.addAll(strDatas3);
-                                this.mListIntStartMonth.add(new Integer(i5));
-                            }
-                            int i6 = this.mDstObj.getInt("SWEEK");
-                            this.mListStrStartWeek.clear();
-                            this.mListIntStartWeek.clear();
-                            List<String> strDatas4 = getStrDatas(R.array.WeekSelector);
-                            if (i6 >= 0 && i6 < strDatas4.size()) {
-                                this.mTvStartWeek.setText(strDatas4.get(i6));
-                                this.mListStrStartWeek.addAll(strDatas4);
-                                this.mListIntStartWeek.add(new Integer(i6));
-                            }
-                            int i7 = this.mDstObj.getInt("SWIND");
-                            this.mListStrStartDay.clear();
-                            this.mListIntStartDay.clear();
-                            List<String> strDatas5 = getStrDatas(R.array.DaySelector);
-                            if (i7 >= 0 && i7 < strDatas5.size()) {
-                                this.mTvStartDay.setText(strDatas5.get(i7));
-                                this.mListStrStartDay.addAll(strDatas5);
-                                this.mListIntStartDay.add(new Integer(i7));
-                            }
-                            this.mTvStartTime.setText(TimeUtils.parse2Str_86399(this.mDstObj.getInt("SH"), this.mDstObj.getInt("SM"), this.mDstObj.getInt("SS")));
-                        } else {
-                            this.mLlStart1.setVisibility(8);
-                            this.mLlStart2.setVisibility(0);
-                            this.mTvStartDateTime.setText(timeLong2String("yyyy-MM-dd HH:mm:ss", "GMT", this.mDstObj.getLong("STARTTIME") * 1000));
-                        }
-                        if (i == 1) {
-                            this.mLlEnd1.setVisibility(0);
-                            this.mLlEnd2.setVisibility(8);
-                            int i8 = this.mDstObj.getInt("EMON");
-                            this.mListStrEndMonth.clear();
-                            this.mListIntEndMonth.clear();
-                            List<String> strDatas6 = getStrDatas(R.array.MonthSelector);
-                            if (i8 >= 0 && i8 < strDatas6.size()) {
-                                this.mTvEndMonth.setText(strDatas6.get(i8));
-                                this.mListStrEndMonth.addAll(strDatas6);
-                                this.mListIntEndMonth.add(new Integer(i8));
-                            }
-                            int i9 = this.mDstObj.getInt("EWEEK");
-                            this.mListStrEndWeek.clear();
-                            this.mListIntEndWeek.clear();
-                            List<String> strDatas7 = getStrDatas(R.array.WeekSelector);
-                            if (i9 >= 0 && i9 < strDatas7.size()) {
-                                this.mTvEndWeek.setText(strDatas7.get(i9));
-                                this.mListStrEndWeek.addAll(strDatas7);
-                                this.mListIntEndWeek.add(new Integer(i9));
-                            }
-                            int i10 = this.mDstObj.getInt("EWIND");
-                            this.mListStrEndDay.clear();
-                            this.mListIntEndDay.clear();
-                            List<String> strDatas8 = getStrDatas(R.array.DaySelector);
-                            if (i10 >= 0 && i10 < strDatas8.size()) {
-                                this.mTvEndDay.setText(strDatas8.get(i10));
-                                this.mListStrEndDay.addAll(strDatas8);
-                                this.mListIntEndDay.add(new Integer(i10));
-                            }
-                            this.mTvEndTime.setText(TimeUtils.parse2Str_86399(this.mDstObj.getInt("EH"), this.mDstObj.getInt("EM"), this.mDstObj.getInt("ES")));
-                            return;
-                        }
-                        this.mLlEnd1.setVisibility(8);
-                        this.mLlEnd2.setVisibility(0);
-                        this.mTvEndDateTime.setText(timeLong2String("yyyy-MM-dd HH:mm:ss", "GMT", this.mDstObj.getLong("ENDTIME") * 1000));
                     }
                 }
             } catch (JSONException unused) {
@@ -413,10 +415,10 @@ public class DstOfDt extends ConfigFragment implements BaseListener.GetListener,
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            LogUtils.e("DstOfDt", "getSuccess 1, result: " + str);
-            this.mDstRes = new JSONObject(str);
+            LogUtils.e("DstOfDt", "getSuccess 1, result: " + response);
+            this.mDstRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -443,151 +445,72 @@ public class DstOfDt extends ConfigFragment implements BaseListener.GetListener,
         toastFailure();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x001e, code lost:
-        if (r11.mTimeType == 2) goto L_0x0037;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:6:0x0035, code lost:
-        if (r11.mTimeType == 1) goto L_0x0037;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:8:0x0039, code lost:
-        r2 = r13;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setTimePickListener(android.widget.TextView r12, java.util.Date r13) {
-        /*
-            r11 = this;
-            int r12 = r11.mTimeType
-            r0 = 3
-            r1 = 1
-            if (r12 == r1) goto L_0x0021
-            if (r12 != r0) goto L_0x0009
-            goto L_0x0021
-        L_0x0009:
-            com.streamax.view.VsTextView r12 = r11.mTvStartDateTime
-            java.lang.String r12 = com.streamax.utils.StringUtils.getString(r12)
-            com.streamax.view.VsTextView r2 = r11.mTvEndDateTime
-            java.lang.String r2 = com.streamax.utils.StringUtils.getString(r2)
-            java.lang.String r3 = com.streamax.utils.TimeUtils.YMDHMS
-            java.lang.String r13 = com.streamax.utils.TimeUtils.getTime(r13, r3)
-            int r3 = r11.mTimeType
-            r4 = 2
-            if (r3 != r4) goto L_0x0039
-            goto L_0x0037
-        L_0x0021:
-            android.widget.TextView r12 = r11.mTvStartTime
-            java.lang.String r12 = com.streamax.utils.StringUtils.getString(r12)
-            android.widget.TextView r2 = r11.mTvEndTime
-            java.lang.String r2 = com.streamax.utils.StringUtils.getString(r2)
-            java.lang.String r3 = com.streamax.utils.TimeUtils.HMS
-            java.lang.String r13 = com.streamax.utils.TimeUtils.getTime(r13, r3)
-            int r3 = r11.mTimeType
-            if (r3 != r1) goto L_0x0039
-        L_0x0037:
-            r12 = r13
-            goto L_0x003a
-        L_0x0039:
-            r2 = r13
-        L_0x003a:
-            int r13 = r11.mTimeType
-            r3 = 2131755790(0x7f10030e, float:1.914247E38)
-            if (r13 == r1) goto L_0x005c
-            if (r13 != r0) goto L_0x0044
-            goto L_0x005c
-        L_0x0044:
-            java.lang.String r13 = "yyyy-MM-dd HH:mm:ss"
-            java.lang.String r4 = "GMT"
-            long r5 = r11.parseString2Long(r13, r4, r12)
-            r7 = 1000(0x3e8, double:4.94E-321)
-            long r5 = r5 / r7
-            long r12 = r11.parseString2Long(r13, r4, r2)
-            long r12 = r12 / r7
-            int r2 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-            if (r2 < 0) goto L_0x007c
-            r11.toastSf((int) r3)
-            return
-        L_0x005c:
-            int r12 = r11.parse2Int_86399((java.lang.String) r12)
-            long r5 = (long) r12
-            int r12 = r11.parse2Int_86399((java.lang.String) r2)
-            long r12 = (long) r12
-            int r2 = r11.mTimeType
-            if (r2 != r1) goto L_0x006c
-            r4 = 3
-            goto L_0x006d
-        L_0x006c:
-            r4 = 7
-        L_0x006d:
-            if (r2 != r1) goto L_0x0071
-            int r2 = (int) r5
-            goto L_0x0072
-        L_0x0071:
-            int r2 = (int) r12
-        L_0x0072:
-            boolean r2 = r11.isValidWeekDateTime(r4, r2)
-            if (r2 != 0) goto L_0x007c
-            r11.toastSf((int) r3)
-            return
-        L_0x007c:
-            org.json.JSONObject r2 = r11.mDstObj
-            if (r2 != 0) goto L_0x0081
-            return
-        L_0x0081:
-            int r3 = r11.mTimeType     // Catch:{ JSONException -> 0x00e0 }
-            if (r3 == r1) goto L_0x0095
-            if (r3 != r0) goto L_0x0088
-            goto L_0x0095
-        L_0x0088:
-            java.lang.String r0 = "STARTTIME"
-            r2.put(r0, r5)     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r0 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r1 = "ENDTIME"
-            r0.put(r1, r12)     // Catch:{ JSONException -> 0x00e0 }
-            goto L_0x00d9
-        L_0x0095:
-            r0 = 3600(0xe10, double:1.7786E-320)
-            long r3 = r5 / r0
-            int r4 = (int) r3     // Catch:{ JSONException -> 0x00e0 }
-            int r3 = r4 * 3600
-            long r7 = (long) r3     // Catch:{ JSONException -> 0x00e0 }
-            long r5 = r5 - r7
-            r7 = 60
-            long r9 = r5 / r7
-            int r3 = (int) r9     // Catch:{ JSONException -> 0x00e0 }
-            long r5 = r5 % r7
-            int r6 = (int) r5     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r5 = "SH"
-            r2.put(r5, r4)     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r2 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r4 = "SM"
-            r2.put(r4, r3)     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r2 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r3 = "SS"
-            r2.put(r3, r6)     // Catch:{ JSONException -> 0x00e0 }
-            long r0 = r12 / r0
-            int r1 = (int) r0     // Catch:{ JSONException -> 0x00e0 }
-            int r0 = r1 * 3600
-            long r2 = (long) r0     // Catch:{ JSONException -> 0x00e0 }
-            long r12 = r12 - r2
-            long r2 = r12 / r7
-            int r0 = (int) r2     // Catch:{ JSONException -> 0x00e0 }
-            long r12 = r12 % r7
-            int r13 = (int) r12     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r12 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r2 = "EH"
-            r12.put(r2, r1)     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r12 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r1 = "EM"
-            r12.put(r1, r0)     // Catch:{ JSONException -> 0x00e0 }
-            org.json.JSONObject r12 = r11.mDstObj     // Catch:{ JSONException -> 0x00e0 }
-            java.lang.String r0 = "ES"
-            r12.put(r0, r13)     // Catch:{ JSONException -> 0x00e0 }
-        L_0x00d9:
-            com.streamax.config.network.NetPresenter r12 = com.streamax.config.network.NetPresenter.getDefault()
-            r12.setConfig(r11)
-        L_0x00e0:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.config.fragment.datetime.DstOfDt.setTimePickListener(android.widget.TextView, java.util.Date):void");
+    public void setTimePickListener(TextView textView, Date date) {
+        String startValue;
+        String endValue;
+        long startTime;
+        long endTime;
+        int timeType = this.mTimeType;
+        if (timeType == TIMETYPE_STARTTIME || timeType == TIMETYPE_ENDTIME) {
+            startValue = StringUtils.getString(this.mTvStartTime);
+            endValue = StringUtils.getString(this.mTvEndTime);
+            String selectedTime = TimeUtils.getTime(date, TimeUtils.HMS);
+            if (timeType == TIMETYPE_STARTTIME) {
+                startValue = selectedTime;
+            } else {
+                endValue = selectedTime;
+            }
+            startTime = (long) parse2Int_86399(startValue);
+            endTime = (long) parse2Int_86399(endValue);
+            int validationIndex = timeType == TIMETYPE_STARTTIME ? INDEX_STIME : INDEX_ETIME;
+            int selectedSeconds = (int) (timeType == TIMETYPE_STARTTIME ? startTime : endTime);
+            if (!isValidWeekDateTime(validationIndex, selectedSeconds)) {
+                toastSf((int) R.string.time_is_error);
+                return;
+            }
+        } else {
+            startValue = StringUtils.getString(this.mTvStartDateTime);
+            endValue = StringUtils.getString(this.mTvEndDateTime);
+            String selectedDateTime = TimeUtils.getTime(date, TimeUtils.YMDHMS);
+            if (timeType == TIMETYPE_STARTDATETIME) {
+                startValue = selectedDateTime;
+            } else {
+                endValue = selectedDateTime;
+            }
+            startTime = parseString2Long(TimeUtils.YMDHMS, "GMT", startValue) / 1000;
+            endTime = parseString2Long(TimeUtils.YMDHMS, "GMT", endValue) / 1000;
+            if (startTime >= endTime) {
+                toastSf((int) R.string.time_is_error);
+                return;
+            }
+        }
+        if (this.mDstObj == null) {
+            return;
+        }
+        try {
+            if (timeType == TIMETYPE_STARTTIME || timeType == TIMETYPE_ENDTIME) {
+                int startHour = (int) (startTime / 3600);
+                long startRemainder = startTime - ((long) (startHour * 3600));
+                int startMinute = (int) (startRemainder / 60);
+                int startSecond = (int) (startRemainder % 60);
+                this.mDstObj.put("SH", startHour);
+                this.mDstObj.put("SM", startMinute);
+                this.mDstObj.put("SS", startSecond);
+
+                int endHour = (int) (endTime / 3600);
+                long endRemainder = endTime - ((long) (endHour * 3600));
+                int endMinute = (int) (endRemainder / 60);
+                int endSecond = (int) (endRemainder % 60);
+                this.mDstObj.put("EH", endHour);
+                this.mDstObj.put("EM", endMinute);
+                this.mDstObj.put("ES", endSecond);
+            } else {
+                this.mDstObj.put("STARTTIME", startTime);
+                this.mDstObj.put("ENDTIME", endTime);
+            }
+            NetPresenter.getDefault().setConfig(this);
+        } catch (JSONException unused) {
+        }
     }
 
     public void updateDateForMode(int i) {
@@ -612,26 +535,23 @@ public class DstOfDt extends ConfigFragment implements BaseListener.GetListener,
         }
     }
 
-    private boolean isValidWeekDateTime(int i, int i2) {
+    private boolean isValidWeekDateTime(int fieldIndex, int selectedValue) {
         try {
-            int i3 = this.mDstObj.getInt("SMON");
-            int i4 = this.mDstObj.getInt("SWEEK");
-            int i5 = this.mDstObj.getInt("EMON");
-            int i6 = this.mDstObj.getInt("EWEEK");
-            if (i != 0) {
-                if (i == 1) {
-                    i4 = i2;
-                } else if (i == 4) {
-                    i5 = i2;
-                } else if (i == 5) {
-                    i6 = i2;
+            int startMonth = this.mDstObj.getInt("SMON");
+            int startWeek = this.mDstObj.getInt("SWEEK");
+            int endMonth = this.mDstObj.getInt("EMON");
+            int endWeek = this.mDstObj.getInt("EWEEK");
+            if (fieldIndex != INDEX_SMON) {
+                if (fieldIndex == INDEX_SWEEK) {
+                    startWeek = selectedValue;
+                } else if (fieldIndex == INDEX_EMON) {
+                    endMonth = selectedValue;
+                } else if (fieldIndex == INDEX_EWEEK) {
+                    endWeek = selectedValue;
                 }
-                i2 = i3;
+                selectedValue = startMonth;
             }
-            if (i2 == i5 && i4 == i6) {
-                return false;
-            }
-            return true;
+            return selectedValue != endMonth || startWeek != endWeek;
         } catch (JSONException unused) {
             return false;
         }
@@ -721,36 +641,36 @@ public class DstOfDt extends ConfigFragment implements BaseListener.GetListener,
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForMode")) {
+    public void saveSelect(String fragmentName, List<Integer> list) {
+        if (fragmentName.equals("SelectFragmentForMode")) {
             if (list.size() > 0) {
                 updateDateForMode(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForOffset")) {
+        } else if (fragmentName.equals("SelectFragmentForOffset")) {
             if (list.size() > 0) {
                 updateDateForOffset(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForStartMonth")) {
+        } else if (fragmentName.equals("SelectFragmentForStartMonth")) {
             if (list.size() > 0) {
                 updateDateForStartMonth(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForStartWeek")) {
+        } else if (fragmentName.equals("SelectFragmentForStartWeek")) {
             if (list.size() > 0) {
                 updateDateForStartWeek(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForStartDay")) {
+        } else if (fragmentName.equals("SelectFragmentForStartDay")) {
             if (list.size() > 0) {
                 updateDateForStartDay(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForEndMonth")) {
+        } else if (fragmentName.equals("SelectFragmentForEndMonth")) {
             if (list.size() > 0) {
                 updateDateForEndMonth(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForEndWeek")) {
+        } else if (fragmentName.equals("SelectFragmentForEndWeek")) {
             if (list.size() > 0) {
                 updateDateForEndWeek(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForEndDay") && list.size() > 0) {
+        } else if (fragmentName.equals("SelectFragmentForEndDay") && list.size() > 0) {
             updateDateForEndDay(list.get(0).intValue());
         }
     }
