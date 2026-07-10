@@ -47,9 +47,9 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
     public VsTextView mTvRecordType;
     public VsTextView mTvStartTime;
 
-    public static PlayFragmentSearch getInstance(String str, PlayActivity playActivity) {
+    public static PlayFragmentSearch getInstance(String title, PlayActivity playActivity) {
         PlayFragmentSearch playFragmentSearch = new PlayFragmentSearch();
-        playFragmentSearch.mTitle = str;
+        playFragmentSearch.mTitle = title;
         playFragmentSearch.mActivity = playActivity;
         playFragmentSearch.restData();
         return playFragmentSearch;
@@ -57,15 +57,13 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
 
     private void restData() {
         this.mJsonObj = new JSONObject();
-        String string = UiUtils.getString(R.string.channel);
-        int i = 0;
-        while (i < this.mActivity.mApp.mDevInfo.mChCounts) {
-            int i2 = i + 1;
-            Integer valueOf = Integer.valueOf(i2);
-            ArrayList<String> arrayList = this.mListChannelName;
-            arrayList.add(string + valueOf);
-            this.mListChannelCase.add(Integer.valueOf(i));
-            i = i2;
+        String channelLabel = UiUtils.getString(R.string.channel);
+        int channelIndex = 0;
+        while (channelIndex < this.mActivity.mApp.mDevInfo.mChCounts) {
+            int displayChannel = channelIndex + 1;
+            this.mListChannelName.add(channelLabel + Integer.valueOf(displayChannel));
+            this.mListChannelCase.add(Integer.valueOf(channelIndex));
+            channelIndex = displayChannel;
         }
         this.mListRecordTypeName.addAll(getStrDatas(R.array.play_search_record_type_name));
         this.mListRecordTypeCase.addAll(getIntDatas(R.array.play_search_record_type_case));
@@ -110,62 +108,39 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
     }
 
     public void refreshUi() {
-        int i;
         try {
-            Integer valueOf = Integer.valueOf(this.mJsonObj.getInt("Channel"));
-            Integer valueOf2 = Integer.valueOf(this.mJsonObj.getInt("RecordType"));
-            Integer valueOf3 = Integer.valueOf(this.mJsonObj.getInt("DiskType"));
-            String string = this.mJsonObj.getString("Date");
-            String string2 = this.mJsonObj.getString("StartTime");
-            String string3 = this.mJsonObj.getString("EndTime");
-            int i2 = 0;
-            int i3 = 0;
-            while (true) {
-                i = -1;
-                if (i3 >= this.mListChannelCase.size()) {
-                    i3 = -1;
-                    break;
-                } else if (valueOf == this.mListChannelCase.get(i3)) {
-                    break;
-                } else {
-                    i3++;
-                }
+            Integer channel = Integer.valueOf(this.mJsonObj.getInt("Channel"));
+            Integer recordType = Integer.valueOf(this.mJsonObj.getInt("RecordType"));
+            Integer diskType = Integer.valueOf(this.mJsonObj.getInt("DiskType"));
+            String date = this.mJsonObj.getString("Date");
+            String startTime = this.mJsonObj.getString("StartTime");
+            String endTime = this.mJsonObj.getString("EndTime");
+            int channelSelectionIndex = getCaseIndex(this.mListChannelCase, channel);
+            if (channelSelectionIndex >= 0) {
+                this.mTvChannel.setText(this.mListChannelName.get(channelSelectionIndex));
             }
-            if (i3 >= 0) {
-                this.mTvChannel.setText(this.mListChannelName.get(i3));
+            int recordTypeSelectionIndex = getCaseIndex(this.mListRecordTypeCase, recordType);
+            if (recordTypeSelectionIndex >= 0) {
+                this.mTvRecordType.setText(this.mListRecordTypeName.get(recordTypeSelectionIndex));
             }
-            int i4 = 0;
-            while (true) {
-                if (i4 >= this.mListRecordTypeCase.size()) {
-                    i4 = -1;
-                    break;
-                } else if (valueOf2 == this.mListRecordTypeCase.get(i4)) {
-                    break;
-                } else {
-                    i4++;
-                }
+            int diskTypeSelectionIndex = getCaseIndex(this.mListDiskTypeCase, diskType);
+            if (diskTypeSelectionIndex >= 0) {
+                this.mTvDiskType.setText(this.mListDiskTypeName.get(diskTypeSelectionIndex));
             }
-            if (i4 >= 0) {
-                this.mTvRecordType.setText(this.mListRecordTypeName.get(i4));
-            }
-            while (true) {
-                if (i2 >= this.mListDiskTypeCase.size()) {
-                    break;
-                } else if (valueOf3 == this.mListDiskTypeCase.get(i2)) {
-                    i = i2;
-                    break;
-                } else {
-                    i2++;
-                }
-            }
-            if (i >= 0) {
-                this.mTvDiskType.setText(this.mListDiskTypeName.get(i));
-            }
-            this.mTvDate.setText(string);
-            this.mTvStartTime.setText(string2);
-            this.mTvEndTime.setText(string3);
+            this.mTvDate.setText(date);
+            this.mTvStartTime.setText(startTime);
+            this.mTvEndTime.setText(endTime);
         } catch (Exception unused) {
         }
+    }
+
+    private int getCaseIndex(List<Integer> cases, Integer value) {
+        for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
+            if (value.equals(cases.get(caseIndex))) {
+                return caseIndex;
+            }
+        }
+        return -1;
     }
 
     /* access modifiers changed from: protected */
@@ -222,19 +197,19 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
     }
 
     public void showDateDialog() {
-        String str;
+        String selectedDate;
         try {
-            str = this.mJsonObj.getString("Date");
+            selectedDate = this.mJsonObj.getString("Date");
         } catch (Exception unused) {
-            str = "";
+            selectedDate = "";
         }
-        ((DateDialog.Builder) ((DateDialog.Builder) ((DateDialog.Builder) new DateDialog.Builder(getContext()).setTitle((CharSequence) getString(R.string.date_title))).setConfirm((CharSequence) getString(R.string.common_confirm))).setCancel((CharSequence) getString(R.string.common_cancel))).setDate(str).setListener(new DateDialog.OnListener() {
+        ((DateDialog.Builder) ((DateDialog.Builder) ((DateDialog.Builder) new DateDialog.Builder(getContext()).setTitle((CharSequence) getString(R.string.date_title))).setConfirm((CharSequence) getString(R.string.common_confirm))).setCancel((CharSequence) getString(R.string.common_cancel))).setDate(selectedDate).setListener(new DateDialog.OnListener() {
             public void onCancel(BaseDialog baseDialog) {
             }
 
-            public void onSelected(BaseDialog baseDialog, int i, int i2, int i3) {
+            public void onSelected(BaseDialog baseDialog, int year, int month, int day) {
                 try {
-                    PlayFragmentSearch.this.mJsonObj.put("Date", String.format("%04d-%02d-%02d", new Object[]{Integer.valueOf(i), Integer.valueOf(i2), Integer.valueOf(i3)}));
+                    PlayFragmentSearch.this.mJsonObj.put("Date", String.format("%04d-%02d-%02d", new Object[]{Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day)}));
                 } catch (Exception unused) {
                 }
                 PlayFragmentSearch.this.refreshUi();
@@ -242,32 +217,32 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
         }).show();
     }
 
-    public void showTimeDialog(final boolean z) {
-        String str;
-        if (z) {
+    public void showTimeDialog(final boolean isStartTime) {
+        String selectedTime;
+        if (isStartTime) {
             try {
-                str = this.mJsonObj.getString("StartTime");
+                selectedTime = this.mJsonObj.getString("StartTime");
             } catch (Exception unused) {
-                str = "";
+                selectedTime = "";
             }
         } else {
             try {
-                str = this.mJsonObj.getString("EndTime");
+                selectedTime = this.mJsonObj.getString("EndTime");
             } catch (Exception unused2) {
-                str = "";
+                selectedTime = "";
             }
         }
-        ((TimeDialog.Builder) ((TimeDialog.Builder) ((TimeDialog.Builder) new TimeDialog.Builder(getContext()).setTitle((CharSequence) getString(R.string.time_title))).setConfirm((CharSequence) getString(R.string.common_confirm))).setCancel((CharSequence) getString(R.string.common_cancel))).setTime(str).setListener(new TimeDialog.OnListener() {
+        ((TimeDialog.Builder) ((TimeDialog.Builder) ((TimeDialog.Builder) new TimeDialog.Builder(getContext()).setTitle((CharSequence) getString(R.string.time_title))).setConfirm((CharSequence) getString(R.string.common_confirm))).setCancel((CharSequence) getString(R.string.common_cancel))).setTime(selectedTime).setListener(new TimeDialog.OnListener() {
             public void onCancel(BaseDialog baseDialog) {
             }
 
-            public void onSelected(BaseDialog baseDialog, int i, int i2, int i3) {
+            public void onSelected(BaseDialog baseDialog, int hour, int minute, int second) {
                 try {
-                    String format = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(i), Integer.valueOf(i2), Integer.valueOf(i3)});
-                    if (z) {
-                        PlayFragmentSearch.this.mJsonObj.put("StartTime", format);
+                    String selectedTime = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(hour), Integer.valueOf(minute), Integer.valueOf(second)});
+                    if (isStartTime) {
+                        PlayFragmentSearch.this.mJsonObj.put("StartTime", selectedTime);
                     } else {
-                        PlayFragmentSearch.this.mJsonObj.put("EndTime", format);
+                        PlayFragmentSearch.this.mJsonObj.put("EndTime", selectedTime);
                     }
                 } catch (Exception unused) {
                 }
@@ -276,24 +251,24 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
         }).show();
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("FragmentSelectForChannel")) {
-            if (list.size() > 0) {
-                updateDateForSelect("Channel", this.mListChannelCase, list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("FragmentSelectForChannel")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForSelect("Channel", this.mListChannelCase, selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("FragmentSelectForRecordType")) {
-            if (list.size() > 0) {
-                updateDateForSelect("RecordType", this.mListRecordTypeCase, list.get(0).intValue());
+        } else if (fragmentTag.equals("FragmentSelectForRecordType")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForSelect("RecordType", this.mListRecordTypeCase, selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("FragmentSelectForDiskType") && list.size() > 0) {
-            updateDateForSelect("DiskType", this.mListDiskTypeCase, list.get(0).intValue());
+        } else if (fragmentTag.equals("FragmentSelectForDiskType") && selectedIndexes.size() > 0) {
+            updateDateForSelect("DiskType", this.mListDiskTypeCase, selectedIndexes.get(0).intValue());
         }
     }
 
-    public void updateDateForSelect(String str, ArrayList<Integer> arrayList, int i) {
-        if (i < arrayList.size()) {
+    public void updateDateForSelect(String jsonKey, ArrayList<Integer> cases, int selectedIndex) {
+        if (selectedIndex < cases.size()) {
             try {
-                this.mJsonObj.put(str, arrayList.get(i));
+                this.mJsonObj.put(jsonKey, cases.get(selectedIndex));
                 refreshUi();
             } catch (JSONException unused) {
             }
@@ -301,16 +276,6 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
     }
 
     public void startSearch() {
-        String str;
-        String str2;
-        int i;
-        int i2;
-        int i3;
-        int i4;
-        String str3;
-        int i5;
-        String str4;
-        int intValue;
         if (this.mActivity.mDvrNet == null) {
             toastSf((int) R.string.connect_error);
         } else if (this.mActivity.mConnectRunnable != null) {
@@ -318,27 +283,27 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
         } else if (this.mSearchRunnable != null) {
             toastSf((int) R.string.is_searching);
         } else {
-            i3 = 0;
-            i2 = 65535;
-            i = 65535;
-            str2 = "";
-            str = "";
+            int diskType = 0;
+            int fileTypeMask = 65535;
+            int channelBits = 65535;
+            String searchStartTime = "";
+            String searchEndTime = "";
             try {
                 int channel = this.mJsonObj.getInt("Channel");
                 int recordType = this.mJsonObj.getInt("RecordType");
-                int diskType = this.mJsonObj.getInt("DiskType");
+                int selectedDiskType = this.mJsonObj.getInt("DiskType");
                 String date = this.mJsonObj.getString("Date");
                 String startTime = this.mJsonObj.getString("StartTime");
                 String endTime = this.mJsonObj.getString("EndTime");
-                i3 = diskType;
-                i2 = recordType != 0 ? 1 << (recordType - 1) : 65535;
-                i = 1 << channel;
-                str2 = date.replace("-", "") + startTime.replace(":", "");
-                str = date.replace("-", "") + endTime.replace(":", "");
+                diskType = selectedDiskType;
+                fileTypeMask = recordType != 0 ? 1 << (recordType - 1) : 65535;
+                channelBits = 1 << channel;
+                searchStartTime = date.replace("-", "") + startTime.replace(":", "");
+                searchEndTime = date.replace("-", "") + endTime.replace(":", "");
             } catch (Exception unused) {
             }
             this.mProgressBar.setVisibility(0);
-            this.mSearchRunnable = new PlaySearchRunnable(this.mActivity, this, i3, i2, 1, i, str2, str);
+            this.mSearchRunnable = new PlaySearchRunnable(this.mActivity, this, diskType, fileTypeMask, 1, channelBits, searchStartTime, searchEndTime);
             new Thread(this.mSearchRunnable).start();
         }
     }
@@ -354,31 +319,31 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
         String mStartTime;
         int mStream;
 
-        PlaySearchRunnable(PlayActivity playActivity, FragmentBase fragmentBase, int i, int i2, int i3, int i4, String str, String str2) {
+        PlaySearchRunnable(PlayActivity playActivity, FragmentBase fragmentBase, int diskType, int fileTypeMask, int streamType, int channelBits, String searchStartTime, String searchEndTime) {
             this.mActivity = playActivity;
             this.mFragment = fragmentBase;
-            this.mDisk = i;
-            this.mFileType = i2;
-            this.mStream = i3;
-            this.mChannelBits = i4;
-            this.mStartTime = str;
-            this.mEndTime = str2;
+            this.mDisk = diskType;
+            this.mFileType = fileTypeMask;
+            this.mStream = streamType;
+            this.mChannelBits = channelBits;
+            this.mStartTime = searchStartTime;
+            this.mEndTime = searchEndTime;
         }
 
         /* access modifiers changed from: private */
-        public char[] getChars(byte[] bArr) {
-            Charset forName = Charset.forName("UTF-8");
-            ByteBuffer allocate = ByteBuffer.allocate(bArr.length);
-            allocate.put(bArr);
-            allocate.flip();
-            return forName.decode(allocate).array();
+        public char[] getChars(byte[] data) {
+            Charset charset = Charset.forName("UTF-8");
+            ByteBuffer byteBuffer = ByteBuffer.allocate(data.length);
+            byteBuffer.put(data);
+            byteBuffer.flip();
+            return charset.decode(byteBuffer).array();
         }
 
         public void run() {
             if (this.mActivity.mDvrNet != null) {
-                RemoteFileInfo[] SearchVideoFileList = this.mActivity.mDvrNet.SearchVideoFileList(this.mDisk, this.mFileType, this.mStream, this.mChannelBits, this.mStartTime, this.mEndTime);
-                this.mFileInfo = SearchVideoFileList;
-                if (SearchVideoFileList == null || SearchVideoFileList.length == 0) {
+                RemoteFileInfo[] searchResults = this.mActivity.mDvrNet.SearchVideoFileList(this.mDisk, this.mFileType, this.mStream, this.mChannelBits, this.mStartTime, this.mEndTime);
+                this.mFileInfo = searchResults;
+                if (searchResults == null || searchResults.length == 0) {
                     PlayFragmentSearch.this.mHandler.post(new Runnable() {
                         public void run() {
                             PlayFragmentSearch.this.mSearchRunnable = null;
@@ -389,7 +354,6 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
                 } else {
                     PlayFragmentSearch.this.mHandler.post(new Runnable() {
                         public void run() {
-                            String str;
                             PlayFragmentFile instance = PlayFragmentFile.getInstance(UiUtils.getString(R.string.file), PlaySearchRunnable.this.mActivity);
                             instance.mPopFragment = PlaySearchRunnable.this.mFragment;
                             if (instance.mFileList == null) {
@@ -397,26 +361,28 @@ public class PlayFragmentSearch extends FragmentBase implements View.OnClickList
                             } else {
                                 instance.mFileList.clear();
                             }
-                            for (int i = 0; i < PlaySearchRunnable.this.mFileInfo.length; i++) {
+                            for (int fileIndex = 0; fileIndex < PlaySearchRunnable.this.mFileInfo.length; fileIndex++) {
+                                RemoteFileInfo remoteFileInfo = PlaySearchRunnable.this.mFileInfo[fileIndex];
                                 PlayFileInfo playFileInfo = new PlayFileInfo();
-                                playFileInfo.nDiskType = PlaySearchRunnable.this.mFileInfo[i].nDiskType;
-                                playFileInfo.FileTime = PlaySearchRunnable.this.mFileInfo[i].FileTime;
-                                playFileInfo.name = PlaySearchRunnable.this.mFileInfo[i].name;
-                                playFileInfo.nFileSize = PlaySearchRunnable.this.mFileInfo[i].nFileSize;
-                                playFileInfo.nChannel = PlaySearchRunnable.this.mFileInfo[i].nChannel;
-                                playFileInfo.nType = PlaySearchRunnable.this.mFileInfo[i].nType;
-                                if (1 == ((PlaySearchRunnable.this.mFileInfo[i].nType >> 0) & 1)) {
-                                    str = UiUtils.getString(R.string.normal_record);
+                                playFileInfo.nDiskType = remoteFileInfo.nDiskType;
+                                playFileInfo.FileTime = remoteFileInfo.FileTime;
+                                playFileInfo.name = remoteFileInfo.name;
+                                playFileInfo.nFileSize = remoteFileInfo.nFileSize;
+                                playFileInfo.nChannel = remoteFileInfo.nChannel;
+                                playFileInfo.nType = remoteFileInfo.nType;
+                                String recordTypeName;
+                                if (1 == ((remoteFileInfo.nType >> 0) & 1)) {
+                                    recordTypeName = UiUtils.getString(R.string.normal_record);
                                 } else {
-                                    str = 1 == ((PlaySearchRunnable.this.mFileInfo[i].nType >> 1) & 1) ? UiUtils.getString(R.string.alarm_record) : "";
+                                    recordTypeName = 1 == ((remoteFileInfo.nType >> 1) & 1) ? UiUtils.getString(R.string.alarm_record) : "";
                                 }
-                                String str2 = playFileInfo.FileTime;
+                                String formattedFileTime = playFileInfo.FileTime;
                                 if (playFileInfo.FileTime.length() >= 29) {
-                                    char[] access$100 = PlaySearchRunnable.this.getChars(playFileInfo.FileTime.getBytes());
-                                    str2 = String.format("%s %s:%s:%s - %s:%s:%s", new Object[]{String.format("%s-%s-%s", new Object[]{String.valueOf(access$100, 0, 4), String.valueOf(access$100, 4, 2), String.valueOf(access$100, 6, 2)}), String.valueOf(access$100, 8, 2), String.valueOf(access$100, 10, 2), String.valueOf(access$100, 12, 2), String.valueOf(access$100, 23, 2), String.valueOf(access$100, 25, 2), String.valueOf(access$100, 27, 2)});
+                                    char[] fileTimeChars = PlaySearchRunnable.this.getChars(playFileInfo.FileTime.getBytes());
+                                    formattedFileTime = String.format("%s %s:%s:%s - %s:%s:%s", new Object[]{String.format("%s-%s-%s", new Object[]{String.valueOf(fileTimeChars, 0, 4), String.valueOf(fileTimeChars, 4, 2), String.valueOf(fileTimeChars, 6, 2)}), String.valueOf(fileTimeChars, 8, 2), String.valueOf(fileTimeChars, 10, 2), String.valueOf(fileTimeChars, 12, 2), String.valueOf(fileTimeChars, 23, 2), String.valueOf(fileTimeChars, 25, 2), String.valueOf(fileTimeChars, 27, 2)});
                                 }
-                                playFileInfo.mTitle = String.format("%s%d %s", new Object[]{UiUtils.getString(R.string.channel), Integer.valueOf(PlaySearchRunnable.this.mFileInfo[i].nChannel), str});
-                                playFileInfo.mSubTitle = str2;
+                                playFileInfo.mTitle = String.format("%s%d %s", new Object[]{UiUtils.getString(R.string.channel), Integer.valueOf(remoteFileInfo.nChannel), recordTypeName});
+                                playFileInfo.mSubTitle = formattedFileTime;
                                 instance.mFileList.add(playFileInfo);
                             }
                             PlayFragmentSearch.this.mProgressBar.setVisibility(8);
