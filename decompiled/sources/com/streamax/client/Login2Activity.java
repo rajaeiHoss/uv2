@@ -54,10 +54,10 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
     public void initEvent() {
     }
 
-    public void onWiFiConnectFailure(String str) {
+    public void onWiFiConnectFailure(String ssid) {
     }
 
-    public void onWiFiConnectLog(String str) {
+    public void onWiFiConnectLog(String logMessage) {
     }
 
     /* access modifiers changed from: protected */
@@ -84,11 +84,11 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
         instance.setOnWifiEnabledListener(this);
         this.mWifiService.setOnWifiConnectListener(this);
         XXPermissions.with((Context) this).permission(Permission.ACCESS_COARSE_LOCATION).permission(Permission.ACCESS_FINE_LOCATION).request(new OnPermissionCallback() {
-            public void onDenied(List<String> list, boolean z) {
+            public void onDenied(List<String> deniedPermissions, boolean doNotAskAgain) {
             }
 
-            public void onGranted(List<String> list, boolean z) {
-                if (z) {
+            public void onGranted(List<String> grantedPermissions, boolean allGranted) {
+                if (allGranted) {
                     Login2Activity.this.setWifiName();
                 }
             }
@@ -113,10 +113,10 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
             public void afterTextChanged(Editable editable) {
             }
 
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (charSequence != null) {
                     MyApp.ServerHostNameDatas.set(MyApp.loginType, charSequence.toString());
                 }
@@ -155,14 +155,14 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
             this.mEtServerIP.setText("192.168.100.1");
             this.mEtUsername.setText("admin");
         }
-        boolean z = this.mApp.mbRemember;
-        this.isChecked = z;
-        this.mtbRemmber.setBackgroundResource(!z ? R.drawable.switch_close : R.drawable.switch_open);
+        boolean rememberAccount = this.mApp.mbRemember;
+        this.isChecked = rememberAccount;
+        this.mtbRemmber.setBackgroundResource(!rememberAccount ? R.drawable.switch_close : R.drawable.switch_open);
     }
 
-    public DevInfoBean getDeviceInfo(String str, String str2, String str3) {
+    public DevInfoBean getDeviceInfo(String serverAddress, String username, String password) {
         DevInfoBean devInfoBean = new DevInfoBean();
-        String[] split = str.split(":");
+        String[] split = serverAddress.split(":");
         if (split.length < 2) {
             devInfoBean.mDevIp = split[0];
             devInfoBean.mMediaPort = 9006;
@@ -170,25 +170,25 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
             devInfoBean.mDevIp = split[0];
             devInfoBean.mMediaPort = StringUtils.parse2Int(split[1]);
         }
-        devInfoBean.mUsername = str2;
-        devInfoBean.mPwd = str3;
+        devInfoBean.mUsername = username;
+        devInfoBean.mPwd = password;
         devInfoBean.mLinkMode = "LAN";
         devInfoBean.mChCounts = 4;
         return devInfoBean;
     }
 
     /* access modifiers changed from: private */
-    public void loginDevice(final String str, final String str2, final String str3) {
+    public void loginDevice(final String serverAddress, final String username, final String password) {
         new Thread(new Runnable() {
             public void run() {
-                final DevInfoBean deviceInfo = Login2Activity.this.getDeviceInfo(str, str2, str3);
+                final DevInfoBean deviceInfo = Login2Activity.this.getDeviceInfo(serverAddress, username, password);
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, deviceInfo, Login2Activity.this.mApp);
                 int intValue = connDeviceProxy != null ? ((Integer) connDeviceProxy.get("errorcode")).intValue() : -1;
-                final int i = dvrNet.nChannelCount;
-                Log.d("Login2Activity", "loginDevice result errorCode=" + intValue + " channelCount=" + i);
+                final int channelCount = dvrNet.nChannelCount;
+                Log.d("Login2Activity", "loginDevice result errorCode=" + intValue + " channelCount=" + channelCount);
                 dvrNet.CloseDeviceHandle();
-                if (intValue != 0 || i <= 0) {
+                if (intValue != 0 || channelCount <= 0) {
                     Login2Activity.this.mHandler.post(new Runnable() {
                         public void run() {
                             ToastUtils.show((CharSequence) Login2Activity.this.mResources.getString(R.string.login_fail));
@@ -198,12 +198,12 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
                     Login2Activity.this.mHandler.post(new Runnable() {
                         public void run() {
                             Login2Activity.this.mApp.mDevInfo = deviceInfo;
-                            Login2Activity.this.mApp.mDevInfo.mChCounts = i;
-                            MyApp.serverip = str;
-                            MyApp.username = str2;
-                            MyApp.password = str3;
+                            Login2Activity.this.mApp.mDevInfo.mChCounts = channelCount;
+                            MyApp.serverip = serverAddress;
+                            MyApp.username = username;
+                            MyApp.password = password;
                             SpUtils.putInt(Configs.Key.LoginType, MyApp.loginType);
-                            Login2Activity.this.mApp.writeuser(Login2Activity.this.isChecked, MyApp.loginType, str, str2, str3);
+                            Login2Activity.this.mApp.writeuser(Login2Activity.this.isChecked, MyApp.loginType, serverAddress, username, password);
                             Login2Activity.this.startActivity(new Intent(Login2Activity.this, MainActivity.class));
                             Login2Activity.this.finish();
                         }
@@ -214,9 +214,9 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
     }
 
     /* access modifiers changed from: protected */
-    public void onActivityResult(int i, int i2, Intent intent) {
-        super.onActivityResult(i, i2, intent);
-        if (i == 0 && i2 == -1) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == 0 && resultCode == -1) {
             this.mEtUsername.setText(intent.getStringExtra("RESULT"));
         }
     }
@@ -230,25 +230,25 @@ public class Login2Activity extends BaseUi implements OnWifiConnectListener, OnW
         }
     }
 
-    public void onWiFiConnectSuccess(String str) {
+    public void onWiFiConnectSuccess(String ssid) {
         setWifiName();
     }
 
-    public void onWifiEnabled(boolean z) {
+    public void onWifiEnabled(boolean enabled) {
         setWifiName();
     }
 
     public void setWifiName() {
         WifiInfo currentWifi;
         WifiService wifiService = this.mWifiService;
-        String str = "";
+        String wifiSsid = "";
         if (!(wifiService == null || (currentWifi = wifiService.getCurrentWifi()) == null)) {
-            str = currentWifi.getSSID().replaceAll("\"", str);
+            wifiSsid = currentWifi.getSSID().replaceAll("\"", wifiSsid);
         }
-        if (str.isEmpty() || "<unknown ssid>" == str) {
+        if (wifiSsid.isEmpty() || "<unknown ssid>" == wifiSsid) {
             this.mLoginWifiTv.setText(R.string.please_select_wifi);
         } else {
-            this.mLoginWifiTv.setText(str);
+            this.mLoginWifiTv.setText(wifiSsid);
         }
     }
 
