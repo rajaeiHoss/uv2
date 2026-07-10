@@ -2,5 +2,5 @@ package com.google.android.gms.internal
 
 internal interface zzhl
 {
-    fun zzh(z: Boolean)
+    fun zzh(enabled: Boolean)
 }

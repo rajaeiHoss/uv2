@@ -2,5 +2,5 @@ package com.google.android.gms.internal
 
 internal interface zzzn
 {
-    fun zzb(zzahd: zzahd)
+    fun zzb(value: zzahd)
 }
