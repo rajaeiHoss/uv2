@@ -27,7 +27,7 @@ public final class TimeDialog {
 
         void onCancel(BaseDialog baseDialog);
 
-        void onSelected(BaseDialog baseDialog, int i, int i2, int i3);
+        void onSelected(BaseDialog baseDialog, int hour, int minute, int second);
     }
 
     public static final class Builder extends CommonDialog.Builder<Builder> {
@@ -44,63 +44,63 @@ public final class TimeDialog {
 
         public Builder(Context context) {
             super(context);
-            String str;
-            String str2;
-            String str3;
+            String zeroPrefix;
+            String secondPrefix;
+            String minutePrefix;
             setCustomView((int) R.layout.time_dialog);
             setTitle((int) R.string.time_title);
             this.mHourAdapter = new PickerAdapter(context);
             this.mMinuteAdapter = new PickerAdapter(context);
             this.mSecondAdapter = new PickerAdapter(context);
-            ArrayList arrayList = new ArrayList(24);
-            int i = 0;
+            ArrayList<String> hours = new ArrayList<>(24);
+            int hour = 0;
             while (true) {
-                str = "0";
-                if (i > 23) {
+                zeroPrefix = "0";
+                if (hour > 23) {
                     break;
                 }
                 StringBuilder sb = new StringBuilder();
-                if (i >= 10) {
-                    str = "";
+                if (hour >= 10) {
+                    zeroPrefix = "";
                 }
-                sb.append(str);
-                sb.append(i);
+                sb.append(zeroPrefix);
+                sb.append(hour);
                 sb.append(" ");
                 sb.append(getString(R.string.common_hour));
-                arrayList.add(sb.toString());
-                i++;
+                hours.add(sb.toString());
+                hour++;
             }
-            ArrayList arrayList2 = new ArrayList(60);
-            for (int i2 = 0; i2 <= 59; i2++) {
+            ArrayList<String> minutes = new ArrayList<>(60);
+            for (int minute = 0; minute <= 59; minute++) {
                 StringBuilder sb2 = new StringBuilder();
-                if (i2 < 10) {
-                    str3 = str;
+                if (minute < 10) {
+                    minutePrefix = zeroPrefix;
                 } else {
-                    str3 = "";
+                    minutePrefix = "";
                 }
-                sb2.append(str3);
-                sb2.append(i2);
+                sb2.append(minutePrefix);
+                sb2.append(minute);
                 sb2.append(" ");
                 sb2.append(getString(R.string.common_minute));
-                arrayList2.add(sb2.toString());
+                minutes.add(sb2.toString());
             }
-            ArrayList arrayList3 = new ArrayList(60);
-            for (int i3 = 0; i3 <= 59; i3++) {
+            ArrayList<String> seconds = new ArrayList<>(60);
+            for (int second = 0; second <= 59; second++) {
                 StringBuilder sb3 = new StringBuilder();
-                if (i3 < 10) {
-                    str2 = str;
+                if (second < 10) {
+                    secondPrefix = zeroPrefix;
                 } else {
-                    str2 = "";
+                    secondPrefix = "";
                 }
-                sb3.append(str2);
-                sb3.append(i3);
+                sb3.append(secondPrefix);
+                sb3.append(second);
                 sb3.append(" ");
                 sb3.append(getString(R.string.common_second));
-                arrayList3.add(sb3.toString());
+                seconds.add(sb3.toString());
             }
-            this.mHourAdapter.setData(arrayList);
-            this.mMinuteAdapter.setData(arrayList2);
-            this.mSecondAdapter.setData(arrayList3);
+            this.mHourAdapter.setData(hours);
+            this.mMinuteAdapter.setData(minutes);
+            this.mSecondAdapter.setData(seconds);
             PickerLayoutManager build = new PickerLayoutManager.Builder(context).build();
             this.mHourManager = build;
             PickerLayoutManager build2 = new PickerLayoutManager.Builder(context).build();
@@ -129,58 +129,58 @@ public final class TimeDialog {
             return this;
         }
 
-        public Builder setTime(String str) {
-            if (str.matches("\\d{6}")) {
-                setHour(str.substring(0, 2));
-                setMinute(str.substring(2, 4));
-                setSecond(str.substring(4, 6));
-            } else if (str.matches("\\d{2}:\\d{2}:\\d{2}")) {
-                setHour(str.substring(0, 2));
-                setMinute(str.substring(3, 5));
-                setSecond(str.substring(6, 8));
+        public Builder setTime(String timeText) {
+            if (timeText.matches("\\d{6}")) {
+                setHour(timeText.substring(0, 2));
+                setMinute(timeText.substring(2, 4));
+                setSecond(timeText.substring(4, 6));
+            } else if (timeText.matches("\\d{2}:\\d{2}:\\d{2}")) {
+                setHour(timeText.substring(0, 2));
+                setMinute(timeText.substring(3, 5));
+                setSecond(timeText.substring(6, 8));
             }
             return this;
         }
 
-        public Builder setHour(String str) {
-            return setHour(Integer.parseInt(str));
+        public Builder setHour(String hourText) {
+            return setHour(Integer.parseInt(hourText));
         }
 
-        public Builder setHour(int i) {
-            if (i < 0 || i == 24) {
-                i = 0;
-            } else if (i > this.mHourAdapter.getCount() - 1) {
-                i = this.mHourAdapter.getCount() - 1;
+        public Builder setHour(int hour) {
+            if (hour < 0 || hour == 24) {
+                hour = 0;
+            } else if (hour > this.mHourAdapter.getCount() - 1) {
+                hour = this.mHourAdapter.getCount() - 1;
             }
-            this.mHourView.scrollToPosition(i);
+            this.mHourView.scrollToPosition(hour);
             return this;
         }
 
-        public Builder setMinute(String str) {
-            return setMinute(Integer.parseInt(str));
+        public Builder setMinute(String minuteText) {
+            return setMinute(Integer.parseInt(minuteText));
         }
 
-        public Builder setMinute(int i) {
-            if (i < 0) {
-                i = 0;
-            } else if (i > this.mMinuteAdapter.getCount() - 1) {
-                i = this.mMinuteAdapter.getCount() - 1;
+        public Builder setMinute(int minute) {
+            if (minute < 0) {
+                minute = 0;
+            } else if (minute > this.mMinuteAdapter.getCount() - 1) {
+                minute = this.mMinuteAdapter.getCount() - 1;
             }
-            this.mMinuteView.scrollToPosition(i);
+            this.mMinuteView.scrollToPosition(minute);
             return this;
         }
 
-        public Builder setSecond(String str) {
-            return setSecond(Integer.parseInt(str));
+        public Builder setSecond(String secondText) {
+            return setSecond(Integer.parseInt(secondText));
         }
 
-        public Builder setSecond(int i) {
-            if (i < 0) {
-                i = 0;
-            } else if (i > this.mSecondAdapter.getCount() - 1) {
-                i = this.mSecondAdapter.getCount() - 1;
+        public Builder setSecond(int second) {
+            if (second < 0) {
+                second = 0;
+            } else if (second > this.mSecondAdapter.getCount() - 1) {
+                second = this.mSecondAdapter.getCount() - 1;
             }
-            this.mSecondView.scrollToPosition(i);
+            this.mSecondView.scrollToPosition(second);
             return this;
         }
 
@@ -208,7 +208,7 @@ public final class TimeDialog {
             super(context);
         }
 
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
             return new ViewHolder();
         }
 
@@ -219,8 +219,8 @@ public final class TimeDialog {
                 super((BaseAdapter) PickerAdapter.this, (int) R.layout.picker_item);
             }
 
-            public void onBindView(int i) {
-                this.mPickerView.setText((CharSequence) PickerAdapter.this.getItem(i));
+            public void onBindView(int position) {
+                this.mPickerView.setText((CharSequence) PickerAdapter.this.getItem(position));
             }
         }
     }
