@@ -106,108 +106,102 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
     }
 
     public void refreshUi() {
-        int i;
         if (this.mDateTimeRes != null && this.mListTimeZoneLongName.size() == this.mListTimeZoneShortName.size() && this.mListTimeZoneLongName.size() == this.mListTimeZoneCase.size()) {
             try {
-                JSONObject jSONObject = this.mDateTimeRes.getJSONObject("DEVEMM");
-                JSONObject jSONObject2 = this.mDateTimeRes.getJSONObject("NWSM");
-                if (jSONObject == null) {
+                JSONObject deviceManagementObj = this.mDateTimeRes.getJSONObject("DEVEMM");
+                JSONObject networkSettingsObj = this.mDateTimeRes.getJSONObject("NWSM");
+                if (deviceManagementObj == null) {
                     return;
                 }
-                if (jSONObject2 != null) {
-                    this.mTimePObj = jSONObject.getJSONObject("TIMEP");
-                    JSONObject jSONObject3 = jSONObject2.getJSONObject("NTP");
-                    this.mNtpObj = jSONObject3;
-                    JSONObject jSONObject4 = this.mTimePObj;
-                    if (jSONObject4 == null) {
+                if (networkSettingsObj != null) {
+                    this.mTimePObj = deviceManagementObj.getJSONObject("TIMEP");
+                    JSONObject ntpObj = networkSettingsObj.getJSONObject("NTP");
+                    this.mNtpObj = ntpObj;
+                    JSONObject timePolicyObj = this.mTimePObj;
+                    if (timePolicyObj == null) {
                         return;
                     }
-                    if (jSONObject3 != null) {
-                        int i2 = jSONObject4.getInt("DATEM");
+                    if (ntpObj != null) {
+                        int dateFormatIndex = timePolicyObj.getInt("DATEM");
                         this.mListStrDateFormat.clear();
                         this.mListIntDateFormat.clear();
-                        List<String> strDatas = getStrDatas(R.array.config_sys_time_DateFormat);
-                        if (i2 >= 0 && i2 < strDatas.size()) {
-                            this.mTvDateFormat.setText(strDatas.get(i2));
-                            this.mListStrDateFormat.addAll(strDatas);
-                            this.mListIntDateFormat.add(new Integer(i2));
+                        List<String> dateFormats = getStrDatas(R.array.config_sys_time_DateFormat);
+                        if (dateFormatIndex >= 0 && dateFormatIndex < dateFormats.size()) {
+                            this.mTvDateFormat.setText(dateFormats.get(dateFormatIndex));
+                            this.mListStrDateFormat.addAll(dateFormats);
+                            this.mListIntDateFormat.add(new Integer(dateFormatIndex));
                         }
-                        int i3 = this.mTimePObj.getInt("TIMEM");
+                        int timeFormatIndex = this.mTimePObj.getInt("TIMEM");
                         this.mListStrTimeFormat.clear();
                         this.mListIntTimeFormat.clear();
-                        List<String> strDatas2 = getStrDatas(R.array.config_sys_time_TimeFormat);
-                        if (i3 >= 0 && i3 < strDatas2.size()) {
-                            this.mTvTimeFormat.setText(strDatas2.get(i3));
-                            this.mListStrTimeFormat.addAll(strDatas2);
-                            this.mListIntTimeFormat.add(new Integer(i3));
+                        List<String> timeFormats = getStrDatas(R.array.config_sys_time_TimeFormat);
+                        if (timeFormatIndex >= 0 && timeFormatIndex < timeFormats.size()) {
+                            this.mTvTimeFormat.setText(timeFormats.get(timeFormatIndex));
+                            this.mListStrTimeFormat.addAll(timeFormats);
+                            this.mListIntTimeFormat.add(new Integer(timeFormatIndex));
                         }
-                        String string = this.mTimePObj.getString("TIMEZ");
+                        String timeZoneValue = this.mTimePObj.getString("TIMEZ");
                         this.mListStrTimeZone.clear();
                         this.mListIntTimeZone.clear();
-                        int i4 = 0;
-                        int i5 = 0;
+                        int timeZoneIndex = 0;
                         while (true) {
-                            i = -1;
-                            if (i5 >= this.mListTimeZoneCase.size()) {
-                                i5 = -1;
+                            if (timeZoneIndex >= this.mListTimeZoneCase.size()) {
+                                timeZoneIndex = -1;
                                 break;
-                            } else if (string.equalsIgnoreCase(this.mListTimeZoneCase.get(i5))) {
+                            } else if (timeZoneValue.equalsIgnoreCase(this.mListTimeZoneCase.get(timeZoneIndex))) {
                                 break;
                             } else {
-                                i5++;
+                                timeZoneIndex++;
                             }
                         }
-                        if (i5 >= 0) {
-                            this.mTvTimeZone.setText(this.mListTimeZoneShortName.get(i5));
+                        if (timeZoneIndex >= 0) {
+                            this.mTvTimeZone.setText(this.mListTimeZoneShortName.get(timeZoneIndex));
                             this.mListStrTimeZone.addAll(this.mListTimeZoneLongName);
-                            this.mListIntTimeZone.add(new Integer(i5));
+                            this.mListIntTimeZone.add(new Integer(timeZoneIndex));
                         }
-                        String string2 = this.mTimePObj.getString("ZONEOFFSET");
+                        String zoneOffsetValue = this.mTimePObj.getString("ZONEOFFSET");
                         this.mListStrZoneOffset.clear();
                         this.mListIntZoneOffset.clear();
-                        int i6 = 0;
+                        int zoneOffsetIndex = 0;
                         while (true) {
-                            if (i6 >= this.mListZoneOffsetCase.size()) {
-                                i6 = -1;
+                            if (zoneOffsetIndex >= this.mListZoneOffsetCase.size()) {
+                                zoneOffsetIndex = -1;
                                 break;
-                            } else if (string2.equalsIgnoreCase(this.mListZoneOffsetCase.get(i6))) {
+                            } else if (zoneOffsetValue.equalsIgnoreCase(this.mListZoneOffsetCase.get(zoneOffsetIndex))) {
                                 break;
                             } else {
-                                i6++;
+                                zoneOffsetIndex++;
                             }
                         }
-                        if (i6 >= 0) {
-                            this.mTvZoneOffset.setText(this.mListZoneOffsetName.get(i6));
+                        if (zoneOffsetIndex >= 0) {
+                            this.mTvZoneOffset.setText(this.mListZoneOffsetName.get(zoneOffsetIndex));
                             this.mListStrZoneOffset.addAll(this.mListZoneOffsetName);
-                            this.mListIntZoneOffset.add(new Integer(i6));
+                            this.mListIntZoneOffset.add(new Integer(zoneOffsetIndex));
                         }
-                        int i7 = this.mTimePObj.getInt("GPSSYNC");
+                        int gpsSync = this.mTimePObj.getInt("GPSSYNC");
                         Button button = this.mBtnGpsStatus;
-                        int i8 = R.drawable.switch_close;
-                        button.setBackgroundResource(i7 == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                        int i9 = this.mNtpObj.getInt("NTPSWITCH");
+                        int switchBackground = R.drawable.switch_close;
+                        button.setBackgroundResource(gpsSync == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                        int ntpSwitch = this.mNtpObj.getInt("NTPSWITCH");
                         Button button2 = this.mBtnNtpStatus;
-                        if (i9 != 0) {
-                            i8 = R.drawable.switch_open;
+                        if (ntpSwitch != 0) {
+                            switchBackground = R.drawable.switch_open;
                         }
-                        button2.setBackgroundResource(i8);
+                        button2.setBackgroundResource(switchBackground);
                         this.mListStrNtpServer.clear();
                         this.mListIntNtpServer.clear();
-                        String string3 = this.mNtpObj.getString("SERVERNAME");
-                        while (true) {
-                            if (i4 >= this.mListNtpServer.size()) {
+                        String ntpServerName = this.mNtpObj.getString("SERVERNAME");
+                        int ntpServerIndex = -1;
+                        for (int serverIndex = 0; serverIndex < this.mListNtpServer.size(); serverIndex++) {
+                            if (ntpServerName.equalsIgnoreCase(this.mListNtpServer.get(serverIndex))) {
+                                ntpServerIndex = serverIndex;
                                 break;
-                            } else if (string3.equalsIgnoreCase(this.mListNtpServer.get(i4))) {
-                                i = i4;
-                                break;
-                            } else {
-                                i4++;
                             }
                         }
-                        if (i >= 0) {
-                            this.mTvNtpServerName.setText(this.mListNtpServer.get(i));
+                        if (ntpServerIndex >= 0) {
+                            this.mTvNtpServerName.setText(this.mListNtpServer.get(ntpServerIndex));
                             this.mListStrNtpServer.addAll(this.mListNtpServer);
-                            this.mListIntNtpServer.add(new Integer(i));
+                            this.mListIntNtpServer.add(new Integer(ntpServerIndex));
                         }
                     }
                 }
@@ -348,9 +342,9 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String responseJson) {
         try {
-            this.mDateTimeRes = new JSONObject(str);
+            this.mDateTimeRes = new JSONObject(responseJson);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -388,11 +382,11 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         toastSf((int) R.string.config_info_set_failure);
     }
 
-    public void updateDateForDateFormat(int i) {
+    public void updateDateForDateFormat(int selectedIndex) {
         JSONObject jSONObject = this.mTimePObj;
         if (jSONObject != null) {
             try {
-                jSONObject.put("DATEM", i);
+                jSONObject.put("DATEM", selectedIndex);
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -400,11 +394,11 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void updateDateForTimeFormat(int i) {
+    public void updateDateForTimeFormat(int selectedIndex) {
         JSONObject jSONObject = this.mTimePObj;
         if (jSONObject != null) {
             try {
-                jSONObject.put("TIMEM", i);
+                jSONObject.put("TIMEM", selectedIndex);
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -412,10 +406,10 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void updateDateForTimeZone(int i) {
-        if (this.mTimePObj != null && i < this.mListTimeZoneCase.size()) {
+    public void updateDateForTimeZone(int selectedIndex) {
+        if (this.mTimePObj != null && selectedIndex < this.mListTimeZoneCase.size()) {
             try {
-                this.mTimePObj.put("TIMEZ", this.mListTimeZoneCase.get(i));
+                this.mTimePObj.put("TIMEZ", this.mListTimeZoneCase.get(selectedIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -423,10 +417,10 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void updateDateForZoneOffset(int i) {
-        if (this.mTimePObj != null && i < this.mListZoneOffsetCase.size()) {
+    public void updateDateForZoneOffset(int selectedIndex) {
+        if (this.mTimePObj != null && selectedIndex < this.mListZoneOffsetCase.size()) {
             try {
-                this.mTimePObj.put("ZONEOFFSET", this.mListZoneOffsetCase.get(i));
+                this.mTimePObj.put("ZONEOFFSET", this.mListZoneOffsetCase.get(selectedIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -434,10 +428,10 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void updateDateForNtpServer(int i) {
-        if (this.mNtpObj != null && i < this.mListNtpServer.size()) {
+    public void updateDateForNtpServer(int selectedIndex) {
+        if (this.mNtpObj != null && selectedIndex < this.mListNtpServer.size()) {
             try {
-                this.mNtpObj.put("SERVERNAME", this.mListNtpServer.get(i));
+                this.mNtpObj.put("SERVERNAME", this.mListNtpServer.get(selectedIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -445,25 +439,25 @@ public class FragmentSysTime extends ConfigFragment implements BaseListener.SetL
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForDateFormat")) {
-            if (list.size() > 0) {
-                updateDateForDateFormat(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForDateFormat")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForDateFormat(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForTimeFormat")) {
-            if (list.size() > 0) {
-                updateDateForTimeFormat(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForTimeFormat")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForTimeFormat(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForTimeZone")) {
-            if (list.size() > 0) {
-                updateDateForTimeZone(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForTimeZone")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForTimeZone(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForZoneOffset")) {
-            if (list.size() > 0) {
-                updateDateForZoneOffset(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForZoneOffset")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForZoneOffset(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForNtpServer") && list.size() > 0) {
-            updateDateForNtpServer(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForNtpServer") && selectedIndexes.size() > 0) {
+            updateDateForNtpServer(selectedIndexes.get(0).intValue());
         }
     }
 }
