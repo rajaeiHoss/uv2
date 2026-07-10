@@ -147,8 +147,8 @@ public class RemoteFileList extends ListView {
         return this.mCalendarview;
     }
 
-    public void SetHeader(String str) {
-        this.mDateText = str;
+    public void SetHeader(String headerText) {
+        this.mDateText = headerText;
         this.mtvHeader.post(new Runnable() {
             public void run() {
                 RemoteFileList.this.mtvHeader.setText(RemoteFileList.this.mDateText);
@@ -255,10 +255,10 @@ public class RemoteFileList extends ListView {
     }
 
     /* access modifiers changed from: private */
-    public char[] getChars(byte[] bArr) {
+    public char[] getChars(byte[] bytes) {
         Charset forName = Charset.forName("UTF-8");
-        ByteBuffer allocate = ByteBuffer.allocate(bArr.length);
-        allocate.put(bArr);
+        ByteBuffer allocate = ByteBuffer.allocate(bytes.length);
+        allocate.put(bytes);
         allocate.flip();
         return forName.decode(allocate).array();
     }
@@ -266,12 +266,12 @@ public class RemoteFileList extends ListView {
     /* access modifiers changed from: private */
     public void showDateTimePicker() {
         Calendar instance = Calendar.getInstance();
-        int i = instance.get(1);
-        int i2 = instance.get(2);
-        int i3 = instance.get(5);
-        int i4 = instance.get(11);
-        int i5 = instance.get(12);
-        int i6 = instance.get(13);
+        int year = instance.get(1);
+        int month = instance.get(2);
+        int day = instance.get(5);
+        int hour = instance.get(11);
+        int minute = instance.get(12);
+        int second = instance.get(13);
         List asList = Arrays.asList(new String[]{"1", "3", "5", "7", "8", "10", "12"});
         List asList2 = Arrays.asList(new String[]{"4", "6", "9", "11"});
         Dialog dialog2 = new Dialog(this.mContext);
@@ -282,38 +282,38 @@ public class RemoteFileList extends ListView {
         wheelView.setAdapter(new NumericWheelAdapter(START_YEAR, END_YEAR));
         wheelView.setCyclic(true);
         wheelView.setLabel("Y");
-        wheelView.setCurrentItem(i - START_YEAR);
+        wheelView.setCurrentItem(year - START_YEAR);
         WheelView wheelView2 = (WheelView) inflate.findViewById(R.id.month);
         wheelView2.setAdapter(new NumericWheelAdapter(1, 12));
         wheelView2.setCyclic(true);
         wheelView2.setLabel("M");
-        wheelView2.setCurrentItem(i2);
+        wheelView2.setCurrentItem(month);
         WheelView wheelView3 = (WheelView) inflate.findViewById(R.id.day);
         wheelView3.setCyclic(true);
-        int i7 = i2 + 1;
-        if (asList.contains(String.valueOf(i7))) {
+        int currentMonth = month + 1;
+        if (asList.contains(String.valueOf(currentMonth))) {
             wheelView3.setAdapter(new NumericWheelAdapter(1, 31));
-        } else if (asList2.contains(String.valueOf(i7))) {
+        } else if (asList2.contains(String.valueOf(currentMonth))) {
             wheelView3.setAdapter(new NumericWheelAdapter(1, 30));
-        } else if ((i % 4 != 0 || i % 100 == 0) && i % 400 != 0) {
+        } else if ((year % 4 != 0 || year % 100 == 0) && year % 400 != 0) {
             wheelView3.setAdapter(new NumericWheelAdapter(1, 28));
         } else {
             wheelView3.setAdapter(new NumericWheelAdapter(1, 29));
         }
         wheelView3.setLabel("D");
-        wheelView3.setCurrentItem(i3 - 1);
+        wheelView3.setCurrentItem(day - 1);
         WheelView wheelView4 = (WheelView) inflate.findViewById(R.id.hour);
         wheelView4.setAdapter(new NumericWheelAdapter(0, 23));
         wheelView4.setCyclic(true);
-        wheelView4.setCurrentItem(i4);
+        wheelView4.setCurrentItem(hour);
         WheelView wheelView5 = (WheelView) inflate.findViewById(R.id.mins);
         wheelView5.setAdapter(new NumericWheelAdapter(0, 59, "%02d"));
         wheelView5.setCyclic(true);
-        wheelView5.setCurrentItem(i5);
+        wheelView5.setCurrentItem(minute);
         final WheelView wheelView6 = (WheelView) inflate.findViewById(R.id.secs);
         wheelView6.setAdapter(new NumericWheelAdapter(0, 59, "%02d"));
         wheelView6.setCyclic(true);
-        wheelView6.setCurrentItem(i6);
+        wheelView6.setCurrentItem(second);
         WheelView wheelView7 = (WheelView) inflate.findViewById(R.id.chn);
         wheelView7.setAdapter(new NumericWheelAdapter(1, this.mRemotePlayback.mDevInfo.mChCounts, "%d"));
         wheelView7.setCyclic(true);
@@ -327,13 +327,13 @@ public class RemoteFileList extends ListView {
         final WheelView minView = wheelView5;
         final WheelView chnView = wheelView7;
         OnWheelChangedListener yearChangedListener = new OnWheelChangedListener() {
-            public void onChanged(WheelView wheelView, int i, int i2) {
-                int access$200 = i2 + RemoteFileList.START_YEAR;
+            public void onChanged(WheelView wheelView, int oldValue, int newValue) {
+                int selectedYear = newValue + RemoteFileList.START_YEAR;
                 if (list.contains(String.valueOf(monthView.getCurrentItem() + 1))) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 31));
                 } else if (list2.contains(String.valueOf(monthView.getCurrentItem() + 1))) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 30));
-                } else if ((access$200 % 4 != 0 || access$200 % 100 == 0) && access$200 % 400 != 0) {
+                } else if ((selectedYear % 4 != 0 || selectedYear % 100 == 0) && selectedYear % 400 != 0) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 28));
                 } else {
                     dayView.setAdapter(new NumericWheelAdapter(1, 29));
@@ -341,11 +341,11 @@ public class RemoteFileList extends ListView {
             }
         };
         OnWheelChangedListener monthChangedListener = new OnWheelChangedListener() {
-            public void onChanged(WheelView wheelView, int i, int i2) {
-                int i3 = i2 + 1;
-                if (list.contains(String.valueOf(i3))) {
+            public void onChanged(WheelView wheelView, int oldValue, int newValue) {
+                int selectedMonth = newValue + 1;
+                if (list.contains(String.valueOf(selectedMonth))) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 31));
-                } else if (list2.contains(String.valueOf(i3))) {
+                } else if (list2.contains(String.valueOf(selectedMonth))) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 30));
                 } else if (((yearView.getCurrentItem() + RemoteFileList.START_YEAR) % 4 != 0 || (yearView.getCurrentItem() + RemoteFileList.START_YEAR) % 100 == 0) && (yearView.getCurrentItem() + RemoteFileList.START_YEAR) % 400 != 0) {
                     dayView.setAdapter(new NumericWheelAdapter(1, 28));
@@ -356,15 +356,15 @@ public class RemoteFileList extends ListView {
         };
         yearView.addChangingListener(yearChangedListener);
         monthView.addChangingListener(monthChangedListener);
-        int i8 = getResources().getDisplayMetrics().widthPixels;
-        int i9 = (i8 >= 480 && (i8 < 480 || i8 >= 720)) ? i8 >= 720 ? 32 : 0 : 12;
-        wheelView3.TEXT_SIZE = i9;
-        wheelView4.TEXT_SIZE = i9;
-        wheelView5.TEXT_SIZE = i9;
-        wheelView6.TEXT_SIZE = i9;
-        wheelView7.TEXT_SIZE = i9;
-        wheelView2.TEXT_SIZE = i9;
-        wheelView.TEXT_SIZE = i9;
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int pickerTextSize = (screenWidth >= 480 && (screenWidth < 480 || screenWidth >= 720)) ? screenWidth >= 720 ? 32 : 0 : 12;
+        wheelView3.TEXT_SIZE = pickerTextSize;
+        wheelView4.TEXT_SIZE = pickerTextSize;
+        wheelView5.TEXT_SIZE = pickerTextSize;
+        wheelView6.TEXT_SIZE = pickerTextSize;
+        wheelView7.TEXT_SIZE = pickerTextSize;
+        wheelView2.TEXT_SIZE = pickerTextSize;
+        wheelView.TEXT_SIZE = pickerTextSize;
         View view2 = inflate;
         Button button = (Button) view2.findViewById(R.id.btn_datetime_cancel);
         View.OnClickListener confirmClickListener = new View.OnClickListener() {
