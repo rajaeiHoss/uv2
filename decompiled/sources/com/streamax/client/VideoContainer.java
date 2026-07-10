@@ -258,10 +258,85 @@ public class VideoContainer extends RelativeLayout {
         }
     }
 
-    public void ArrayViews(int viewCount, boolean fromFling) {
-        // Decompiler could not reconstruct this method; keep the stub explicit instead of preserving the
-        // multi-thousand-line register dump comment that obscures the surrounding real Java code.
-        throw new UnsupportedOperationException("Method not decompiled: com.streamax.client.VideoContainer.ArrayViews(int, boolean):void");
+    public void ArrayViews(int targetViewCount, boolean preserveLastArrayMode) {
+        int layoutIndex;
+        if (targetViewCount <= 0 || this.mVideoFrame == null) {
+            return;
+        }
+        this.mWidth = getWidth();
+        this.mHeight = getHeight();
+        if (this.mWidth <= 0 || this.mHeight <= 0) {
+            this.mWidth = getMeasuredWidth();
+            this.mHeight = getMeasuredHeight();
+        }
+        if (this.mWidth <= 0 || this.mHeight <= 0) {
+            return;
+        }
+        if (!preserveLastArrayMode) {
+            this.mLastArrayMode = this.mCurViewCount;
+        }
+        int visibleItemCount = this.mInitViewCount > 0 ? this.mInitViewCount : this.mIndexList.size();
+        int baseIndex = this.mBaseIndex;
+        if (baseIndex < 0) {
+            baseIndex = 0;
+        }
+        if (baseIndex + targetViewCount > visibleItemCount) {
+            baseIndex = 0;
+        }
+        this.mBaseIndex = baseIndex;
+        this.mCurViewCount = targetViewCount;
+        int columns = targetViewCount == 1 ? 1 : targetViewCount == 4 ? 2 : targetViewCount == 9 ? 3 : targetViewCount == 16 ? 4 : (int) Math.ceil(Math.sqrt((double) targetViewCount));
+        int rows = (int) Math.ceil(((double) targetViewCount) / ((double) columns));
+        int cellWidth = this.mWidth / columns;
+        int cellHeight = this.mHeight / rows;
+        for (int listIndex = 0; listIndex < visibleItemCount; listIndex++) {
+            int frameIndex = this.mIndexList.get(listIndex).intValue();
+            if (listIndex < this.mBaseIndex || listIndex >= this.mBaseIndex + targetViewCount) {
+                VideoFrame videoFrame = this.mVideoFrame[frameIndex];
+                if (videoFrame != null) {
+                    videoFrame.setVisibility(8);
+                }
+                RealPlayActivity realPlayActivity = this.mRealPlayUi;
+                if (realPlayActivity != null) {
+                    realPlayActivity.SetStreamDecodeState(frameIndex, true);
+                }
+            }
+        }
+        int visibleIndex = 0;
+        for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < columns; columnIndex++) {
+                if (visibleIndex >= targetViewCount || (layoutIndex = this.mBaseIndex + visibleIndex) >= visibleItemCount) {
+                    break;
+                }
+                int frameIndex = this.mIndexList.get(layoutIndex).intValue();
+                VideoFrame videoFrame = this.mVideoFrame[frameIndex];
+                if (videoFrame != null) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) videoFrame.getLayoutParams();
+                    if (layoutParams == null) {
+                        layoutParams = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
+                    }
+                    layoutParams.width = cellWidth;
+                    layoutParams.height = cellHeight;
+                    layoutParams.leftMargin = cellWidth * columnIndex;
+                    layoutParams.topMargin = cellHeight * rowIndex;
+                    videoFrame.setLayoutParams(layoutParams);
+                    videoFrame.setVisibility(0);
+                    videoFrame.SetMax(targetViewCount == 1);
+                }
+                RealPlayActivity realPlayActivity = this.mRealPlayUi;
+                if (realPlayActivity != null) {
+                    realPlayActivity.SetStreamDecodeState(frameIndex, false);
+                }
+                visibleIndex++;
+            }
+        }
+        if (this.mRealPlayUi != null) {
+            new Thread(new Runnable() {
+                public void run() {
+                    VideoContainer.this.mRealPlayUi.SwitchPlay();
+                }
+            }).start();
+        }
     }
 
     public void SetPtzControlState(int visibility) {
@@ -947,118 +1022,118 @@ public class VideoContainer extends RelativeLayout {
     }
 
     public void TurnLastView() {
-        int i = this.mInitViewCount;
-        if (i == 32) {
-            int i2 = this.mCurViewCount;
-            if (i2 < i) {
-                if (i2 == 16) {
-                    int i3 = this.mBaseIndex;
-                    if (i3 - 16 < 0) {
+        int initViewCount = this.mInitViewCount;
+        if (initViewCount == 32) {
+            int currentViewCount32 = this.mCurViewCount;
+            if (currentViewCount32 < initViewCount) {
+                if (currentViewCount32 == 16) {
+                    int previousBaseIndex32For16 = this.mBaseIndex;
+                    if (previousBaseIndex32For16 - 16 < 0) {
                         this.mBaseIndex = 16;
                     } else {
-                        this.mBaseIndex = i3 - 16;
+                        this.mBaseIndex = previousBaseIndex32For16 - 16;
                     }
-                    for (int i4 = 0; i4 < this.mInitViewCount; i4++) {
-                        int i5 = this.mBaseIndex;
-                        if (i4 < i5 || i4 >= i5 - 16) {
-                            this.mVideoFrame[this.mIndexList.get(i4).intValue()].setVisibility(8);
+                    for (int viewIndex32For16 = 0; viewIndex32For16 < this.mInitViewCount; viewIndex32For16++) {
+                        int baseIndex32For16 = this.mBaseIndex;
+                        if (viewIndex32For16 < baseIndex32For16 || viewIndex32For16 >= baseIndex32For16 - 16) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex32For16).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity = this.mRealPlayUi;
                             if (realPlayActivity != null) {
-                                realPlayActivity.SetStreamDecodeState(this.mIndexList.get(i4).intValue(), true);
+                                realPlayActivity.SetStreamDecodeState(this.mIndexList.get(viewIndex32For16).intValue(), true);
                             }
                         }
                     }
-                    int i6 = this.mWidth / 4;
-                    int i7 = this.mHeight / 4;
-                    for (int i8 = 0; i8 < 4; i8++) {
-                        for (int i9 = 0; i9 < 4; i9++) {
-                            int i10 = (i8 * 4) + i9;
-                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].getLayoutParams();
+                    int cellWidth32For16 = this.mWidth / 4;
+                    int cellHeight32For16 = this.mHeight / 4;
+                    for (int rowIndex32For16 = 0; rowIndex32For16 < 4; rowIndex32For16++) {
+                        for (int columnIndex32For16 = 0; columnIndex32For16 < 4; columnIndex32For16++) {
+                            int cellIndex32For16 = (rowIndex32For16 * 4) + columnIndex32For16;
+                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For16).intValue()].getLayoutParams();
                             if (layoutParams == null) {
-                                layoutParams = new RelativeLayout.LayoutParams(i6, i7);
+                                layoutParams = new RelativeLayout.LayoutParams(cellWidth32For16, cellHeight32For16);
                             }
-                            layoutParams.width = i6;
-                            layoutParams.height = i7;
-                            layoutParams.leftMargin = i6 * i9;
-                            layoutParams.topMargin = i7 * i8;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].setLayoutParams(layoutParams);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].SetMax(false);
+                            layoutParams.width = cellWidth32For16;
+                            layoutParams.height = cellHeight32For16;
+                            layoutParams.leftMargin = cellWidth32For16 * columnIndex32For16;
+                            layoutParams.topMargin = cellHeight32For16 * rowIndex32For16;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For16).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For16).intValue()].setLayoutParams(layoutParams);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For16).intValue()].SetMax(false);
                             RealPlayActivity realPlayActivity2 = this.mRealPlayUi;
                             if (realPlayActivity2 != null) {
-                                realPlayActivity2.SetStreamDecodeState(this.mIndexList.get(i10 + this.mBaseIndex).intValue(), false);
+                                realPlayActivity2.SetStreamDecodeState(this.mIndexList.get(cellIndex32For16 + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i2 == 9) {
+                } else if (currentViewCount32 == 9) {
                     this.mFlingStatus = 1;
                     ArrayViews(9, true);
-                } else if (i2 == 4) {
-                    int i11 = this.mBaseIndex;
-                    if (i11 - 4 < 0) {
+                } else if (currentViewCount32 == 4) {
+                    int previousBaseIndex32For4 = this.mBaseIndex;
+                    if (previousBaseIndex32For4 - 4 < 0) {
                         this.mBaseIndex = 28;
                     } else {
-                        this.mBaseIndex = i11 - 4;
+                        this.mBaseIndex = previousBaseIndex32For4 - 4;
                     }
-                    for (int i12 = 0; i12 < this.mInitViewCount; i12++) {
-                        int i13 = this.mBaseIndex;
-                        if (i12 < i13 || i12 >= i13 + 4) {
-                            this.mVideoFrame[this.mIndexList.get(i12).intValue()].setVisibility(8);
+                    for (int viewIndex32For4 = 0; viewIndex32For4 < this.mInitViewCount; viewIndex32For4++) {
+                        int baseIndex32For4 = this.mBaseIndex;
+                        if (viewIndex32For4 < baseIndex32For4 || viewIndex32For4 >= baseIndex32For4 + 4) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex32For4).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity3 = this.mRealPlayUi;
                             if (realPlayActivity3 != null) {
-                                realPlayActivity3.SetStreamDecodeState(this.mIndexList.get(i12).intValue(), true);
+                                realPlayActivity3.SetStreamDecodeState(this.mIndexList.get(viewIndex32For4).intValue(), true);
                             }
                         }
                     }
-                    int i14 = this.mWidth / 2;
-                    int i15 = this.mHeight / 2;
-                    for (int i16 = 0; i16 < 2; i16++) {
-                        for (int i17 = 0; i17 < 2; i17++) {
-                            int i18 = (i16 * 2) + i17;
-                            RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].getLayoutParams();
+                    int cellWidth32For4 = this.mWidth / 2;
+                    int cellHeight32For4 = this.mHeight / 2;
+                    for (int rowIndex32For4 = 0; rowIndex32For4 < 2; rowIndex32For4++) {
+                        for (int columnIndex32For4 = 0; columnIndex32For4 < 2; columnIndex32For4++) {
+                            int cellIndex32For4 = (rowIndex32For4 * 2) + columnIndex32For4;
+                            RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For4).intValue()].getLayoutParams();
                             if (layoutParams2 == null) {
-                                layoutParams2 = new RelativeLayout.LayoutParams(i14, i15);
+                                layoutParams2 = new RelativeLayout.LayoutParams(cellWidth32For4, cellHeight32For4);
                             }
-                            layoutParams2.width = i14;
-                            layoutParams2.height = i15;
-                            layoutParams2.leftMargin = i14 * i17;
-                            layoutParams2.topMargin = i15 * i16;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].setLayoutParams(layoutParams2);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].SetMax(false);
+                            layoutParams2.width = cellWidth32For4;
+                            layoutParams2.height = cellHeight32For4;
+                            layoutParams2.leftMargin = cellWidth32For4 * columnIndex32For4;
+                            layoutParams2.topMargin = cellHeight32For4 * rowIndex32For4;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For4).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For4).intValue()].setLayoutParams(layoutParams2);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex32For4).intValue()].SetMax(false);
                             RealPlayActivity realPlayActivity4 = this.mRealPlayUi;
                             if (realPlayActivity4 != null) {
-                                realPlayActivity4.SetStreamDecodeState(this.mIndexList.get(i18 + this.mBaseIndex).intValue(), false);
+                                realPlayActivity4.SetStreamDecodeState(this.mIndexList.get(cellIndex32For4 + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i2 == 1) {
-                    int i19 = this.mBaseIndex;
-                    if (i19 - 1 < 0) {
+                } else if (currentViewCount32 == 1) {
+                    int previousBaseIndex32For1 = this.mBaseIndex;
+                    if (previousBaseIndex32For1 - 1 < 0) {
                         this.mBaseIndex = 31;
                     } else {
-                        this.mBaseIndex = (i19 - 1) % 32;
+                        this.mBaseIndex = (previousBaseIndex32For1 - 1) % 32;
                     }
-                    for (int i20 = 0; i20 < this.mInitViewCount; i20++) {
-                        int i21 = this.mBaseIndex;
-                        if (i20 < i21 || i20 >= i21 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i20).intValue()].setVisibility(8);
+                    for (int viewIndex32For1 = 0; viewIndex32For1 < this.mInitViewCount; viewIndex32For1++) {
+                        int baseIndex32For1 = this.mBaseIndex;
+                        if (viewIndex32For1 < baseIndex32For1 || viewIndex32For1 >= baseIndex32For1 + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex32For1).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity5 = this.mRealPlayUi;
                             if (realPlayActivity5 != null) {
-                                realPlayActivity5.SetStreamDecodeState(this.mIndexList.get(i20).intValue(), true);
+                                realPlayActivity5.SetStreamDecodeState(this.mIndexList.get(viewIndex32For1).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i20).intValue()].setFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex32For1).intValue()].setFocusState(false);
                         }
                     }
-                    int i22 = this.mWidth;
-                    int i23 = this.mHeight;
+                    int cellWidth32For1 = this.mWidth;
+                    int cellHeight32For1 = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams3 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams3 == null) {
-                        layoutParams3 = new RelativeLayout.LayoutParams(i22, i23);
+                        layoutParams3 = new RelativeLayout.LayoutParams(cellWidth32For1, cellHeight32For1);
                     }
-                    layoutParams3.width = i22;
-                    layoutParams3.height = i23;
+                    layoutParams3.width = cellWidth32For1;
+                    layoutParams3.height = cellHeight32For1;
                     layoutParams3.leftMargin = 0;
                     layoutParams3.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1070,90 +1145,90 @@ public class VideoContainer extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i24 = 0; i24 < this.mInitViewCount; i24++) {
-                    int i25 = this.mFocusIndex;
-                    if (i24 == i25) {
-                        this.mVideoFrame[this.mIndexList.get(i25).intValue()].setFocusState(true);
+                for (int focusViewIndex32 = 0; focusViewIndex32 < this.mInitViewCount; focusViewIndex32++) {
+                    int focusIndex32 = this.mFocusIndex;
+                    if (focusViewIndex32 == focusIndex32) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex32).intValue()].setFocusState(true);
                         this.mRealPlayUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i24).intValue()].setFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(focusViewIndex32).intValue()].setFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 16) {
-            int i26 = this.mCurViewCount;
-            if (i26 < i) {
-                if (i26 == 9) {
+        } else if (initViewCount == 16) {
+            int currentViewCount16 = this.mCurViewCount;
+            if (currentViewCount16 < initViewCount) {
+                if (currentViewCount16 == 9) {
                     this.mFlingStatus = 1;
                     ArrayViews(9, true);
-                } else if (i26 == 4) {
-                    int i27 = this.mBaseIndex;
-                    if (i27 - 4 < 0) {
+                } else if (currentViewCount16 == 4) {
+                    int previousBaseIndex16For4 = this.mBaseIndex;
+                    if (previousBaseIndex16For4 - 4 < 0) {
                         this.mBaseIndex = 12;
                     } else {
-                        this.mBaseIndex = i27 - 4;
+                        this.mBaseIndex = previousBaseIndex16For4 - 4;
                     }
-                    for (int i28 = 0; i28 < this.mInitViewCount; i28++) {
-                        int i29 = this.mBaseIndex;
-                        if (i28 < i29 || i28 >= i29 + 4) {
-                            this.mVideoFrame[this.mIndexList.get(i28).intValue()].setVisibility(8);
+                    for (int viewIndex16For4 = 0; viewIndex16For4 < this.mInitViewCount; viewIndex16For4++) {
+                        int baseIndex16For4 = this.mBaseIndex;
+                        if (viewIndex16For4 < baseIndex16For4 || viewIndex16For4 >= baseIndex16For4 + 4) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex16For4).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity7 = this.mRealPlayUi;
                             if (realPlayActivity7 != null) {
-                                realPlayActivity7.SetStreamDecodeState(this.mIndexList.get(i28).intValue(), true);
+                                realPlayActivity7.SetStreamDecodeState(this.mIndexList.get(viewIndex16For4).intValue(), true);
                             }
                         }
                     }
-                    int i30 = this.mWidth / 2;
-                    int i31 = this.mHeight / 2;
-                    for (int i32 = 0; i32 < 2; i32++) {
-                        for (int i33 = 0; i33 < 2; i33++) {
-                            int i34 = (i32 * 2) + i33;
-                            RelativeLayout.LayoutParams layoutParams4 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i34).intValue()].getLayoutParams();
+                    int cellWidth16For4 = this.mWidth / 2;
+                    int cellHeight16For4 = this.mHeight / 2;
+                    for (int rowIndex16For4 = 0; rowIndex16For4 < 2; rowIndex16For4++) {
+                        for (int columnIndex16For4 = 0; columnIndex16For4 < 2; columnIndex16For4++) {
+                            int cellIndex16For4 = (rowIndex16For4 * 2) + columnIndex16For4;
+                            RelativeLayout.LayoutParams layoutParams4 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex16For4).intValue()].getLayoutParams();
                             if (layoutParams4 == null) {
-                                layoutParams4 = new RelativeLayout.LayoutParams(i30, i31);
+                                layoutParams4 = new RelativeLayout.LayoutParams(cellWidth16For4, cellHeight16For4);
                             }
-                            layoutParams4.width = i30;
-                            layoutParams4.height = i31;
-                            layoutParams4.leftMargin = i30 * i33;
-                            layoutParams4.topMargin = i31 * i32;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i34).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i34).intValue()].setLayoutParams(layoutParams4);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i34).intValue()].SetMax(false);
+                            layoutParams4.width = cellWidth16For4;
+                            layoutParams4.height = cellHeight16For4;
+                            layoutParams4.leftMargin = cellWidth16For4 * columnIndex16For4;
+                            layoutParams4.topMargin = cellHeight16For4 * rowIndex16For4;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex16For4).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex16For4).intValue()].setLayoutParams(layoutParams4);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex16For4).intValue()].SetMax(false);
                             RealPlayActivity realPlayActivity8 = this.mRealPlayUi;
                             if (realPlayActivity8 != null) {
-                                realPlayActivity8.SetStreamDecodeState(this.mIndexList.get(i34 + this.mBaseIndex).intValue(), false);
+                                realPlayActivity8.SetStreamDecodeState(this.mIndexList.get(cellIndex16For4 + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i26 == 1) {
-                    int i35 = this.mBaseIndex;
-                    if (i35 - 1 < 0) {
+                } else if (currentViewCount16 == 1) {
+                    int previousBaseIndex16For1 = this.mBaseIndex;
+                    if (previousBaseIndex16For1 - 1 < 0) {
                         this.mBaseIndex = 15;
                     } else {
-                        this.mBaseIndex = (i35 - 1) % 16;
+                        this.mBaseIndex = (previousBaseIndex16For1 - 1) % 16;
                     }
-                    for (int i36 = 0; i36 < this.mInitViewCount; i36++) {
-                        int i37 = this.mBaseIndex;
-                        if (i36 < i37 || i36 >= i37 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i36).intValue()].setVisibility(8);
+                    for (int viewIndex16For1 = 0; viewIndex16For1 < this.mInitViewCount; viewIndex16For1++) {
+                        int baseIndex16For1 = this.mBaseIndex;
+                        if (viewIndex16For1 < baseIndex16For1 || viewIndex16For1 >= baseIndex16For1 + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex16For1).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity9 = this.mRealPlayUi;
                             if (realPlayActivity9 != null) {
-                                realPlayActivity9.SetStreamDecodeState(this.mIndexList.get(i36).intValue(), true);
+                                realPlayActivity9.SetStreamDecodeState(this.mIndexList.get(viewIndex16For1).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i36).intValue()].setFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex16For1).intValue()].setFocusState(false);
                         }
                     }
-                    int i38 = this.mWidth;
-                    int i39 = this.mHeight;
+                    int cellWidth16For1 = this.mWidth;
+                    int cellHeight16For1 = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams5 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams5 == null) {
-                        layoutParams5 = new RelativeLayout.LayoutParams(i38, i39);
+                        layoutParams5 = new RelativeLayout.LayoutParams(cellWidth16For1, cellHeight16For1);
                     }
-                    layoutParams5.width = i38;
-                    layoutParams5.height = i39;
+                    layoutParams5.width = cellWidth16For1;
+                    layoutParams5.height = cellHeight16For1;
                     layoutParams5.leftMargin = 0;
                     layoutParams5.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1165,50 +1240,50 @@ public class VideoContainer extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i40 = 0; i40 < this.mInitViewCount; i40++) {
-                    int i41 = this.mFocusIndex;
-                    if (i40 == i41) {
-                        this.mVideoFrame[this.mIndexList.get(i41).intValue()].setFocusState(true);
+                for (int focusViewIndex16 = 0; focusViewIndex16 < this.mInitViewCount; focusViewIndex16++) {
+                    int focusIndex16 = this.mFocusIndex;
+                    if (focusViewIndex16 == focusIndex16) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex16).intValue()].setFocusState(true);
                         this.mRealPlayUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i40).intValue()].setFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(focusViewIndex16).intValue()].setFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 9) {
-            int i42 = this.mCurViewCount;
-            if (i42 < i) {
-                if (i42 == 4) {
+        } else if (initViewCount == 9) {
+            int currentViewCount9 = this.mCurViewCount;
+            if (currentViewCount9 < initViewCount) {
+                if (currentViewCount9 == 4) {
                     ArrayViews(4, true);
-                } else if (i42 == 1) {
-                    int i43 = this.mBaseIndex;
-                    if (i43 - 1 < 0) {
+                } else if (currentViewCount9 == 1) {
+                    int previousBaseIndex9For1 = this.mBaseIndex;
+                    if (previousBaseIndex9For1 - 1 < 0) {
                         this.mBaseIndex = 7;
                     } else {
-                        this.mBaseIndex = (i43 - 1) % 8;
+                        this.mBaseIndex = (previousBaseIndex9For1 - 1) % 8;
                     }
-                    for (int i44 = 0; i44 < this.mInitViewCount; i44++) {
-                        int i45 = this.mBaseIndex;
-                        if (i44 < i45 || i44 >= i45 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i44).intValue()].setVisibility(8);
+                    for (int viewIndex9For1 = 0; viewIndex9For1 < this.mInitViewCount; viewIndex9For1++) {
+                        int baseIndex9For1 = this.mBaseIndex;
+                        if (viewIndex9For1 < baseIndex9For1 || viewIndex9For1 >= baseIndex9For1 + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex9For1).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity11 = this.mRealPlayUi;
                             if (realPlayActivity11 != null) {
-                                realPlayActivity11.SetStreamDecodeState(this.mIndexList.get(i44).intValue(), true);
+                                realPlayActivity11.SetStreamDecodeState(this.mIndexList.get(viewIndex9For1).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i44).intValue()].setFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex9For1).intValue()].setFocusState(false);
                         }
                     }
-                    int i46 = this.mWidth;
-                    int i47 = this.mHeight;
+                    int cellWidth9For1 = this.mWidth;
+                    int cellHeight9For1 = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams6 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams6 == null) {
-                        layoutParams6 = new RelativeLayout.LayoutParams(i46, i47);
+                        layoutParams6 = new RelativeLayout.LayoutParams(cellWidth9For1, cellHeight9For1);
                     }
-                    layoutParams6.width = i46;
-                    layoutParams6.height = i47;
+                    layoutParams6.width = cellWidth9For1;
+                    layoutParams6.height = cellHeight9For1;
                     layoutParams6.leftMargin = 0;
                     layoutParams6.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1220,46 +1295,46 @@ public class VideoContainer extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i48 = 0; i48 < this.mInitViewCount; i48++) {
-                    int i49 = this.mFocusIndex;
-                    if (i48 == i49) {
-                        this.mVideoFrame[this.mIndexList.get(i49).intValue()].setFocusState(true);
+                for (int focusViewIndex9 = 0; focusViewIndex9 < this.mInitViewCount; focusViewIndex9++) {
+                    int focusIndex9 = this.mFocusIndex;
+                    if (focusViewIndex9 == focusIndex9) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex9).intValue()].setFocusState(true);
                         this.mRealPlayUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i48).intValue()].setFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(focusViewIndex9).intValue()].setFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 4) {
-            int i50 = this.mCurViewCount;
-            if (i50 < i) {
-                if (i50 == 1) {
-                    int i51 = this.mBaseIndex;
-                    if (i51 - 1 < 0) {
+        } else if (initViewCount == 4) {
+            int currentViewCount4 = this.mCurViewCount;
+            if (currentViewCount4 < initViewCount) {
+                if (currentViewCount4 == 1) {
+                    int previousBaseIndex4For1 = this.mBaseIndex;
+                    if (previousBaseIndex4For1 - 1 < 0) {
                         this.mBaseIndex = 3;
                     } else {
-                        this.mBaseIndex = i51 - 1;
+                        this.mBaseIndex = previousBaseIndex4For1 - 1;
                     }
-                    for (int i52 = 0; i52 < this.mInitViewCount; i52++) {
-                        this.mVideoFrame[this.mIndexList.get(i52).intValue()].setFocusState(false);
-                        if (i52 != this.mBaseIndex) {
-                            this.mVideoFrame[this.mIndexList.get(i52).intValue()].setVisibility(8);
+                    for (int viewIndex4For1 = 0; viewIndex4For1 < this.mInitViewCount; viewIndex4For1++) {
+                        this.mVideoFrame[this.mIndexList.get(viewIndex4For1).intValue()].setFocusState(false);
+                        if (viewIndex4For1 != this.mBaseIndex) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex4For1).intValue()].setVisibility(8);
                             RealPlayActivity realPlayActivity13 = this.mRealPlayUi;
                             if (realPlayActivity13 != null) {
-                                realPlayActivity13.SetStreamDecodeState(this.mIndexList.get(i52).intValue(), true);
+                                realPlayActivity13.SetStreamDecodeState(this.mIndexList.get(viewIndex4For1).intValue(), true);
                             }
                         }
                     }
-                    int i53 = this.mWidth;
-                    int i54 = this.mHeight;
+                    int cellWidth4For1 = this.mWidth;
+                    int cellHeight4For1 = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams7 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams7 == null) {
-                        layoutParams7 = new RelativeLayout.LayoutParams(i53, i54);
+                        layoutParams7 = new RelativeLayout.LayoutParams(cellWidth4For1, cellHeight4For1);
                     }
-                    layoutParams7.width = i53;
-                    layoutParams7.height = i54;
+                    layoutParams7.width = cellWidth4For1;
+                    layoutParams7.height = cellHeight4For1;
                     layoutParams7.leftMargin = 0;
                     layoutParams7.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1271,13 +1346,13 @@ public class VideoContainer extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i55 = 0; i55 < this.mInitViewCount; i55++) {
-                    int i56 = this.mFocusIndex;
-                    if (i55 == i56) {
-                        this.mVideoFrame[this.mIndexList.get(i56).intValue()].setFocusState(true);
+                for (int focusViewIndex4 = 0; focusViewIndex4 < this.mInitViewCount; focusViewIndex4++) {
+                    int focusIndex4 = this.mFocusIndex;
+                    if (focusViewIndex4 == focusIndex4) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex4).intValue()].setFocusState(true);
                         this.mRealPlayUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i55).intValue()].setFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(focusViewIndex4).intValue()].setFocusState(false);
                     }
                 }
             } else {

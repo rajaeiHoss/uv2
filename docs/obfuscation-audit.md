@@ -62,15 +62,14 @@ App-owned source files do not have obfuscated file names, but many still contain
 | `r0`, `r1`, ... | 6 |
 | `str`, `str2`, ... | 80 |
 | `bArr`, `bArr2`, ... | 10 |
-| `i2`, `j2`, ... | 61 |
+| `i2`, `j2`, ... | 60 |
 | `z`, `z2`, ... | 50 |
-| App-owned files with at least one generic identifier | 108 |
+| App-owned files with at least one generic identifier | 107 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/VideoContainer.java` | 237 |
 | `decompiled/sources/com/streamax/client/VideoView.java` | 217 |
 | `decompiled/sources/com/streamax/client/LiveViewUi.java` | 215 |
 | `decompiled/sources/com/streamax/proxy/ConnDeviceProxy.java` | 182 |
@@ -90,12 +89,13 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/config/db/DeviceInfoDao.java` | 54 |
 | `decompiled/sources/com/streamax/client/ui/devlist/ui/DevListFragment.java` | 54 |
 | `decompiled/sources/com/streamax/TimeBar/TimeBar.java` | 47 |
+| `decompiled/sources/com/streamax/config/fragment/FragmentSysTime.java` | 46 |
 
 Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 108 | 3,885 |
+| `decompiled/sources/com/streamax` | 107 | 3,648 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, cleaned `VideoContainer.TurnNextView`, reconstructed the frame-rate helpers in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, and reconstructed the DST time-picker flow in `DstOfDt.java`. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, and `VideoGroup.java` no longer have generic identifier hits under this audit scan; `VideoContainer.java` is down from 476 to 237 hits, and `StreamOfVideo.java` is down from 472 to 159 hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, and reconstructed the DST time-picker flow in `DstOfDt.java`. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, and `VideoContainer.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 159 hits.
 
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/client/VideoContainer.java`
 - `decompiled/sources/com/streamax/client/VideoView.java`
 - `decompiled/sources/com/streamax/client/LiveViewUi.java`
 - `decompiled/sources/com/streamax/proxy/ConnDeviceProxy.java`
+- `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java`
 
-Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
+Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.
