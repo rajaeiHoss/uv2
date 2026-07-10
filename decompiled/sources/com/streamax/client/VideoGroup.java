@@ -740,115 +740,115 @@ public class VideoGroup extends RelativeLayout {
     public void TurnNextView() {
         this.mWidth = getWidth();
         this.mHeight = getHeight();
-        int i = this.mInitViewCount;
-        if (i == 32) {
-            int i2 = this.mCurViewCount;
-            if (i2 < i) {
-                if (i2 == 16) {
-                    int i3 = this.mBaseIndex;
-                    if (i3 + 16 >= 32) {
+        int initViewCount = this.mInitViewCount;
+        if (initViewCount == 32) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount < initViewCount) {
+                if (currentViewCount == 16) {
+                    int previousBaseIndex = this.mBaseIndex;
+                    if (previousBaseIndex + 16 >= 32) {
                         this.mBaseIndex = 0;
                     } else {
-                        this.mBaseIndex = i3 + 16;
+                        this.mBaseIndex = previousBaseIndex + 16;
                     }
-                    for (int i4 = 0; i4 < this.mInitViewCount; i4++) {
-                        int i5 = this.mBaseIndex;
-                        if (i4 < i5 || i4 >= i5 + 16) {
-                            this.mVideoFrame[this.mIndexList.get(i4).intValue()].setVisibility(8);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + 16) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
                             LiveViewUi liveViewUi = this.mLiveViewUi;
                             if (liveViewUi != null) {
-                                liveViewUi.SetStreamDecodeState(this.mIndexList.get(i4).intValue(), true);
+                                liveViewUi.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         }
                     }
-                    int i6 = this.mWidth / 4;
-                    int i7 = this.mHeight / 4;
-                    for (int i8 = 0; i8 < 4; i8++) {
-                        for (int i9 = 0; i9 < 4; i9++) {
-                            int i10 = (i8 * 4) + i9;
-                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].getLayoutParams();
+                    int cellWidth = this.mWidth / 4;
+                    int cellHeight = this.mHeight / 4;
+                    for (int rowIndex = 0; rowIndex < 4; rowIndex++) {
+                        for (int columnIndex = 0; columnIndex < 4; columnIndex++) {
+                            int cellIndex = (rowIndex * 4) + columnIndex;
+                            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].getLayoutParams();
                             if (layoutParams == null) {
-                                layoutParams = new RelativeLayout.LayoutParams(i6, i7);
+                                layoutParams = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                             }
-                            layoutParams.width = i6;
-                            layoutParams.height = i7;
-                            layoutParams.leftMargin = i6 * i9;
-                            layoutParams.topMargin = i7 * i8;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].setLayoutParams(layoutParams);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i10).intValue()].SetMax(false);
+                            layoutParams.width = cellWidth;
+                            layoutParams.height = cellHeight;
+                            layoutParams.leftMargin = cellWidth * columnIndex;
+                            layoutParams.topMargin = cellHeight * rowIndex;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setLayoutParams(layoutParams);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].SetMax(false);
                             LiveViewUi liveViewUi2 = this.mLiveViewUi;
                             if (liveViewUi2 != null) {
-                                liveViewUi2.SetStreamDecodeState(this.mIndexList.get(i10 + this.mBaseIndex).intValue(), false);
+                                liveViewUi2.SetStreamDecodeState(this.mIndexList.get(cellIndex + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i2 == 9) {
+                } else if (currentViewCount == 9) {
                     this.mFlingStatus = 0;
                     ArrayViews(9, true);
-                } else if (i2 == 4) {
-                    int i11 = this.mBaseIndex;
-                    if (i11 + 4 >= 32) {
+                } else if (currentViewCount == 4) {
+                    int previousBaseIndex = this.mBaseIndex;
+                    if (previousBaseIndex + 4 >= 32) {
                         this.mBaseIndex = 0;
                     } else {
-                        this.mBaseIndex = i11 + 4;
+                        this.mBaseIndex = previousBaseIndex + 4;
                     }
-                    for (int i12 = 0; i12 < this.mInitViewCount; i12++) {
-                        int i13 = this.mBaseIndex;
-                        if (i12 < i13 || i12 >= i13 + 4) {
-                            this.mVideoFrame[this.mIndexList.get(i12).intValue()].setVisibility(8);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + 4) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
                             LiveViewUi liveViewUi3 = this.mLiveViewUi;
                             if (liveViewUi3 != null) {
-                                liveViewUi3.SetStreamDecodeState(this.mIndexList.get(i12).intValue(), true);
+                                liveViewUi3.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         }
                     }
-                    int i14 = this.mWidth / 2;
-                    int i15 = this.mHeight / 2;
-                    for (int i16 = 0; i16 < 2; i16++) {
-                        for (int i17 = 0; i17 < 2; i17++) {
-                            int i18 = (i16 * 2) + i17;
-                            RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].getLayoutParams();
+                    int cellWidth = this.mWidth / 2;
+                    int cellHeight = this.mHeight / 2;
+                    for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
+                        for (int columnIndex = 0; columnIndex < 2; columnIndex++) {
+                            int cellIndex = (rowIndex * 2) + columnIndex;
+                            RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].getLayoutParams();
                             if (layoutParams2 == null) {
-                                layoutParams2 = new RelativeLayout.LayoutParams(i14, i15);
+                                layoutParams2 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                             }
-                            layoutParams2.width = i14;
-                            layoutParams2.height = i15;
-                            layoutParams2.leftMargin = i14 * i17;
-                            layoutParams2.topMargin = i15 * i16;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].setLayoutParams(layoutParams2);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i18).intValue()].SetMax(false);
+                            layoutParams2.width = cellWidth;
+                            layoutParams2.height = cellHeight;
+                            layoutParams2.leftMargin = cellWidth * columnIndex;
+                            layoutParams2.topMargin = cellHeight * rowIndex;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setLayoutParams(layoutParams2);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].SetMax(false);
                             LiveViewUi liveViewUi4 = this.mLiveViewUi;
                             if (liveViewUi4 != null) {
-                                liveViewUi4.SetStreamDecodeState(this.mIndexList.get(i18 + this.mBaseIndex).intValue(), false);
+                                liveViewUi4.SetStreamDecodeState(this.mIndexList.get(cellIndex + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i2 == 1) {
+                } else if (currentViewCount == 1) {
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].SetFocusState(false);
                     this.mBaseIndex = (this.mBaseIndex + 1) % 32;
-                    for (int i19 = 0; i19 < this.mInitViewCount; i19++) {
-                        int i20 = this.mBaseIndex;
-                        if (i19 < i20 || i19 >= i20 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i19).intValue()].setVisibility(8);
-                            this.mVideoFrame[this.mIndexList.get(i19).intValue()].SetFocusState(false);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                             LiveViewUi liveViewUi5 = this.mLiveViewUi;
                             if (liveViewUi5 != null) {
-                                liveViewUi5.SetStreamDecodeState(this.mIndexList.get(i19).intValue(), true);
+                                liveViewUi5.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i19).intValue()].SetFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                         }
                     }
-                    int i21 = this.mWidth;
-                    int i22 = this.mHeight;
+                    int cellWidth = this.mWidth;
+                    int cellHeight = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams3 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams3 == null) {
-                        layoutParams3 = new RelativeLayout.LayoutParams(i21, i22);
+                        layoutParams3 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                     }
-                    layoutParams3.width = i21;
-                    layoutParams3.height = i22;
+                    layoutParams3.width = cellWidth;
+                    layoutParams3.height = cellHeight;
                     layoutParams3.leftMargin = 0;
                     layoutParams3.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -860,86 +860,86 @@ public class VideoGroup extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i23 = 0; i23 < this.mInitViewCount; i23++) {
-                    if (i23 == this.mFocusIndex) {
-                        this.mVideoFrame[this.mIndexList.get(i23).intValue()].SetFocusState(true);
+                for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                    if (viewIndex == this.mFocusIndex) {
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(true);
                         this.mLiveViewUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i23).intValue()].SetFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 16) {
-            int i24 = this.mCurViewCount;
-            if (i24 < i) {
-                if (i24 == 9) {
+        } else if (initViewCount == 16) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount < initViewCount) {
+                if (currentViewCount == 9) {
                     this.mFlingStatus = 0;
                     ArrayViews(9, true);
-                } else if (i24 == 4) {
-                    int i25 = this.mBaseIndex;
-                    if (i25 + 4 >= 16) {
+                } else if (currentViewCount == 4) {
+                    int previousBaseIndex = this.mBaseIndex;
+                    if (previousBaseIndex + 4 >= 16) {
                         this.mBaseIndex = 0;
                     } else {
-                        this.mBaseIndex = i25 + 4;
+                        this.mBaseIndex = previousBaseIndex + 4;
                     }
-                    for (int i26 = 0; i26 < this.mInitViewCount; i26++) {
-                        int i27 = this.mBaseIndex;
-                        if (i26 < i27 || i26 >= i27 + 4) {
-                            this.mVideoFrame[this.mIndexList.get(i26).intValue()].setVisibility(8);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + 4) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
                             LiveViewUi liveViewUi7 = this.mLiveViewUi;
                             if (liveViewUi7 != null) {
-                                liveViewUi7.SetStreamDecodeState(this.mIndexList.get(i26).intValue(), true);
+                                liveViewUi7.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         }
                     }
-                    int i28 = this.mWidth / 2;
-                    int i29 = this.mHeight / 2;
-                    for (int i30 = 0; i30 < 2; i30++) {
-                        for (int i31 = 0; i31 < 2; i31++) {
-                            int i32 = (i30 * 2) + i31;
-                            RelativeLayout.LayoutParams layoutParams4 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i32).intValue()].getLayoutParams();
+                    int cellWidth = this.mWidth / 2;
+                    int cellHeight = this.mHeight / 2;
+                    for (int rowIndex = 0; rowIndex < 2; rowIndex++) {
+                        for (int columnIndex = 0; columnIndex < 2; columnIndex++) {
+                            int cellIndex = (rowIndex * 2) + columnIndex;
+                            RelativeLayout.LayoutParams layoutParams4 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].getLayoutParams();
                             if (layoutParams4 == null) {
-                                layoutParams4 = new RelativeLayout.LayoutParams(i28, i29);
+                                layoutParams4 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                             }
-                            layoutParams4.width = i28;
-                            layoutParams4.height = i29;
-                            layoutParams4.leftMargin = i28 * i31;
-                            layoutParams4.topMargin = i29 * i30;
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i32).intValue()].setVisibility(0);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i32).intValue()].setLayoutParams(layoutParams4);
-                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + i32).intValue()].SetMax(false);
+                            layoutParams4.width = cellWidth;
+                            layoutParams4.height = cellHeight;
+                            layoutParams4.leftMargin = cellWidth * columnIndex;
+                            layoutParams4.topMargin = cellHeight * rowIndex;
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setVisibility(0);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].setLayoutParams(layoutParams4);
+                            this.mVideoFrame[this.mIndexList.get(this.mBaseIndex + cellIndex).intValue()].SetMax(false);
                             LiveViewUi liveViewUi8 = this.mLiveViewUi;
                             if (liveViewUi8 != null) {
-                                liveViewUi8.SetStreamDecodeState(this.mIndexList.get(i32 + this.mBaseIndex).intValue(), false);
+                                liveViewUi8.SetStreamDecodeState(this.mIndexList.get(cellIndex + this.mBaseIndex).intValue(), false);
                             }
                         }
                     }
-                } else if (i24 == 1) {
+                } else if (currentViewCount == 1) {
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].SetFocusState(false);
                     this.mBaseIndex = (this.mBaseIndex + 1) % 16;
-                    for (int i33 = 0; i33 < this.mInitViewCount; i33++) {
-                        int i34 = this.mBaseIndex;
-                        if (i33 < i34 || i33 >= i34 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i33).intValue()].setVisibility(8);
-                            this.mVideoFrame[this.mIndexList.get(i33).intValue()].SetFocusState(false);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                             LiveViewUi liveViewUi9 = this.mLiveViewUi;
                             if (liveViewUi9 != null) {
-                                liveViewUi9.SetStreamDecodeState(this.mIndexList.get(i33).intValue(), true);
+                                liveViewUi9.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i33).intValue()].SetFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                         }
                     }
-                    int i35 = this.mWidth;
-                    int i36 = this.mHeight;
+                    int cellWidth = this.mWidth;
+                    int cellHeight = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams5 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams5 == null) {
-                        layoutParams5 = new RelativeLayout.LayoutParams(i35, i36);
+                        layoutParams5 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                     }
-                    layoutParams5.width = i35;
-                    layoutParams5.height = i36;
+                    layoutParams5.width = cellWidth;
+                    layoutParams5.height = cellHeight;
                     layoutParams5.leftMargin = 0;
                     layoutParams5.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -951,47 +951,47 @@ public class VideoGroup extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i37 = 0; i37 < this.mInitViewCount; i37++) {
-                    int i38 = this.mFocusIndex;
-                    if (i37 == i38) {
-                        this.mVideoFrame[this.mIndexList.get(i38).intValue()].SetFocusState(true);
+                for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                    int focusIndex = this.mFocusIndex;
+                    if (viewIndex == focusIndex) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex).intValue()].SetFocusState(true);
                         this.mLiveViewUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i37).intValue()].SetFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 9) {
-            int i39 = this.mCurViewCount;
-            if (i39 < i) {
-                if (i39 == 4) {
+        } else if (initViewCount == 9) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount < initViewCount) {
+                if (currentViewCount == 4) {
                     ArrayViews(4, true);
-                } else if (i39 == 1) {
+                } else if (currentViewCount == 1) {
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].SetFocusState(false);
                     this.mBaseIndex = (this.mBaseIndex + 1) % 8;
-                    for (int i40 = 0; i40 < this.mInitViewCount; i40++) {
-                        int i41 = this.mBaseIndex;
-                        if (i40 < i41 || i40 >= i41 + this.mCurViewCount) {
-                            this.mVideoFrame[this.mIndexList.get(i40).intValue()].setVisibility(8);
-                            this.mVideoFrame[this.mIndexList.get(i40).intValue()].SetFocusState(false);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        int baseIndex = this.mBaseIndex;
+                        if (viewIndex < baseIndex || viewIndex >= baseIndex + this.mCurViewCount) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                             LiveViewUi liveViewUi11 = this.mLiveViewUi;
                             if (liveViewUi11 != null) {
-                                liveViewUi11.SetStreamDecodeState(this.mIndexList.get(i40).intValue(), true);
+                                liveViewUi11.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         } else {
-                            this.mVideoFrame[this.mIndexList.get(i40).intValue()].SetFocusState(false);
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                         }
                     }
-                    int i42 = this.mWidth;
-                    int i43 = this.mHeight;
+                    int cellWidth = this.mWidth;
+                    int cellHeight = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams6 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams6 == null) {
-                        layoutParams6 = new RelativeLayout.LayoutParams(i42, i43);
+                        layoutParams6 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                     }
-                    layoutParams6.width = i42;
-                    layoutParams6.height = i43;
+                    layoutParams6.width = cellWidth;
+                    layoutParams6.height = cellHeight;
                     layoutParams6.leftMargin = 0;
                     layoutParams6.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1003,42 +1003,42 @@ public class VideoGroup extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i44 = 0; i44 < this.mInitViewCount; i44++) {
-                    int i45 = this.mFocusIndex;
-                    if (i44 == i45) {
-                        this.mVideoFrame[this.mIndexList.get(i45).intValue()].SetFocusState(true);
+                for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                    int focusIndex = this.mFocusIndex;
+                    if (viewIndex == focusIndex) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex).intValue()].SetFocusState(true);
                         this.mLiveViewUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i44).intValue()].SetFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 4) {
-            int i46 = this.mCurViewCount;
-            if (i46 < i) {
-                if (i46 == 1) {
+        } else if (initViewCount == 4) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount < initViewCount) {
+                if (currentViewCount == 1) {
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].SetFocusState(false);
                     this.mBaseIndex = (this.mBaseIndex + 1) % 4;
-                    for (int i47 = 0; i47 < this.mInitViewCount; i47++) {
-                        this.mVideoFrame[this.mIndexList.get(i47).intValue()].SetFocusState(false);
-                        if (i47 != this.mBaseIndex) {
-                            this.mVideoFrame[this.mIndexList.get(i47).intValue()].setVisibility(8);
+                    for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
+                        if (viewIndex != this.mBaseIndex) {
+                            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
                             LiveViewUi liveViewUi13 = this.mLiveViewUi;
                             if (liveViewUi13 != null) {
-                                liveViewUi13.SetStreamDecodeState(this.mIndexList.get(i47).intValue(), true);
+                                liveViewUi13.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                             }
                         }
                     }
-                    int i48 = this.mWidth;
-                    int i49 = this.mHeight;
+                    int cellWidth = this.mWidth;
+                    int cellHeight = this.mHeight;
                     RelativeLayout.LayoutParams layoutParams7 = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].getLayoutParams();
                     if (layoutParams7 == null) {
-                        layoutParams7 = new RelativeLayout.LayoutParams(i48, i49);
+                        layoutParams7 = new RelativeLayout.LayoutParams(cellWidth, cellHeight);
                     }
-                    layoutParams7.width = i48;
-                    layoutParams7.height = i49;
+                    layoutParams7.width = cellWidth;
+                    layoutParams7.height = cellHeight;
                     layoutParams7.leftMargin = 0;
                     layoutParams7.topMargin = 0;
                     this.mVideoFrame[this.mIndexList.get(this.mBaseIndex).intValue()].setVisibility(0);
@@ -1050,28 +1050,28 @@ public class VideoGroup extends RelativeLayout {
                     }
                 }
                 this.mFocusIndex = this.mBaseIndex;
-                for (int i50 = 0; i50 < this.mInitViewCount; i50++) {
-                    int i51 = this.mFocusIndex;
-                    if (i50 == i51) {
-                        this.mVideoFrame[this.mIndexList.get(i51).intValue()].SetFocusState(true);
+                for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                    int focusIndex = this.mFocusIndex;
+                    if (viewIndex == focusIndex) {
+                        this.mVideoFrame[this.mIndexList.get(focusIndex).intValue()].SetFocusState(true);
                         this.mLiveViewUi.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i50).intValue()].SetFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
                     }
                 }
             } else {
                 return;
             }
-        } else if (i == 1) {
-            if (this.mCurViewCount < i) {
-                for (int i52 = 0; i52 < this.mInitViewCount; i52++) {
-                    this.mVideoFrame[this.mIndexList.get(i52).intValue()].SetFocusState(false);
-                    int i53 = this.mBaseIndex;
-                    if (i52 < i53 || i52 >= i53 + this.mCurViewCount) {
-                        this.mVideoFrame[this.mIndexList.get(i52).intValue()].setVisibility(8);
+        } else if (initViewCount == 1) {
+            if (this.mCurViewCount < initViewCount) {
+                for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+                    this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetFocusState(false);
+                    int baseIndex = this.mBaseIndex;
+                    if (viewIndex < baseIndex || viewIndex >= baseIndex + this.mCurViewCount) {
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setVisibility(8);
                         LiveViewUi liveViewUi15 = this.mLiveViewUi;
                         if (liveViewUi15 != null) {
-                            liveViewUi15.SetStreamDecodeState(this.mIndexList.get(i52).intValue(), true);
+                            liveViewUi15.SetStreamDecodeState(this.mIndexList.get(viewIndex).intValue(), true);
                         }
                     }
                 }

@@ -70,10 +70,10 @@ Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/VideoGroup.java` | 474 |
 | `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java` | 472 |
 | `decompiled/sources/com/streamax/config/fragment/network/DdnsOfNetwork.java` | 302 |
 | `decompiled/sources/com/streamax/config/fragment/datetime/DstOfDt.java` | 288 |
+| `decompiled/sources/com/streamax/client/VideoGroup.java` | 237 |
 | `decompiled/sources/com/streamax/client/VideoContainer.java` | 237 |
 | `decompiled/sources/com/streamax/client/VideoView.java` | 217 |
 | `decompiled/sources/com/streamax/client/LiveViewUi.java` | 215 |
@@ -95,7 +95,7 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 111 | 5,262 |
+| `decompiled/sources/com/streamax` | 111 | 5,025 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, and cleaned `VideoContainer.TurnNextView`. `RealPlayActivity.java` and `PlayerView.java` no longer have generic identifier hits under this audit scan; `VideoGroup.java` is down from 620 to 474 hits and `VideoContainer.java` is down from 476 to 237 hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods and `TurnNextView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, and cleaned `VideoContainer.TurnNextView`. `RealPlayActivity.java` and `PlayerView.java` no longer have generic identifier hits under this audit scan; `VideoGroup.java` is down from 620 to 237 hits and `VideoContainer.java` is down from 476 to 237 hits.
 
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/client/VideoGroup.java`
 - `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java`
 - `decompiled/sources/com/streamax/config/fragment/network/DdnsOfNetwork.java`
 - `decompiled/sources/com/streamax/config/fragment/datetime/DstOfDt.java`
+- `decompiled/sources/com/streamax/client/VideoGroup.java`
 
 Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. `VideoContainer.java` no longer contains the large non-executable decompiler register dump for `ArrayViews`; its remaining hits are in real Java methods.
