@@ -134,7 +134,7 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         this.mSeekBar.setProgress(0);
         this.mSeekBar.setSecondaryProgress(0);
         this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -201,7 +201,7 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         };
         this.mHandlerMessage = new Handler() {
             public void handleMessage(Message message) {
-                int i = message.what;
+                int messageWhat = message.what;
                 super.handleMessage(message);
             }
         };
@@ -247,16 +247,16 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.multiplay_controlbar_fast /*2131362748*/:
                 if (this.mbPlay) {
-                    int i = this.mSpeed;
-                    if (i == 1) {
+                    int currentSpeed = this.mSpeed;
+                    if (currentSpeed == 1) {
                         this.mSpeed = 2;
-                    } else if (i == 2) {
+                    } else if (currentSpeed == 2) {
                         this.mSpeed = 4;
-                    } else if (i == 4) {
+                    } else if (currentSpeed == 4) {
                         this.mSpeed = 8;
-                    } else if (i == 8) {
+                    } else if (currentSpeed == 8) {
                         this.mSpeed = 16;
-                    } else if (i == 16) {
+                    } else if (currentSpeed == 16) {
                         this.mSpeed = 32;
                     }
                     this.mDvrNet.MuitiPlaySetSpeed(this.mSpeed);
@@ -284,16 +284,16 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
                 }
             case R.id.multiplay_controlbar_slow /*2131362751*/:
                 if (this.mbPlay) {
-                    int i2 = this.mSpeed;
-                    if (i2 == 2) {
+                    int currentSpeed = this.mSpeed;
+                    if (currentSpeed == 2) {
                         this.mSpeed = 1;
-                    } else if (i2 == 4) {
+                    } else if (currentSpeed == 4) {
                         this.mSpeed = 2;
-                    } else if (i2 == 8) {
+                    } else if (currentSpeed == 8) {
                         this.mSpeed = 4;
-                    } else if (i2 == 16) {
+                    } else if (currentSpeed == 16) {
                         this.mSpeed = 8;
-                    } else if (i2 == 32) {
+                    } else if (currentSpeed == 32) {
                         this.mSpeed = 16;
                     }
                     this.mDvrNet.MuitiPlaySetSpeed(this.mSpeed);
@@ -335,8 +335,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(String str) {
-        ToastUtils.show((CharSequence) str);
+    public void toastSf(String messageText) {
+        ToastUtils.show((CharSequence) messageText);
     }
 
     public void startConnect() {
@@ -348,8 +348,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         this.mAdapter.replaceFragment(0, fragment);
     }
 
-    public void setViewPager(int i) {
-        this.mViewPager.setCurrentItem(i);
+    public void setViewPager(int position) {
+        this.mViewPager.setCurrentItem(position);
     }
 
     private class PlayPagerAdapter extends FragmentStatePagerAdapter {
@@ -368,16 +368,16 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
             return this.mFragments.size();
         }
 
-        public CharSequence getPageTitle(int i) {
-            return (CharSequence) PlayActivity.this.mListTitles.get(i);
+        public CharSequence getPageTitle(int position) {
+            return (CharSequence) PlayActivity.this.mListTitles.get(position);
         }
 
-        public Fragment getItem(int i) {
-            return this.mFragments.get(i);
+        public Fragment getItem(int position) {
+            return this.mFragments.get(position);
         }
 
-        public void replaceFragment(int i, Fragment fragment) {
-            this.mFragments.set(i, fragment);
+        public void replaceFragment(int position, Fragment fragment) {
+            this.mFragments.set(position, fragment);
             notifyDataSetChanged();
         }
     }
@@ -393,11 +393,11 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
             if (PlayActivity.this.mDvrNet == null) {
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, PlayActivity.this.mApp.mDevInfo, PlayActivity.this.mApp);
-                int i = -1;
+                int errorCode = -1;
                 if (connDeviceProxy != null) {
-                    i = ((Integer) connDeviceProxy.get("errorcode")).intValue();
+                    errorCode = ((Integer) connDeviceProxy.get("errorcode")).intValue();
                 }
-                if (i != 0) {
+                if (errorCode != 0) {
                     PlayActivity.this.mHandler.post(new Runnable() {
                         public void run() {
                             PlayActivity.this.mConnectRunnable = null;
@@ -485,10 +485,10 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         new Thread(this.mPlayStartRunnable).start();
     }
 
-    public char[] getChars(byte[] bArr) {
+    public char[] getChars(byte[] bytes) {
         Charset forName = Charset.forName("UTF-8");
-        ByteBuffer allocate = ByteBuffer.allocate(bArr.length);
-        allocate.put(bArr);
+        ByteBuffer allocate = ByteBuffer.allocate(bytes.length);
+        allocate.put(bytes);
         allocate.flip();
         return forName.decode(allocate).array();
     }
@@ -497,8 +497,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         PlayFileInfo mFile;
         boolean mPlay;
 
-        PlayFileRunnable(boolean z, PlayFileInfo playFileInfo) {
-            this.mPlay = z;
+        PlayFileRunnable(boolean shouldStopCurrentPlayback, PlayFileInfo playFileInfo) {
+            this.mPlay = shouldStopCurrentPlayback;
             this.mFile = playFileInfo;
         }
 
@@ -520,13 +520,13 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
                     PlayActivity.this.mStartTime = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(PlayActivity.this.mYear), Integer.valueOf(PlayActivity.this.mMonth), Integer.valueOf(PlayActivity.this.mDay), Integer.valueOf(PlayActivity.this.mHour), Integer.valueOf(PlayActivity.this.mMinute), Integer.valueOf(PlayActivity.this.mSecond)});
                     PlayActivity.this.mEndTime = String.valueOf(chars, 15, 14);
                     PlayActivity.this.mFileStartTime = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(PlayActivity.this.mHour), Integer.valueOf(PlayActivity.this.mMinute), Integer.valueOf(PlayActivity.this.mSecond)});
-                    char[] chars2 = PlayActivity.this.getChars(PlayActivity.this.mEndTime.getBytes());
-                    int parseInt = Integer.parseInt(String.valueOf(chars2, 8, 2));
-                    int parseInt2 = Integer.parseInt(String.valueOf(chars2, 10, 2));
-                    int parseInt3 = Integer.parseInt(String.valueOf(chars2, 12, 2));
-                    PlayActivity.this.mFileEndTime = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(parseInt), Integer.valueOf(parseInt2), Integer.valueOf(parseInt3)});
+                    char[] endTimeChars = PlayActivity.this.getChars(PlayActivity.this.mEndTime.getBytes());
+                    int endHour = Integer.parseInt(String.valueOf(endTimeChars, 8, 2));
+                    int endMinute = Integer.parseInt(String.valueOf(endTimeChars, 10, 2));
+                    int endSecond = Integer.parseInt(String.valueOf(endTimeChars, 12, 2));
+                    PlayActivity.this.mFileEndTime = String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(endHour), Integer.valueOf(endMinute), Integer.valueOf(endSecond)});
                     PlayActivity.this.mFileStartSec = (PlayActivity.this.mHour * 3600) + (PlayActivity.this.mMinute * 60) + PlayActivity.this.mSecond;
-                    PlayActivity.this.mFileEndSec = (parseInt * 3600) + (parseInt2 * 60) + parseInt3;
+                    PlayActivity.this.mFileEndSec = (endHour * 3600) + (endMinute * 60) + endSecond;
                     PlayActivity.this.mFileTimeSec = 0;
                     if (PlayActivity.this.mFileEndSec > PlayActivity.this.mFileStartSec) {
                         PlayActivity.this.mFileTimeSec = PlayActivity.this.mFileEndSec - PlayActivity.this.mFileStartSec;
@@ -566,8 +566,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
     public class PlaySeekRunnable implements Runnable {
         public String mSeekTime;
 
-        PlaySeekRunnable(String str) {
-            this.mSeekTime = str;
+        PlaySeekRunnable(String seekTime) {
+            this.mSeekTime = seekTime;
         }
 
         public void run() {
@@ -580,11 +580,11 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public void seekTime(int i, int i2) {
+    public void seekTime(int maxProgress, int progressSeconds) {
         if (checkPlayRunnable()) {
-            int i3 = this.mFileStartSec + i2;
-            int i4 = i3 / 3600;
-            this.mPlaySeekRunnable = new PlaySeekRunnable(String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i4), Integer.valueOf((i3 - (i4 * 3600)) / 60), Integer.valueOf(i3 % 60)}));
+            int absoluteSecond = this.mFileStartSec + progressSeconds;
+            int hour = absoluteSecond / 3600;
+            this.mPlaySeekRunnable = new PlaySeekRunnable(String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(hour), Integer.valueOf((absoluteSecond - (hour * 3600)) / 60), Integer.valueOf(absoluteSecond % 60)}));
             new Thread(this.mPlaySeekRunnable).start();
         }
     }
@@ -592,8 +592,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
     public class PlayPauseRunnable implements Runnable {
         public boolean mPause;
 
-        PlayPauseRunnable(boolean z) {
-            this.mPause = z;
+        PlayPauseRunnable(boolean pause) {
+            this.mPause = pause;
         }
 
         public void run() {
@@ -610,9 +610,9 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         if (checkPlayRunnable()) {
             this.mLastActive = new Date();
             this.mImagePlay.setVisibility(0);
-            boolean z = !this.mbPause;
-            this.mbPause = z;
-            if (z) {
+            boolean paused = !this.mbPause;
+            this.mbPause = paused;
+            if (paused) {
                 this.mImagePlay.setImageResource(R.drawable.play_start);
             } else {
                 this.mImagePlay.setImageResource(R.drawable.play_pause);
@@ -657,15 +657,15 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public void WriteIn(int i, int i2, byte[] bArr, int i3, int i4) {
+    public void WriteIn(int channel, int frameType, byte[] frameData, int width, int height) {
         VideoView videoView;
         if (this.mVideoGroup.GetLayoutMode() == 1) {
             videoView = this.mVideoGroup.getVideoView(0);
         } else {
-            videoView = this.mVideoGroup.getVideoView(i);
+            videoView = this.mVideoGroup.getVideoView(channel);
         }
         if (videoView != null) {
-            videoView.writeIn(bArr, i3, i4);
+            videoView.writeIn(frameData, width, height);
         }
     }
 
@@ -676,11 +676,11 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
             this.mtvPlayTime.post(new Runnable() {
                 public void run() {
                     if (PlayActivity.this.mTimeValues >= PlayActivity.this.mFileStartSec && PlayActivity.this.mTimeValues <= PlayActivity.this.mFileEndSec) {
-                        int i = PlayActivity.this.mTimeValues / 3600;
-                        PlayActivity.this.mtvPlayTime.setText(String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(i), Integer.valueOf((PlayActivity.this.mTimeValues - (i * 3600)) / 60), Integer.valueOf(PlayActivity.this.mTimeValues % 60)}));
-                        int i2 = PlayActivity.this.mTimeValues - PlayActivity.this.mFileStartSec;
-                        if (i2 != PlayActivity.this.mSeekBar.getProgress() && !PlayActivity.this.mTracking) {
-                            PlayActivity.this.mSeekBar.setProgress(i2);
+                        int currentHour = PlayActivity.this.mTimeValues / 3600;
+                        PlayActivity.this.mtvPlayTime.setText(String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(currentHour), Integer.valueOf((PlayActivity.this.mTimeValues - (currentHour * 3600)) / 60), Integer.valueOf(PlayActivity.this.mTimeValues % 60)}));
+                        int progressSeconds = PlayActivity.this.mTimeValues - PlayActivity.this.mFileStartSec;
+                        if (progressSeconds != PlayActivity.this.mSeekBar.getProgress() && !PlayActivity.this.mTracking) {
+                            PlayActivity.this.mSeekBar.setProgress(progressSeconds);
                         }
                     }
                 }
@@ -688,8 +688,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public void setVideoGroupMax(boolean z) {
-        if (z) {
+    public void setVideoGroupMax(boolean fullScreen) {
+        if (fullScreen) {
             getWindow().getDecorView().setSystemUiVisibility(4);
             this.mTitleLayout.setVisibility(8);
             this.mPlayLayout.getLayoutParams().height = -1;
@@ -711,9 +711,9 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
     }
 
     public void onEventMainThread(ClickFullEvent clickFullEvent) {
-        boolean z = !this.landscape;
-        this.landscape = z;
-        if (z) {
+        boolean fullScreen = !this.landscape;
+        this.landscape = fullScreen;
+        if (fullScreen) {
             setRequestedOrientation(0);
             setVideoGroupMax(true);
             return;
