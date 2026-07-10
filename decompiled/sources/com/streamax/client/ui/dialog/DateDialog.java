@@ -30,7 +30,7 @@ public final class DateDialog {
 
         void onCancel(BaseDialog baseDialog);
 
-        void onSelected(BaseDialog baseDialog, int i, int i2, int i3);
+        void onSelected(BaseDialog baseDialog, int year, int month, int day);
     }
 
     public static final class Builder extends CommonDialog.Builder<Builder> implements Runnable, PickerLayoutManager.OnPickerListener {
@@ -50,13 +50,13 @@ public final class DateDialog {
             this(context, Calendar.getInstance(Locale.CHINA).get(1) - 100);
         }
 
-        public Builder(Context context, int i) {
-            this(context, i, Calendar.getInstance(Locale.CHINA).get(1));
+        public Builder(Context context, int startYear) {
+            this(context, startYear, Calendar.getInstance(Locale.CHINA).get(1));
         }
 
-        public Builder(Context context, int i, int i2) {
+        public Builder(Context context, int startYear, int endYear) {
             super(context);
-            this.mStartYear = i;
+            this.mStartYear = startYear;
             setCustomView((int) R.layout.date_dialog);
             setTitle((int) R.string.time_title);
             this.mYearView = (RecyclerView) findViewById(R.id.rv_date_year);
@@ -65,24 +65,25 @@ public final class DateDialog {
             this.mYearAdapter = new PickerAdapter(context);
             this.mMonthAdapter = new PickerAdapter(context);
             this.mDayAdapter = new PickerAdapter(context);
-            ArrayList arrayList = new ArrayList(10);
-            while (i <= i2) {
-                arrayList.add(i + " " + getString(R.string.common_year));
-                i++;
+            ArrayList<String> years = new ArrayList<>(10);
+            int year = startYear;
+            while (year <= endYear) {
+                years.add(year + " " + getString(R.string.common_year));
+                year++;
             }
-            ArrayList arrayList2 = new ArrayList(12);
-            for (int i3 = 1; i3 <= 12; i3++) {
-                arrayList2.add(i3 + " " + getString(R.string.common_month));
+            ArrayList<String> months = new ArrayList<>(12);
+            for (int month = 1; month <= 12; month++) {
+                months.add(month + " " + getString(R.string.common_month));
             }
             Calendar instance = Calendar.getInstance(Locale.CHINA);
             int actualMaximum = instance.getActualMaximum(5);
-            ArrayList arrayList3 = new ArrayList(actualMaximum);
-            for (int i4 = 1; i4 <= actualMaximum; i4++) {
-                arrayList3.add(i4 + " " + getString(R.string.common_day));
+            ArrayList<String> days = new ArrayList<>(actualMaximum);
+            for (int day = 1; day <= actualMaximum; day++) {
+                days.add(day + " " + getString(R.string.common_day));
             }
-            this.mYearAdapter.setData(arrayList);
-            this.mMonthAdapter.setData(arrayList2);
-            this.mDayAdapter.setData(arrayList3);
+            this.mYearAdapter.setData(years);
+            this.mMonthAdapter.setData(months);
+            this.mDayAdapter.setData(days);
             PickerLayoutManager build = new PickerLayoutManager.Builder(context).build();
             this.mYearManager = build;
             PickerLayoutManager build2 = new PickerLayoutManager.Builder(context).build();
@@ -112,70 +113,70 @@ public final class DateDialog {
             return this;
         }
 
-        public Builder setDate(long j) {
-            if (j > 0) {
-                setDate(new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date(j)));
+        public Builder setDate(long timestampMs) {
+            if (timestampMs > 0) {
+                setDate(new SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(new Date(timestampMs)));
             }
             return this;
         }
 
-        public Builder setDate(String str) {
-            if (str.matches("\\d{8}")) {
-                setYear(str.substring(0, 4));
-                setMonth(str.substring(4, 6));
-                setDay(str.substring(6, 8));
-            } else if (str.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                setYear(str.substring(0, 4));
-                setMonth(str.substring(5, 7));
-                setDay(str.substring(8, 10));
+        public Builder setDate(String dateText) {
+            if (dateText.matches("\\d{8}")) {
+                setYear(dateText.substring(0, 4));
+                setMonth(dateText.substring(4, 6));
+                setDay(dateText.substring(6, 8));
+            } else if (dateText.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                setYear(dateText.substring(0, 4));
+                setMonth(dateText.substring(5, 7));
+                setDay(dateText.substring(8, 10));
             }
             return this;
         }
 
-        public Builder setYear(String str) {
-            return setYear(Integer.parseInt(str));
+        public Builder setYear(String yearText) {
+            return setYear(Integer.parseInt(yearText));
         }
 
-        public Builder setYear(int i) {
-            int i2 = i - this.mStartYear;
-            if (i2 < 0) {
-                i2 = 0;
-            } else if (i2 > this.mYearAdapter.getCount() - 1) {
-                i2 = this.mYearAdapter.getCount() - 1;
+        public Builder setYear(int year) {
+            int yearPosition = year - this.mStartYear;
+            if (yearPosition < 0) {
+                yearPosition = 0;
+            } else if (yearPosition > this.mYearAdapter.getCount() - 1) {
+                yearPosition = this.mYearAdapter.getCount() - 1;
             }
-            this.mYearView.scrollToPosition(i2);
+            this.mYearView.scrollToPosition(yearPosition);
             refreshMonthMaximumDay();
             return this;
         }
 
-        public Builder setMonth(String str) {
-            return setMonth(Integer.parseInt(str));
+        public Builder setMonth(String monthText) {
+            return setMonth(Integer.parseInt(monthText));
         }
 
-        public Builder setMonth(int i) {
-            int i2 = i - 1;
-            if (i2 < 0) {
-                i2 = 0;
-            } else if (i2 > this.mMonthAdapter.getCount() - 1) {
-                i2 = this.mMonthAdapter.getCount() - 1;
+        public Builder setMonth(int month) {
+            int monthPosition = month - 1;
+            if (monthPosition < 0) {
+                monthPosition = 0;
+            } else if (monthPosition > this.mMonthAdapter.getCount() - 1) {
+                monthPosition = this.mMonthAdapter.getCount() - 1;
             }
-            this.mMonthView.scrollToPosition(i2);
+            this.mMonthView.scrollToPosition(monthPosition);
             refreshMonthMaximumDay();
             return this;
         }
 
-        public Builder setDay(String str) {
-            return setDay(Integer.parseInt(str));
+        public Builder setDay(String dayText) {
+            return setDay(Integer.parseInt(dayText));
         }
 
-        public Builder setDay(int i) {
-            int i2 = i - 1;
-            if (i2 < 0) {
-                i2 = 0;
-            } else if (i2 > this.mDayAdapter.getCount() - 1) {
-                i2 = this.mDayAdapter.getCount() - 1;
+        public Builder setDay(int day) {
+            int dayPosition = day - 1;
+            if (dayPosition < 0) {
+                dayPosition = 0;
+            } else if (dayPosition > this.mDayAdapter.getCount() - 1) {
+                dayPosition = this.mDayAdapter.getCount() - 1;
             }
-            this.mDayView.scrollToPosition(i2);
+            this.mDayView.scrollToPosition(dayPosition);
             refreshMonthMaximumDay();
             return this;
         }
@@ -198,7 +199,7 @@ public final class DateDialog {
             }
         }
 
-        public void onPicked(RecyclerView recyclerView, int i) {
+        public void onPicked(RecyclerView recyclerView, int position) {
             refreshMonthMaximumDay();
         }
 
@@ -207,11 +208,11 @@ public final class DateDialog {
             instance.set(this.mStartYear + this.mYearManager.getPickedPosition(), this.mMonthManager.getPickedPosition(), 1);
             int actualMaximum = instance.getActualMaximum(5);
             if (this.mDayAdapter.getCount() != actualMaximum) {
-                ArrayList arrayList = new ArrayList(actualMaximum);
-                for (int i = 1; i <= actualMaximum; i++) {
-                    arrayList.add(i + " " + getString(R.string.common_day));
+                ArrayList<String> days = new ArrayList<>(actualMaximum);
+                for (int day = 1; day <= actualMaximum; day++) {
+                    days.add(day + " " + getString(R.string.common_day));
                 }
-                this.mDayAdapter.setData(arrayList);
+                this.mDayAdapter.setData(days);
             }
         }
 
@@ -225,7 +226,7 @@ public final class DateDialog {
                 super(context);
             }
 
-            public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
                 return new ViewHolder();
             }
 
@@ -236,8 +237,8 @@ public final class DateDialog {
                     super((BaseAdapter) PickerAdapter.this, (int) R.layout.picker_item);
                 }
 
-                public void onBindView(int i) {
-                    this.mPickerView.setText((CharSequence) PickerAdapter.this.getItem(i));
+                public void onBindView(int position) {
+                    this.mPickerView.setText((CharSequence) PickerAdapter.this.getItem(position));
                 }
             }
         }
