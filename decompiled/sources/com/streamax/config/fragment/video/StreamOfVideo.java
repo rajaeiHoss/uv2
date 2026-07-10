@@ -769,133 +769,94 @@ public class StreamOfVideo extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void updateDateForCopy(List<Integer> list) {
-        int i;
-        int i2;
-        int i3;
-        int i4;
-        JSONArray jSONArray;
-        int i5;
-        int i6;
-        int i7;
-        int i8;
-        JSONArray jSONArray2 = this.mStreamArr;
-        if (jSONArray2 != null) {
+        JSONArray streamArr = this.mStreamArr;
+        if (streamArr != null) {
             try {
-                JSONObject jSONObject = jSONArray2.getJSONObject(this.mCurCh);
-                if (jSONObject != null) {
-                    int i9 = jSONObject.getInt("RST");
-                    int i10 = jSONObject.getInt("FR");
-                    int i11 = jSONObject.getInt("BR");
-                    int i12 = 0;
-                    boolean z = false;
-                    while (i12 < list.size()) {
-                        int intValue = list.get(i12).intValue();
-                        if (intValue != this.mCurCh) {
-                            JSONObject jSONObject2 = this.mStreamArr.getJSONObject(intValue);
-                            JSONObject jSONObject3 = this.mStreamVpArr.getJSONObject(intValue);
-                            if (jSONObject2 != null) {
-                                if (jSONObject3 != null) {
-                                    JSONArray jSONArray3 = jSONObject3.getJSONArray("RSFR");
-                                    if (jSONArray3 != null) {
-                                        int i13 = 0;
-                                        boolean z2 = false;
-                                        boolean z3 = false;
-                                        boolean z4 = false;
-                                        while (i13 < jSONArray3.length()) {
-                                            JSONObject jSONObject4 = jSONArray3.getJSONObject(i13);
-                                            if (jSONObject4 == null) {
-                                                i4 = i9;
-                                                jSONArray = jSONArray3;
-                                                i3 = i12;
-                                            } else {
-                                                jSONArray = jSONArray3;
-                                                if (i9 == jSONObject4.getInt("RST")) {
-                                                    z4 = true;
-                                                }
-                                                String string = jSONObject4.getString("FR");
-                                                i4 = i9;
-                                                if (string != null) {
-                                                    String[] split = string.split("-");
-                                                    i3 = i12;
-                                                    if (split.length <= 1 || split[0].isEmpty() || split[1].isEmpty()) {
-                                                        i8 = -1;
-                                                        i7 = -1;
-                                                    } else {
-                                                        i7 = Integer.parseInt(split[0]);
-                                                        i8 = Integer.parseInt(split[1]);
-                                                    }
-                                                    if (i7 > 0 && i8 >= i7 && i10 >= i7 && i10 <= i8) {
-                                                        z3 = true;
-                                                    }
-                                                } else {
-                                                    i3 = i12;
-                                                }
-                                                String string2 = jSONObject4.getString("BR");
-                                                if (string2 != null) {
-                                                    String[] split2 = string2.split("-");
-                                                    if (split2.length > 1) {
-                                                        if (!split2[0].isEmpty() && !split2[1].isEmpty()) {
-                                                            int parseInt = Integer.parseInt(split2[0]);
-                                                            i5 = Integer.parseInt(split2[1]);
-                                                            i6 = parseInt;
-                                                            if (i6 > 0 && i5 >= i6 && i11 >= i6 && i11 <= i5) {
-                                                                z2 = true;
-                                                            }
-                                                            i13++;
-                                                            List<Integer> list2 = list;
-                                                            jSONArray3 = jSONArray;
-                                                            i9 = i4;
-                                                            i12 = i3;
-                                                        }
-                                                    }
-                                                    i6 = -1;
-                                                    i5 = -1;
-                                                    z2 = true;
-                                                    i13++;
-                                                    List<Integer> list22 = list;
-                                                    jSONArray3 = jSONArray;
-                                                    i9 = i4;
-                                                    i12 = i3;
-                                                }
-                                            }
-                                            i13++;
-                                            List<Integer> list222 = list;
-                                            jSONArray3 = jSONArray;
-                                            i9 = i4;
-                                            i12 = i3;
-                                        }
-                                        i2 = i9;
-                                        i = i12;
-                                        JSONObject jSONObject5 = new JSONObject(jSONObject.toString());
-                                        if (!z2) {
-                                            jSONObject5.put("BR", jSONObject2.getInt("BR"));
-                                        }
-                                        if (!z3) {
-                                            jSONObject5.put("FR", jSONObject2.getInt("FR"));
-                                        }
-                                        if (!z4) {
-                                            jSONObject5.put("RST", jSONObject2.getInt("RST"));
-                                        }
-                                        this.mStreamArr.put(intValue, jSONObject5);
-                                        z = true;
-                                        i12 = i + 1;
-                                        i9 = i2;
-                                    }
-                                }
-                            }
+                JSONObject sourceStream = streamArr.getJSONObject(this.mCurCh);
+                if (sourceStream != null) {
+                    int sourceResolution = sourceStream.getInt("RST");
+                    int sourceFrameRate = sourceStream.getInt("FR");
+                    int sourceBitRate = sourceStream.getInt("BR");
+                    boolean configChanged = false;
+                    for (int selectionIndex = 0; selectionIndex < list.size(); selectionIndex++) {
+                        int targetChannel = list.get(selectionIndex).intValue();
+                        if (targetChannel != this.mCurCh && copyStreamToChannel(sourceStream, sourceResolution, sourceFrameRate, sourceBitRate, targetChannel)) {
+                            configChanged = true;
                         }
-                        i2 = i9;
-                        i = i12;
-                        i12 = i + 1;
-                        i9 = i2;
                     }
-                    if (z) {
+                    if (configChanged) {
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
             } catch (JSONException unused) {
             }
         }
+    }
+
+    private boolean copyStreamToChannel(JSONObject sourceStream, int sourceResolution, int sourceFrameRate, int sourceBitRate, int targetChannel) throws JSONException {
+        JSONObject targetStream = this.mStreamArr.getJSONObject(targetChannel);
+        JSONObject targetStreamVp = this.mStreamVpArr.getJSONObject(targetChannel);
+        if (targetStream == null || targetStreamVp == null) {
+            return false;
+        }
+        JSONArray supportedRanges = targetStreamVp.getJSONArray("RSFR");
+        if (supportedRanges == null) {
+            return false;
+        }
+        boolean bitRateSupported = false;
+        boolean frameRateSupported = false;
+        boolean resolutionSupported = false;
+        for (int rangeIndex = 0; rangeIndex < supportedRanges.length(); rangeIndex++) {
+            JSONObject rangeObj = supportedRanges.getJSONObject(rangeIndex);
+            if (rangeObj != null) {
+                if (sourceResolution == rangeObj.getInt("RST")) {
+                    resolutionSupported = true;
+                }
+                if (isStrictRangeValue(rangeObj.getString("FR"), sourceFrameRate)) {
+                    frameRateSupported = true;
+                }
+                if (isBitRateSupported(rangeObj.getString("BR"), sourceBitRate)) {
+                    bitRateSupported = true;
+                }
+            }
+        }
+        JSONObject copiedStream = new JSONObject(sourceStream.toString());
+        if (!bitRateSupported) {
+            copiedStream.put("BR", targetStream.getInt("BR"));
+        }
+        if (!frameRateSupported) {
+            copiedStream.put("FR", targetStream.getInt("FR"));
+        }
+        if (!resolutionSupported) {
+            copiedStream.put("RST", targetStream.getInt("RST"));
+        }
+        this.mStreamArr.put(targetChannel, copiedStream);
+        return true;
+    }
+
+    private boolean isStrictRangeValue(String rangeValue, int value) {
+        if (rangeValue != null) {
+            String[] rangeParts = rangeValue.split("-");
+            if (rangeParts.length > 1 && !rangeParts[0].isEmpty() && !rangeParts[1].isEmpty()) {
+                int minValue = Integer.parseInt(rangeParts[0]);
+                int maxValue = Integer.parseInt(rangeParts[1]);
+                return minValue > 0 && maxValue >= minValue && value >= minValue && value <= maxValue;
+            }
+        }
+        return false;
+    }
+
+    private boolean isBitRateSupported(String bitRateRange, int bitRate) {
+        if (bitRateRange != null) {
+            String[] rangeParts = bitRateRange.split("-");
+            if (rangeParts.length <= 1 || rangeParts[0].isEmpty() || rangeParts[1].isEmpty()) {
+                return true;
+            }
+            int minBitRate = Integer.parseInt(rangeParts[0]);
+            int maxBitRate = Integer.parseInt(rangeParts[1]);
+            return minBitRate > 0 && maxBitRate >= minBitRate && bitRate >= minBitRate && bitRate <= maxBitRate;
+        }
+        return false;
     }
 
     public void saveSelect(String str, List<Integer> list) {
