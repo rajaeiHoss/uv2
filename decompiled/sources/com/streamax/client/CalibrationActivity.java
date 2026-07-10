@@ -426,39 +426,36 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
         return true;
     }
 
-    private void moveAdasCalLine(int i) {
-        boolean z = false;
-        boolean z2 = true;
-        if (MENU_ACTION_UP == i) {
-            if (checkAdasHorizon(i)) {
+    private void moveAdasCalLine(int action) {
+        if (MENU_ACTION_UP == action) {
+            if (checkAdasHorizon(action)) {
                 this.mAdasHorizon--;
             } else {
                 return;
             }
-        } else if (MENU_ACTION_DOWN != i) {
-            if (MENU_ACTION_LEFT != i) {
-                if (MENU_ACTION_RIGHT == i) {
-                    if (checkAdasVertical(i)) {
-                        this.mAdasVertical++;
-                    } else {
-                        return;
-                    }
-                }
-                z2 = false;
-            } else if (checkAdasVertical(i)) {
+            setAdasCalText(true, false);
+        } else if (MENU_ACTION_DOWN == action) {
+            if (checkAdasHorizon(action)) {
+                this.mAdasHorizon++;
+            } else {
+                return;
+            }
+            setAdasCalText(true, false);
+        } else if (MENU_ACTION_LEFT == action) {
+            if (checkAdasVertical(action)) {
                 this.mAdasVertical--;
             } else {
                 return;
             }
-            setAdasCalText(z, z2);
-        } else if (checkAdasHorizon(i)) {
-            this.mAdasHorizon++;
-        } else {
-            return;
+            setAdasCalText(false, true);
+        } else if (MENU_ACTION_RIGHT == action) {
+            if (checkAdasVertical(action)) {
+                this.mAdasVertical++;
+            } else {
+                return;
+            }
+            setAdasCalText(false, true);
         }
-        z = true;
-        z2 = false;
-        setAdasCalText(z, z2);
     }
 
     private void stopPlay() {
