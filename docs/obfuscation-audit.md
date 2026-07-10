@@ -60,17 +60,16 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 3 |
-| `str`, `str2`, ... | 79 |
+| `str`, `str2`, ... | 78 |
 | `bArr`, `bArr2`, ... | 10 |
-| `i2`, `j2`, ... | 59 |
-| `z`, `z2`, ... | 48 |
-| App-owned files with at least one generic identifier | 105 |
+| `i2`, `j2`, ... | 58 |
+| `z`, `z2`, ... | 47 |
+| App-owned files with at least one generic identifier | 104 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/WebService.java` | 141 |
 | `decompiled/sources/com/streamax/client/CustomImageView.java` | 140 |
 | `decompiled/sources/com/streamax/config/fragment/record/PlanOfRecord.java` | 120 |
 | `decompiled/sources/com/streamax/config/fragment/alarm/ScheduleOfAlarm.java` | 109 |
@@ -90,12 +89,13 @@ Top app-owned cleanup targets by generic identifier count:
 | `decompiled/sources/com/streamax/config/fragment/FragmentSysTime.java` | 46 |
 | `decompiled/sources/com/streamax/client/ui/dialog/DateDialog.java` | 45 |
 | `decompiled/sources/com/streamax/client/PlayActivity.java` | 45 |
+| `decompiled/sources/com/streamax/client/ui/dialog/TimeDialog.java` | 41 |
 
 Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 105 | 2,940 |
+| `decompiled/sources/com/streamax` | 104 | 2,799 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,13 +125,13 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers and copy-channel compatibility flow in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, cleaned the render/zoom/touch locals in `VideoView.java`, simplified `LiveViewUi` surface visibility while removing its stale `SwitchChannelRunnable` JADX dump, reconstructed `ConnDeviceProxy.connDeviceByAuto`, and simplified `TriggerOfAlarm.refreshUi`. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, `VideoView.java`, and `ConnDeviceProxy.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 70 hits, `LiveViewUi.java` is down from 215 to 84 hits, and `TriggerOfAlarm.java` is down from 146 to 57 hits.
+The latest safe chunks cleaned executable/local identifiers in `RealPlayActivity.java`, removed its non-executable `SwitchChannelRunnable` decompiler dump, cleaned the smaller layout/control methods plus `TurnNextView` and `TurnLastView` in `VideoGroup.java`, removed the non-executable `PlayerView.onTouchEvent` decompiler dump, reconstructed `VideoContainer.ArrayViews`, cleaned `VideoContainer.TurnNextView` and `TurnLastView`, reconstructed the frame-rate helpers and copy-channel compatibility flow in `StreamOfVideo.java`, reconstructed the DDNS refresh flow in `DdnsOfNetwork.java`, reconstructed the DST time-picker flow in `DstOfDt.java`, cleaned the render/zoom/touch locals in `VideoView.java`, simplified `LiveViewUi` surface visibility while removing its stale `SwitchChannelRunnable` JADX dump, reconstructed `ConnDeviceProxy.connDeviceByAuto`, simplified `TriggerOfAlarm.refreshUi`, and cleaned `WebService.java` SOAP/CSV parsing locals. `RealPlayActivity.java`, `PlayerView.java`, `DdnsOfNetwork.java`, `DstOfDt.java`, `VideoGroup.java`, `VideoContainer.java`, `VideoView.java`, `ConnDeviceProxy.java`, and `WebService.java` no longer have generic identifier hits under this audit scan; `StreamOfVideo.java` is down from 472 to 70 hits, `LiveViewUi.java` is down from 215 to 84 hits, and `TriggerOfAlarm.java` is down from 146 to 57 hits.
 
 The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
-- `decompiled/sources/com/streamax/client/WebService.java`
 - `decompiled/sources/com/streamax/client/CustomImageView.java`
 - `decompiled/sources/com/streamax/config/fragment/record/PlanOfRecord.java`
 - `decompiled/sources/com/streamax/config/fragment/alarm/ScheduleOfAlarm.java`
+- `decompiled/sources/com/streamax/client/EventPlaybackActivity.java`
 
 Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.

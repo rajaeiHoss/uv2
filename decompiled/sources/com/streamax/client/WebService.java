@@ -36,29 +36,29 @@ public class WebService {
     private String mServerIP;
     private String mUsername;
 
-    public WebService(String str, String str2, String str3) {
-        this.mUsername = str2;
-        this.mPassword = str3;
-        if (TextUtils.isEmpty(str)) {
+    public WebService(String serverHost, String username, String password) {
+        this.mUsername = username;
+        this.mPassword = password;
+        if (TextUtils.isEmpty(serverHost)) {
             return;
         }
-        if (str.contains("http://")) {
-            this.mServerIP = str;
+        if (serverHost.contains("http://")) {
+            this.mServerIP = serverHost;
             return;
         }
-        this.mServerIP = "http://" + str;
+        this.mServerIP = "http://" + serverHost;
     }
 
-    public void SetRegisterId(String str) {
-        this.mRegId = str;
+    public void SetRegisterId(String registerId) {
+        this.mRegId = registerId;
     }
 
     public int GetLoginType() {
         return this.mLoginType;
     }
 
-    public synchronized List<DevInfoBean> GetTerminalInfoAndroid(boolean z) {
-        if (z) {
+    public synchronized List<DevInfoBean> GetTerminalInfoAndroid(boolean forceRefresh) {
+        if (forceRefresh) {
             List<DevInfoBean> list = this.mDevList;
             if (list != null) {
                 list.clear();
@@ -87,48 +87,15 @@ public class WebService {
         try {
             httpTransportSE.call("cq-video.cn/GetTerminalInfoAndroid", soapSerializationEnvelope);
             if (soapSerializationEnvelope.getResponse() != null) {
-                String[] split = soapSerializationEnvelope.getResponse().toString().split(";");
-                for (int i = 0; i < split.length; i++) {
-                    for (int i2 = i; i2 < split.length; i2++) {
-                        if (split[i2].length() > split[i].length()) {
-                            String str = split[i];
-                            split[i] = split[i2];
-                            split[i2] = str;
-                        }
-                    }
-                }
-                String[] split2 = split[0].split(",");
-                for (int i3 = 1; i3 < split.length; i3++) {
-                    String[] split3 = split[i3].split(",");
+                String[] rows = soapSerializationEnvelope.getResponse().toString().split(";");
+                sortRowsByLengthDescending(rows);
+                String[] headers = rows[0].split(",");
+                for (int rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+                    String[] fields = rows[rowIndex].split(",");
                     DevInfoBean devInfoBean = new DevInfoBean();
-                    for (int i4 = 0; i4 < split3.length; i4++) {
-                        if (split2[i4].compareTo("TerminalID") == 0) {
-                            devInfoBean.mDevId = Integer.parseInt(split3[i4]);
-                        } else if (split2[i4].compareTo("SIMCardID") == 0) {
-                            devInfoBean.mDevName = split3[i4];
-                        } else if (split2[i4].compareTo("WANIp") == 0) {
-                            devInfoBean.mDevIp = split3[i4];
-                        } else if (split2[i4].compareTo("TerminalPort") == 0) {
-                            if (!"".equals(split3[i4])) {
-                                devInfoBean.mMediaPort = Integer.parseInt(split3[i4]);
-                            }
-                        } else if (split2[i4].compareTo("TransmitPort") == 0) {
-                            devInfoBean.mWebPort = Integer.parseInt(split3[i4]);
-                        } else if (split2[i4].compareTo("User") == 0) {
-                            devInfoBean.mUsername = split3[i4];
-                        } else if (split2[i4].compareTo("Key") == 0) {
-                            if (this.mLoginType == 3) {
-                                devInfoBean.mPwd = this.mPassword;
-                            } else {
-                                devInfoBean.mPwd = split3[i4];
-                            }
-                        } else if (split2[i4].compareTo("ChannelCount") == 0) {
-                            devInfoBean.mChCounts = Integer.parseInt(split3[i4]);
-                        } else if (split2[i4].compareTo("Remark") == 0) {
-                            devInfoBean.mRemark = split3[i4];
-                        } else if (split2[i4].compareTo("Push") == 0 && !"".equals(split3[i4])) {
-                            devInfoBean.mPush = Integer.valueOf(split3[i4]).intValue();
-                        }
+                    int fieldCount = Math.min(fields.length, headers.length);
+                    for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
+                        applyTerminalField(devInfoBean, headers[fieldIndex], fields[fieldIndex]);
                     }
                     this.mDevList.add(devInfoBean);
                 }
@@ -141,21 +108,63 @@ public class WebService {
         return this.mDevList;
     }
 
-    public DevInfoBean query(int i) {
+    private void sortRowsByLengthDescending(String[] rows) {
+        for (int startIndex = 0; startIndex < rows.length; startIndex++) {
+            for (int scanIndex = startIndex; scanIndex < rows.length; scanIndex++) {
+                if (rows[scanIndex].length() > rows[startIndex].length()) {
+                    String row = rows[startIndex];
+                    rows[startIndex] = rows[scanIndex];
+                    rows[scanIndex] = row;
+                }
+            }
+        }
+    }
+
+    private void applyTerminalField(DevInfoBean devInfoBean, String header, String value) {
+        if (header.compareTo("TerminalID") == 0) {
+            devInfoBean.mDevId = Integer.parseInt(value);
+        } else if (header.compareTo("SIMCardID") == 0) {
+            devInfoBean.mDevName = value;
+        } else if (header.compareTo("WANIp") == 0) {
+            devInfoBean.mDevIp = value;
+        } else if (header.compareTo("TerminalPort") == 0) {
+            if (!"".equals(value)) {
+                devInfoBean.mMediaPort = Integer.parseInt(value);
+            }
+        } else if (header.compareTo("TransmitPort") == 0) {
+            devInfoBean.mWebPort = Integer.parseInt(value);
+        } else if (header.compareTo("User") == 0) {
+            devInfoBean.mUsername = value;
+        } else if (header.compareTo("Key") == 0) {
+            if (this.mLoginType == 3) {
+                devInfoBean.mPwd = this.mPassword;
+            } else {
+                devInfoBean.mPwd = value;
+            }
+        } else if (header.compareTo("ChannelCount") == 0) {
+            devInfoBean.mChCounts = Integer.parseInt(value);
+        } else if (header.compareTo("Remark") == 0) {
+            devInfoBean.mRemark = value;
+        } else if (header.compareTo("Push") == 0 && !"".equals(value)) {
+            devInfoBean.mPush = Integer.valueOf(value).intValue();
+        }
+    }
+
+    public DevInfoBean query(int deviceId) {
         DevInfoBean devInfoBean = null;
-        for (int i2 = 0; i2 < this.mDevList.size(); i2++) {
-            if (this.mDevList.get(i2).mDevId == i) {
-                devInfoBean = this.mDevList.get(i2);
+        for (int deviceIndex = 0; deviceIndex < this.mDevList.size(); deviceIndex++) {
+            if (this.mDevList.get(deviceIndex).mDevId == deviceId) {
+                devInfoBean = this.mDevList.get(deviceIndex);
             }
         }
         return devInfoBean;
     }
 
-    public DevInfoBean query(String str) {
+    public DevInfoBean query(String deviceName) {
         DevInfoBean devInfoBean = null;
-        for (int i = 0; i < this.mDevList.size(); i++) {
-            if (this.mDevList.get(i).mDevName.compareTo(str) == 0) {
-                devInfoBean = this.mDevList.get(i);
+        for (int deviceIndex = 0; deviceIndex < this.mDevList.size(); deviceIndex++) {
+            if (this.mDevList.get(deviceIndex).mDevName.compareTo(deviceName) == 0) {
+                devInfoBean = this.mDevList.get(deviceIndex);
             }
         }
         return devInfoBean;
@@ -185,11 +194,11 @@ public class WebService {
         return 0;
     }
 
-    public List<AlarmInfo> getAlarmBySerialNum(String str, int i) {
-        ArrayList arrayList = new ArrayList();
+    public List<AlarmInfo> getAlarmBySerialNum(String serialNum, int count) {
+        ArrayList alarmList = new ArrayList();
         SoapObject soapObject = new SoapObject("cq-video.cn", "Dvr_AlarmBySerialNum");
-        soapObject.addProperty("serialnum", str);
-        soapObject.addProperty("count", Integer.valueOf(i));
+        soapObject.addProperty("serialnum", serialNum);
+        soapObject.addProperty("count", Integer.valueOf(count));
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
@@ -198,28 +207,19 @@ public class WebService {
         try {
             httpTransportSE.call("cq-video.cn/Dvr_AlarmBySerialNum", soapSerializationEnvelope);
             if (soapSerializationEnvelope.getResponse() != null) {
-                String[] split = soapSerializationEnvelope.getResponse().toString().split(";");
-                if (split.length == 1) {
-                    return arrayList;
+                String[] rows = soapSerializationEnvelope.getResponse().toString().split(";");
+                if (rows.length == 1) {
+                    return alarmList;
                 }
-                String[] split2 = split[0].split(",");
-                for (int i2 = 1; i2 < split.length; i2++) {
-                    String[] split3 = split[i2].split(",");
+                String[] headers = rows[0].split(",");
+                for (int rowIndex = 1; rowIndex < rows.length; rowIndex++) {
+                    String[] fields = rows[rowIndex].split(",");
                     AlarmInfo alarmInfo = new AlarmInfo();
-                    for (int i3 = 0; i3 < split3.length; i3++) {
-                        if (split2[i3].compareTo("AlarmTime") == 0) {
-                            alarmInfo.alarmTime = split3[i3];
-                        } else if (split2[i3].compareTo("AlarmType") == 0) {
-                            alarmInfo.alarmType = split3[i3];
-                        } else if (split2[i3].compareTo("AlarmSubType") == 0) {
-                            alarmInfo.alarmSubType = split3[i3];
-                        } else if (split2[i3].compareTo("AlarmChannel") == 0) {
-                            alarmInfo.alarmChannel = split3[i3];
-                        } else if (split2[i3].compareTo("AlarmContent") == 0) {
-                            alarmInfo.alarmContent = split3[i3];
-                        }
+                    int fieldCount = Math.min(fields.length, headers.length);
+                    for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++) {
+                        applyAlarmField(alarmInfo, headers[fieldIndex], fields[fieldIndex]);
                     }
-                    arrayList.add(alarmInfo);
+                    alarmList.add(alarmInfo);
                 }
             }
         } catch (IOException e) {
@@ -227,13 +227,27 @@ public class WebService {
         } catch (XmlPullParserException e2) {
             e2.printStackTrace();
         }
-        return arrayList;
+        return alarmList;
     }
 
-    public boolean Login_Status_Android(String str, String str2, String str3) {
+    private void applyAlarmField(AlarmInfo alarmInfo, String header, String value) {
+        if (header.compareTo("AlarmTime") == 0) {
+            alarmInfo.alarmTime = value;
+        } else if (header.compareTo("AlarmType") == 0) {
+            alarmInfo.alarmType = value;
+        } else if (header.compareTo("AlarmSubType") == 0) {
+            alarmInfo.alarmSubType = value;
+        } else if (header.compareTo("AlarmChannel") == 0) {
+            alarmInfo.alarmChannel = value;
+        } else if (header.compareTo("AlarmContent") == 0) {
+            alarmInfo.alarmContent = value;
+        }
+    }
+
+    public boolean Login_Status_Android(String androidId, String unusedPassword, String username) {
         SoapObject soapObject = new SoapObject("cq-video.cn", "Login_Status_Android");
-        soapObject.addProperty("androidid", str);
-        soapObject.addProperty("username", str3);
+        soapObject.addProperty("androidid", androidId);
+        soapObject.addProperty("username", username);
         soapObject.addProperty(Configs.Key.LoginType, Integer.toString(this.mLoginType));
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
@@ -250,24 +264,24 @@ public class WebService {
         return false;
     }
 
-    public boolean Android_AddForMultiApp(String str, String str2, String str3, String str4, String str5, String str6, String str7) {
-        String str8 = this.mServerIP + "/ddns_service.asmx";
+    public boolean Android_AddForMultiApp(String androidId, String serialNum, String deviceName, String username, String unusedPassword, String deviceId, String appIdentification) {
+        String serviceUrl = this.mServerIP + "/ddns_service.asmx";
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_AddForMultiApp");
-        soapObject.addProperty("androidid", str);
-        soapObject.addProperty("serialnum", str2);
-        soapObject.addProperty("devicename", str3);
-        soapObject.addProperty("username", str4);
-        soapObject.addProperty("appIdentification", str7);
+        soapObject.addProperty("androidid", androidId);
+        soapObject.addProperty("serialnum", serialNum);
+        soapObject.addProperty("devicename", deviceName);
+        soapObject.addProperty("username", username);
+        soapObject.addProperty("appIdentification", appIdentification);
         soapObject.addProperty(Configs.Key.LoginType, Integer.toString(this.mLoginType));
         if (this.mLoginType == 0) {
             soapObject.addProperty("deviceid", "0");
         } else {
-            soapObject.addProperty("deviceid", str6);
+            soapObject.addProperty("deviceid", deviceId);
         }
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
-        HttpTransportSE httpTransportSE = new HttpTransportSE(str8);
+        HttpTransportSE httpTransportSE = new HttpTransportSE(serviceUrl);
         httpTransportSE.debug = true;
         try {
             httpTransportSE.call("cq-video.cn/Android_AddForMultiApp", soapSerializationEnvelope);
@@ -279,23 +293,23 @@ public class WebService {
         return false;
     }
 
-    public boolean Android_Add(String str, String str2, String str3, String str4, String str5, String str6) {
-        String str7 = this.mServerIP + "/ddns_service.asmx";
+    public boolean Android_Add(String androidId, String serialNum, String deviceName, String username, String unusedPassword, String deviceId) {
+        String serviceUrl = this.mServerIP + "/ddns_service.asmx";
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_Add");
-        soapObject.addProperty("androidid", str);
-        soapObject.addProperty("serialnum", str2);
-        soapObject.addProperty("devicename", str3);
-        soapObject.addProperty("username", str4);
+        soapObject.addProperty("androidid", androidId);
+        soapObject.addProperty("serialnum", serialNum);
+        soapObject.addProperty("devicename", deviceName);
+        soapObject.addProperty("username", username);
         soapObject.addProperty(Configs.Key.LoginType, Integer.toString(this.mLoginType));
         if (this.mLoginType == 0) {
             soapObject.addProperty("deviceid", "0");
         } else {
-            soapObject.addProperty("deviceid", str6);
+            soapObject.addProperty("deviceid", deviceId);
         }
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
-        HttpTransportSE httpTransportSE = new HttpTransportSE(str7);
+        HttpTransportSE httpTransportSE = new HttpTransportSE(serviceUrl);
         httpTransportSE.debug = true;
         try {
             httpTransportSE.call("cq-video.cn/Android_Add", soapSerializationEnvelope);
@@ -309,22 +323,22 @@ public class WebService {
         }
     }
 
-    public boolean Android_Delete(String str, String str2, String str3, String str4, String str5) {
-        String str6 = this.mServerIP + "/ddns_service.asmx";
+    public boolean Android_Delete(String androidId, String deviceName, String username, String unusedPassword, String deviceId) {
+        String serviceUrl = this.mServerIP + "/ddns_service.asmx";
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_Delete");
-        soapObject.addProperty("androidid", str);
-        soapObject.addProperty("devicename", str2);
-        soapObject.addProperty("username", str3);
+        soapObject.addProperty("androidid", androidId);
+        soapObject.addProperty("devicename", deviceName);
+        soapObject.addProperty("username", username);
         soapObject.addProperty(Configs.Key.LoginType, Integer.toString(this.mLoginType));
         if (this.mLoginType == 0) {
             soapObject.addProperty("deviceid", "0");
         } else {
-            soapObject.addProperty("deviceid", str5);
+            soapObject.addProperty("deviceid", deviceId);
         }
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
-        HttpTransportSE httpTransportSE = new HttpTransportSE(str6);
+        HttpTransportSE httpTransportSE = new HttpTransportSE(serviceUrl);
         httpTransportSE.debug = true;
         try {
             httpTransportSE.call("cq-video.cn/Android_Delete", soapSerializationEnvelope);
@@ -341,10 +355,10 @@ public class WebService {
         }
     }
 
-    public boolean Android_DeleteAllPush(String str, String str2) {
+    public boolean Android_DeleteAllPush(String androidId, String username) {
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_DeleteAll_User");
-        soapObject.addProperty("androidid", str);
-        soapObject.addProperty("username", str2);
+        soapObject.addProperty("androidid", androidId);
+        soapObject.addProperty("username", username);
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
@@ -365,9 +379,9 @@ public class WebService {
         }
     }
 
-    public boolean Android_DeleteAll(String str) {
+    public boolean Android_DeleteAll(String androidId) {
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_DeleteAll");
-        soapObject.addProperty("androidid", str);
+        soapObject.addProperty("androidid", androidId);
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
@@ -388,9 +402,9 @@ public class WebService {
         }
     }
 
-    public boolean Android_Unregister(String str) {
+    public boolean Android_Unregister(String androidId) {
         SoapObject soapObject = new SoapObject("cq-video.cn", "Android_Unregister");
-        soapObject.addProperty("androidid", str);
+        soapObject.addProperty("androidid", androidId);
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
@@ -412,28 +426,28 @@ public class WebService {
     }
 
     public Map<String, String> GetServer() {
-        String str = this.mServerIP + "/serversfordevice/NatServer.ashx?did=";
+        String serverUrl = this.mServerIP + "/serversfordevice/NatServer.ashx?did=";
         HashMap hashMap = new HashMap();
         try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(str).openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(serverUrl).openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String str2 = "";
+            String responseBody = "";
             while (true) {
                 String readLine = bufferedReader.readLine();
                 if (readLine == null) {
                     break;
                 }
-                str2 = str2 + readLine;
+                responseBody = responseBody + readLine;
             }
             inputStream.close();
             bufferedReader.close();
             httpURLConnection.disconnect();
-            if (str2.length() == 0) {
+            if (responseBody.length() == 0) {
                 return hashMap;
             }
             try {
-                JSONObject jSONObject = (JSONObject) new JSONTokener(str2).nextValue();
+                JSONObject jSONObject = (JSONObject) new JSONTokener(responseBody).nextValue();
                 JSONObject jSONObject2 = jSONObject.getJSONObject("nat");
                 String string = jSONObject2.getString("ip");
                 String string2 = jSONObject2.getString("port");
@@ -468,11 +482,11 @@ public class WebService {
         }
     }
 
-    public int CheckTerminalPw(String str, String str2, String str3) {
+    public int CheckTerminalPw(String serial, String username, String userPassword) {
         SoapObject soapObject = new SoapObject("cq-video.cn", "CheckTerminalPw");
-        soapObject.addProperty("serial", str);
-        soapObject.addProperty("username", str2);
-        soapObject.addProperty("userpassword", str3);
+        soapObject.addProperty("serial", serial);
+        soapObject.addProperty("username", username);
+        soapObject.addProperty("userpassword", userPassword);
         SoapSerializationEnvelope soapSerializationEnvelope = new SoapSerializationEnvelope(110);
         soapSerializationEnvelope.dotNet = true;
         soapSerializationEnvelope.setOutputSoapObject(soapObject);
