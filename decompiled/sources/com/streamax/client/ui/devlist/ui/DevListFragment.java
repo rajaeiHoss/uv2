@@ -87,8 +87,8 @@ public class DevListFragment extends BaseFragment {
         this.mGroupNameDatas.clear();
         List<Map<String, Object>> list = this.mDevDatas;
         if (list != null && list.size() > 0) {
-            for (int i = 0; i < this.mDevDatas.size(); i++) {
-                this.mDevIdDatas.add("" + this.mDevDatas.get(i).get("id"));
+            for (int deviceIndex = 0; deviceIndex < this.mDevDatas.size(); deviceIndex++) {
+                this.mDevIdDatas.add("" + this.mDevDatas.get(deviceIndex).get("id"));
             }
         }
         if (MyApp.loginType == 0) {
@@ -99,9 +99,9 @@ public class DevListFragment extends BaseFragment {
         List<GroupBean> groupDatas = this.mDao.getGroupDatas();
         this.mDevGroupDatas = groupDatas;
         if (groupDatas != null && groupDatas.size() > 0) {
-            ArrayList arrayList = new ArrayList();
-            for (int i2 = 0; i2 < this.mDevGroupDatas.size(); i2++) {
-                GroupBean groupBean = this.mDevGroupDatas.get(i2);
+            ArrayList<String> serverDeviceIds = new ArrayList<>();
+            for (int devGroupIndex = 0; devGroupIndex < this.mDevGroupDatas.size(); devGroupIndex++) {
+                GroupBean groupBean = this.mDevGroupDatas.get(devGroupIndex);
                 if (!this.mGroupNameDatas.contains(groupBean.dbGroupName)) {
                     this.mGroupCount++;
                     this.mGroupNameDatas.add(groupBean.dbGroupName);
@@ -109,37 +109,37 @@ public class DevListFragment extends BaseFragment {
             }
             if (MyApp.loginType != 0) {
                 List<GroupBean> groupDatasByName = this.mDao.getGroupDatasByName(this.mGroupNameDatas.get(0));
-                for (int i3 = 0; i3 < groupDatasByName.size(); i3++) {
-                    if (!arrayList.contains("" + groupDatasByName.get(i3).dbId)) {
-                        arrayList.add("" + groupDatasByName.get(i3).dbId);
+                for (int serverGroupIndex = 0; serverGroupIndex < groupDatasByName.size(); serverGroupIndex++) {
+                    if (!serverDeviceIds.contains("" + groupDatasByName.get(serverGroupIndex).dbId)) {
+                        serverDeviceIds.add("" + groupDatasByName.get(serverGroupIndex).dbId);
                     }
                 }
-                if (arrayList.size() > 0) {
-                    for (int i4 = 0; i4 < this.mDevIdDatas.size(); i4++) {
-                        if (!arrayList.contains("" + this.mDevIdDatas.get(i4))) {
-                            for (int i5 = 0; i5 < this.mGroupNameDatas.size(); i5++) {
-                                for (int i6 = 0; i6 < 4; i6++) {
-                                    this.mDao.add(this.mGroupNameDatas.get(i5), ((Integer) this.mDevDatas.get(i4).get("id")).intValue(), (String) this.mDevDatas.get(i4).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE), i6, 0);
+                if (serverDeviceIds.size() > 0) {
+                    for (int deviceIdIndex = 0; deviceIdIndex < this.mDevIdDatas.size(); deviceIdIndex++) {
+                        if (!serverDeviceIds.contains("" + this.mDevIdDatas.get(deviceIdIndex))) {
+                            for (int groupNameIndex = 0; groupNameIndex < this.mGroupNameDatas.size(); groupNameIndex++) {
+                                for (int channelIndex = 0; channelIndex < 4; channelIndex++) {
+                                    this.mDao.add(this.mGroupNameDatas.get(groupNameIndex), ((Integer) this.mDevDatas.get(deviceIdIndex).get("id")).intValue(), (String) this.mDevDatas.get(deviceIdIndex).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE), channelIndex, 0);
                                 }
                             }
                         }
                     }
-                    for (int i7 = 0; i7 < arrayList.size(); i7++) {
-                        if (!this.mDevIdDatas.contains("" + ((String) arrayList.get(i7)))) {
-                            this.mDao.delete(Integer.valueOf((String) arrayList.get(i7)).intValue());
+                    for (int staleDeviceIndex = 0; staleDeviceIndex < serverDeviceIds.size(); staleDeviceIndex++) {
+                        if (!this.mDevIdDatas.contains("" + serverDeviceIds.get(staleDeviceIndex))) {
+                            this.mDao.delete(Integer.valueOf(serverDeviceIds.get(staleDeviceIndex)).intValue());
                         }
                     }
-                    for (int i8 = 0; i8 < this.mDevIdDatas.size(); i8++) {
-                        this.mDao.updateDevNameById(((Integer) this.mDevDatas.get(i8).get("id")).intValue(), "" + this.mDevDatas.get(i8).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+                    for (int deviceNameIndex = 0; deviceNameIndex < this.mDevIdDatas.size(); deviceNameIndex++) {
+                        this.mDao.updateDevNameById(((Integer) this.mDevDatas.get(deviceNameIndex).get("id")).intValue(), "" + this.mDevDatas.get(deviceNameIndex).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
                     }
                 }
                 this.mDevGroupDatas = this.mDao.getGroupDatas();
             }
-            for (int i9 = 0; i9 < this.mGroupCount; i9++) {
+            for (int groupIndex = 0; groupIndex < this.mGroupCount; groupIndex++) {
                 this.mGroupDatas = new ArrayList<>();
-                for (int i10 = 0; i10 < this.mDevGroupDatas.size(); i10++) {
-                    if (this.mDevGroupDatas.get(i10).dbGroupName.equals(this.mGroupNameDatas.get(i9))) {
-                        this.mGroupDatas.add(this.mDevGroupDatas.get(i10));
+                for (int groupDataIndex = 0; groupDataIndex < this.mDevGroupDatas.size(); groupDataIndex++) {
+                    if (this.mDevGroupDatas.get(groupDataIndex).dbGroupName.equals(this.mGroupNameDatas.get(groupIndex))) {
+                        this.mGroupDatas.add(this.mDevGroupDatas.get(groupDataIndex));
                     }
                 }
                 this.mDatas.add(this.mGroupDatas);
@@ -207,19 +207,19 @@ public class DevListFragment extends BaseFragment {
         this.mTvUp.setOnClickListener(this);
         this.mTvDown.setOnClickListener(this);
         this.mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long j) {
-                int itemViewType = DevListFragment.this.mAdapter.getItemViewType(i);
+            public void onItemClick(AdapterView<?> adapterView, View view, final int position, long rowId) {
+                int itemViewType = DevListFragment.this.mAdapter.getItemViewType(position);
                 if (itemViewType == 0) {
                     if (DevListFragment.this.mFlag) {
                         DevAddFragment devAddFragment = new DevAddFragment();
                         Bundle bundle = new Bundle();
                         bundle.putBoolean("flag", true);
-                        bundle.putString("devName", (String) ((Map) DevListFragment.this.mDevDatas.get(i)).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+                        bundle.putString("devName", (String) ((Map) DevListFragment.this.mDevDatas.get(position)).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
                         devAddFragment.setArguments(bundle);
                         FragmentUtils.fragmentReplace(DevListFragment.this, devAddFragment, R.id.dev_fl);
                     } else if (!DevListFragment.this.mApp.mbSingle) {
                         DevListFragment devListFragment = DevListFragment.this;
-                        int unused = devListFragment.mId = ((Integer) ((Map) devListFragment.mDevDatas.get(i)).get("id")).intValue();
+                        int unused = devListFragment.mId = ((Integer) ((Map) devListFragment.mDevDatas.get(position)).get("id")).intValue();
                         EventBus.getDefault().post(new DevInfoEvent(DevListFragment.this.mId, ""));
                         DevListFragment.this.mApp.mainActivity.getTabHost().setCurrentTab(1);
                     }
@@ -237,20 +237,20 @@ public class DevListFragment extends BaseFragment {
                                 DevListFragment.this.mDao = new GroupDaoForServer();
                                 DevListFragment.this.mDevIdDatas.clear();
                                 if (DevListFragment.this.mDevDatas != null && DevListFragment.this.mDevDatas.size() > 0) {
-                                    for (int i = 0; i < DevListFragment.this.mDevDatas.size(); i++) {
+                                    for (int deviceIndex = 0; deviceIndex < DevListFragment.this.mDevDatas.size(); deviceIndex++) {
                                         List access$800 = DevListFragment.this.mDevIdDatas;
-                                        access$800.add("" + ((Map) DevListFragment.this.mDevDatas.get(i)).get("id"));
+                                        access$800.add("" + ((Map) DevListFragment.this.mDevDatas.get(deviceIndex)).get("id"));
                                     }
                                 }
                                 DevListFragment.this.initNativeDb();
                                 DevListFragment.this.mBusyLayout.post(new Runnable() {
                                     public void run() {
                                         DevListFragment.this.mBusyLayout.setVisibility(8);
-                                        String str = ((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName;
+                                        String groupName = ((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName;
                                         DevGroupFragment devGroupFragment = new DevGroupFragment();
                                         Bundle bundle = new Bundle();
                                         bundle.putBoolean("flag", true);
-                                        bundle.putString("groupName", str);
+                                        bundle.putString("groupName", groupName);
                                         devGroupFragment.setArguments(bundle);
                                         FragmentUtils.fragmentReplace(DevListFragment.this, devGroupFragment, R.id.dev_fl);
                                     }
@@ -259,7 +259,7 @@ public class DevListFragment extends BaseFragment {
                         }).start();
                         return;
                     }
-                    EventBus.getDefault().post(new DevInfoEvent(-1, ((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName));
+                    EventBus.getDefault().post(new DevInfoEvent(-1, ((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName));
                     DevListFragment.this.mApp.mainActivity.getTabHost().setCurrentTab(1);
                 }
             }
@@ -305,8 +305,8 @@ public class DevListFragment extends BaseFragment {
             list = this.mApp.mWebService.GetTerminalInfoAndroid(true);
         }
         ArrayList arrayList = new ArrayList();
-        for (int i = 0; i < list.size(); i++) {
-            DevInfoBean devInfoBean = list.get(i);
+        for (int deviceIndex = 0; deviceIndex < list.size(); deviceIndex++) {
+            DevInfoBean devInfoBean = list.get(deviceIndex);
             HashMap hashMap = new HashMap();
             hashMap.put("id", Integer.valueOf(devInfoBean.mDevId));
             hashMap.put(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE, devInfoBean.mDevName);
@@ -318,8 +318,8 @@ public class DevListFragment extends BaseFragment {
     }
 
     private class CustomAdapter extends SuperBaseAdapter<Map<String, Object>> {
-        public CustomAdapter(List<Map<String, Object>> list) {
-            super(list);
+        public CustomAdapter(List<Map<String, Object>> rows) {
+            super(rows);
         }
 
         public int getCount() {
@@ -333,8 +333,8 @@ public class DevListFragment extends BaseFragment {
             return size + DevListFragment.this.mDatas.size();
         }
 
-        public int getItemViewType(int i) {
-            return (DevListFragment.this.mDevDatas == null || i < DevListFragment.this.mDevDatas.size()) ? 0 : 1;
+        public int getItemViewType(int position) {
+            return (DevListFragment.this.mDevDatas == null || position < DevListFragment.this.mDevDatas.size()) ? 0 : 1;
         }
 
         public int getViewTypeCount() {
@@ -342,17 +342,17 @@ public class DevListFragment extends BaseFragment {
         }
 
         /* access modifiers changed from: protected */
-        public View initConvertView(final int i, View view, ViewGroup viewGroup) {
+        public View initConvertView(final int position, View view, ViewGroup viewGroup) {
             if (view == null) {
                 view = View.inflate(AppProxy.getContext(), R.layout.dev_lv_item, (ViewGroup) null);
                 new ViewHolder(view);
             }
             ViewHolder viewHolder = (ViewHolder) view.getTag();
-            if (i < DevListFragment.this.mDevDatas.size()) {
-                viewHolder.mTvDevName.setText((String) ((Map) DevListFragment.this.mDevDatas.get(i)).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
-                viewHolder.mTvDevInfo.setText((String) ((Map) DevListFragment.this.mDevDatas.get(i)).get("info"));
+            if (position < DevListFragment.this.mDevDatas.size()) {
+                viewHolder.mTvDevName.setText((String) ((Map) DevListFragment.this.mDevDatas.get(position)).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+                viewHolder.mTvDevInfo.setText((String) ((Map) DevListFragment.this.mDevDatas.get(position)).get("info"));
                 viewHolder.mIvDevIcon.setImageResource(R.drawable.dvronline);
-                viewHolder.mId = ((Integer) ((Map) DevListFragment.this.mDevDatas.get(i)).get("id")).intValue();
+                viewHolder.mId = ((Integer) ((Map) DevListFragment.this.mDevDatas.get(position)).get("id")).intValue();
                 viewHolder.mIvDevDelete.setTag(Integer.valueOf(viewHolder.mId));
                 if (MyApp.loginType == 0 || !DevListFragment.this.mFlag) {
                     viewHolder.mTvDevName.setVisibility(0);
@@ -366,26 +366,26 @@ public class DevListFragment extends BaseFragment {
                     viewHolder.mIvDevDelete.setVisibility(8);
                 }
             } else {
-                ArrayList arrayList = new ArrayList();
+                ArrayList<String> groupDeviceLabels = new ArrayList<>();
                 if (DevListFragment.this.mDatas != null && DevListFragment.this.mDatas.size() > 0) {
-                    viewHolder.mTvDevName.setText(((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName);
-                    int size = ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).size();
-                    for (int i2 = 0; i2 < size; i2++) {
-                        GroupBean groupBean = (GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).get(i2);
+                    viewHolder.mTvDevName.setText(((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName);
+                    int groupSize = ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).size();
+                    for (int groupItemIndex = 0; groupItemIndex < groupSize; groupItemIndex++) {
+                        GroupBean groupBean = (GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).get(groupItemIndex);
                         if (groupBean != null && DevListFragment.this.mDevDatas != null && DevListFragment.this.mDevDatas.size() > 0 && groupBean.dbFlag == 1) {
-                            arrayList.add(groupBean.dbDevName + "-" + (groupBean.dbChannel + 1));
+                            groupDeviceLabels.add(groupBean.dbDevName + "-" + (groupBean.dbChannel + 1));
                         }
                     }
-                    StringBuffer stringBuffer = new StringBuffer();
-                    for (int i3 = 0; i3 < arrayList.size(); i3++) {
-                        if (i3 == arrayList.size() - 1) {
-                            stringBuffer.append((String) arrayList.get(i3));
+                    StringBuffer groupInfo = new StringBuffer();
+                    for (int labelIndex = 0; labelIndex < groupDeviceLabels.size(); labelIndex++) {
+                        if (labelIndex == groupDeviceLabels.size() - 1) {
+                            groupInfo.append(groupDeviceLabels.get(labelIndex));
                         } else {
-                            stringBuffer.append((String) arrayList.get(i3));
-                            stringBuffer.append(", ");
+                            groupInfo.append(groupDeviceLabels.get(labelIndex));
+                            groupInfo.append(", ");
                         }
                     }
-                    viewHolder.mTvDevInfo.setText(stringBuffer.toString());
+                    viewHolder.mTvDevInfo.setText(groupInfo.toString());
                     viewHolder.mIvDevIcon.setImageResource(R.drawable.arrow_right);
                 }
             }
@@ -395,14 +395,14 @@ public class DevListFragment extends BaseFragment {
                 } else {
                     viewHolder.mIvDevDelete.setVisibility(8);
                 }
-            } else if (!DevListFragment.this.mFlag || i < DevListFragment.this.mDevDatas.size()) {
+            } else if (!DevListFragment.this.mFlag || position < DevListFragment.this.mDevDatas.size()) {
                 viewHolder.mIvDevDelete.setVisibility(8);
             } else {
                 viewHolder.mIvDevDelete.setVisibility(0);
             }
             viewHolder.mIvDevDelete.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (i < DevListFragment.this.mDevDatas.size()) {
+                    if (position < DevListFragment.this.mDevDatas.size()) {
                         new Thread(new Runnable() {
                             public void run() {
                                 DevListFragment.this.mBusyLayout.post(new Runnable() {
@@ -410,7 +410,7 @@ public class DevListFragment extends BaseFragment {
                                         DevListFragment.this.mBusyLayout.setVisibility(0);
                                     }
                                 });
-                                int unused = DevListFragment.this.mId = ((Integer) ((Map) DevListFragment.this.mDevDatas.get(i)).get("id")).intValue();
+                                int unused = DevListFragment.this.mId = ((Integer) ((Map) DevListFragment.this.mDevDatas.get(position)).get("id")).intValue();
                                 DevInfoBean query = DevListFragment.this.mDbHelper.query(DevListFragment.this.mId);
                                 if (query.mPush == 1 && DevListFragment.this.mApp.mRegId != null && DevListFragment.this.mApp.mRegId.length() > 0) {
                                     if (DevListFragment.this.mApp.mWebService == null) {
@@ -433,7 +433,7 @@ public class DevListFragment extends BaseFragment {
                         }).start();
                         return;
                     }
-                    DevListFragment.this.mDao.delete(((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(i - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName);
+                    DevListFragment.this.mDao.delete(((GroupBean) ((ArrayList) DevListFragment.this.mDatas.get(position - DevListFragment.this.mDevDatas.size())).get(0)).dbGroupName);
                     DevListFragment.this.initNativeDb();
                     DevListFragment.this.mAdapter.notifyDataSetChanged();
                 }
