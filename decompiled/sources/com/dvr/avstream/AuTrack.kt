@@ -71,41 +71,41 @@ class AuTrack : AudioTrackInterface {
         }
     }
 
-    fun SetMute(z: Boolean) {
-        Log.v(TAG, "[SetMute]bMute =$z")
+    fun SetMute(muted: Boolean) {
+        Log.v(TAG, "[SetMute]bMute =$muted")
         if (mPlayer.mAudioTrack == null) {
             Log.v(TAG, "mPlayer.mAudioTrack == null")
-        } else if (z) {
+        } else if (muted) {
             mPlayer.Pause()
         } else {
             mPlayer.play()
         }
-        mbMute = z
+        mbMute = muted
     }
 
-    fun SwitchChannels(i: Int) {
-        if (mChannel != i) {
-            mChannel = i
+    fun SwitchChannels(channel: Int) {
+        if (mChannel != channel) {
+            mChannel = channel
             val player = mPlayer
             if (player.mAudioTrack != null) {
-                Log.v(TAG, "[SwitchChannels][$i]----check start")
+                Log.v(TAG, "[SwitchChannels][$channel]----check start")
                 val audioTrack = player.mAudioTrack
                 if (audioTrack == null || audioTrack.playState != 3) {
-                    Log.v(TAG, "[SwitchChannels][$i]----check end")
+                    Log.v(TAG, "[SwitchChannels][$channel]----check end")
                     return
                 }
-                Log.v(TAG, "[SwitchChannels][$i]----check end")
+                Log.v(TAG, "[SwitchChannels][$channel]----check end")
                 audioTrack.pause()
                 player.play()
             }
         }
     }
 
-    override fun InputAudioData(i: Int, bArr: ByteArray?, i2: Int) {
+    override fun InputAudioData(channel: Int, audioData: ByteArray?, length: Int) {
         val player = mPlayer
         val audioTrack = player.mAudioTrack
-        if (audioTrack != null && !mbMute && i == mChannel && audioTrack.playState == 3 && bArr != null) {
-            audioTrack.write(bArr, 0, i2)
+        if (audioTrack != null && !mbMute && channel == mChannel && audioTrack.playState == 3 && audioData != null) {
+            audioTrack.write(audioData, 0, length)
         }
     }
 

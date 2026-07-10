@@ -1,5 +1,5 @@
 package com.dvr.net
 
 interface DownVideoInterface {
-    fun DownVideoCallback(j: Long, i: Int, i2: Int, i3: Int)
+    fun DownVideoCallback(nativeHandle: Long, status: Int, totalBytes: Int, currentBytes: Int)
 }

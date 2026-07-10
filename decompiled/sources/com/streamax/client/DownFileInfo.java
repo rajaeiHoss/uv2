@@ -42,11 +42,11 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
         this.df = downFileInterface;
     }
 
-    public void DownVideoCallback(long j, int i, final int i2, final int i3) {
+    public void DownVideoCallback(long nativeHandle, int status, final int totalBytes, final int currentBytes) {
         this.mHandler.post(new Runnable() {
             public void run() {
-                DownFileInfo.this.mCur = i3;
-                DownFileInfo.this.mTotal = i2;
+                DownFileInfo.this.mCur = currentBytes;
+                DownFileInfo.this.mTotal = totalBytes;
                 if (DownFileInfo.this.mCur > 0 && DownFileInfo.this.mCur >= DownFileInfo.this.mTotal) {
                     DownFileInfo.this.mIsDown = true;
                     DownFileInfo.this.stopDown(false);

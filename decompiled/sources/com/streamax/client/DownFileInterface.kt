@@ -1,5 +1,5 @@
 package com.streamax.client
 
 interface DownFileInterface {
-    fun DownFileCallback(i: Int, str: String)
+    fun DownFileCallback(status: Int, fileName: String)
 }

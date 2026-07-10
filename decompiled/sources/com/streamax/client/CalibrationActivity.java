@@ -212,10 +212,10 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
         }
     }
 
-    public void fuc(int i, int i2, byte[] bArr, int i3, int i4, int i5) {
+    public void fuc(int channel, int streamType, byte[] frameData, int dataLength, int width, int height) {
         VideoView videoView = this.mVideoGroup.getVideoView(0);
         if (videoView != null) {
-            videoView.writeIn(bArr, i4, i5);
+            videoView.writeIn(frameData, width, height);
         }
     }
 

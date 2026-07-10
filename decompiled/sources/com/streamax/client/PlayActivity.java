@@ -190,8 +190,8 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         viewPager.setAdapter(playPagerAdapter);
         ((SlidingTabLayout) this.mRootView.findViewById(R.id.tab_layout)).setViewPager(viewPager);
         this.mMessageCallback = new MessageCallback() {
-            public void sendMessage(int i) {
-                if (i == 0) {
+            public void sendMessage(int messageType) {
+                if (messageType == 0) {
                     Message message = new Message();
                     message.what = 0;
                     message.setTarget(PlayActivity.this.mHandlerMessage);
@@ -669,10 +669,10 @@ public class PlayActivity extends FragmentActivity implements View.OnClickListen
         }
     }
 
-    public void MultiplayCallback(long j, int i, int i2, int i3, byte[] bArr, int i4, int i5, int i6) {
-        WriteIn(i, i3, bArr, i4, i5);
-        if (i6 != 0) {
-            this.mTimeValues = i6;
+    public void MultiplayCallback(long nativeHandle, int channel, int codecType, int frameType, byte[] frameData, int width, int height, int playbackSecond) {
+        WriteIn(channel, frameType, frameData, width, height);
+        if (playbackSecond != 0) {
+            this.mTimeValues = playbackSecond;
             this.mtvPlayTime.post(new Runnable() {
                 public void run() {
                     if (PlayActivity.this.mTimeValues >= PlayActivity.this.mFileStartSec && PlayActivity.this.mTimeValues <= PlayActivity.this.mFileEndSec) {

@@ -292,8 +292,8 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
             }
         };
         this.mMessageCallback = new MessageCallback() {
-            public void sendMessage(int i) {
-                if (i == 0) {
+            public void sendMessage(int messageType) {
+                if (messageType == 0) {
                     Message message = new Message();
                     message.what = 0;
                     message.setTarget(RemotePlaybackActivity.this.mHandlerMessage);
@@ -536,10 +536,10 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
         return replace.length() > 0 ? replace : str;
     }
 
-    public void MultiplayCallback(long j, int i, int i2, int i3, byte[] bArr, int i4, int i5, int i6) {
-        WriteIn(i, i3, bArr, i4, i5);
-        if (i6 != 0) {
-            this.mTimeValues = i6;
+    public void MultiplayCallback(long nativeHandle, int channel, int codecType, int frameType, byte[] frameData, int width, int height, int playbackSecond) {
+        WriteIn(channel, frameType, frameData, width, height);
+        if (playbackSecond != 0) {
+            this.mTimeValues = playbackSecond;
             this.mtvTime.post(new Runnable() {
                 public void run() {
                     int i = RemotePlaybackActivity.this.mTimeValues / 3600;

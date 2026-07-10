@@ -24,13 +24,13 @@ open class RemoteFileInfo {
     @JvmField
     var name: String? = null
 
-    fun Print(str: String?) {
-        Log.v(str, "nDiskType =" + nDiskType)
-        Log.v(str, "FileTime =" + FileTime)
-        Log.v(str, "name =" + name)
-        Log.v(str, "nFileSize =" + nFileSize)
-        Log.v(str, "nChannel =" + nChannel)
-        Log.v(str, "nType =" + nType)
-        Log.v(str, "bLocked =" + bLocked)
+    fun Print(tag: String?) {
+        Log.v(tag, "nDiskType =" + nDiskType)
+        Log.v(tag, "FileTime =" + FileTime)
+        Log.v(tag, "name =" + name)
+        Log.v(tag, "nFileSize =" + nFileSize)
+        Log.v(tag, "nChannel =" + nChannel)
+        Log.v(tag, "nType =" + nType)
+        Log.v(tag, "bLocked =" + bLocked)
     }
 }

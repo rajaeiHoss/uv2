@@ -119,24 +119,24 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
         return i;
     }
 
-    public void DownFileCallback(int i, String str) {
-        if (i == 0) {
+    public void DownFileCallback(int status, String fileName) {
+        if (status == 0) {
             this.mDownAdapter.notifyDataSetChanged();
-        } else if (1 != i && 2 != i && 3 == i) {
-            int i2 = -1;
-            int i3 = 0;
+        } else if (1 != status && 2 != status && 3 == status) {
+            int targetIndex = -1;
+            int index = 0;
             while (true) {
-                if (i3 >= this.mFileList.size()) {
+                if (index >= this.mFileList.size()) {
                     break;
-                } else if (str == this.mFileList.get(i3).name) {
-                    i2 = i3;
+                } else if (fileName == this.mFileList.get(index).name) {
+                    targetIndex = index;
                     break;
                 } else {
-                    i3++;
+                    index++;
                 }
             }
-            if (i2 >= 0) {
-                this.mFileList.remove(i2);
+            if (targetIndex >= 0) {
+                this.mFileList.remove(targetIndex);
                 this.mDownAdapter.notifyDataSetChanged();
             }
         }

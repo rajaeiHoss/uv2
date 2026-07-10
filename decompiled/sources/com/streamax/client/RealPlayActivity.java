@@ -753,10 +753,10 @@ public class RealPlayActivity extends Activity implements Runnable, MyCallInterf
         super.onActivityResult(i, i2, intent);
     }
 
-    public void fuc(int i, int i2, byte[] bArr, int i3, int i4, int i5) {
-        VideoView videoView = this.mVideoContainer.getVideoView(i);
+    public void fuc(int channel, int streamType, byte[] frameData, int dataLength, int width, int height) {
+        VideoView videoView = this.mVideoContainer.getVideoView(channel);
         if (videoView != null) {
-            videoView.writeIn(bArr, i4, i5);
+            videoView.writeIn(frameData, width, height);
         }
     }
 

@@ -392,36 +392,36 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
         findViewById(R.id.local_playback_controlbar).setVisibility(i);
     }
 
-    public void FilePlaybackCallback(int i, int i2, byte[] bArr, int i3, int i4, int i5, int i6, final int i7) {
+    public void FilePlaybackCallback(int channel, int streamIndex, byte[] frameData, int dataLength, int width, int height, int playbackState, final int playbackSecond) {
         VideoView videoView = this.mVideoGroup.getVideoView(0);
         if (videoView != null) {
-            videoView.writeIn(bArr, i4, i5);
+            videoView.writeIn(frameData, width, height);
         }
-        if (i6 == 1) {
+        if (playbackState == 1) {
             this.mSeekBar.post(new Runnable() {
                 public void run() {
                     LocalPlaybackActivity.this.mSeekBar.setProgress(0);
                     LocalPlaybackActivity.this.mSeekBar.setSecondaryProgress(0);
                 }
             });
-            this.mSeekBar.setMax(i7);
+            this.mSeekBar.setMax(playbackSecond);
             this.mUpdateText = null;
             this.mUpdateText = new UpdateText();
         }
-        if (i6 == 2) {
+        if (playbackState == 2) {
             if (!this.mTracking) {
                 this.mSeekBar.post(new Runnable() {
                     public void run() {
-                        LocalPlaybackActivity.this.mSeekBar.setProgress(i7);
-                        LocalPlaybackActivity.this.mSeekBar.setSecondaryProgress(i7);
+                        LocalPlaybackActivity.this.mSeekBar.setProgress(playbackSecond);
+                        LocalPlaybackActivity.this.mSeekBar.setSecondaryProgress(playbackSecond);
                     }
                 });
             }
-            this.mVideoGroup.getVideoView(0).writeIn(bArr, i4, i5);
-            this.mPlaybackTime = String.format("%02d:%02d", new Object[]{Integer.valueOf(i7 / 60), Integer.valueOf(i7 % 60)});
+            this.mVideoGroup.getVideoView(0).writeIn(frameData, width, height);
+            this.mPlaybackTime = String.format("%02d:%02d", new Object[]{Integer.valueOf(playbackSecond / 60), Integer.valueOf(playbackSecond % 60)});
             this.mtvTime.post(this.mUpdateText);
         }
-        if (i6 == 3) {
+        if (playbackState == 3) {
             this.mSeekBar.post(new Runnable() {
                 public void run() {
                     LocalPlaybackActivity.this.mSeekBar.setProgress(0);

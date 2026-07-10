@@ -60,33 +60,33 @@ App-owned source files do not have obfuscated file names, but many still contain
 | Identifier family | App-owned files hit |
 | --- | ---: |
 | `r0`, `r1`, ... | 13 |
-| `str`, `str2`, ... | 92 |
-| `bArr`, `bArr2`, ... | 28 |
-| `i2`, `j2`, ... | 85 |
-| `z`, `z2`, ... | 59 |
-| App-owned files with at least one generic identifier | 137 |
+| `str`, `str2`, ... | 87 |
+| `bArr`, `bArr2`, ... | 14 |
+| `i2`, `j2`, ... | 74 |
+| `z`, `z2`, ... | 57 |
+| App-owned files with at least one generic identifier | 122 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
 | `decompiled/sources/com/streamax/client/VideoContainer.java` | 4,768 |
-| `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 917 |
+| `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 909 |
 | `decompiled/sources/com/streamax/client/VideoGroup.java` | 620 |
 | `decompiled/sources/com/streamax/client/widget/PlayerView.java` | 518 |
-| `decompiled/sources/com/dvr/net/DvrNet.kt` | 479 |
 | `decompiled/sources/com/streamax/config/fragment/video/StreamOfVideo.java` | 472 |
+| `decompiled/sources/com/dvr/net/DvrNet.kt` | 432 |
 | `decompiled/sources/com/streamax/config/fragment/network/DdnsOfNetwork.java` | 302 |
 | `decompiled/sources/com/streamax/config/fragment/datetime/DstOfDt.java` | 288 |
-| `decompiled/sources/com/streamax/client/LiveViewUi.java` | 223 |
 | `decompiled/sources/com/streamax/client/VideoView.java` | 217 |
+| `decompiled/sources/com/streamax/client/LiveViewUi.java` | 215 |
 | `decompiled/sources/com/streamax/proxy/ConnDeviceProxy.java` | 182 |
 | `decompiled/sources/com/streamax/config/fragment/alarm/TriggerOfAlarm.java` | 146 |
 | `decompiled/sources/com/streamax/client/WebService.java` | 141 |
 | `decompiled/sources/com/streamax/client/CustomImageView.java` | 140 |
-| `decompiled/sources/com/streamax/client/EventPlaybackActivity.java` | 120 |
 | `decompiled/sources/com/streamax/config/fragment/record/PlanOfRecord.java` | 120 |
 | `decompiled/sources/com/streamax/config/fragment/alarm/ScheduleOfAlarm.java` | 109 |
+| `decompiled/sources/com/streamax/client/EventPlaybackActivity.java` | 108 |
 | `decompiled/sources/com/streamax/client/ui/devlist/ui/DevGroupFragment.java` | 101 |
 | `decompiled/sources/com/streamax/config/fragment/network/EmailOfNetwork.java` | 94 |
 | `decompiled/sources/com/streamax/client/PlayFragmentSearch.java` | 91 |
@@ -95,8 +95,8 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 118 | 11,495 |
-| `decompiled/sources/com/dvr` | 19 | 691 |
+| `decompiled/sources/com/streamax` | 113 | 11,372 |
+| `decompiled/sources/com/dvr` | 9 | 537 |
 
 ## Kotlin Generic Parameter Names
 
@@ -106,16 +106,18 @@ Converted Kotlin files still include some generic parameter names. These are saf
 | --- | ---: |
 | `com/google/android` | 22 |
 | `com/hjq/http` | 22 |
-| `com/dvr/net` | 7 |
-| `com/dvr/avstream` | 6 |
 | `com/dvr/calendar` | 5 |
-| `com/streamax/client` | 4 |
 | `com/amo/demo` | 4 |
 | `org/jivesoftware/smackx` | 3 |
 | `org/jivesoftware/smack` | 3 |
 | `com/wifi/net` | 3 |
 | `com/dvr/bluetooth` | 2 |
-| `com/streamax/config` | 1 |
+| `com/kenai/jbosh` | 1 |
+| `com/pickview/listener` | 1 |
+| `com/wifi/ui` | 1 |
+| `com/dvr/net` | 1 |
+| `freemarker/log/LoggerFactory.kt` | 1 |
+| `com/dvr/avstream` | 1 |
 
 ## Cleanup Recommendation
 
@@ -127,16 +129,14 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 ## Next Safe Chunk
 
-A safe next chunk is to clean converted Kotlin parameter names in app-owned files first:
+A safe next chunk is to clean the remaining app-owned Kotlin parameter names in smaller UI/data files:
 
-- `decompiled/sources/com/dvr/net/DvrNet.kt`
-- `decompiled/sources/com/dvr/avstream/AVStream.kt`
-- `decompiled/sources/com/dvr/avstream/AuTrack.kt`
+- `decompiled/sources/com/dvr/calendar/CalendarView.kt`
+- `decompiled/sources/com/dvr/calendar/DateWidgetDayCell.kt`
+- `decompiled/sources/com/dvr/calendar/DateWidgetDayHeader.kt`
+- `decompiled/sources/com/dvr/calendar/DayStyle.kt`
+- `decompiled/sources/com/dvr/calendar/UpdateCalendarInterface.kt`
 - `decompiled/sources/com/dvr/bluetooth/BluetoothChat.kt`
-- `decompiled/sources/com/streamax/client/AudioTrackInterface.kt`
-- `decompiled/sources/com/streamax/client/DownFileInterface.kt`
-- `decompiled/sources/com/streamax/client/FilePlaybackInterface.kt`
-- `decompiled/sources/com/streamax/client/RemotePlayInterface.kt`
-- `decompiled/sources/com/streamax/config/fragment/OneNumberEditInterface.kt`
+- `decompiled/sources/com/dvr/bluetooth/StreamBuffer.kt`
 
-This keeps the next rename pass small and low-risk before touching large Java files such as `VideoContainer.java`.
+After those, the next higher-impact cleanup target is still the Java-heavy playback UI, starting with `VideoContainer.java`.

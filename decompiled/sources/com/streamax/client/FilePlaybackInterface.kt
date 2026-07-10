@@ -1,5 +1,5 @@
 package com.streamax.client
 
 interface FilePlaybackInterface {
-    fun FilePlaybackCallback(i: Int, bArr: ByteArray, i2: Int, i3: Int, i4: Int, i5: Int)
+    fun FilePlaybackCallback(channel: Int, frameData: ByteArray, dataLength: Int, width: Int, height: Int, playbackSecond: Int)
 }

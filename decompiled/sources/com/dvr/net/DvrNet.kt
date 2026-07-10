@@ -193,36 +193,36 @@ class DvrNet {
         }
     }
 
-    fun MyHeartbeatCallbackFun(j: Long, i: Int): Int {
-        Log.v(TAG, "[HeartbeatCallbackFun]nState = $i")
+    fun MyHeartbeatCallbackFun(nativeHandle: Long, state: Int): Int {
+        Log.v(TAG, "[HeartbeatCallbackFun]nState = $state")
         synchronized(mIOTCListeners) {
             Log.v(TAG, "mIOTCListeners.size() =${mIOTCListeners.size}")
             for (listener in mIOTCListeners) {
                 Log.v(TAG, "[receiveHearbeatInfo]listener =$listener")
-                listener.receiveHearbeatInfo(i)
+                listener.receiveHearbeatInfo(state)
             }
         }
         return 0
     }
 
-    fun MyCommandCallbackFunc(j: Long, i: Int, bArr: ByteArray?, i2: Int): Int {
-        var str = ""
-        if (i == 18) {
+    fun MyCommandCallbackFunc(nativeHandle: Long, command: Int, payload: ByteArray?, payloadLength: Int): Int {
+        var payloadText = ""
+        if (command == 18) {
             synchronized(mIOTCListeners) {
                 for (listener in mIOTCListeners) {
-                    listener.receiveTransData(bArr, i2)
+                    listener.receiveTransData(payload, payloadLength)
                 }
             }
             return 0
         }
-        str = try {
-            String(bArr ?: ByteArray(0), Charsets.UTF_8)
+        payloadText = try {
+            String(payload ?: ByteArray(0), Charsets.UTF_8)
         } catch (e: Exception) {
             e.printStackTrace()
             ""
         }
         return try {
-            val obj = JSONObject(str)
+            val obj = JSONObject(payloadText)
             val operation = obj.getString("OPERATION")
             Log.v(TAG, "operation = $operation")
 
@@ -325,37 +325,37 @@ class DvrNet {
         }
     }
 
-    fun MyFrameCallbackFunc(j: Long, i: Int, i2: Int, i3: Int, j2: Long, i4: Int, j3: Long): Int {
+    fun MyFrameCallbackFunc(nativeHandle: Long, width: Int, height: Int, channel: Int, frameTimestamp: Long, dataLength: Int, frameId: Long): Int {
         synchronized(mIOTCListeners) {
             for (listener in mIOTCListeners) {
-                listener.receiveFrameData(i3, i, i2, j2, i4, j3)
+                listener.receiveFrameData(channel, width, height, frameTimestamp, dataLength, frameId)
             }
         }
-        val stream = av[i3]
+        val stream = av[channel]
         return if (stream != null) {
-            stream.InputFrame(j2, i4, i, i2, j3)
+            stream.InputFrame(frameTimestamp, dataLength, width, height, frameId)
         } else {
             0
         }
     }
 
-    fun TalkbackCallbackFunc(j: Long, i: Int, i2: Int): Int {
+    fun TalkbackCallbackFunc(nativeHandle: Long, channel: Int, dataLength: Int): Int {
         val talkbackListener = tc ?: return 0
-        talkbackListener.receiveTalkbackPCMData(Talkbackdata, i2)
+        talkbackListener.receiveTalkbackPCMData(Talkbackdata, dataLength)
         return 0
     }
 
-    fun MyMultiPlayCallbacFunc(j: Long, i: Int, i2: Int, i3: Int, j2: Long, i4: Int, i5: Int, i6: Int, i7: Int) {
-        if (i2 == 1 || i2 == 2) {
-            mc?.MultiplayCallback(j, i3, i, i2, mPixels[0], i5, i6, i7)
-        } else if (i2 == 4) {
-            ac?.InputAudioData(i3, mAudio[0], i4)
-        } else if (i2 == 0) {
+    fun MyMultiPlayCallbacFunc(nativeHandle: Long, codecType: Int, frameType: Int, channel: Int, frameTimestamp: Long, audioLength: Int, width: Int, height: Int, playbackSecond: Int) {
+        if (frameType == 1 || frameType == 2) {
+            mc?.MultiplayCallback(nativeHandle, channel, codecType, frameType, mPixels[0], width, height, playbackSecond)
+        } else if (frameType == 4) {
+            ac?.InputAudioData(channel, mAudio[0], audioLength)
+        } else if (frameType == 0) {
             mMessageCallback?.sendMessage(0)
         }
     }
 
-    fun BlackBoxInfoCallbackFunc(j: Long, blackBoxFrameArr: Array<BlackBoxFrame?>?): Int {
+    fun BlackBoxInfoCallbackFunc(nativeHandle: Long, blackBoxFrameArr: Array<BlackBoxFrame?>?): Int {
         synchronized(mIOTCListeners) {
             for (listener in mIOTCListeners) {
                 Log.v(TAG, "[receiveSessionInfo]listener =${listener}")
@@ -365,8 +365,8 @@ class DvrNet {
         return 0
     }
 
-    fun MyDownVideoCallbackFunc(j: Long, i: Int, i2: Int, i3: Int) {
-        dc?.DownVideoCallback(j, i, i2, i3)
+    fun MyDownVideoCallbackFunc(nativeHandle: Long, status: Int, totalBytes: Int, currentBytes: Int) {
+        dc?.DownVideoCallback(nativeHandle, status, totalBytes, currentBytes)
     }
 
     private fun fillLoginBaseInfo(obj: JSONObject, map: MutableMap<String, Any>, includeDevClass: Boolean, includeType: Boolean, stypeFromMtype: Boolean) {
@@ -495,12 +495,12 @@ class DvrNet {
         return map
     }
 
-    fun registerIOTCListener(iRegisterIOTCListener: IRegisterIOTCListener): Boolean {
+    fun registerIOTCListener(listener: IRegisterIOTCListener): Boolean {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
         synchronized(mIOTCListeners) {
-            return if (!mIOTCListeners.contains(iRegisterIOTCListener)) {
+            return if (!mIOTCListeners.contains(listener)) {
                 Log.v(TAG, "register IOTC listener")
-                mIOTCListeners.add(iRegisterIOTCListener)
+                mIOTCListeners.add(listener)
                 true
             } else {
                 false
@@ -508,12 +508,12 @@ class DvrNet {
         }
     }
 
-    fun unregisterIOTCListener(iRegisterIOTCListener: IRegisterIOTCListener): Boolean {
+    fun unregisterIOTCListener(listener: IRegisterIOTCListener): Boolean {
         Log.v(TAG, "[${CommonFunction._FUNC_()}]handle = $handle")
         synchronized(mIOTCListeners) {
-            return if (mIOTCListeners.contains(iRegisterIOTCListener)) {
+            return if (mIOTCListeners.contains(listener)) {
                 Log.i("IOTCamera", "unregister IOTC listener")
-                mIOTCListeners.remove(iRegisterIOTCListener)
+                mIOTCListeners.remove(listener)
                 true
             } else {
                 false

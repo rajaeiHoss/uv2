@@ -1,5 +1,5 @@
 package com.dvr.net
 
 interface MultiplaybackInterface {
-    fun MultiplayCallback(j: Long, i: Int, i2: Int, i3: Int, bArr: ByteArray?, i4: Int, i5: Int, i6: Int)
+    fun MultiplayCallback(nativeHandle: Long, channel: Int, codecType: Int, frameType: Int, frameData: ByteArray?, width: Int, height: Int, playbackSecond: Int)
 }

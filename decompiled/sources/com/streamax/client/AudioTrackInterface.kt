@@ -1,5 +1,5 @@
 package com.streamax.client
 
 interface AudioTrackInterface {
-    fun InputAudioData(i: Int, bArr: ByteArray, i2: Int)
+    fun InputAudioData(channel: Int, audioData: ByteArray, length: Int)
 }
