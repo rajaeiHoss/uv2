@@ -101,121 +101,85 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
     }
 
     public void refreshUi() {
-        JSONObject jSONObject = this.mCmsRes;
-        if (jSONObject != null) {
+        JSONObject cmsResponse = this.mCmsRes;
+        if (cmsResponse != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("NWSM");
-                if (jSONObject2 != null) {
-                    JSONArray jSONArray = jSONObject2.getJSONArray("MCMS");
-                    this.mCmsObj = jSONArray;
-                    if (jSONArray != null) {
-                        int i = -1;
-                        boolean z = false;
-                        if (jSONArray.length() >= 1) {
-                            JSONObject jSONObject3 = this.mCmsObj.getJSONObject(0);
-                            String string = jSONObject3.getString("PROTOCOL");
-                            String string2 = jSONObject3.getString("VISITTYPE");
-                            String string3 = jSONObject3.getString("SERVER");
-                            int i2 = jSONObject3.getInt("PORT");
+                JSONObject networkConfig = cmsResponse.getJSONObject("NWSM");
+                if (networkConfig != null) {
+                    JSONArray cmsConfigs = networkConfig.getJSONArray("MCMS");
+                    this.mCmsObj = cmsConfigs;
+                    if (cmsConfigs != null) {
+                        if (cmsConfigs.length() >= 1) {
+                            JSONObject primaryCms = this.mCmsObj.getJSONObject(0);
+                            String protocol = primaryCms.getString("PROTOCOL");
+                            String visitType = primaryCms.getString("VISITTYPE");
+                            String server = primaryCms.getString("SERVER");
+                            int port = primaryCms.getInt("PORT");
                             this.mListStrProtocol1.clear();
                             this.mListIntProtocol1.clear();
-                            int i3 = 0;
-                            while (true) {
-                                if (i3 >= this.mListProtocolCase.size()) {
-                                    i3 = -1;
-                                    break;
-                                } else if (string.equalsIgnoreCase(this.mListProtocolCase.get(i3))) {
-                                    break;
-                                } else {
-                                    i3++;
-                                }
-                            }
-                            if (i3 >= 0) {
-                                this.mTvProtocol1.setText(this.mListProtocolName.get(i3));
+                            int protocolIndex = findCaseIndex(protocol, this.mListProtocolCase);
+                            if (protocolIndex >= 0) {
+                                this.mTvProtocol1.setText(this.mListProtocolName.get(protocolIndex));
                                 this.mListStrProtocol1.addAll(this.mListProtocolName);
-                                this.mListIntProtocol1.add(new Integer(i3));
+                                this.mListIntProtocol1.add(new Integer(protocolIndex));
                             }
                             this.mListStrVisitType1.clear();
                             this.mListIntVisitType1.clear();
-                            int i4 = 0;
-                            while (true) {
-                                if (i4 >= this.mListVisitTypeCase.size()) {
-                                    i4 = -1;
-                                    break;
-                                } else if (string2.equalsIgnoreCase(this.mListVisitTypeCase.get(i4))) {
-                                    break;
-                                } else {
-                                    i4++;
-                                }
-                            }
-                            if (i4 >= 0) {
-                                this.mTvVisitType1.setText(this.mListVisitTypeName.get(i4));
+                            int visitTypeIndex = findCaseIndex(visitType, this.mListVisitTypeCase);
+                            if (visitTypeIndex >= 0) {
+                                this.mTvVisitType1.setText(this.mListVisitTypeName.get(visitTypeIndex));
                                 this.mListStrVisitType1.addAll(this.mListVisitTypeName);
-                                this.mListIntVisitType1.add(new Integer(i4));
+                                this.mListIntVisitType1.add(new Integer(visitTypeIndex));
                             }
-                            int i5 = i3 <= 0 ? 1 : 0;
-                            this.mTvVisitType1.setEnabled(i3 > 0);
-                            setTvEnableAndContent(this.mEtServerHost1, i5, string3);
+                            int enableFlag = protocolIndex <= 0 ? 1 : 0;
+                            this.mTvVisitType1.setEnabled(protocolIndex > 0);
+                            setTvEnableAndContent(this.mEtServerHost1, enableFlag, server);
                             VsEditView vsEditView = this.mEtServerPort1;
-                            setTvEnableAndContent(vsEditView, i5, "" + i2);
+                            setTvEnableAndContent(vsEditView, enableFlag, "" + port);
                         }
                         if (this.mCmsObj.length() >= 2) {
-                            JSONObject jSONObject4 = this.mCmsObj.getJSONObject(1);
-                            String string4 = jSONObject4.getString("PROTOCOL");
-                            String string5 = jSONObject4.getString("VISITTYPE");
-                            String string6 = jSONObject4.getString("SERVER");
-                            int i6 = jSONObject4.getInt("PORT");
+                            JSONObject secondaryCms = this.mCmsObj.getJSONObject(1);
+                            String protocol = secondaryCms.getString("PROTOCOL");
+                            String visitType = secondaryCms.getString("VISITTYPE");
+                            String server = secondaryCms.getString("SERVER");
+                            int port = secondaryCms.getInt("PORT");
                             this.mListStrProtocol2.clear();
                             this.mListIntProtocol2.clear();
-                            int i7 = 0;
-                            while (true) {
-                                if (i7 >= this.mListProtocolCase.size()) {
-                                    i7 = -1;
-                                    break;
-                                } else if (string4.equalsIgnoreCase(this.mListProtocolCase.get(i7))) {
-                                    break;
-                                } else {
-                                    i7++;
-                                }
-                            }
-                            if (i7 >= 0) {
-                                this.mTvProtocol2.setText(this.mListProtocolName.get(i7));
+                            int protocolIndex = findCaseIndex(protocol, this.mListProtocolCase);
+                            if (protocolIndex >= 0) {
+                                this.mTvProtocol2.setText(this.mListProtocolName.get(protocolIndex));
                                 this.mListStrProtocol2.addAll(this.mListProtocolName);
-                                this.mListIntProtocol2.add(new Integer(i7));
+                                this.mListIntProtocol2.add(new Integer(protocolIndex));
                             }
                             this.mListStrVisitType2.clear();
                             this.mListIntVisitType2.clear();
-                            int i8 = 0;
-                            while (true) {
-                                if (i8 >= this.mListVisitTypeCase.size()) {
-                                    break;
-                                } else if (string5.equalsIgnoreCase(this.mListVisitTypeCase.get(i8))) {
-                                    i = i8;
-                                    break;
-                                } else {
-                                    i8++;
-                                }
-                            }
-                            if (i >= 0) {
-                                this.mTvVisitType2.setText(this.mListVisitTypeName.get(i));
+                            int visitTypeIndex = findCaseIndex(visitType, this.mListVisitTypeCase);
+                            if (visitTypeIndex >= 0) {
+                                this.mTvVisitType2.setText(this.mListVisitTypeName.get(visitTypeIndex));
                                 this.mListStrVisitType2.addAll(this.mListVisitTypeName);
-                                this.mListIntVisitType2.add(new Integer(i));
+                                this.mListIntVisitType2.add(new Integer(visitTypeIndex));
                             }
-                            int i9 = i7 <= 0 ? 1 : 0;
+                            int enableFlag = protocolIndex <= 0 ? 1 : 0;
                             TextView textView = this.mTvVisitType2;
-                            if (i7 > 0) {
-                                z = true;
-                            }
-                            textView.setEnabled(z);
-                            setTvEnableAndContent(this.mEtServerHost2, i9, string6);
+                            textView.setEnabled(protocolIndex > 0);
+                            setTvEnableAndContent(this.mEtServerHost2, enableFlag, server);
                             VsEditView vsEditView2 = this.mEtServerPort2;
-                            setTvEnableAndContent(vsEditView2, i9, "" + i6);
+                            setTvEnableAndContent(vsEditView2, enableFlag, "" + port);
                         }
                     }
                 }
             } catch (JSONException unused) {
             }
         }
+    }
+
+    private int findCaseIndex(String value, ArrayList<String> cases) {
+        for (int caseIndex = 0; caseIndex < cases.size(); caseIndex++) {
+            if (value.equalsIgnoreCase(cases.get(caseIndex))) {
+                return caseIndex;
+            }
+        }
+        return -1;
     }
 
     /* access modifiers changed from: protected */
@@ -312,19 +276,19 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("MCMS", "?");
-            jSONObject.put("NWSM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject request = new JSONObject();
+            JSONObject networkConfig = new JSONObject();
+            networkConfig.put("MCMS", "?");
+            request.put("NWSM", networkConfig);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mCmsRes = new JSONObject(str);
+            this.mCmsRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -336,11 +300,11 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mCmsRes;
-        if (jSONObject == null) {
+        JSONObject cmsResponse = this.mCmsRes;
+        if (cmsResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return cmsResponse.toString();
     }
 
     public void setSuccess() {
@@ -353,11 +317,11 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
         toastSf((int) R.string.config_info_set_failure);
     }
 
-    public void updateDateForProtocol(int i, int i2) {
-        JSONArray jSONArray = this.mCmsObj;
-        if (jSONArray != null && i < jSONArray.length() && i2 < this.mListProtocolCase.size()) {
+    public void updateDateForProtocol(int cmsIndex, int selectedIndex) {
+        JSONArray cmsConfigs = this.mCmsObj;
+        if (cmsConfigs != null && cmsIndex < cmsConfigs.length() && selectedIndex < this.mListProtocolCase.size()) {
             try {
-                this.mCmsObj.getJSONObject(i).put("PROTOCOL", this.mListProtocolCase.get(i2));
+                this.mCmsObj.getJSONObject(cmsIndex).put("PROTOCOL", this.mListProtocolCase.get(selectedIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -365,11 +329,11 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
         }
     }
 
-    public void updateDateForVisitType(int i, int i2) {
-        JSONArray jSONArray = this.mCmsObj;
-        if (jSONArray != null && i < jSONArray.length() && i2 < this.mListVisitTypeCase.size()) {
+    public void updateDateForVisitType(int cmsIndex, int selectedIndex) {
+        JSONArray cmsConfigs = this.mCmsObj;
+        if (cmsConfigs != null && cmsIndex < cmsConfigs.length() && selectedIndex < this.mListVisitTypeCase.size()) {
             try {
-                this.mCmsObj.getJSONObject(i).put("VISITTYPE", this.mListVisitTypeCase.get(i2));
+                this.mCmsObj.getJSONObject(cmsIndex).put("VISITTYPE", this.mListVisitTypeCase.get(selectedIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -377,20 +341,20 @@ public class FragmentCMS extends ConfigFragment implements BaseListener.SetListe
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForProtocol1") && list.size() > 0) {
-            updateDateForProtocol(0, list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForProtocol1") && selectedIndexes.size() > 0) {
+            updateDateForProtocol(0, selectedIndexes.get(0).intValue());
         }
-        if (str.equals("SelectFragmentForProtocol2")) {
-            if (list.size() > 0) {
-                updateDateForProtocol(1, list.get(0).intValue());
+        if (fragmentTag.equals("SelectFragmentForProtocol2")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForProtocol(1, selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForVisitType1")) {
-            if (list.size() > 0) {
-                updateDateForVisitType(0, list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForVisitType1")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForVisitType(0, selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForVisitType2") && list.size() > 0) {
-            updateDateForVisitType(1, list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForVisitType2") && selectedIndexes.size() > 0) {
+            updateDateForVisitType(1, selectedIndexes.get(0).intValue());
         }
     }
 }
