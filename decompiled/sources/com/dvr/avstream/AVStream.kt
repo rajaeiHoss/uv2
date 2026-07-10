@@ -244,7 +244,7 @@ class AVStream {
         if (j == 0L) {
             return 0
         }
-        return AVMultiplayStartPlay(j)
+        return AVMultiplayStopPlay(j)
     }
 
     companion object {
