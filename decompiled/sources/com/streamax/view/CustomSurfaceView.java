@@ -60,7 +60,7 @@ public class CustomSurfaceView extends SurfaceView {
     View view;
 
     public interface ICoallBack {
-        void getAngle(int i, int i2);
+        void getAngle(int left, int width);
     }
 
     public CustomSurfaceView(Context context, AttributeSet attributeSet, int i) {
@@ -120,42 +120,42 @@ public class CustomSurfaceView extends SurfaceView {
                 iCoallBack.getAngle((int) getX(), getWidth());
             }
             if (touchSlop <= getDistance((float) this.distanceX, (float) this.distanceY)) {
-                int i = this.distanceX;
-                int i2 = left + i;
-                int i3 = right + i;
-                int i4 = this.distanceY;
-                int i5 = bottom + i4;
-                int i6 = top + i4;
+                int deltaX = this.distanceX;
+                int newLeft = left + deltaX;
+                int newRight = right + deltaX;
+                int deltaY = this.distanceY;
+                int newBottom = bottom + deltaY;
+                int newTop = top + deltaY;
                 if (this.isControl_Horizal) {
-                    if (i2 >= 0) {
-                        i3 = getWidth();
-                        i2 = 0;
+                    if (newLeft >= 0) {
+                        newRight = getWidth();
+                        newLeft = 0;
                     }
-                    int i7 = this.screenWidth;
-                    if (i3 <= i7) {
-                        i2 = i7 - getWidth();
-                        i3 = this.screenWidth;
+                    int rightLimit = this.screenWidth;
+                    if (newRight <= rightLimit) {
+                        newLeft = rightLimit - getWidth();
+                        newRight = this.screenWidth;
                     }
                 } else {
-                    i2 = getLeft();
-                    i3 = getRight();
+                    newLeft = getLeft();
+                    newRight = getRight();
                 }
                 if (this.isControl_Vertical) {
-                    if (i6 > 0) {
-                        i5 = getHeight();
-                        i6 = 0;
+                    if (newTop > 0) {
+                        newBottom = getHeight();
+                        newTop = 0;
                     }
-                    int i8 = this.start_Bottom;
-                    if (i5 <= i8) {
-                        i6 = this.fatherView_H - getWidth();
-                        i5 = i8;
+                    int bottomLimit = this.start_Bottom;
+                    if (newBottom <= bottomLimit) {
+                        newTop = this.fatherView_H - getWidth();
+                        newBottom = bottomLimit;
                     }
                 } else {
-                    i6 = getTop();
-                    i5 = getBottom();
+                    newTop = getTop();
+                    newBottom = getBottom();
                 }
                 if (this.isControl_Horizal || this.isControl_Vertical) {
-                    setPosition(i2, i6, i3, i5);
+                    setPosition(newLeft, newTop, newRight, newBottom);
                 }
                 this.current_x = (int) motionEvent.getRawX();
                 this.current_y = (int) motionEvent.getRawY();
@@ -191,13 +191,13 @@ public class CustomSurfaceView extends SurfaceView {
     }
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        super.onLayout(z, i, i2, i3, i4);
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
         if (this.start_Top == -1) {
-            this.start_Top = i2;
-            this.start_Left = i;
-            this.start_Right = i3;
-            this.start_Bottom = i4;
+            this.start_Top = top;
+            this.start_Left = left;
+            this.start_Right = right;
+            this.start_Bottom = bottom;
             this.initViewWidth = this.view.getWidth();
             this.initViewHeight = this.view.getHeight();
         }
@@ -222,37 +222,37 @@ public class CustomSurfaceView extends SurfaceView {
                 int bottom = CustomSurfaceView.this.getBottom();
                 int right = CustomSurfaceView.this.getRight();
                 if (scaleFactor > 1.0f) {
-                    float height = ((float) ((int) (((double) (((float) CustomSurfaceView.this.getHeight()) * (scaleFactor - 1.0f))) / 7.0d))) / 2.0f;
-                    int i = (int) (((float) left) - height);
-                    int i2 = (int) (((float) right) + height);
-                    int i3 = (int) (((float) bottom) + height);
-                    int i4 = (int) (((float) top) - height);
+                    float scaleDelta = ((float) ((int) (((double) (((float) CustomSurfaceView.this.getHeight()) * (scaleFactor - 1.0f))) / 7.0d))) / 2.0f;
+                    int scaledLeft = (int) (((float) left) - scaleDelta);
+                    int scaledRight = (int) (((float) right) + scaleDelta);
+                    int scaledBottom = (int) (((float) bottom) + scaleDelta);
+                    int scaledTop = (int) (((float) top) - scaleDelta);
                     if (CustomSurfaceView.this.getWidth() <= CustomSurfaceView.this.screenWidth * 3 && CustomSurfaceView.this.getHeight() <= CustomSurfaceView.this.fatherView_H * 3) {
-                        CustomSurfaceView.this.setPosition(i, i4, i2, i3);
+                        CustomSurfaceView.this.setPosition(scaledLeft, scaledTop, scaledRight, scaledBottom);
                     }
                 } else {
-                    float height2 = ((float) ((int) (((double) (((float) CustomSurfaceView.this.getHeight()) * (1.0f - scaleFactor))) / 7.0d))) / 2.0f;
-                    int i5 = (int) (((float) left) + height2);
-                    int i6 = (int) (((float) right) - height2);
-                    int i7 = (int) (((float) bottom) - height2);
-                    int i8 = (int) (((float) top) + height2);
-                    if (i5 >= 0) {
-                        i5 = 0;
+                    float scaleDelta = ((float) ((int) (((double) (((float) CustomSurfaceView.this.getHeight()) * (1.0f - scaleFactor))) / 7.0d))) / 2.0f;
+                    int scaledLeft = (int) (((float) left) + scaleDelta);
+                    int scaledRight = (int) (((float) right) - scaleDelta);
+                    int scaledBottom = (int) (((float) bottom) - scaleDelta);
+                    int scaledTop = (int) (((float) top) + scaleDelta);
+                    if (scaledLeft >= 0) {
+                        scaledLeft = 0;
                     }
-                    if (i6 <= CustomSurfaceView.this.screenWidth) {
-                        i6 = CustomSurfaceView.this.screenWidth;
+                    if (scaledRight <= CustomSurfaceView.this.screenWidth) {
+                        scaledRight = CustomSurfaceView.this.screenWidth;
                     }
-                    if (i8 >= 0) {
-                        i8 = 0;
+                    if (scaledTop >= 0) {
+                        scaledTop = 0;
                     }
-                    if (i7 <= CustomSurfaceView.this.fatherView_H) {
-                        i7 = CustomSurfaceView.this.fatherView_H;
+                    if (scaledBottom <= CustomSurfaceView.this.fatherView_H) {
+                        scaledBottom = CustomSurfaceView.this.fatherView_H;
                     }
                     if (CustomSurfaceView.this.getWidth() <= CustomSurfaceView.this.initViewWidth || CustomSurfaceView.this.getHeight() <= CustomSurfaceView.this.fatherView_H) {
                         CustomSurfaceView customSurfaceView = CustomSurfaceView.this;
                         customSurfaceView.setPosition(customSurfaceView.start_Left, CustomSurfaceView.this.start_Top, CustomSurfaceView.this.start_Right, CustomSurfaceView.this.start_Bottom);
                     } else {
-                        CustomSurfaceView.this.setPosition(i5, i8, i6, i7);
+                        CustomSurfaceView.this.setPosition(scaledLeft, scaledTop, scaledRight, scaledBottom);
                     }
                 }
             }
@@ -328,13 +328,13 @@ public class CustomSurfaceView extends SurfaceView {
     }
 
     /* access modifiers changed from: private */
-    public void setPosition(int i, int i2, int i3, int i4) {
-        layout(i, i2, i3, i4);
+    public void setPosition(int left, int top, int right, int bottom) {
+        layout(left, top, right, bottom);
     }
 
-    public void setFatherW_H(int i, int i2) {
-        this.fatherView_W = i;
-        this.fatherView_H = i2;
+    public void setFatherW_H(int width, int height) {
+        this.fatherView_W = width;
+        this.fatherView_H = height;
     }
 
     public void setLayoutParam(float f) {
@@ -345,13 +345,13 @@ public class CustomSurfaceView extends SurfaceView {
         setLayoutParams(layoutParams);
     }
 
-    private float getDistance(float f, float f2) {
-        return (float) Math.sqrt((double) ((f * f) + (f2 * f2)));
+    private float getDistance(float deltaX, float deltaY) {
+        return (float) Math.sqrt((double) ((deltaX * deltaX) + (deltaY * deltaY)));
     }
 
-    public void setFatherTopAndBottom(int i, int i2) {
-        this.fatherTop = i;
-        this.fatherBottom = i2;
+    public void setFatherTopAndBottom(int top, int bottom) {
+        this.fatherTop = top;
+        this.fatherBottom = bottom;
     }
 
     public void setEvent(ICoallBack iCoallBack) {
