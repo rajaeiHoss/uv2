@@ -63,14 +63,14 @@ App-owned source files do not have obfuscated file names, but many still contain
 | `str`, `str2`, ... | 84 |
 | `bArr`, `bArr2`, ... | 10 |
 | `i2`, `j2`, ... | 65 |
-| `z`, `z2`, ... | 54 |
+| `z`, `z2`, ... | 53 |
 | App-owned files with at least one generic identifier | 113 |
 
 Top app-owned cleanup targets by generic identifier count:
 
 | File | Generic identifier hits |
 | --- | ---: |
-| `decompiled/sources/com/streamax/client/VideoContainer.java` | 4,768 |
+| `decompiled/sources/com/streamax/client/VideoContainer.java` | 4,696 |
 | `decompiled/sources/com/streamax/client/RealPlayActivity.java` | 909 |
 | `decompiled/sources/com/streamax/client/VideoGroup.java` | 620 |
 | `decompiled/sources/com/streamax/client/widget/PlayerView.java` | 518 |
@@ -95,7 +95,7 @@ Generic identifier concentration by app-owned namespace:
 
 | Namespace | Files | Hits |
 | --- | ---: | ---: |
-| `decompiled/sources/com/streamax` | 113 | 11,366 |
+| `decompiled/sources/com/streamax` | 113 | 11,294 |
 | `decompiled/sources/com/dvr` | 0 | 0 |
 
 ## Kotlin Generic Parameter Names
@@ -125,10 +125,10 @@ Converted Kotlin files still include some generic parameter names. These are saf
 
 All app-owned Kotlin parameter cleanup is complete under the current generic-identifier scan.
 
-The next safe chunk is Java-heavy playback UI cleanup, starting with the highest-hit files:
+The next safe chunk is continued Java-heavy playback UI cleanup, starting with the highest-hit files:
 
 - `decompiled/sources/com/streamax/client/VideoContainer.java`
 - `decompiled/sources/com/streamax/client/RealPlayActivity.java`
 - `decompiled/sources/com/streamax/client/VideoGroup.java`
 
-Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state.
+Keep each Java cleanup chunk narrow because these files contain decompiled control flow and playback/channel state. For `VideoContainer.java`, continue with small real Java methods first and avoid the large decompiler-dump body in `ArrayViews`.

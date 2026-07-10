@@ -75,8 +75,8 @@ public class VideoContainer extends RelativeLayout {
     private PointF start = new PointF();
 
     /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        if (z) {
+    public void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if (changed) {
             postDelayed(new Runnable() {
                 public void run() {
                     VideoContainer videoContainer = VideoContainer.this;
@@ -84,7 +84,7 @@ public class VideoContainer extends RelativeLayout {
                 }
             }, 100);
         }
-        super.onLayout(z, i, i2, i3, i4);
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     public VideoContainer(Context context) {
@@ -107,8 +107,8 @@ public class VideoContainer extends RelativeLayout {
         LoadViews();
     }
 
-    public VideoContainer(Context context, AttributeSet attributeSet, int i) {
-        super(context, attributeSet, i);
+    public VideoContainer(Context context, AttributeSet attributeSet, int defStyleAttr) {
+        super(context, attributeSet, defStyleAttr);
         this.mContext = context;
         if (this.mGestureDetector == null) {
             this.mGestureDetector = new GestureDetector(this.mContext, new FlingGestureDetector());
@@ -117,20 +117,20 @@ public class VideoContainer extends RelativeLayout {
         LoadViews();
     }
 
-    public void SetInitMode(int i) {
-        this.mLastArrayMode = i;
-        this.mCurViewCount = i;
-        this.mInitViewCount = i;
+    public void SetInitMode(int layoutMode) {
+        this.mLastArrayMode = layoutMode;
+        this.mCurViewCount = layoutMode;
+        this.mInitViewCount = layoutMode;
         this.mIndexList.clear();
-        for (int i2 = 0; i2 < this.mMax; i2++) {
-            this.mIndexList.add(i2, Integer.valueOf(i2));
+        for (int index = 0; index < this.mMax; index++) {
+            this.mIndexList.add(index, Integer.valueOf(index));
         }
         this.mFocusIndex = 0;
-        for (int i3 = 0; i3 < this.mInitViewCount; i3++) {
-            if (i3 == this.mFocusIndex) {
-                this.mVideoFrame[this.mIndexList.get(i3).intValue()].setFocusState(true);
+        for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+            if (viewIndex == this.mFocusIndex) {
+                this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setFocusState(true);
             } else {
-                this.mVideoFrame[this.mIndexList.get(i3).intValue()].setFocusState(false);
+                this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setFocusState(false);
             }
         }
         if (this.mCurViewCount == 32) {
@@ -148,14 +148,14 @@ public class VideoContainer extends RelativeLayout {
     }
 
     public List<Integer> GetChannelList() {
-        ArrayList arrayList = new ArrayList();
-        for (int i = 0; i < this.mInitViewCount; i++) {
+        ArrayList<Integer> channelList = new ArrayList();
+        for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
             VideoFrame[] videoFrameArr = this.mVideoFrame;
-            if (videoFrameArr[i] != null && videoFrameArr[i].getVisibility() == 0) {
-                arrayList.add(Integer.valueOf(this.mIndexList.get(i).intValue()));
+            if (videoFrameArr[viewIndex] != null && videoFrameArr[viewIndex].getVisibility() == 0) {
+                channelList.add(Integer.valueOf(this.mIndexList.get(viewIndex).intValue()));
             }
         }
-        return arrayList;
+        return channelList;
     }
 
     public void SetActivity(RealPlayActivity realPlayActivity) {
@@ -167,23 +167,23 @@ public class VideoContainer extends RelativeLayout {
         this.mIndexList.clear();
         setVerticalGravity(17);
         setHorizontalGravity(17);
-        int i = 0;
-        while (i < this.mMax) {
-            int i2 = i + 1;
-            this.mVideoFrame[i] = new VideoFrame(this.mContext, i2);
-            this.mVideoFrame[i].setId(i);
-            this.mVideoFrame[i].setVisibility(8);
-            this.mVideoFrame[i].setClickable(false);
-            this.mVideoFrame[i].setFocusable(false);
-            this.mVideoFrame[i].setFocusableInTouchMode(false);
-            this.mVideoFrame[i].setHapticFeedbackEnabled(false);
-            addView(this.mVideoFrame[i]);
-            this.mIndexList.add(i, Integer.valueOf(i));
-            i = i2;
+        int viewIndex = 0;
+        while (viewIndex < this.mMax) {
+            int channelNumber = viewIndex + 1;
+            this.mVideoFrame[viewIndex] = new VideoFrame(this.mContext, channelNumber);
+            this.mVideoFrame[viewIndex].setId(viewIndex);
+            this.mVideoFrame[viewIndex].setVisibility(8);
+            this.mVideoFrame[viewIndex].setClickable(false);
+            this.mVideoFrame[viewIndex].setFocusable(false);
+            this.mVideoFrame[viewIndex].setFocusableInTouchMode(false);
+            this.mVideoFrame[viewIndex].setHapticFeedbackEnabled(false);
+            addView(this.mVideoFrame[viewIndex]);
+            this.mIndexList.add(viewIndex, Integer.valueOf(viewIndex));
+            viewIndex = channelNumber;
         }
-        for (int i3 = 0; i3 < this.mMax; i3++) {
-            final int index = i3;
-            this.mVideoFrame[i3].mImgAdd.setOnClickListener(new View.OnClickListener() {
+        for (int frameIndex = 0; frameIndex < this.mMax; frameIndex++) {
+            final int index = frameIndex;
+            this.mVideoFrame[frameIndex].mImgAdd.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     Intent intent = new Intent(VideoContainer.this.mRealPlayUi, DevSelectUi.class);
                     intent.putExtra("currentPosition", index);
@@ -194,28 +194,28 @@ public class VideoContainer extends RelativeLayout {
         this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].setFocusState(true);
         this.mOnclickListener = new View.OnClickListener() {
             public void onClick(View view) {
-                final int i;
+                final int ptzCommand;
                 switch (view.getId()) {
                     case R.id.ptz_control_down /*2131362923*/:
-                        i = 2;
+                        ptzCommand = 2;
                         break;
                     case R.id.ptz_control_left /*2131362924*/:
-                        i = 3;
+                        ptzCommand = 3;
                         break;
                     case R.id.ptz_control_right /*2131362926*/:
-                        i = 4;
+                        ptzCommand = 4;
                         break;
                     case R.id.ptz_control_up /*2131362927*/:
-                        i = 1;
+                        ptzCommand = 1;
                         break;
                     default:
-                        i = 0;
+                        ptzCommand = 0;
                         break;
                 }
                 if (VideoContainer.this.mDvrNet != null && VideoContainer.this.mCurViewCount == 1) {
                     new Thread(new Runnable() {
                         public void run() {
-                            VideoContainer.this.mDvrNet.PTZControl(((Integer) VideoContainer.this.mIndexList.get(VideoContainer.this.mFocusIndex)).intValue(), i, VideoContainer.this.mRealPlayUi.mApp.mPtzSpeed);
+                            VideoContainer.this.mDvrNet.PTZControl(((Integer) VideoContainer.this.mIndexList.get(VideoContainer.this.mFocusIndex)).intValue(), ptzCommand, VideoContainer.this.mRealPlayUi.mApp.mPtzSpeed);
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e) {
@@ -227,9 +227,9 @@ public class VideoContainer extends RelativeLayout {
                 }
             }
         };
-        int[] iArr = {R.id.ptz_control_left, R.id.ptz_control_right, R.id.ptz_control_up, R.id.ptz_control_down};
-        for (int i4 = 0; i4 < 4; i4++) {
-            ImageView imageView = (ImageView) findViewById(iArr[i4]);
+        int[] ptzButtonIds = {R.id.ptz_control_left, R.id.ptz_control_right, R.id.ptz_control_up, R.id.ptz_control_down};
+        for (int buttonIndex = 0; buttonIndex < 4; buttonIndex++) {
+            ImageView imageView = (ImageView) findViewById(ptzButtonIds[buttonIndex]);
             if (imageView != null) {
                 imageView.setOnClickListener(this.mOnclickListener);
             }
@@ -240,21 +240,21 @@ public class VideoContainer extends RelativeLayout {
         });
     }
 
-    public void SetPlayState(int i, boolean z) {
-        this.mVideoFrame[i].setPlayState(z);
+    public void SetPlayState(int channel, boolean playing) {
+        this.mVideoFrame[channel].setPlayState(playing);
     }
 
-    public void SetBusyState(int i, boolean z) {
-        this.mVideoFrame[i].SetBusyState(z);
+    public void SetBusyState(int channel, boolean busy) {
+        this.mVideoFrame[channel].SetBusyState(busy);
     }
 
-    public void SetRecState(int i, boolean z) {
-        this.mVideoFrame[i].SetRecState(z);
+    public void SetRecState(int channel, boolean recording) {
+        this.mVideoFrame[channel].SetRecState(recording);
     }
 
     public void ClearViews() {
-        for (int i = 0; i < this.mInitViewCount; i++) {
-            this.mVideoFrame[i].ClearViews();
+        for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
+            this.mVideoFrame[viewIndex].ClearViews();
         }
     }
 
@@ -2653,24 +2653,24 @@ public class VideoContainer extends RelativeLayout {
         throw new UnsupportedOperationException("Method not decompiled: com.streamax.client.VideoContainer.ArrayViews(int, boolean):void");
     }
 
-    public void SetPtzControlState(int i) {
+    public void SetPtzControlState(int visibility) {
         RealPlayActivity realPlayActivity;
-        int[] iArr = {R.id.ptz_control_left, R.id.ptz_control_right, R.id.ptz_control_up, R.id.ptz_control_down};
-        for (int i2 = 0; i2 < 4; i2++) {
-            ImageView imageView = (ImageView) findViewById(iArr[i2]);
+        int[] ptzButtonIds = {R.id.ptz_control_left, R.id.ptz_control_right, R.id.ptz_control_up, R.id.ptz_control_down};
+        for (int buttonIndex = 0; buttonIndex < 4; buttonIndex++) {
+            ImageView imageView = (ImageView) findViewById(ptzButtonIds[buttonIndex]);
             if (imageView != null) {
-                if (imageView.getVisibility() != i) {
-                    imageView.setVisibility(i);
+                if (imageView.getVisibility() != visibility) {
+                    imageView.setVisibility(visibility);
                 }
                 imageView.bringToFront();
             }
         }
-        if (i == 8 || i == 4) {
+        if (visibility == 8 || visibility == 4) {
             RealPlayActivity realPlayActivity2 = this.mRealPlayUi;
             if (realPlayActivity2 != null) {
                 realPlayActivity2.SetPtzState(false);
             }
-        } else if (i == 0 && (realPlayActivity = this.mRealPlayUi) != null) {
+        } else if (visibility == 0 && (realPlayActivity = this.mRealPlayUi) != null) {
             realPlayActivity.SetPtzState(true);
         }
     }
@@ -2686,24 +2686,24 @@ public class VideoContainer extends RelativeLayout {
         return this.mCurViewCount;
     }
 
-    public void FlingRight(float f) {
+    public void FlingRight(float distance) {
         if ((this.mCurViewCount != 1 || this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].GetDigitalScales() == 1.0f) && this.mInitViewCount != this.mCurViewCount) {
             applyRotation(-1, 0.0f, 90.0f);
         }
     }
 
-    public void FlingLeft(float f) {
+    public void FlingLeft(float distance) {
         if ((this.mCurViewCount != 1 || this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].GetDigitalScales() == 1.0f) && this.mInitViewCount != this.mCurViewCount) {
             applyRotation(1, 0.0f, -90.0f);
         }
     }
 
-    private void applyRotation(int i, float f, float f2) {
-        Rotate3dAnimation rotate3dAnimation = new Rotate3dAnimation(f, f2, ((float) this.mContainer.getWidth()) / 2.0f, ((float) this.mContainer.getHeight()) / 2.0f, 250.0f, true);
+    private void applyRotation(int direction, float startDegrees, float endDegrees) {
+        Rotate3dAnimation rotate3dAnimation = new Rotate3dAnimation(startDegrees, endDegrees, ((float) this.mContainer.getWidth()) / 2.0f, ((float) this.mContainer.getHeight()) / 2.0f, 250.0f, true);
         rotate3dAnimation.setDuration(500);
         rotate3dAnimation.setFillAfter(true);
         rotate3dAnimation.setInterpolator(new AccelerateInterpolator());
-        rotate3dAnimation.setAnimationListener(new DisplayNextView(i));
+        rotate3dAnimation.setAnimationListener(new DisplayNextView(direction));
         this.mContainer.startAnimation(rotate3dAnimation);
     }
 
@@ -2716,8 +2716,8 @@ public class VideoContainer extends RelativeLayout {
         public void onAnimationStart(Animation animation) {
         }
 
-        private DisplayNextView(int i) {
-            this.mPosition = i;
+        private DisplayNextView(int position) {
+            this.mPosition = position;
         }
 
         public void onAnimationEnd(Animation animation) {
@@ -2728,8 +2728,8 @@ public class VideoContainer extends RelativeLayout {
     private final class SwapViews implements Runnable {
         private final int mPosition;
 
-        public SwapViews(int i) {
-            this.mPosition = i;
+        public SwapViews(int position) {
+            this.mPosition = position;
         }
 
         public void run() {
@@ -2772,32 +2772,32 @@ public class VideoContainer extends RelativeLayout {
     }
 
     public void ZoomIn() {
-        int i = this.mCurViewCount;
-        if (i != 1 || !this.mbPtz) {
-            int i2 = this.mInitViewCount;
-            if (i2 == 32) {
-                if (i == 4) {
+        int currentViewCount = this.mCurViewCount;
+        if (currentViewCount != 1 || !this.mbPtz) {
+            int initViewCount = this.mInitViewCount;
+            if (initViewCount == 32) {
+                if (currentViewCount == 4) {
                     ArrayViews(1, false);
-                } else if (i == 9) {
+                } else if (currentViewCount == 9) {
                     ArrayViews(4, false);
-                } else if (i == 16) {
+                } else if (currentViewCount == 16) {
                     ArrayViews(9, false);
                 }
-            } else if (i2 == 16) {
-                if (i == 4) {
+            } else if (initViewCount == 16) {
+                if (currentViewCount == 4) {
                     ArrayViews(1, false);
-                } else if (i == 9) {
+                } else if (currentViewCount == 9) {
                     ArrayViews(4, false);
-                } else if (i == 16) {
+                } else if (currentViewCount == 16) {
                     ArrayViews(9, false);
                 }
-            } else if (i2 == 9) {
-                if (i == 4) {
+            } else if (initViewCount == 9) {
+                if (currentViewCount == 4) {
                     ArrayViews(1, false);
-                } else if (i == 9) {
+                } else if (currentViewCount == 9) {
                     ArrayViews(4, false);
                 }
-            } else if (i2 == 4 && i == 4) {
+            } else if (initViewCount == 4 && currentViewCount == 4) {
                 ArrayViews(1, false);
             }
             if (this.mbPtz && this.mCurViewCount == 1 && (this.mPtzState & (1 << this.mIndexList.get(this.mFocusIndex).intValue())) > 0) {
@@ -2837,33 +2837,33 @@ public class VideoContainer extends RelativeLayout {
                 return;
             }
         }
-        int i = this.mInitViewCount;
-        if (i == 32) {
-            int i2 = this.mCurViewCount;
-            if (i2 == 1) {
+        int initViewCount = this.mInitViewCount;
+        if (initViewCount == 32) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount == 1) {
                 ArrayViews(4, false);
-            } else if (i2 == 4) {
+            } else if (currentViewCount == 4) {
                 ArrayViews(9, false);
-            } else if (i2 == 9) {
+            } else if (currentViewCount == 9) {
                 ArrayViews(16, false);
             }
-        } else if (i == 16) {
-            int i3 = this.mCurViewCount;
-            if (i3 == 1) {
+        } else if (initViewCount == 16) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount == 1) {
                 ArrayViews(4, false);
-            } else if (i3 == 4) {
+            } else if (currentViewCount == 4) {
                 ArrayViews(9, false);
-            } else if (i3 == 9) {
+            } else if (currentViewCount == 9) {
                 ArrayViews(16, false);
             }
-        } else if (i == 9) {
-            int i4 = this.mCurViewCount;
-            if (i4 == 1) {
+        } else if (initViewCount == 9) {
+            int currentViewCount = this.mCurViewCount;
+            if (currentViewCount == 1) {
                 ArrayViews(4, false);
-            } else if (i4 == 4) {
+            } else if (currentViewCount == 4) {
                 ArrayViews(9, false);
             }
-        } else if (i == 4 && this.mCurViewCount == 1) {
+        } else if (initViewCount == 4 && this.mCurViewCount == 1) {
             ArrayViews(4, false);
         }
         RealPlayActivity realPlayActivity = this.mRealPlayUi;
@@ -2889,17 +2889,17 @@ public class VideoContainer extends RelativeLayout {
                     if (this.mLongPress) {
                         Dragging(motionEvent);
                     }
-                    int i = this.mTouchMode;
-                    if (i == 2) {
-                        float GetDistance = GetDistance(motionEvent);
-                        if (this.mCurViewCount == 1 && ((!this.mbPtz || (this.mPtzState & (1 << this.mIndexList.get(this.mFocusIndex).intValue())) <= 0) && GetDistance > 0.0f)) {
+                    int touchMode = this.mTouchMode;
+                    if (touchMode == 2) {
+                        float currentDistance = GetDistance(motionEvent);
+                        if (this.mCurViewCount == 1 && ((!this.mbPtz || (this.mPtzState & (1 << this.mIndexList.get(this.mFocusIndex).intValue())) <= 0) && currentDistance > 0.0f)) {
                             this.matrix.set(this.savedMatrix);
-                            float f = GetDistance / this.mDignitalDistance;
-                            this.mDignitalDistance = GetDistance;
+                            float scale = currentDistance / this.mDignitalDistance;
+                            this.mDignitalDistance = currentDistance;
                             this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].setFatherW_H(getLeft(), getTop(), getRight(), getBottom(), getWidth(), getHeight());
-                            this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].SetDigitalZoomIn(f);
+                            this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].SetDigitalZoomIn(scale);
                         }
-                    } else if (i == 1 && this.mCurViewCount == 1 && this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].GetDigitalScales() != 1.0f) {
+                    } else if (touchMode == 1 && this.mCurViewCount == 1 && this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].GetDigitalScales() != 1.0f) {
                         this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].SetDigitalTranslate(this.start.x - motionEvent.getX(), this.start.y - motionEvent.getY());
                         this.start.set(motionEvent.getX(), motionEvent.getY());
                         this.mVideoFrame[this.mIndexList.get(this.mFocusIndex).intValue()].onTouchMove(motionEvent);
@@ -2942,30 +2942,30 @@ public class VideoContainer extends RelativeLayout {
         return true;
     }
 
-    public int getFocusView(PointF pointF) {
-        boolean z = false;
-        for (int i = 0; i < this.mInitViewCount; i++) {
+    public int getFocusView(PointF point) {
+        boolean foundFocus = false;
+        for (int viewIndex = 0; viewIndex < this.mInitViewCount; viewIndex++) {
             VideoFrame[] videoFrameArr = this.mVideoFrame;
-            if (videoFrameArr[i] != null) {
-                if (videoFrameArr[i].getVisibility() != 0) {
-                    this.mVideoFrame[i].setFocusState(false);
+            if (videoFrameArr[viewIndex] != null) {
+                if (videoFrameArr[viewIndex].getVisibility() != 0) {
+                    this.mVideoFrame[viewIndex].setFocusState(false);
                 } else {
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(i).intValue()].getLayoutParams();
-                    if (new Rect(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.leftMargin + layoutParams.width, layoutParams.topMargin + layoutParams.height).contains((int) pointF.x, (int) pointF.y)) {
-                        this.mFocusIndex = i;
-                        this.mVideoFrame[this.mIndexList.get(i).intValue()].setFocusState(true);
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].getLayoutParams();
+                    if (new Rect(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.leftMargin + layoutParams.width, layoutParams.topMargin + layoutParams.height).contains((int) point.x, (int) point.y)) {
+                        this.mFocusIndex = viewIndex;
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setFocusState(true);
                         RealPlayActivity realPlayActivity = this.mRealPlayUi;
                         if (realPlayActivity != null) {
                             realPlayActivity.openSound(this.mIndexList.get(this.mFocusIndex).intValue());
                         }
-                        z = true;
+                        foundFocus = true;
                     } else {
-                        this.mVideoFrame[this.mIndexList.get(i).intValue()].setFocusState(false);
+                        this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].setFocusState(false);
                     }
                 }
             }
         }
-        if (!z) {
+        if (!foundFocus) {
             this.mFocusIndex = 0;
         }
         return this.mFocusIndex;
@@ -3704,51 +3704,51 @@ public class VideoContainer extends RelativeLayout {
     }
 
     public void endDragging(MotionEvent motionEvent) {
-        int i = this.mSourceIndex;
-        if (i != this.mDestinationIndex) {
-            this.mVideoFrame[this.mIndexList.get(i).intValue()].setLayoutParams(this.mDestinationParams);
+        int sourceIndex = this.mSourceIndex;
+        if (sourceIndex != this.mDestinationIndex) {
+            this.mVideoFrame[this.mIndexList.get(sourceIndex).intValue()].setLayoutParams(this.mDestinationParams);
             this.mVideoFrame[this.mIndexList.get(this.mDestinationIndex).intValue()].setLayoutParams(this.mSourceParams);
-            int intValue = this.mIndexList.get(this.mSourceIndex).intValue();
+            int sourceChannel = this.mIndexList.get(this.mSourceIndex).intValue();
             this.mIndexList.set(this.mSourceIndex, Integer.valueOf(this.mIndexList.get(this.mDestinationIndex).intValue()));
-            this.mIndexList.set(this.mDestinationIndex, Integer.valueOf(intValue));
+            this.mIndexList.set(this.mDestinationIndex, Integer.valueOf(sourceChannel));
         } else {
-            this.mVideoFrame[this.mIndexList.get(i).intValue()].setLayoutParams(this.mSourceParams);
+            this.mVideoFrame[this.mIndexList.get(sourceIndex).intValue()].setLayoutParams(this.mSourceParams);
         }
-        for (int i2 = this.mBaseIndex; i2 < this.mCurViewCount + this.mBaseIndex; i2++) {
-            this.mVideoFrame[this.mIndexList.get(i2).intValue()].SetDragState(false);
+        for (int viewIndex = this.mBaseIndex; viewIndex < this.mCurViewCount + this.mBaseIndex; viewIndex++) {
+            this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetDragState(false);
         }
     }
 
     public void FindDestination(MotionEvent motionEvent) {
-        boolean z = false;
-        for (int i = this.mBaseIndex; i < this.mCurViewCount + this.mBaseIndex; i++) {
-            if (i != this.mSourceIndex) {
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(i).intValue()].getLayoutParams();
+        boolean foundDestination = false;
+        for (int viewIndex = this.mBaseIndex; viewIndex < this.mCurViewCount + this.mBaseIndex; viewIndex++) {
+            if (viewIndex != this.mSourceIndex) {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].getLayoutParams();
                 if (new Rect(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.leftMargin + layoutParams.width, layoutParams.topMargin + layoutParams.height).contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                    this.mDestinationIndex = i;
+                    this.mDestinationIndex = viewIndex;
                     this.mDestinationParams = layoutParams;
-                    this.mVideoFrame[this.mIndexList.get(i).intValue()].SetDragState(true);
-                    z = true;
+                    this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetDragState(true);
+                    foundDestination = true;
                 } else {
-                    this.mVideoFrame[this.mIndexList.get(i).intValue()].SetDragState(false);
+                    this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].SetDragState(false);
                 }
             }
         }
-        if (!z) {
+        if (!foundDestination) {
             this.mDestinationIndex = this.mSourceIndex;
             this.mDestinationParams = this.mSourceParams;
         }
     }
 
-    public boolean SetPtzMode(boolean z, int i, DvrNet dvrNet) {
-        if (!z || this.mCurViewCount == 1) {
-            this.mbPtz = z;
-            this.mPtzState = i;
+    public boolean SetPtzMode(boolean enabled, int ptzState, DvrNet dvrNet) {
+        if (!enabled || this.mCurViewCount == 1) {
+            this.mbPtz = enabled;
+            this.mPtzState = ptzState;
             this.mDvrNet = dvrNet;
-            if (!z) {
+            if (!enabled) {
                 SetPtzControlState(8);
                 this.mRealPlayUi.SetPtzState(false);
-            } else if (((1 << this.mIndexList.get(this.mFocusIndex).intValue()) & i) > 0) {
+            } else if (((1 << this.mIndexList.get(this.mFocusIndex).intValue()) & ptzState) > 0) {
                 SetPtzControlState(0);
                 this.mRealPlayUi.SetPtzState(true);
             }
@@ -3796,11 +3796,11 @@ public class VideoContainer extends RelativeLayout {
             }
         }
 
-        public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-            if (motionEvent2.getPointerCount() > 1) {
+        public boolean onScroll(MotionEvent firstEvent, MotionEvent currentEvent, float distanceX, float distanceY) {
+            if (currentEvent.getPointerCount() > 1) {
                 this.mbMultiTouch = true;
             }
-            return super.onScroll(motionEvent, motionEvent2, f, f2);
+            return super.onScroll(firstEvent, currentEvent, distanceX, distanceY);
         }
 
         public void onShowPress(MotionEvent motionEvent) {
@@ -3820,23 +3820,23 @@ public class VideoContainer extends RelativeLayout {
             return super.onSingleTapUp(motionEvent);
         }
 
-        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
+        public boolean onFling(MotionEvent startEvent, MotionEvent endEvent, float velocityX, float velocityY) {
             if (this.mbMultiTouch) {
                 this.mbMultiTouch = false;
-                return super.onFling(motionEvent, motionEvent2, f, f2);
-            } else if (motionEvent.getX() - motionEvent2.getX() > 100.0f) {
-                VideoContainer.this.FlingLeft(motionEvent.getX() - motionEvent2.getX());
-                return super.onFling(motionEvent, motionEvent2, f, f2);
-            } else if (motionEvent.getX() - motionEvent2.getX() < -100.0f) {
-                VideoContainer.this.FlingRight(motionEvent.getX() - motionEvent2.getX());
-                return super.onFling(motionEvent, motionEvent2, f, f2);
-            } else if (motionEvent.getY() - motionEvent2.getY() > 100.0f) {
-                return super.onFling(motionEvent, motionEvent2, f, f2);
+                return super.onFling(startEvent, endEvent, velocityX, velocityY);
+            } else if (startEvent.getX() - endEvent.getX() > 100.0f) {
+                VideoContainer.this.FlingLeft(startEvent.getX() - endEvent.getX());
+                return super.onFling(startEvent, endEvent, velocityX, velocityY);
+            } else if (startEvent.getX() - endEvent.getX() < -100.0f) {
+                VideoContainer.this.FlingRight(startEvent.getX() - endEvent.getX());
+                return super.onFling(startEvent, endEvent, velocityX, velocityY);
+            } else if (startEvent.getY() - endEvent.getY() > 100.0f) {
+                return super.onFling(startEvent, endEvent, velocityX, velocityY);
             } else {
-                if (motionEvent.getY() - motionEvent2.getY() < -100.0f) {
-                    return super.onFling(motionEvent, motionEvent2, f, f2);
+                if (startEvent.getY() - endEvent.getY() < -100.0f) {
+                    return super.onFling(startEvent, endEvent, velocityX, velocityY);
                 }
-                return super.onFling(motionEvent, motionEvent2, f, f2);
+                return super.onFling(startEvent, endEvent, velocityX, velocityY);
             }
         }
 
@@ -3858,8 +3858,8 @@ public class VideoContainer extends RelativeLayout {
         return this.mIndexList.get(this.mFocusIndex).intValue();
     }
 
-    public VideoView getVideoView(int i) {
-        return this.mVideoFrame[i].GetVideoView();
+    public VideoView getVideoView(int channel) {
+        return this.mVideoFrame[channel].GetVideoView();
     }
 
     public int getInitViewCount() {
@@ -3870,7 +3870,7 @@ public class VideoContainer extends RelativeLayout {
         return this.mCurViewCount;
     }
 
-    public int getVideoFrameVisibility(int i) {
-        return this.mVideoFrame[this.mIndexList.get(i).intValue()].getVisibility();
+    public int getVideoFrameVisibility(int viewIndex) {
+        return this.mVideoFrame[this.mIndexList.get(viewIndex).intValue()].getVisibility();
     }
 }
