@@ -84,13 +84,13 @@ public class LoginActivity extends BaseUi {
             public void afterTextChanged(Editable editable) {
             }
 
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                if (charSequence != null) {
-                    MyApp.ServerHostNameDatas.set(MyApp.loginType, charSequence.toString());
-                    LoginActivity.this.mLoginTypeButton.setText(charSequence.toString());
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                if (text != null) {
+                    MyApp.ServerHostNameDatas.set(MyApp.loginType, text.toString());
+                    LoginActivity.this.mLoginTypeButton.setText(text.toString());
                 }
             }
         });
@@ -129,22 +129,22 @@ public class LoginActivity extends BaseUi {
                     LoginActivity.this.finish();
                     return;
                 }
-                final String charSequence = LoginActivity.this.mEtServerIP.getText().toString();
-                final String charSequence2 = LoginActivity.this.mEtUsername.getText().toString();
-                final String charSequence3 = LoginActivity.this.mEtPassword.getText().toString();
-                MyApp.username = charSequence2;
-                MyApp.password = charSequence3;
+                final String serverUrl = LoginActivity.this.mEtServerIP.getText().toString();
+                final String username = LoginActivity.this.mEtUsername.getText().toString();
+                final String password = LoginActivity.this.mEtPassword.getText().toString();
+                MyApp.username = username;
+                MyApp.password = password;
                 SharedPreferences.Editor edit2 = LoginActivity.this.mSp.edit();
-                edit2.putString("dbAccount", charSequence2);
-                edit2.putString("dbPwd", charSequence3);
+                edit2.putString("dbAccount", username);
+                edit2.putString("dbPwd", password);
                 edit2.commit();
-                final WebService webservice = new WebService(charSequence, charSequence2, charSequence3);
+                final WebService webService = new WebService(serverUrl, username, password);
                 LoginActivity.this.mtbRemmber.setVisibility(8);
                 LoginActivity.this.mProgressBar.setVisibility(0);
                 LoginActivity.this.mtbRemmber.setVisibility(0);
                 new Thread(new Runnable() {
                     public void run() {
-                        if (!LoginActivity.this.TestUrl(charSequence)) {
+                        if (!LoginActivity.this.TestUrl(serverUrl)) {
                             LoginActivity.this.mHandler.post(new Runnable() {
                                 public void run() {
                                     LoginActivity.this.mtbRemmber.setVisibility(8);
@@ -154,15 +154,15 @@ public class LoginActivity extends BaseUi {
                             });
                             return;
                         }
-                        LoginActivity.this.mnLoginResult = webservice.Login();
+                        LoginActivity.this.mnLoginResult = webService.Login();
                         if (LoginActivity.this.mnLoginResult > 0) {
                             SpUtils.putInt(Configs.Key.LoginType, MyApp.loginType);
                             MyApp.setServerHostNames();
-                            LoginActivity.this.mApp.mWebService = webservice;
+                            LoginActivity.this.mApp.mWebService = webService;
                             if (LoginActivity.this.mtbRemmber.isChecked()) {
-                                LoginActivity.this.mApp.writeuser(true, MyApp.loginType, charSequence, charSequence2, charSequence3);
+                                LoginActivity.this.mApp.writeuser(true, MyApp.loginType, serverUrl, username, password);
                             } else {
-                                LoginActivity.this.mApp.writeuser(false, MyApp.loginType, charSequence, "", "");
+                                LoginActivity.this.mApp.writeuser(false, MyApp.loginType, serverUrl, "", "");
                             }
                             LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             LoginActivity.this.finish();
@@ -211,27 +211,27 @@ public class LoginActivity extends BaseUi {
         }
     }
 
-    public boolean TestUrl(String str) {
-        if (!str.contains("http://")) {
-            str = "http://" + str;
+    public boolean TestUrl(String serverUrl) {
+        if (!serverUrl.contains("http://")) {
+            serverUrl = "http://" + serverUrl;
         }
         try {
-            new URL(str).openStream().close();
+            new URL(serverUrl).openStream().close();
             return true;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        } catch (MalformedURLException malformedUrlException) {
+            malformedUrlException.printStackTrace();
             return false;
-        } catch (IOException e2) {
-            e2.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
             return false;
         }
     }
 
     /* access modifiers changed from: protected */
-    public void onActivityResult(int i, int i2, Intent intent) {
-        super.onActivityResult(i, i2, intent);
-        if (i == 0 && i2 == -1) {
-            this.mEtUsername.setText(intent.getStringExtra("RESULT"));
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == -1) {
+            this.mEtUsername.setText(data.getStringExtra("RESULT"));
         }
     }
 
