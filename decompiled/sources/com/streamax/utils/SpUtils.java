@@ -5,84 +5,84 @@ import com.streamax.config.constant.Constants;
 import java.util.ArrayList;
 
 public class SpUtils {
-    private static volatile SharedPreferences preferences;
-    private static volatile SharedPreferences preferences1;
+    private static volatile SharedPreferences primaryPreferences;
+    private static volatile SharedPreferences serverListPreferences;
 
-    private static SharedPreferences getSp() {
-        if (preferences == null) {
+    private static SharedPreferences getPrimaryPreferences() {
+        if (primaryPreferences == null) {
             synchronized (SpUtils.class) {
-                if (preferences == null) {
-                    preferences = AppProxy.getContext().getSharedPreferences(Constants.SpName, 0);
+                if (primaryPreferences == null) {
+                    primaryPreferences = AppProxy.getContext().getSharedPreferences(Constants.SpName, 0);
                 }
             }
         }
-        return preferences;
+        return primaryPreferences;
     }
 
-    private static SharedPreferences getSps() {
-        if (preferences1 == null) {
+    private static SharedPreferences getServerListPreferences() {
+        if (serverListPreferences == null) {
             synchronized (SpUtils.class) {
-                if (preferences1 == null) {
-                    preferences1 = AppProxy.getContext().getSharedPreferences(Constants.SpName1, 0);
+                if (serverListPreferences == null) {
+                    serverListPreferences = AppProxy.getContext().getSharedPreferences(Constants.SpName1, 0);
                 }
             }
         }
-        return preferences1;
+        return serverListPreferences;
     }
 
-    public static void putInt(String str, int i) {
-        preferences = getSp();
-        preferences.edit().putInt(str, i).apply();
+    public static void putInt(String key, int value) {
+        primaryPreferences = getPrimaryPreferences();
+        primaryPreferences.edit().putInt(key, value).apply();
     }
 
-    public static int getInt(String str, int i) {
-        preferences = getSp();
-        return preferences.getInt(str, i);
+    public static int getInt(String key, int defaultValue) {
+        primaryPreferences = getPrimaryPreferences();
+        return primaryPreferences.getInt(key, defaultValue);
     }
 
-    public static void putString(String str, String str2) {
-        preferences = getSp();
-        preferences.edit().putString(str, str2).apply();
+    public static void putString(String key, String value) {
+        primaryPreferences = getPrimaryPreferences();
+        primaryPreferences.edit().putString(key, value).apply();
     }
 
-    public static void removeString(String str) {
-        preferences = getSp();
-        preferences.edit().remove(str).apply();
+    public static void removeString(String key) {
+        primaryPreferences = getPrimaryPreferences();
+        primaryPreferences.edit().remove(key).apply();
     }
 
-    public static String getString(String str, String str2) {
-        preferences = getSp();
-        return preferences.getString(str, str2);
+    public static String getString(String key, String defaultValue) {
+        primaryPreferences = getPrimaryPreferences();
+        return primaryPreferences.getString(key, defaultValue);
     }
 
-    public static void putBoolean(String str, boolean z) {
-        preferences = getSp();
-        preferences.edit().putBoolean(str, z).apply();
+    public static void putBoolean(String key, boolean value) {
+        primaryPreferences = getPrimaryPreferences();
+        primaryPreferences.edit().putBoolean(key, value).apply();
     }
 
-    public static boolean getBoolean(String str, boolean z) {
-        preferences = getSp();
-        return preferences.getBoolean(str, z);
+    public static boolean getBoolean(String key, boolean defaultValue) {
+        primaryPreferences = getPrimaryPreferences();
+        return primaryPreferences.getBoolean(key, defaultValue);
     }
 
-    public static void setListData(ArrayList<String> arrayList) {
-        preferences1 = getSps();
-        SharedPreferences.Editor edit = preferences1.edit();
-        edit.putInt("servernums", arrayList.size());
-        for (int i = 0; i < arrayList.size(); i++) {
-            edit.putString("item_" + i, arrayList.get(i));
+    public static void setListData(ArrayList<String> serverList) {
+        serverListPreferences = getServerListPreferences();
+        SharedPreferences.Editor editor = serverListPreferences.edit();
+        editor.putInt("servernums", serverList.size());
+        for (int serverIndex = 0; serverIndex < serverList.size(); serverIndex++) {
+            editor.putString("item_" + serverIndex, serverList.get(serverIndex));
         }
-        edit.commit();
+        editor.commit();
     }
 
     public static ArrayList<String> getListData() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        preferences1 = getSps();
-        int i = preferences1.getInt("servernums", 0);
-        for (int i2 = 0; i2 < i; i2++) {
-            SharedPreferences sharedPreferences = preferences1;
-            arrayList.add(sharedPreferences.getString("item_" + i2, (String) null));
+        ArrayList<String> serverList = new ArrayList<>();
+        serverListPreferences = getServerListPreferences();
+        int serverCount = serverListPreferences.getInt("servernums", 0);
+        for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
+            SharedPreferences preferences = serverListPreferences;
+            serverList.add(preferences.getString("item_" + serverIndex, (String) null));
         }
-        return arrayList;
+        return serverList;
     }
 }
