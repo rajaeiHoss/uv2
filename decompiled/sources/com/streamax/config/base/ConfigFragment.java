@@ -65,10 +65,10 @@ public abstract class ConfigFragment extends BaseFragment implements SelectInter
     public void init() {
     }
 
-    public void saveOneNumberEdit(String str, int i) {
+    public void saveOneNumberEdit(String fieldName, int value) {
     }
 
-    public void saveSelect(String str, List<Integer> list) {
+    public void saveSelect(String fieldName, List<Integer> selectedIndexes) {
     }
 
     public void setConfig() {
@@ -99,13 +99,13 @@ public abstract class ConfigFragment extends BaseFragment implements SelectInter
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(String str) {
-        ToastUtils.show((CharSequence) str);
+    public void toastSf(String message) {
+        ToastUtils.show((CharSequence) message);
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(int i) {
-        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(i)));
+    public void toastSf(int stringResId) {
+        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(stringResId)));
     }
 
     /* access modifiers changed from: protected */
@@ -122,8 +122,8 @@ public abstract class ConfigFragment extends BaseFragment implements SelectInter
     }
 
     /* access modifiers changed from: protected */
-    public void nextPage(BaseFragment baseFragment, int i) {
-        fragmentPop.push(new FragmentBean(getString(this.mTvTitle), this, i));
+    public void nextPage(BaseFragment baseFragment, int visibleState) {
+        fragmentPop.push(new FragmentBean(getString(this.mTvTitle), this, visibleState));
         FragmentUtils.showAndHide(this, baseFragment);
     }
 
@@ -147,18 +147,18 @@ public abstract class ConfigFragment extends BaseFragment implements SelectInter
         FragmentUtils.showAndHide(this, baseFragment);
     }
 
-    public void onHiddenChanged(boolean z) {
-        super.onHiddenChanged(z);
-        if (!z) {
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
             showUnHiddenView();
         }
     }
 
-    public JSONObject getJSONObject(JSONObject jSONObject) {
+    public JSONObject getJSONObject(JSONObject jsonObject) {
         try {
-            return new JSONObject(jSONObject.toString());
+            return new JSONObject(jsonObject.toString());
         } catch (JSONException unused) {
-            return jSONObject;
+            return jsonObject;
         }
     }
 
@@ -173,45 +173,45 @@ public abstract class ConfigFragment extends BaseFragment implements SelectInter
         this.mTvTitle.setText(fragmentBean.mTitle);
     }
 
-    public void pushSelectFragment(String str, String str2, int i, List<String> list, List<Integer> list2) {
+    public void pushSelectFragment(String fragmentTitle, String fragmentName, int checkBoxMode, List<String> options, List<Integer> selectedOptions) {
         SelectFragment selectFragment = new SelectFragment();
         this.mSelectFragment = selectFragment;
         selectFragment.mPopFragment = this;
         this.mSelectFragment.SetSelectInterface(this);
-        this.mSelectFragment.mFragTitle = str;
-        this.mSelectFragment.mFragName = str2;
+        this.mSelectFragment.mFragTitle = fragmentTitle;
+        this.mSelectFragment.mFragName = fragmentName;
         this.mSelectFragment.SetTextViewData(UiUtils.getString(R.string.config_All));
-        this.mSelectFragment.SetListViewData(list);
-        this.mSelectFragment.SetListViewSelect(list2);
-        this.mSelectFragment.mCheckBox = i;
+        this.mSelectFragment.SetListViewData(options);
+        this.mSelectFragment.SetListViewSelect(selectedOptions);
+        this.mSelectFragment.mCheckBox = checkBoxMode;
         pushFragment(this.mSelectFragment);
     }
 
-    public void pushOneNumberEditFragment(String str, String str2, int i, int i2, int i3) {
+    public void pushOneNumberEditFragment(String fragmentTitle, String fragmentName, int currentValue, int minValue, int maxValue) {
         OneNumberEditFragment oneNumberEditFragment = new OneNumberEditFragment();
         this.mOneNumberEditFragment = oneNumberEditFragment;
         oneNumberEditFragment.mPopFragment = this;
         this.mOneNumberEditFragment.SetOneNumberEditInterface(this);
-        this.mOneNumberEditFragment.mFragTitle = str;
-        this.mOneNumberEditFragment.mFragName = str2;
-        this.mOneNumberEditFragment.curValue = i;
-        this.mOneNumberEditFragment.minValue = i2;
-        this.mOneNumberEditFragment.maxValue = i3;
+        this.mOneNumberEditFragment.mFragTitle = fragmentTitle;
+        this.mOneNumberEditFragment.mFragName = fragmentName;
+        this.mOneNumberEditFragment.curValue = currentValue;
+        this.mOneNumberEditFragment.minValue = minValue;
+        this.mOneNumberEditFragment.maxValue = maxValue;
         pushFragment(this.mOneNumberEditFragment);
     }
 
-    public void setTvEnableAndContent(VsEditView vsEditView, int i, String str) {
-        vsEditView.SetText((CharSequence) str).SetEnable(i != 1).SetTextColor(i == 1 ? DayStyle.iColorBkg : ViewCompat.MEASURED_STATE_MASK);
+    public void setTvEnableAndContent(VsEditView vsEditView, int editMode, String content) {
+        vsEditView.SetText((CharSequence) content).SetEnable(editMode != 1).SetTextColor(editMode == 1 ? DayStyle.iColorBkg : ViewCompat.MEASURED_STATE_MASK);
     }
 
-    public void setTvEnable(VsEditView vsEditView, int i) {
-        vsEditView.SetEnable(i != 1).SetTextColor(i == 1 ? DayStyle.iColorBkg : ViewCompat.MEASURED_STATE_MASK);
+    public void setTvEnable(VsEditView vsEditView, int editMode) {
+        vsEditView.SetEnable(editMode != 1).SetTextColor(editMode == 1 ? DayStyle.iColorBkg : ViewCompat.MEASURED_STATE_MASK);
     }
 
     public void initPop() {
-        View inflate = LayoutInflater.from(this.mContext).inflate(R.layout.authority_dialog, (ViewGroup) null);
-        this.mPopView = inflate;
-        this.mContentLl = (LinearLayout) inflate.findViewById(R.id.dialog_content_ll);
+        View popupView = LayoutInflater.from(this.mContext).inflate(R.layout.authority_dialog, (ViewGroup) null);
+        this.mPopView = popupView;
+        this.mContentLl = (LinearLayout) popupView.findViewById(R.id.dialog_content_ll);
         this.mSureTv = (TextView) this.mPopView.findViewById(R.id.authority_dialog_ok);
     }
 
