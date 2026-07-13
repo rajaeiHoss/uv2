@@ -68,26 +68,26 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     private void configureIpMode() {
-        String str;
-        String str2;
-        JSONObject jSONObject = this.mEthernet;
-        if (jSONObject != null) {
+        JSONObject ethernetConfig = this.mEthernet;
+        if (ethernetConfig != null) {
             try {
-                int i = jSONObject.getInt("IPMODE");
-                this.mBtnIpMode.setBackgroundResource(i == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                JSONObject jSONObject2 = this.mEthernet.getJSONObject("PIP");
-                String str3 = "";
-                if (jSONObject2 != null) {
-                    str3 = jSONObject2.getString("IPADDR");
-                    str = jSONObject2.getString("SUBMASK");
-                    str2 = jSONObject2.getString("GATEWAY");
+                int ipMode = ethernetConfig.getInt("IPMODE");
+                this.mBtnIpMode.setBackgroundResource(ipMode == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                JSONObject pipConfig = this.mEthernet.getJSONObject("PIP");
+                String ipAddress = "";
+                String subnetMask;
+                String gateway;
+                if (pipConfig != null) {
+                    ipAddress = pipConfig.getString("IPADDR");
+                    subnetMask = pipConfig.getString("SUBMASK");
+                    gateway = pipConfig.getString("GATEWAY");
                 } else {
-                    str2 = str3;
-                    str = str2;
+                    gateway = ipAddress;
+                    subnetMask = gateway;
                 }
-                setTvEnableAndContent(this.mEtIp, i, str3);
-                setTvEnableAndContent(this.mEtSm, i, str);
-                setTvEnableAndContent(this.mEtDg, i, str2);
+                setTvEnableAndContent(this.mEtIp, ipMode, ipAddress);
+                setTvEnableAndContent(this.mEtSm, ipMode, subnetMask);
+                setTvEnableAndContent(this.mEtDg, ipMode, gateway);
             } catch (JSONException unused) {
                 showErrorFragment();
             }
@@ -95,42 +95,42 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     private void configureDnsMode() {
-        String str;
-        JSONObject jSONObject = this.mEthernet;
-        if (jSONObject != null) {
+        JSONObject ethernetConfig = this.mEthernet;
+        if (ethernetConfig != null) {
             try {
-                int i = jSONObject.getInt("DNSMODE");
-                this.mBtnDnsMode.setBackgroundResource(i == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                JSONObject jSONObject2 = this.mEthernet.getJSONObject("DNS");
-                String str2 = "";
-                if (jSONObject2 != null) {
-                    str2 = jSONObject2.getString("PDNS");
-                    str = jSONObject2.getString("ADNS");
+                int dnsMode = ethernetConfig.getInt("DNSMODE");
+                this.mBtnDnsMode.setBackgroundResource(dnsMode == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                JSONObject dnsConfig = this.mEthernet.getJSONObject("DNS");
+                String primaryDns = "";
+                String secondaryDns;
+                if (dnsConfig != null) {
+                    primaryDns = dnsConfig.getString("PDNS");
+                    secondaryDns = dnsConfig.getString("ADNS");
                 } else {
-                    str = str2;
+                    secondaryDns = primaryDns;
                 }
-                setTvEnableAndContent(this.mEtFd, i, str2);
-                setTvEnableAndContent(this.mEtSd, i, str);
+                setTvEnableAndContent(this.mEtFd, dnsMode, primaryDns);
+                setTvEnableAndContent(this.mEtSd, dnsMode, secondaryDns);
             } catch (JSONException unused) {
             }
         }
     }
 
     private void refreshUi() {
-        JSONObject jSONObject = this.mLanRes;
-        if (jSONObject == null) {
+        JSONObject lanResponse = this.mLanRes;
+        if (lanResponse == null) {
             showErrorFragment();
             return;
         }
         try {
-            JSONObject jSONObject2 = jSONObject.getJSONObject("NWSM");
-            if (jSONObject2 == null) {
+            JSONObject networkSection = lanResponse.getJSONObject("NWSM");
+            if (networkSection == null) {
                 showErrorFragment();
                 return;
             }
-            JSONObject jSONObject3 = jSONObject2.getJSONObject("ETHERNET");
-            this.mEthernet = jSONObject3;
-            if (jSONObject3 == null) {
+            JSONObject ethernetConfig = networkSection.getJSONObject("ETHERNET");
+            this.mEthernet = ethernetConfig;
+            if (ethernetConfig == null) {
                 showErrorFragment();
                 return;
             }
@@ -171,20 +171,20 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     public void saveData() {
         if (this.mEthernet != null) {
             try {
-                Pattern compile = Pattern.compile("^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
-                if (compile.matcher(getString(this.mEtIp)).matches() && compile.matcher(getString(this.mEtSm)).matches() && compile.matcher(getString(this.mEtDg)).matches() && compile.matcher(getString(this.mEtFd)).matches()) {
-                    if (compile.matcher(getString(this.mEtSd)).matches()) {
-                        JSONObject jSONObject = this.mEthernet.getJSONObject("PIP");
-                        JSONObject jSONObject2 = this.mEthernet.getJSONObject("DNS");
-                        if (jSONObject == null) {
+                Pattern ipAddressPattern = Pattern.compile("^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$");
+                if (ipAddressPattern.matcher(getString(this.mEtIp)).matches() && ipAddressPattern.matcher(getString(this.mEtSm)).matches() && ipAddressPattern.matcher(getString(this.mEtDg)).matches() && ipAddressPattern.matcher(getString(this.mEtFd)).matches()) {
+                    if (ipAddressPattern.matcher(getString(this.mEtSd)).matches()) {
+                        JSONObject pipConfig = this.mEthernet.getJSONObject("PIP");
+                        JSONObject dnsConfig = this.mEthernet.getJSONObject("DNS");
+                        if (pipConfig == null) {
                             return;
                         }
-                        if (jSONObject2 != null) {
-                            jSONObject.put("IPADDR", getString(this.mEtIp));
-                            jSONObject.put("SUBMASK", getString(this.mEtSm));
-                            jSONObject.put("GATEWAY", getString(this.mEtDg));
-                            jSONObject2.put("PDNS", getString(this.mEtFd));
-                            jSONObject2.put("ADNS", getString(this.mEtSd));
+                        if (dnsConfig != null) {
+                            pipConfig.put("IPADDR", getString(this.mEtIp));
+                            pipConfig.put("SUBMASK", getString(this.mEtSm));
+                            pipConfig.put("GATEWAY", getString(this.mEtDg));
+                            dnsConfig.put("PDNS", getString(this.mEtFd));
+                            dnsConfig.put("ADNS", getString(this.mEtSd));
                             NetPresenter.getDefault().setConfig(this);
                             return;
                         }
@@ -198,10 +198,10 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     private void switchIpMode() {
-        JSONObject jSONObject = this.mEthernet;
-        if (jSONObject != null) {
+        JSONObject ethernetConfig = this.mEthernet;
+        if (ethernetConfig != null) {
             try {
-                this.mEthernet.put("IPMODE", jSONObject.getInt("IPMODE") == 0 ? 1 : 0);
+                this.mEthernet.put("IPMODE", ethernetConfig.getInt("IPMODE") == 0 ? 1 : 0);
                 refreshUi();
             } catch (JSONException unused) {
             }
@@ -209,10 +209,10 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     public void switchDnsMode() {
-        JSONObject jSONObject = this.mEthernet;
-        if (jSONObject != null) {
+        JSONObject ethernetConfig = this.mEthernet;
+        if (ethernetConfig != null) {
             try {
-                if (jSONObject.getInt("IPMODE") != 0) {
+                if (ethernetConfig.getInt("IPMODE") != 0) {
                     this.mEthernet.put("DNSMODE", this.mEthernet.getInt("DNSMODE") == 0 ? 1 : 0);
                     refreshUi();
                 }
@@ -223,19 +223,19 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("ETHERNET", "?");
-            jSONObject.put("NWSM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject requestJson = new JSONObject();
+            JSONObject networkSection = new JSONObject();
+            networkSection.put("ETHERNET", "?");
+            requestJson.put("NWSM", networkSection);
+            return requestJson.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mLanRes = new JSONObject(str);
+            this.mLanRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -243,11 +243,11 @@ public class LanOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mLanRes;
-        if (jSONObject == null) {
+        JSONObject lanResponse = this.mLanRes;
+        if (lanResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return lanResponse.toString();
     }
 
     public void setSuccess() {
