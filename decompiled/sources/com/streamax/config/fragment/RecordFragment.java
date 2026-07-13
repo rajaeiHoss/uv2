@@ -86,45 +86,43 @@ public class RecordFragment extends ConfigFragment implements BaseListener.GetLi
     }
 
     public void refreshUi() {
-        JSONObject jSONObject = this.mRecRes;
-        if (jSONObject != null) {
+        JSONObject recordResponse = this.mRecRes;
+        if (recordResponse != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("AVSM");
-                if (jSONObject2 != null) {
-                    JSONArray jSONArray = jSONObject2.getJSONArray("REP");
-                    this.mRecArr = jSONArray;
-                    if (jSONArray != null) {
-                        int length = jSONArray.length();
-                        this.mCurChTotal = length;
-                        if (length > 0) {
-                            int i = this.mCurCh;
-                            if (i < length) {
-                                JSONObject jSONObject3 = this.mRecArr.getJSONObject(i);
-                                this.mRecObj = jSONObject3;
-                                if (jSONObject3 != null) {
+                JSONObject avSettings = recordResponse.getJSONObject("AVSM");
+                if (avSettings != null) {
+                    JSONArray recordEntries = avSettings.getJSONArray("REP");
+                    this.mRecArr = recordEntries;
+                    if (recordEntries != null) {
+                        int channelCount = recordEntries.length();
+                        this.mCurChTotal = channelCount;
+                        if (channelCount > 0) {
+                            int currentChannel = this.mCurCh;
+                            if (currentChannel < channelCount) {
+                                JSONObject currentRecordConfig = this.mRecArr.getJSONObject(currentChannel);
+                                this.mRecObj = currentRecordConfig;
+                                if (currentRecordConfig != null) {
                                     TextView textView = this.mTvCurCh;
                                     textView.setText("CH" + (this.mCurCh + 1));
                                     this.mListStrChannel.clear();
                                     this.mListIntChannel.clear();
-                                    int i2 = 0;
-                                    while (i2 < this.mCurChTotal) {
+                                    for (int channelIndex = 0; channelIndex < this.mCurChTotal; channelIndex++) {
                                         ArrayList<String> arrayList = this.mListStrChannel;
                                         StringBuilder sb = new StringBuilder();
                                         sb.append("CH");
-                                        i2++;
-                                        sb.append(i2);
+                                        sb.append(channelIndex + 1);
                                         arrayList.add(sb.toString());
                                     }
                                     this.mListIntChannel.add(new Integer(this.mCurCh));
                                     this.mBtnEnable.setBackgroundResource(this.mRecObj.getInt("EN") <= 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                                    int i3 = this.mRecObj.getInt("RM");
+                                    int recordMode = this.mRecObj.getInt("RM");
                                     this.mListStrMode.clear();
                                     this.mListIntMode.clear();
                                     List<String> strDatas = getStrDatas(R.array.config_record_rm_rmSelector);
-                                    if (i3 >= 0 && i3 < strDatas.size()) {
-                                        this.mTvRecordMode.setText(strDatas.get(i3));
+                                    if (recordMode >= 0 && recordMode < strDatas.size()) {
+                                        this.mTvRecordMode.setText(strDatas.get(recordMode));
                                         this.mListStrMode.addAll(strDatas);
-                                        this.mListIntMode.add(new Integer(i3));
+                                        this.mListIntMode.add(new Integer(recordMode));
                                     }
                                 }
                             }
@@ -226,9 +224,9 @@ public class RecordFragment extends ConfigFragment implements BaseListener.GetLi
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String responseJson) {
         try {
-            this.mRecRes = new JSONObject(str);
+            this.mRecRes = new JSONObject(responseJson);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -251,18 +249,18 @@ public class RecordFragment extends ConfigFragment implements BaseListener.GetLi
         toastFailure();
     }
 
-    public void updateDateForChannel(int i) {
-        if (this.mRecArr != null && this.mCurCh != i) {
-            this.mCurCh = i;
+    public void updateDateForChannel(int channelIndex) {
+        if (this.mRecArr != null && this.mCurCh != channelIndex) {
+            this.mCurCh = channelIndex;
             refreshUi();
         }
     }
 
-    public void updateDateForMode(int i) {
+    public void updateDateForMode(int recordMode) {
         JSONObject jSONObject = this.mRecObj;
         if (jSONObject != null) {
             try {
-                jSONObject.put("RM", i);
+                jSONObject.put("RM", recordMode);
                 NetPresenter.getDefault().setConfig(this);
             } catch (JSONException unused) {
             }
@@ -270,20 +268,20 @@ public class RecordFragment extends ConfigFragment implements BaseListener.GetLi
     }
 
     public void updateDateForCopy(List<Integer> list) {
-        JSONArray jSONArray = this.mRecArr;
-        if (jSONArray != null) {
+        JSONArray recordEntries = this.mRecArr;
+        if (recordEntries != null) {
             try {
-                JSONObject jSONObject = jSONArray.getJSONObject(this.mCurCh);
-                if (jSONObject != null) {
-                    boolean z = false;
-                    for (int i = 0; i < list.size(); i++) {
-                        int intValue = list.get(i).intValue();
-                        if (intValue != this.mCurCh || intValue <= this.mCurChTotal) {
-                            this.mRecArr.put(intValue, new JSONObject(jSONObject.toString()));
-                            z = true;
+                JSONObject sourceRecordConfig = recordEntries.getJSONObject(this.mCurCh);
+                if (sourceRecordConfig != null) {
+                    boolean hasCopiedConfig = false;
+                    for (int selectedIndex = 0; selectedIndex < list.size(); selectedIndex++) {
+                        int targetChannel = list.get(selectedIndex).intValue();
+                        if (targetChannel >= 0 && targetChannel != this.mCurCh && targetChannel < this.mCurChTotal) {
+                            this.mRecArr.put(targetChannel, new JSONObject(sourceRecordConfig.toString()));
+                            hasCopiedConfig = true;
                         }
                     }
-                    if (z) {
+                    if (hasCopiedConfig) {
                         NetPresenter.getDefault().setConfig(this);
                     }
                 }
@@ -292,16 +290,16 @@ public class RecordFragment extends ConfigFragment implements BaseListener.GetLi
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForChannel")) {
+    public void saveSelect(String selectorTag, List<Integer> list) {
+        if (selectorTag.equals("SelectFragmentForChannel")) {
             if (list.size() > 0) {
                 updateDateForChannel(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForMode")) {
+        } else if (selectorTag.equals("SelectFragmentForMode")) {
             if (list.size() > 0) {
                 updateDateForMode(list.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForCopy") && list.size() > 0) {
+        } else if (selectorTag.equals("SelectFragmentForCopy") && list.size() > 0) {
             updateDateForCopy(list);
         }
     }
