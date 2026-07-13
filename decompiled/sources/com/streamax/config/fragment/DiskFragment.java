@@ -94,8 +94,8 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
 
     public void configureForStorage() {
         try {
-            int i = this.mStorageObj.getInt("STORAGECOUNT");
-            if (this.mCurId >= i) {
+            int storageCount = this.mStorageObj.getInt("STORAGECOUNT");
+            if (this.mCurId >= storageCount) {
                 showErrorFragment();
                 return;
             }
@@ -103,38 +103,38 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
             textView.setText("" + (this.mCurId + 1));
             this.mListStrIndex.clear();
             this.mListIntIndex.clear();
-            int i2 = 0;
-            while (i2 < i) {
+            int diskDisplayIndex = 0;
+            while (diskDisplayIndex < storageCount) {
                 ArrayList<String> arrayList = this.mListStrIndex;
                 StringBuilder sb = new StringBuilder();
                 sb.append("");
-                i2++;
-                sb.append(i2);
+                diskDisplayIndex++;
+                sb.append(diskDisplayIndex);
                 arrayList.add(sb.toString());
             }
             this.mListIntIndex.add(new Integer(this.mCurId));
-            JSONArray jSONArray = this.mStorageObj.getJSONArray("STORAGESTATUS");
-            if (jSONArray != null) {
-                if (this.mCurId < jSONArray.length()) {
-                    int i3 = jSONArray.getInt(this.mCurId);
-                    List<String> strDatas = getStrDatas(R.array.config_diskManage_DiskStatusSelector);
-                    if (i3 < 0 || i3 < strDatas.size()) {
-                        this.mTvStatus.setText(strDatas.get(i3));
-                        JSONArray jSONArray2 = this.mStorageObj.getJSONArray("STORAGETOTALSIZE");
-                        if (jSONArray2 != null) {
-                            if (this.mCurId < jSONArray2.length()) {
-                                JSONArray jSONArray3 = this.mStorageObj.getJSONArray("STORAGELASTSIZE");
-                                if (jSONArray3 != null) {
-                                    if (this.mCurId < jSONArray3.length()) {
-                                        Long valueOf = Long.valueOf(jSONArray2.getLong(this.mCurId));
-                                        Long valueOf2 = Long.valueOf(jSONArray3.getLong(this.mCurId));
-                                        if (valueOf.longValue() >= 0 && valueOf2.longValue() >= 0) {
-                                            if (valueOf.longValue() >= valueOf2.longValue()) {
-                                                JSONArray jSONArray4 = this.mStorageObj.getJSONArray("STORAGEUNIT");
-                                                if (jSONArray4 != null) {
-                                                    if (this.mCurId < jSONArray4.length()) {
-                                                        LogUtils.e("DiskFragment", "configureForStorage 3, total: " + valueOf + ", free: " + valueOf2 + ", unit: " + jSONArray4.getInt(this.mCurId));
-                                                        this.mTvCapacity.setText(String.format("%.1fG/%.1fG", new Object[]{Float.valueOf(AppProxy.s2g(jSONArray4.getInt(this.mCurId), valueOf.longValue())), Float.valueOf(AppProxy.s2g(jSONArray4.getInt(this.mCurId), valueOf2.longValue()))}));
+            JSONArray storageStatusArray = this.mStorageObj.getJSONArray("STORAGESTATUS");
+            if (storageStatusArray != null) {
+                if (this.mCurId < storageStatusArray.length()) {
+                    int storageStatus = storageStatusArray.getInt(this.mCurId);
+                    List<String> statusLabels = getStrDatas(R.array.config_diskManage_DiskStatusSelector);
+                    if (storageStatus < 0 || storageStatus < statusLabels.size()) {
+                        this.mTvStatus.setText(statusLabels.get(storageStatus));
+                        JSONArray totalSizeArray = this.mStorageObj.getJSONArray("STORAGETOTALSIZE");
+                        if (totalSizeArray != null) {
+                            if (this.mCurId < totalSizeArray.length()) {
+                                JSONArray freeSizeArray = this.mStorageObj.getJSONArray("STORAGELASTSIZE");
+                                if (freeSizeArray != null) {
+                                    if (this.mCurId < freeSizeArray.length()) {
+                                        Long totalSize = Long.valueOf(totalSizeArray.getLong(this.mCurId));
+                                        Long freeSize = Long.valueOf(freeSizeArray.getLong(this.mCurId));
+                                        if (totalSize.longValue() >= 0 && freeSize.longValue() >= 0) {
+                                            if (totalSize.longValue() >= freeSize.longValue()) {
+                                                JSONArray storageUnitArray = this.mStorageObj.getJSONArray("STORAGEUNIT");
+                                                if (storageUnitArray != null) {
+                                                    if (this.mCurId < storageUnitArray.length()) {
+                                                        LogUtils.e("DiskFragment", "configureForStorage 3, total: " + totalSize + ", free: " + freeSize + ", unit: " + storageUnitArray.getInt(this.mCurId));
+                                                        this.mTvCapacity.setText(String.format("%.1fG/%.1fG", new Object[]{Float.valueOf(AppProxy.s2g(storageUnitArray.getInt(this.mCurId), totalSize.longValue())), Float.valueOf(AppProxy.s2g(storageUnitArray.getInt(this.mCurId), freeSize.longValue()))}));
                                                         return;
                                                     }
                                                 }
@@ -164,40 +164,40 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
 
     public void configureForOverWrite() {
         try {
-            int i = this.mPadmObj.getInt("OM");
-            List<String> strDatas = getStrDatas(R.array.config_diskManage_overWrite_OmSelector);
-            if (i >= strDatas.size()) {
+            int overwriteMode = this.mPadmObj.getInt("OM");
+            List<String> overwriteModeLabels = getStrDatas(R.array.config_diskManage_overWrite_OmSelector);
+            if (overwriteMode >= overwriteModeLabels.size()) {
                 showErrorFragment();
                 return;
             }
-            this.mTvOm.setText(strDatas.get(i));
+            this.mTvOm.setText(overwriteModeLabels.get(overwriteMode));
             this.mListStrOverWrite.clear();
             this.mListIntOverWrite.clear();
-            this.mListStrOverWrite.addAll(strDatas);
-            this.mListIntOverWrite.add(new Integer(i));
-            int i2 = this.mPadmObj.getInt("SVD");
-            int i3 = 0;
-            if (i == 1) {
+            this.mListStrOverWrite.addAll(overwriteModeLabels);
+            this.mListIntOverWrite.add(new Integer(overwriteMode));
+            int maxSaveDays = this.mPadmObj.getInt("SVD");
+            int dayIndex = 0;
+            if (overwriteMode == 1) {
                 this.mViewDays.setVisibility(0);
                 this.mRlDays.setVisibility(0);
             } else {
                 this.mViewDays.setVisibility(8);
                 this.mRlDays.setVisibility(8);
             }
-            if (i2 >= 1 && i2 <= 99) {
+            if (maxSaveDays >= 1 && maxSaveDays <= 99) {
                 TextView textView = this.mTvDays;
-                textView.setText(i2 + getString(R.string.config_diskManage_Days));
+                textView.setText(maxSaveDays + getString(R.string.config_diskManage_Days));
                 this.mListStrDays.clear();
                 this.mListIntDays.clear();
-                while (i3 < 99) {
+                while (dayIndex < 99) {
                     ArrayList<String> arrayList = this.mListStrDays;
                     StringBuilder sb = new StringBuilder();
-                    i3++;
-                    sb.append(i3);
+                    dayIndex++;
+                    sb.append(dayIndex);
                     sb.append("");
                     arrayList.add(sb.toString());
                 }
-                this.mListIntDays.add(new Integer(i2));
+                this.mListIntDays.add(new Integer(maxSaveDays));
             }
         } catch (JSONException unused) {
         }
@@ -210,29 +210,29 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
         }
         LogUtils.e("DiskFragment", "refreshUi 1");
         try {
-            JSONObject jSONObject = this.mDiskMgrObj.getJSONObject("STORM");
-            if (jSONObject == null) {
+            JSONObject storageManager = this.mDiskMgrObj.getJSONObject("STORM");
+            if (storageManager == null) {
                 showErrorFragment();
                 return;
             }
-            JSONObject jSONObject2 = jSONObject.getJSONObject("PDM");
-            if (jSONObject2 == null) {
+            JSONObject diskManager = storageManager.getJSONObject("PDM");
+            if (diskManager == null) {
                 showErrorFragment();
                 return;
             }
-            JSONObject jSONObject3 = jSONObject2.getJSONObject("PADM");
-            this.mPadmObj = jSONObject3;
-            if (jSONObject3 == null) {
+            JSONObject overwriteConfig = diskManager.getJSONObject("PADM");
+            this.mPadmObj = overwriteConfig;
+            if (overwriteConfig == null) {
                 showErrorFragment();
                 return;
             }
-            int i = jSONObject2.getInt("M");
-            List<String> strDatas = getStrDatas(R.array.config_diskManage_StorageConfigMode);
-            if (i >= 0 && i < strDatas.size()) {
-                this.mTvStorageConfig.setText(strDatas.get(i));
+            int storageConfigMode = diskManager.getInt("M");
+            List<String> storageConfigLabels = getStrDatas(R.array.config_diskManage_StorageConfigMode);
+            if (storageConfigMode >= 0 && storageConfigMode < storageConfigLabels.size()) {
+                this.mTvStorageConfig.setText(storageConfigLabels.get(storageConfigMode));
             }
             configureForStorage();
-            if (i == 0) {
+            if (storageConfigMode == 0) {
                 this.mLlMaybeHide.setVisibility(0);
                 configureForOverWrite();
             } else {
@@ -316,26 +316,26 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("PDM", "?");
-            jSONObject.put("STORM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject requestRoot = new JSONObject();
+            JSONObject storageManager = new JSONObject();
+            storageManager.put("PDM", "?");
+            requestRoot.put("STORM", storageManager);
+            return requestRoot.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String jsonResponse) {
         try {
-            int i = this.mGetConfigMode;
-            if (i == 1) {
+            int configMode = this.mGetConfigMode;
+            if (configMode == 1) {
                 this.mGetConfigMode = 2;
-                this.mDiskMgrObj = new JSONObject(str);
+                this.mDiskMgrObj = new JSONObject(jsonResponse);
                 NetPresenter.getDefault().getStorageInfo(this);
-            } else if (i == 2) {
+            } else if (configMode == 2) {
                 this.mGetConfigMode = 1;
-                this.mStorageObj = new JSONObject(str);
+                this.mStorageObj = new JSONObject(jsonResponse);
                 refreshUi();
             }
         } catch (JSONException unused) {
@@ -344,11 +344,11 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mDiskMgrObj;
-        if (jSONObject == null) {
+        JSONObject diskManagerConfig = this.mDiskMgrObj;
+        if (diskManagerConfig == null) {
             return "";
         }
-        return jSONObject.toString();
+        return diskManagerConfig.toString();
     }
 
     public void setSuccess() {
@@ -360,34 +360,34 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
         toastFailure();
     }
 
-    public void updateDateForIndex(int i) {
-        if (this.mCurId != i) {
-            this.mCurId = i;
+    public void updateDateForIndex(int diskIndex) {
+        if (this.mCurId != diskIndex) {
+            this.mCurId = diskIndex;
             configureForStorage();
         }
     }
 
-    public void updateDateForOverWrite(int i) {
-        JSONObject jSONObject = this.mPadmObj;
-        if (jSONObject != null) {
+    public void updateDateForOverWrite(int overwriteMode) {
+        JSONObject overwriteConfig = this.mPadmObj;
+        if (overwriteConfig != null) {
             try {
-                jSONObject.put("OM", i);
+                overwriteConfig.put("OM", overwriteMode);
                 NetPresenter.getDefault().setConfig(this);
             } catch (JSONException unused) {
             }
         }
     }
 
-    public void updateDateForFormat(final List<Integer> list) {
+    public void updateDateForFormat(final List<Integer> selectedIndexes) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.mConfigUi);
         builder.setTitle(R.string.config_diskManage_diskFormat_FormatRemind);
         builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
             private int mIndexTotal;
 
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (int i2 = 0; i2 < list.size(); i2++) {
-                    if (((Integer) list.get(i2)).intValue() < 32) {
-                        this.mIndexTotal = (int) (((double) this.mIndexTotal) + Math.pow(2.0d, (double) ((Integer) list.get(i2)).intValue()));
+            public void onClick(DialogInterface dialogInterface, int which) {
+                for (int selectedIndex = 0; selectedIndex < selectedIndexes.size(); selectedIndex++) {
+                    if (((Integer) selectedIndexes.get(selectedIndex)).intValue() < 32) {
+                        this.mIndexTotal = (int) (((double) this.mIndexTotal) + Math.pow(2.0d, (double) ((Integer) selectedIndexes.get(selectedIndex)).intValue()));
                     }
                 }
                 DiskFragment.this.mDialog.hide();
@@ -405,41 +405,41 @@ public class DiskFragment extends ConfigFragment implements BaseListener.GetList
             }
         });
         builder.setNegativeButton(R.string.group_Cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(DialogInterface dialogInterface, int which) {
                 DiskFragment.this.mDialog.hide();
             }
         });
         this.mDialog = builder.show();
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForIndex")) {
-            if (list.size() > 0) {
-                updateDateForIndex(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForIndex")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForIndex(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForOverWrite")) {
-            if (list.size() > 0) {
-                updateDateForOverWrite(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForOverWrite")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForOverWrite(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForFormat") && list.size() > 0) {
-            updateDateForFormat(list);
+        } else if (fragmentTag.equals("SelectFragmentForFormat") && selectedIndexes.size() > 0) {
+            updateDateForFormat(selectedIndexes);
         }
     }
 
-    public void updateDateForDays(int i) {
-        JSONObject jSONObject = this.mPadmObj;
-        if (jSONObject != null) {
+    public void updateDateForDays(int maxSaveDays) {
+        JSONObject overwriteConfig = this.mPadmObj;
+        if (overwriteConfig != null) {
             try {
-                jSONObject.put("SVD", i);
+                overwriteConfig.put("SVD", maxSaveDays);
                 NetPresenter.getDefault().setConfig(this);
             } catch (JSONException unused) {
             }
         }
     }
 
-    public void saveOneNumberEdit(String str, int i) {
-        if (str.equals("OneNumberEditFragmentForDays")) {
-            updateDateForDays(i);
+    public void saveOneNumberEdit(String fragmentTag, int value) {
+        if (fragmentTag.equals("OneNumberEditFragmentForDays")) {
+            updateDateForDays(value);
         }
     }
 }
