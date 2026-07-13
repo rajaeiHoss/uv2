@@ -166,17 +166,17 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         });
         this.mFileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-                int i2 = i - 1;
-                String str = RemotePlayback.this.mFileList.mRemoteFileList.get(i2).FileTime;
-                int i3 = RemotePlayback.this.mFileList.mRemoteFileList.get(i2).nChannel;
+                int fileIndex = i - 1;
+                String fileTime = RemotePlayback.this.mFileList.mRemoteFileList.get(fileIndex).FileTime;
+                int channel = RemotePlayback.this.mFileList.mRemoteFileList.get(fileIndex).nChannel;
                 Intent intent = new Intent(RemotePlayback.this.mContext, RemotePlaybackActivity.class);
-                intent.putExtra("year", str.substring(0, 4));
-                intent.putExtra("month", str.substring(4, 6));
-                intent.putExtra("day", str.substring(6, 8));
-                intent.putExtra("hour", str.substring(8, 10));
-                intent.putExtra("minute", str.substring(10, 12));
-                intent.putExtra("second", str.substring(12, 14));
-                intent.putExtra("channel", i3);
+                intent.putExtra("year", fileTime.substring(0, 4));
+                intent.putExtra("month", fileTime.substring(4, 6));
+                intent.putExtra("day", fileTime.substring(6, 8));
+                intent.putExtra("hour", fileTime.substring(8, 10));
+                intent.putExtra("minute", fileTime.substring(10, 12));
+                intent.putExtra("second", fileTime.substring(12, 14));
+                intent.putExtra("channel", channel);
                 RemotePlayback.this.mContext.startActivity(intent);
             }
         });
@@ -197,29 +197,29 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
             linearLayout.setPadding(0, 0, 0, 0);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-1, -1);
             layoutParams.weight = 1.0f;
-            int i2 = 0;
+            int rowIndex = 0;
             while (true) {
-                double d = (double) i2;
+                double row = (double) rowIndex;
                 double d2 = (double) size;
-                if (d < Math.sqrt(d2)) {
+                if (row < Math.sqrt(d2)) {
                     LinearLayout linearLayout2 = new LinearLayout(this.mContext);
                     linearLayout2.setOrientation(i);
                     linearLayout2.setPadding(i, i, i, i);
-                    int i3 = 0;
+                    int columnIndex = 0;
                     while (true) {
-                        double d3 = (double) i3;
-                        if (d3 >= Math.sqrt(d2)) {
+                        double column = (double) columnIndex;
+                        if (column >= Math.sqrt(d2)) {
                             break;
                         }
-                        String obj = list2.get((int) ((Math.sqrt(d2) * d) + d3)).get("path").toString();
+                        String obj = list2.get((int) ((Math.sqrt(d2) * row) + column)).get("path").toString();
                         ImageView imageView = new ImageView(this.mContext);
                         imageView.setImageBitmap(BitmapFactory.decodeFile(obj));
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                         linearLayout2.addView(imageView, layoutParams);
-                        i3++;
+                        columnIndex++;
                     }
                     linearLayout.addView(linearLayout2, layoutParams);
-                    i2++;
+                    rowIndex++;
                     i = 0;
                 } else {
                     ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(linearLayout);
@@ -255,11 +255,11 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
     public void popMenu(View view, View view2) {
         new DisplayMetrics();
         DisplayMetrics displayMetrics = this.mContext.getResources().getDisplayMetrics();
-        int i = displayMetrics.widthPixels;
-        int i2 = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
         PopupWindow popupWindow = this.pop;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow2 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow2;
             popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setTouchInterceptor(new View.OnTouchListener() {
@@ -279,7 +279,7 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
             this.pop = null;
         } else {
             this.pop = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow3 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow3;
             popupWindow3.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setOutsideTouchable(false);
@@ -289,11 +289,11 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
     }
 
     public List<Map<String, Object>> CaptureImage() {
-        String str = Environment.getExternalStorageDirectory() + "/streaming/capture/";
+        String capturePath = Environment.getExternalStorageDirectory() + "/streaming/capture/";
         ArrayList arrayList = new ArrayList();
         DvrNet dvrNet = this.mDvrNet;
         if (dvrNet != null) {
-            BitmapFileInfo[] MultiPlayCaptureBitmap = dvrNet.MultiPlayCaptureBitmap(str);
+            BitmapFileInfo[] MultiPlayCaptureBitmap = dvrNet.MultiPlayCaptureBitmap(capturePath);
             if (MultiPlayCaptureBitmap == null) {
                 return null;
             }
@@ -463,10 +463,10 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String fallbackMacAddress = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) this.mContext.getApplicationContext().getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return fallbackMacAddress;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -474,10 +474,10 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return fallbackMacAddress;
         }
         String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        return replace.length() > 0 ? replace : fallbackMacAddress;
     }
 
     public void OpenDevice(DevInfoBean devInfoBean) {
@@ -542,9 +542,9 @@ public class RemotePlayback extends LinearLayout implements UpdateCalendarInterf
         }
     }
 
-    public void Seek(int i, int i2) {
+    public void Seek(int maxProgress, int progressMinutes) {
         if (this.mDvrNet != null) {
-            this.mDvrNet.MultiPlaySeek(String.format("%04d%02d%02d%02d%02d00", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 60), Integer.valueOf(i2 % 60)}));
+            this.mDvrNet.MultiPlaySeek(String.format("%04d%02d%02d%02d%02d00", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(progressMinutes / 60), Integer.valueOf(progressMinutes % 60)}));
         }
     }
 
