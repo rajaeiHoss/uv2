@@ -127,7 +127,7 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
         this.mSeekBar.setProgress(0);
         this.mSeekBar.setSecondaryProgress(0);
         this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -210,16 +210,16 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
                         return;
                     case R.id.multiplay_controlbar_slow /*2131362751*/:
                         if (RemotePlaybackActivity.this.mDvrNet != null) {
-                            int i2 = RemotePlaybackActivity.this.mSpeed;
-                            if (i2 == -4) {
+                            int currentSpeed = RemotePlaybackActivity.this.mSpeed;
+                            if (currentSpeed == -4) {
                                 RemotePlaybackActivity.this.mSpeed = 1;
-                            } else if (i2 == -2) {
+                            } else if (currentSpeed == -2) {
                                 RemotePlaybackActivity.this.mSpeed = -4;
-                            } else if (i2 == 4) {
+                            } else if (currentSpeed == 4) {
                                 RemotePlaybackActivity.this.mSpeed = 2;
-                            } else if (i2 == 1) {
+                            } else if (currentSpeed == 1) {
                                 RemotePlaybackActivity.this.mSpeed = -2;
-                            } else if (i2 != 2) {
+                            } else if (currentSpeed != 2) {
                                 RemotePlaybackActivity.this.mSpeed = -2;
                             } else {
                                 RemotePlaybackActivity.this.mSpeed = 1;
@@ -316,30 +316,30 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
             linearLayout.setBackgroundColor(Color.argb(200, 40, 0, 0));
             linearLayout.setPadding(0, 0, 0, 0);
             new LinearLayout.LayoutParams(-2, -2);
-            int i2 = 0;
+            int rowIndex = 0;
             while (true) {
-                double d = (double) i2;
+                double row = (double) rowIndex;
                 double d2 = (double) size;
-                if (d < Math.sqrt(d2)) {
+                if (row < Math.sqrt(d2)) {
                     LinearLayout linearLayout2 = new LinearLayout(this.mContext);
                     linearLayout2.setOrientation(i);
                     linearLayout2.setPadding(i, i, i, i);
-                    int i3 = 0;
+                    int columnIndex = 0;
                     while (true) {
-                        double d3 = (double) i3;
-                        if (d3 >= Math.sqrt(d2)) {
+                        double column = (double) columnIndex;
+                        if (column >= Math.sqrt(d2)) {
                             break;
                         }
-                        String obj = list2.get((int) ((Math.sqrt(d2) * d) + d3)).get("path").toString();
+                        String obj = list2.get((int) ((Math.sqrt(d2) * row) + column)).get("path").toString();
                         ImageView imageView = new ImageView(this.mContext);
                         imageView.setImageBitmap(BitmapFactory.decodeFile(obj));
                         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         imageView.setAdjustViewBounds(true);
                         linearLayout2.addView(imageView);
-                        i3++;
+                        columnIndex++;
                     }
                     linearLayout.addView(linearLayout2);
-                    i2++;
+                    rowIndex++;
                     i = 0;
                 } else {
                     ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(linearLayout);
@@ -375,11 +375,11 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
     public void popMenu(View view, View view2) {
         new DisplayMetrics();
         DisplayMetrics displayMetrics = this.mContext.getResources().getDisplayMetrics();
-        int i = displayMetrics.widthPixels;
-        int i2 = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
         PopupWindow popupWindow = this.pop;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow2 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow2;
             popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setTouchInterceptor(new View.OnTouchListener() {
@@ -399,7 +399,7 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
             this.pop = null;
         } else {
             this.pop = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i / 2, i2 / 2, true);
+            PopupWindow popupWindow3 = new PopupWindow(view, screenWidth / 2, screenHeight / 2, true);
             this.pop = popupWindow3;
             popupWindow3.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.pop.setOutsideTouchable(false);
@@ -409,11 +409,11 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
     }
 
     public List<Map<String, Object>> CaptureImage() {
-        String str = Environment.getExternalStorageDirectory() + "/streaming/capture/";
+        String capturePath = Environment.getExternalStorageDirectory() + "/streaming/capture/";
         ArrayList arrayList = new ArrayList();
         DvrNet dvrNet = this.mDvrNet;
         if (dvrNet != null) {
-            BitmapFileInfo[] MultiPlayCaptureBitmap = dvrNet.MultiPlayCaptureBitmap(str);
+            BitmapFileInfo[] MultiPlayCaptureBitmap = dvrNet.MultiPlayCaptureBitmap(capturePath);
             if (MultiPlayCaptureBitmap == null) {
                 return null;
             }
@@ -486,21 +486,21 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
         }
     }
 
-    public void WriteIn(int i, int i2, byte[] bArr, int i3, int i4) {
+    public void WriteIn(int channel, int frameType, byte[] frameData, int width, int height) {
         VideoView videoView;
         if (this.mVideoGroup.GetLayoutMode() == 1) {
             videoView = this.mVideoGroup.getVideoView(0);
         } else {
-            videoView = this.mVideoGroup.getVideoView(i);
+            videoView = this.mVideoGroup.getVideoView(channel);
         }
         if (videoView != null) {
-            videoView.writeIn(bArr, i3, i4);
+            videoView.writeIn(frameData, width, height);
         }
     }
 
-    public void Seek(int i, int i2) {
+    public void Seek(int maxProgress, int progressMinutes) {
         if (this.mDvrNet != null) {
-            this.mDvrNet.MultiPlaySeek(String.format("%04d%02d%02d%02d%02d00", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(i2 / 60), Integer.valueOf(i2 % 60)}));
+            this.mDvrNet.MultiPlaySeek(String.format("%04d%02d%02d%02d%02d00", new Object[]{Integer.valueOf(this.mYear), Integer.valueOf(this.mMonth), Integer.valueOf(this.mDay), Integer.valueOf(progressMinutes / 60), Integer.valueOf(progressMinutes % 60)}));
         }
     }
 
@@ -519,10 +519,10 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String fallbackMacAddress = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) this.mContext.getApplicationContext().getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return fallbackMacAddress;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -530,10 +530,10 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return fallbackMacAddress;
         }
         String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        return replace.length() > 0 ? replace : fallbackMacAddress;
     }
 
     public void MultiplayCallback(long nativeHandle, int channel, int codecType, int frameType, byte[] frameData, int width, int height, int playbackSecond) {
@@ -542,11 +542,11 @@ public class RemotePlaybackActivity extends Activity implements MultiplaybackInt
             this.mTimeValues = playbackSecond;
             this.mtvTime.post(new Runnable() {
                 public void run() {
-                    int i = RemotePlaybackActivity.this.mTimeValues / 3600;
-                    RemotePlaybackActivity.this.mtvTime.setText(String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(i), Integer.valueOf((RemotePlaybackActivity.this.mTimeValues - (i * 3600)) / 60), Integer.valueOf(RemotePlaybackActivity.this.mTimeValues % 60)}));
-                    int i2 = RemotePlaybackActivity.this.mTimeValues / 60;
-                    if (i2 != RemotePlaybackActivity.this.mSeekBar.getProgress() && !RemotePlaybackActivity.this.mTracking) {
-                        RemotePlaybackActivity.this.mSeekBar.setProgress(i2);
+                    int hour = RemotePlaybackActivity.this.mTimeValues / 3600;
+                    RemotePlaybackActivity.this.mtvTime.setText(String.format("%02d:%02d:%02d", new Object[]{Integer.valueOf(hour), Integer.valueOf((RemotePlaybackActivity.this.mTimeValues - (hour * 3600)) / 60), Integer.valueOf(RemotePlaybackActivity.this.mTimeValues % 60)}));
+                    int progressMinutes = RemotePlaybackActivity.this.mTimeValues / 60;
+                    if (progressMinutes != RemotePlaybackActivity.this.mSeekBar.getProgress() && !RemotePlaybackActivity.this.mTracking) {
+                        RemotePlaybackActivity.this.mSeekBar.setProgress(progressMinutes);
                     }
                 }
             });
