@@ -29,11 +29,11 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
     public int mRawY;
     public int mT;
 
-    public long getChildId(int i, int i2) {
+    public long getChildId(int groupPosition, int childPosition) {
         return 0;
     }
 
-    public long getGroupId(int i) {
+    public long getGroupId(int groupPosition) {
         return 0;
     }
 
@@ -41,7 +41,7 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         return true;
     }
 
-    public boolean isChildSelectable(int i, int i2) {
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
 
@@ -51,28 +51,28 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         this.mListView = customExpandLv;
         this.mFlagData02 = list2;
         this.mChs = new int[list.size()][];
-        for (int i = 0; i < list.size(); i++) {
-            this.mChs[i] = new int[arrayList.get(i).size()];
+        for (int groupIndex = 0; groupIndex < list.size(); groupIndex++) {
+            this.mChs[groupIndex] = new int[arrayList.get(groupIndex).size()];
         }
     }
 
-    public Object getChild(int i, int i2) {
-        return this.mChildData.get(i).get(i2);
+    public Object getChild(int groupPosition, int childPosition) {
+        return this.mChildData.get(groupPosition).get(childPosition);
     }
 
-    public int getChildrenCount(int i) {
-        return this.mChildData.get(i).size();
+    public int getChildrenCount(int groupPosition) {
+        return this.mChildData.get(groupPosition).size();
     }
 
-    public Object getGroup(int i) {
-        return this.mGroupData.get(i);
+    public Object getGroup(int groupPosition) {
+        return this.mGroupData.get(groupPosition);
     }
 
     public int getGroupCount() {
         return this.mGroupData.size();
     }
 
-    public View getChildView(final int i, final int i2, boolean z, View view, ViewGroup viewGroup) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         ChildHolder childHolder;
         if (view == null) {
             view = View.inflate(AppProxy.getContext(), R.layout.dev_child, (ViewGroup) null);
@@ -83,11 +83,11 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         } else {
             childHolder = (ChildHolder) view.getTag();
         }
-        childHolder.mTvChName.setText((CharSequence) this.mChildData.get(i).get(i2));
-        if (this.mFlagData02.get(i).size() == this.mChs[i].length) {
+        childHolder.mTvChName.setText((CharSequence) this.mChildData.get(groupPosition).get(childPosition));
+        if (this.mFlagData02.get(groupPosition).size() == this.mChs[groupPosition].length) {
             childHolder.mIvCb.setImageResource(R.drawable.checkbox_check);
         } else {
-            if (this.mFlagData02.get(i).contains("" + i2)) {
+            if (this.mFlagData02.get(groupPosition).contains("" + childPosition)) {
                 childHolder.mIvCb.setImageResource(R.drawable.checkbox_check);
             } else {
                 childHolder.mIvCb.setImageResource(R.drawable.checkbox_uncheck);
@@ -107,37 +107,37 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
                 CustomExpandAdapter customExpandAdapter = CustomExpandAdapter.this;
                 customExpandAdapter.mT = customExpandAdapter.mListView.mT;
                 if (CustomExpandAdapter.this.mRawY <= CustomExpandAdapter.this.mT) {
-                    gourpClick(i);
+                    groupClick(groupPosition);
                 } else {
-                    childClick(i, i2);
+                    childClick(groupPosition, childPosition);
                 }
                 CustomExpandAdapter.this.notifyDataSetChanged();
             }
 
-            private void gourpClick(int i) {
-                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).size() == CustomExpandAdapter.this.mChs[i].length) {
-                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).clear();
+            private void groupClick(int groupPosition) {
+                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).size() == CustomExpandAdapter.this.mChs[groupPosition].length) {
+                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).clear();
                     return;
                 }
-                for (int i2 = 0; i2 < CustomExpandAdapter.this.mChs[i].length; i2++) {
-                    if (!((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).contains("" + i2)) {
-                        ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).add("" + i2);
+                for (int childIndex = 0; childIndex < CustomExpandAdapter.this.mChs[groupPosition].length; childIndex++) {
+                    if (!((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).contains("" + childIndex)) {
+                        ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).add("" + childIndex);
                     }
                 }
             }
 
-            private void childClick(int i, int i2) {
-                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).contains("" + i2)) {
-                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).remove("" + i2);
+            private void childClick(int groupPosition, int childPosition) {
+                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).contains("" + childPosition)) {
+                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).remove("" + childPosition);
                     return;
                 }
-                ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).add("" + i2);
+                ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).add("" + childPosition);
             }
         });
         return view;
     }
 
-    public View getGroupView(final int i, boolean z, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View view, ViewGroup viewGroup) {
         GroupHolder groupHolder;
         if (view == null) {
             view = View.inflate(AppProxy.getContext(), R.layout.dev_group, (ViewGroup) null);
@@ -150,26 +150,26 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         } else {
             groupHolder = (GroupHolder) view.getTag();
         }
-        groupHolder.mTvDevName.setText((String) this.mGroupData.get(i).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
-        groupHolder.mTvDevInfo.setText((String) this.mGroupData.get(i).get("info"));
-        if (z) {
+        groupHolder.mTvDevName.setText((String) this.mGroupData.get(groupPosition).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+        groupHolder.mTvDevInfo.setText((String) this.mGroupData.get(groupPosition).get("info"));
+        if (isExpanded) {
             groupHolder.mIvArrow.setImageResource(R.drawable.arrow_down);
         } else {
             groupHolder.mIvArrow.setImageResource(R.drawable.arrow_right);
         }
-        if (this.mFlagData02.get(i).size() == this.mChs[i].length) {
+        if (this.mFlagData02.get(groupPosition).size() == this.mChs[groupPosition].length) {
             groupHolder.mIvCb.setImageResource(R.drawable.checkbox_check);
         } else {
             groupHolder.mIvCb.setImageResource(R.drawable.checkbox_uncheck);
         }
         groupHolder.mIvCb.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).size() == CustomExpandAdapter.this.mChs[i].length) {
-                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).clear();
+                if (((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).size() == CustomExpandAdapter.this.mChs[groupPosition].length) {
+                    ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).clear();
                 } else {
-                    for (int i = 0; i < CustomExpandAdapter.this.mChs[i].length; i++) {
-                        if (!((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).contains("" + i)) {
-                            ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(i)).add("" + i);
+                    for (int childIndex = 0; childIndex < CustomExpandAdapter.this.mChs[groupPosition].length; childIndex++) {
+                        if (!((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).contains("" + childIndex)) {
+                            ((ArrayList) CustomExpandAdapter.this.mFlagData02.get(groupPosition)).add("" + childIndex);
                         }
                     }
                 }
@@ -197,21 +197,21 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         }
     }
 
-    public int getHeaderState(int i, int i2) {
-        if (i2 == getChildrenCount(i) - 1) {
+    public int getHeaderState(int groupPosition, int childPosition) {
+        if (childPosition == getChildrenCount(groupPosition) - 1) {
             return 2;
         }
-        if (i2 != -1 || this.mListView.isGroupExpanded(i)) {
+        if (childPosition != -1 || this.mListView.isGroupExpanded(groupPosition)) {
             return 1;
         }
         return 0;
     }
 
-    public void configHeader(View view, int i, int i2, int i3) {
-        ((TextView) view.findViewById(R.id.dev_head_tv_devname)).setText((String) this.mGroupData.get(i).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
-        ((TextView) view.findViewById(R.id.dev_head_tv_devinfo)).setText((String) this.mGroupData.get(i).get("info"));
+    public void configHeader(View view, int groupPosition, int childPosition, int alpha) {
+        ((TextView) view.findViewById(R.id.dev_head_tv_devname)).setText((String) this.mGroupData.get(groupPosition).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+        ((TextView) view.findViewById(R.id.dev_head_tv_devinfo)).setText((String) this.mGroupData.get(groupPosition).get("info"));
         ImageView imageView = (ImageView) view.findViewById(R.id.dev_head_iv_checkicon);
-        if (this.mFlagData02.get(i).size() == this.mChs[i].length) {
+        if (this.mFlagData02.get(groupPosition).size() == this.mChs[groupPosition].length) {
             imageView.setImageResource(R.drawable.checkbox_check);
         } else {
             imageView.setImageResource(R.drawable.checkbox_uncheck);
@@ -222,13 +222,13 @@ public class CustomExpandAdapter extends BaseExpandableListAdapter implements Cu
         return this.mFlagData02;
     }
 
-    public void setGroupClickState(int i, int i2) {
-        this.groupStatusMap.put(i, i2);
+    public void setGroupClickState(int groupPosition, int status) {
+        this.groupStatusMap.put(groupPosition, status);
     }
 
-    public int getGroupClickState(int i) {
-        if (this.groupStatusMap.keyAt(i) >= 0) {
-            return this.groupStatusMap.get(i);
+    public int getGroupClickState(int groupPosition) {
+        if (this.groupStatusMap.keyAt(groupPosition) >= 0) {
+            return this.groupStatusMap.get(groupPosition);
         }
         return 0;
     }
