@@ -69,29 +69,29 @@ public class ConfigPageActivity extends LinearLayout {
         this.mProcessBar.setMax(100);
         this.mWebView.getSettings().setJavaScriptEnabled(true);
         this.mWebView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView webView, int i) {
-                ConfigPageActivity.this.mProgress = i;
+            public void onProgressChanged(WebView webView, int progress) {
+                ConfigPageActivity.this.mProgress = progress;
                 ConfigPageActivity.this.mProcessBar.setProgress(ConfigPageActivity.this.mProgress);
-                if (i == 100) {
+                if (progress == 100) {
                     ConfigPageActivity.this.mProcessBar.setVisibility(8);
                 }
             }
         });
         this.mWebView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView webView, String str) {
-                webView.loadUrl(str);
+            public boolean shouldOverrideUrlLoading(WebView webView, String requestedUrl) {
+                webView.loadUrl(requestedUrl);
                 return false;
             }
 
-            public void onReceivedError(WebView webView, int i, String str, String str2) {
-                Class<?> cls = getClass();
-                LogUtils.log(cls, "errorCode:" + i);
+            public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+                Class<?> clientClass = getClass();
+                LogUtils.log(clientClass, "errorCode:" + errorCode);
                 webView.loadUrl("file:///android_asset/volis.html");
                 new AlertDialog.Builder(ConfigPageActivity.this.mConfigActivity).setIcon(R.drawable.icon).setTitle(R.string.app_name).setMessage(R.string.deviceoffline).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onClick(DialogInterface dialogInterface, int which) {
                     }
                 }).show();
-                super.onReceivedError(webView, i, str, str2);
+                super.onReceivedError(webView, errorCode, description, failingUrl);
             }
         });
         ((Button) findViewById(R.id.configwebpage_title_back)).setOnClickListener(new View.OnClickListener() {
@@ -108,43 +108,42 @@ public class ConfigPageActivity extends LinearLayout {
     }
 
     public void OpenUrl() {
-        String str;
+        String loginUrl;
         this.mProcessBar.setVisibility(0);
         this.mWebView.clearHistory();
-        boolean IsHighDefination = IsHighDefination();
+        boolean isHighDefinition = IsHighDefination();
         if (MyApp.loginType != 0) {
             DvrNet dvrNet = new DvrNet();
-            String str2 = this.ip;
-            String str3 = str2;
-            int intValue = ((Integer) dvrNet.GetDeviceHandle(str3, this.mediaport, this.username, this.password, this.mApp.getLocalMacAddress()).get("errorcode")).intValue();
+            String deviceIp = this.ip;
+            int deviceHandleErrorCode = ((Integer) dvrNet.GetDeviceHandle(deviceIp, this.mediaport, this.username, this.password, this.mApp.getLocalMacAddress()).get("errorcode")).intValue();
             dvrNet.CloseDeviceHandle();
-            if (intValue == -1) {
-                if (!IsHighDefination) {
-                    String str4 = this.remark;
-                    str = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, str4, this.username, this.password, str4, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
+            if (deviceHandleErrorCode == -1) {
+                if (!isHighDefinition) {
+                    String natRemark = this.remark;
+                    loginUrl = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, natRemark, this.username, this.password, natRemark, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
                 } else {
-                    String str5 = this.remark;
-                    str = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, str5, this.username, this.password, str5, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
+                    String natRemark = this.remark;
+                    loginUrl = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, natRemark, this.username, this.password, natRemark, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
                 }
-            } else if (!IsHighDefination) {
-                str = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
+            } else if (!isHighDefinition) {
+                loginUrl = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
             } else {
-                str = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
+                loginUrl = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
             }
         } else if (!this.ip.contains(".")) {
-            if (!IsHighDefination) {
-                String str6 = this.ip;
-                str = String.format("http://%s:5559/nat%s/logincheck.rsp?username=nat%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, str6, this.username, this.password, str6, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
+            if (!isHighDefinition) {
+                String natDeviceId = this.ip;
+                loginUrl = String.format("http://%s:5559/nat%s/logincheck.rsp?username=nat%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, natDeviceId, this.username, this.password, natDeviceId, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
             } else {
-                String str7 = this.ip;
-                str = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, str7, this.username, this.password, str7, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
+                String natDeviceId = this.ip;
+                loginUrl = String.format("http://%s:5559/nat%s/logincheck.rsp?username=%s&userpwd=%s&url=/nat%s/WAP/mobileTelephone_left.rsp&language=%d", new Object[]{this.mApp.mUdtServerIp, natDeviceId, this.username, this.password, natDeviceId, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage))});
             }
-        } else if (!IsHighDefination) {
-            str = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
+        } else if (!isHighDefinition) {
+            loginUrl = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp%%23MOBLeft.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
         } else {
-            str = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
+            loginUrl = String.format("http://%s:%d/logincheck.rsp?username=%s&userpwd=%s&language=%d&url=http://%s:%d/WAP/mobileTelephone_left.rsp", new Object[]{this.ip, Integer.valueOf(this.webport), this.username, this.password, Integer.valueOf(this.mConfigActivity.getString(R.string.settinglanguage)), this.ip, Integer.valueOf(this.webport)});
         }
         this.mProcessBar.bringToFront();
-        this.mWebView.loadUrl(str);
+        this.mWebView.loadUrl(loginUrl);
     }
 }
