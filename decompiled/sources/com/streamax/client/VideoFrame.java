@@ -24,26 +24,26 @@ public class VideoFrame extends FrameLayout {
     public boolean mbMax;
     public boolean mbPlay;
 
-    public VideoFrame(Context context, int i) {
-        this(context, (AttributeSet) null, i);
+    public VideoFrame(Context context, int serial) {
+        this(context, (AttributeSet) null, serial);
     }
 
-    public VideoFrame(Context context, AttributeSet attributeSet, int i) {
-        this(context, (AttributeSet) null, 0, i);
+    public VideoFrame(Context context, AttributeSet attributeSet, int serial) {
+        this(context, (AttributeSet) null, 0, serial);
     }
 
     public VideoView GetVideoView() {
         return this.mVideoView;
     }
 
-    public VideoFrame(Context context, AttributeSet attributeSet, int i, int i2) {
-        super(context, attributeSet, i);
+    public VideoFrame(Context context, AttributeSet attributeSet, int defStyleAttr, int serial) {
+        super(context, attributeSet, defStyleAttr);
         this.mSearial = 0;
         this.mbFocus = false;
         this.mbMax = false;
         this.mbPlay = false;
         this.mContext = context;
-        this.mSearial = i2;
+        this.mSearial = serial;
         LoadViews();
     }
 
@@ -80,9 +80,9 @@ public class VideoFrame extends FrameLayout {
         addView(this.mImgRec, layoutParams5);
     }
 
-    public void setFocusState(boolean z) {
-        this.mbFocus = z;
-        if (z) {
+    public void setFocusState(boolean focused) {
+        this.mbFocus = focused;
+        if (focused) {
             this.mImgAdd.setImageResource(R.drawable.add_clicked);
             this.mImgAdd.setClickable(true);
             EventBus.getDefault().post(new RecordStatus(this.mRecordStatus));
@@ -90,13 +90,13 @@ public class VideoFrame extends FrameLayout {
             this.mImgAdd.setImageResource(R.drawable.add_normal);
             this.mImgAdd.setClickable(false);
         }
-        this.mVideoView.setFocusState(z);
-        this.mCusImageView.setFocusState(z);
+        this.mVideoView.setFocusState(focused);
+        this.mCusImageView.setFocusState(focused);
     }
 
-    public void setPlayState(boolean z) {
-        this.mbPlay = z;
-        if (z) {
+    public void setPlayState(boolean playing) {
+        this.mbPlay = playing;
+        if (playing) {
             this.mImgAdd.post(new Runnable() {
                 public void run() {
                     VideoFrame.this.mImgAdd.setVisibility(4);
@@ -112,14 +112,14 @@ public class VideoFrame extends FrameLayout {
         });
     }
 
-    public void SetRecState(boolean z) {
+    public void SetRecState(boolean recording) {
         ImageView imageView = this.mImgRec;
-        this.mRecordStatus = z;
-        imageView.setVisibility(z ? 0 : 4);
+        this.mRecordStatus = recording;
+        imageView.setVisibility(recording ? 0 : 4);
     }
 
-    public void SetBusyState(boolean z) {
-        if (z) {
+    public void SetBusyState(boolean busy) {
+        if (busy) {
             this.mProcessBar.setVisibility(0);
             this.mImgAdd.setVisibility(4);
             return;
@@ -130,8 +130,8 @@ public class VideoFrame extends FrameLayout {
         }
     }
 
-    public void SetMax(boolean z) {
-        this.mbMax = z;
+    public void SetMax(boolean max) {
+        this.mbMax = max;
         postInvalidate();
     }
 
@@ -148,20 +148,20 @@ public class VideoFrame extends FrameLayout {
         this.mVideoView.clearDraw();
     }
 
-    public void SetDigitalTranslate(float f, float f2) {
-        this.mVideoView.setDigitalTranslate(f, f2);
+    public void SetDigitalTranslate(float deltaX, float deltaY) {
+        this.mVideoView.setDigitalTranslate(deltaX, deltaY);
     }
 
-    public void SetDigitalZoomIn(float f) {
-        this.mVideoView.setDigitalZoomIn(f);
+    public void SetDigitalZoomIn(float scaleFactor) {
+        this.mVideoView.setDigitalZoomIn(scaleFactor);
     }
 
-    public void SetDragState(boolean z) {
-        this.mVideoView.setDragState(z);
+    public void SetDragState(boolean dragging) {
+        this.mVideoView.setDragState(dragging);
     }
 
-    public void setFatherW_H(int i, int i2, int i3, int i4, int i5, int i6) {
-        this.mVideoView.setFatherW_H(i, i2, i3, i4, i5, i6);
+    public void setFatherW_H(int startLeft, int startTop, int startRight, int startBottom, int initialWidth, int initialHeight) {
+        this.mVideoView.setFatherW_H(startLeft, startTop, startRight, startBottom, initialWidth, initialHeight);
     }
 
     public void onTouchMove(MotionEvent motionEvent) {
