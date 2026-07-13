@@ -6,16 +6,16 @@ public class DeviceJsonBean {
     private PARAMETER PARAMETER;
     private String SESSION;
 
-    public void setMODULE(String str) {
-        this.MODULE = str;
+    public void setMODULE(String module) {
+        this.MODULE = module;
     }
 
     public String getMODULE() {
         return this.MODULE;
     }
 
-    public void setOPERATION(String str) {
-        this.OPERATION = str;
+    public void setOPERATION(String operation) {
+        this.OPERATION = operation;
     }
 
     public String getOPERATION() {
@@ -30,8 +30,8 @@ public class DeviceJsonBean {
         return this.PARAMETER;
     }
 
-    public void setSESSION(String str) {
-        this.SESSION = str;
+    public void setSESSION(String session) {
+        this.SESSION = session;
     }
 
     public String getSESSION() {
@@ -60,39 +60,39 @@ public class DeviceJsonBean {
         private String PW;
         private String USERNAME;
 
-        public NEWCONF(String str, String str2, String str3, String str4) {
-            this.USERNAME = str;
-            this.PW = str2;
-            this.EN = str3;
-            this.OPERATEMASK = str4;
+        public NEWCONF(String username, String password, String enabled, String operateMask) {
+            this.USERNAME = username;
+            this.PW = password;
+            this.EN = enabled;
+            this.OPERATEMASK = operateMask;
         }
 
-        public void setUSERNAME(String str) {
-            this.USERNAME = str;
+        public void setUSERNAME(String username) {
+            this.USERNAME = username;
         }
 
         public String getUSERNAME() {
             return this.USERNAME;
         }
 
-        public void setPW(String str) {
-            this.PW = str;
+        public void setPW(String password) {
+            this.PW = password;
         }
 
         public String getPW() {
             return this.PW;
         }
 
-        public void setEN(String str) {
-            this.EN = str;
+        public void setEN(String enabled) {
+            this.EN = enabled;
         }
 
         public String getEN() {
             return this.EN;
         }
 
-        public void setOPERATEMASK(String str) {
-            this.OPERATEMASK = str;
+        public void setOPERATEMASK(String operateMask) {
+            this.OPERATEMASK = operateMask;
         }
 
         public String getOPERATEMASK() {
