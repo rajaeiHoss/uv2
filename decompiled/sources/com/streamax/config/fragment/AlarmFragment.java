@@ -105,10 +105,10 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void saveBtnEnable() {
-        JSONObject jSONObject = this.mMdpObj;
-        if (jSONObject != null) {
+        JSONObject motionDetectionConfig = this.mMdpObj;
+        if (motionDetectionConfig != null) {
             try {
-                this.mMdpObj.put("EN", jSONObject.getInt("EN") == 0 ? 1 : 0);
+                this.mMdpObj.put("EN", motionDetectionConfig.getInt("EN") == 0 ? 1 : 0);
                 NetPresenter.getDefault().setConfig(this);
             } catch (JSONException unused) {
             }
@@ -122,15 +122,15 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void pushFragmentForPlan() {
-        JSONObject jSONObject;
-        JSONArray jSONArray;
-        JSONArray jSONArray2 = this.mMdaArr;
-        if (jSONArray2 != null) {
+        JSONObject alarmPlan;
+        JSONArray alarmScheduleRows;
+        JSONArray motionDetectionAlarmArray = this.mMdaArr;
+        if (motionDetectionAlarmArray != null) {
             try {
-                JSONObject jSONObject2 = jSONArray2.getJSONObject(this.mCurCh);
-                if (jSONObject2 != null && (jSONObject = jSONObject2.getJSONObject("APLAN")) != null && (jSONArray = jSONObject.getJSONArray("RSI")) != null) {
+                JSONObject channelAlarmConfig = motionDetectionAlarmArray.getJSONObject(this.mCurCh);
+                if (channelAlarmConfig != null && (alarmPlan = channelAlarmConfig.getJSONObject("APLAN")) != null && (alarmScheduleRows = alarmPlan.getJSONArray("RSI")) != null) {
                     ScheduleOfAlarm scheduleOfAlarm = new ScheduleOfAlarm();
-                    scheduleOfAlarm.setScheduleData(this.mAlarmRes, jSONArray);
+                    scheduleOfAlarm.setScheduleData(this.mAlarmRes, alarmScheduleRows);
                     nextPage(scheduleOfAlarm);
                 }
             } catch (JSONException unused) {
@@ -139,13 +139,13 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void pushFragmentForTrigger() {
-        JSONObject jSONObject;
+        JSONObject alarmProcessConfig;
         if (this.mMdpArr != null) {
             try {
-                JSONObject jSONObject2 = this.mMdaArr.getJSONObject(this.mCurCh);
-                if (jSONObject2 != null && (jSONObject = jSONObject2.getJSONObject("APRO")) != null) {
+                JSONObject channelAlarmConfig = this.mMdaArr.getJSONObject(this.mCurCh);
+                if (channelAlarmConfig != null && (alarmProcessConfig = channelAlarmConfig.getJSONObject("APRO")) != null) {
                     TriggerOfAlarm triggerOfAlarm = new TriggerOfAlarm();
-                    triggerOfAlarm.setTriggerData(this.mAlarmRes, jSONObject, this.mCurChTotal);
+                    triggerOfAlarm.setTriggerData(this.mAlarmRes, alarmProcessConfig, this.mCurChTotal);
                     nextPage(triggerOfAlarm);
                 }
             } catch (JSONException unused) {
@@ -193,55 +193,55 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
     }
 
     public void refreshUi() {
-        JSONObject jSONObject = this.mAlarmRes;
-        if (jSONObject != null) {
+        JSONObject alarmConfig = this.mAlarmRes;
+        if (alarmConfig != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("EVEM");
-                if (jSONObject2 != null) {
-                    this.mMdaArr = jSONObject2.getJSONArray("MDA");
-                    JSONArray jSONArray = jSONObject2.getJSONArray("MDP");
-                    this.mMdpArr = jSONArray;
-                    JSONArray jSONArray2 = this.mMdaArr;
-                    if (jSONArray2 == null) {
+                JSONObject eventManagerConfig = alarmConfig.getJSONObject("EVEM");
+                if (eventManagerConfig != null) {
+                    this.mMdaArr = eventManagerConfig.getJSONArray("MDA");
+                    JSONArray motionDetectionParamArray = eventManagerConfig.getJSONArray("MDP");
+                    this.mMdpArr = motionDetectionParamArray;
+                    JSONArray motionDetectionAlarmArray = this.mMdaArr;
+                    if (motionDetectionAlarmArray == null) {
                         return;
                     }
-                    if (jSONArray != null) {
-                        if (jSONArray2.length() == this.mMdpArr.length()) {
+                    if (motionDetectionParamArray != null) {
+                        if (motionDetectionAlarmArray.length() == this.mMdpArr.length()) {
                             int length = this.mMdpArr.length();
                             this.mCurChTotal = length;
                             if (length > 0) {
-                                int i = this.mCurCh;
-                                if (i < length) {
-                                    this.mMdaObj = this.mMdaArr.getJSONObject(i);
-                                    JSONObject jSONObject3 = this.mMdpArr.getJSONObject(this.mCurCh);
-                                    this.mMdpObj = jSONObject3;
+                                int currentChannel = this.mCurCh;
+                                if (currentChannel < length) {
+                                    this.mMdaObj = this.mMdaArr.getJSONObject(currentChannel);
+                                    JSONObject motionDetectionConfig = this.mMdpArr.getJSONObject(this.mCurCh);
+                                    this.mMdpObj = motionDetectionConfig;
                                     if (this.mMdaObj == null) {
                                         return;
                                     }
-                                    if (jSONObject3 != null) {
+                                    if (motionDetectionConfig != null) {
                                         TextView textView = this.mTvCh;
                                         textView.setText("CH" + (this.mCurCh + 1));
                                         this.mListStrChannel.clear();
                                         this.mListIntChannel.clear();
-                                        int i2 = 0;
-                                        while (i2 < this.mCurChTotal) {
+                                        int channelDisplayIndex = 0;
+                                        while (channelDisplayIndex < this.mCurChTotal) {
                                             ArrayList<String> arrayList = this.mListStrChannel;
                                             StringBuilder sb = new StringBuilder();
                                             sb.append("CH");
-                                            i2++;
-                                            sb.append(i2);
+                                            channelDisplayIndex++;
+                                            sb.append(channelDisplayIndex);
                                             arrayList.add(sb.toString());
                                         }
                                         this.mListIntChannel.add(new Integer(this.mCurCh));
                                         this.mBtnEnable.setBackgroundResource(this.mMdpObj.getInt("EN") <= 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                                        int i3 = this.mMdpObj.getInt("SST");
+                                        int sensitivityIndex = this.mMdpObj.getInt("SST");
                                         this.mListStrSST.clear();
                                         this.mListIntSST.clear();
-                                        List<String> strDatas = getStrDatas(R.array.SensitivitySelector);
-                                        if (i3 >= 0 && i3 < strDatas.size()) {
-                                            this.mTvSst.setText(strDatas.get(i3));
-                                            this.mListStrSST.addAll(strDatas);
-                                            this.mListIntSST.add(new Integer(i3));
+                                        List<String> sensitivityLabels = getStrDatas(R.array.SensitivitySelector);
+                                        if (sensitivityIndex >= 0 && sensitivityIndex < sensitivityLabels.size()) {
+                                            this.mTvSst.setText(sensitivityLabels.get(sensitivityIndex));
+                                            this.mListStrSST.addAll(sensitivityLabels);
+                                            this.mListIntSST.add(new Integer(sensitivityIndex));
                                         }
                                     }
                                 }
@@ -256,21 +256,21 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("MDA", "?");
-            jSONObject2.put("MDP", "?");
-            jSONObject.put("EVEM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject requestRoot = new JSONObject();
+            JSONObject eventManagerConfig = new JSONObject();
+            eventManagerConfig.put("MDA", "?");
+            eventManagerConfig.put("MDP", "?");
+            requestRoot.put("EVEM", eventManagerConfig);
+            return requestRoot.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String jsonResponse) {
         try {
-            LogUtils.e("AlarmFragment", "getSuccess 1, result: " + str);
-            this.mAlarmRes = new JSONObject(str);
+            LogUtils.e("AlarmFragment", "getSuccess 1, result: " + jsonResponse);
+            this.mAlarmRes = new JSONObject(jsonResponse);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -278,11 +278,11 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mAlarmRes;
-        if (jSONObject == null) {
+        JSONObject alarmConfig = this.mAlarmRes;
+        if (alarmConfig == null) {
             return "";
         }
-        return jSONObject.toString();
+        return alarmConfig.toString();
     }
 
     public void setSuccess() {
@@ -293,83 +293,78 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
         toastFailure();
     }
 
-    public void updateDateForChannel(int i) {
-        if (this.mMdpArr != null && this.mCurCh != i) {
-            this.mCurCh = i;
+    public void updateDateForChannel(int channelIndex) {
+        if (this.mMdpArr != null && this.mCurCh != channelIndex) {
+            this.mCurCh = channelIndex;
             refreshUi();
         }
     }
 
-    public void updateDateForSST(int i) {
-        JSONObject jSONObject = this.mMdpObj;
-        if (jSONObject != null) {
+    public void updateDateForSST(int sensitivityIndex) {
+        JSONObject motionDetectionConfig = this.mMdpObj;
+        if (motionDetectionConfig != null) {
             try {
-                jSONObject.put("SST", i);
+                motionDetectionConfig.put("SST", sensitivityIndex);
                 NetPresenter.getDefault().setConfig(this);
             } catch (JSONException unused) {
             }
         }
     }
 
-    public void updateDateForCopy(List<Integer> list) {
-        String str;
-        String str2 = "APRO";
+    public void updateDateForCopy(List<Integer> selectedChannels) {
+        String alarmProcessKey = "APRO";
         LogUtils.e("DstOfDt", "AlarmFragment 0 ");
         if (this.mAlarmRes != null) {
             try {
-                JSONArray jSONArray = this.mMdaArr;
-                if (jSONArray == null) {
+                JSONArray motionDetectionAlarmArray = this.mMdaArr;
+                if (motionDetectionAlarmArray == null) {
                     return;
                 }
                 if (this.mMdpArr != null) {
-                    JSONObject jSONObject = jSONArray.getJSONObject(this.mCurCh);
-                    JSONObject jSONObject2 = this.mMdpArr.getJSONObject(this.mCurCh);
-                    if (jSONObject == null) {
+                    JSONObject sourceAlarmConfig = motionDetectionAlarmArray.getJSONObject(this.mCurCh);
+                    JSONObject sourceParamConfig = this.mMdpArr.getJSONObject(this.mCurCh);
+                    if (sourceAlarmConfig == null) {
                         return;
                     }
-                    if (jSONObject2 != null) {
-                        int i = 0;
-                        boolean z = false;
-                        while (i < list.size()) {
-                            int intValue = list.get(i).intValue();
-                            if (intValue != this.mCurCh || intValue <= this.mCurChTotal) {
-                                JSONObject jSONObject3 = new JSONObject(jSONObject.toString());
-                                JSONObject jSONObject4 = new JSONObject(jSONObject2.toString());
-                                JSONObject jSONObject5 = jSONObject3.getJSONObject(str2);
-                                if (jSONObject5 != null) {
-                                    JSONObject jSONObject6 = jSONObject5.getJSONObject("AR");
-                                    JSONObject jSONObject7 = jSONObject5.getJSONObject("SPS");
-                                    if (jSONObject6 != null) {
-                                        if (jSONObject7 != null) {
-                                            JSONObject jSONObject8 = this.mMdaArr.getJSONObject(intValue);
-                                            if (jSONObject8 != null) {
-                                                JSONObject jSONObject9 = jSONObject8.getJSONObject(str2);
-                                                if (jSONObject9 != null) {
-                                                    str = str2;
-                                                    JSONObject jSONObject10 = jSONObject9.getJSONObject("AR");
-                                                    JSONObject jSONObject11 = jSONObject9.getJSONObject("SPS");
-                                                    if (jSONObject10 != null) {
-                                                        if (jSONObject11 != null) {
-                                                            jSONObject6.put("CH", jSONObject10.get("CH"));
-                                                            jSONObject7.put("CH", jSONObject11.get("CH"));
-                                                            this.mMdaArr.put(intValue, jSONObject3);
-                                                            this.mMdpArr.put(intValue, jSONObject4);
-                                                            z = true;
+                    if (sourceParamConfig != null) {
+                        int selectedIndex = 0;
+                        boolean copiedAnyChannel = false;
+                        while (selectedIndex < selectedChannels.size()) {
+                            int targetChannel = selectedChannels.get(selectedIndex).intValue();
+                            if (targetChannel != this.mCurCh || targetChannel <= this.mCurChTotal) {
+                                JSONObject copiedAlarmConfig = new JSONObject(sourceAlarmConfig.toString());
+                                JSONObject copiedParamConfig = new JSONObject(sourceParamConfig.toString());
+                                JSONObject copiedProcessConfig = copiedAlarmConfig.getJSONObject(alarmProcessKey);
+                                if (copiedProcessConfig != null) {
+                                    JSONObject copiedAlarmRule = copiedProcessConfig.getJSONObject("AR");
+                                    JSONObject copiedSnapshotRule = copiedProcessConfig.getJSONObject("SPS");
+                                    if (copiedAlarmRule != null) {
+                                        if (copiedSnapshotRule != null) {
+                                            JSONObject targetAlarmConfig = this.mMdaArr.getJSONObject(targetChannel);
+                                            if (targetAlarmConfig != null) {
+                                                JSONObject targetProcessConfig = targetAlarmConfig.getJSONObject(alarmProcessKey);
+                                                if (targetProcessConfig != null) {
+                                                    JSONObject targetAlarmRule = targetProcessConfig.getJSONObject("AR");
+                                                    JSONObject targetSnapshotRule = targetProcessConfig.getJSONObject("SPS");
+                                                    if (targetAlarmRule != null) {
+                                                        if (targetSnapshotRule != null) {
+                                                            copiedAlarmRule.put("CH", targetAlarmRule.get("CH"));
+                                                            copiedSnapshotRule.put("CH", targetSnapshotRule.get("CH"));
+                                                            this.mMdaArr.put(targetChannel, copiedAlarmConfig);
+                                                            this.mMdpArr.put(targetChannel, copiedParamConfig);
+                                                            copiedAnyChannel = true;
                                                         }
                                                     }
-                                                    i++;
-                                                    str2 = str;
+                                                    selectedIndex++;
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                            str = str2;
-                            i++;
-                            str2 = str;
+                            selectedIndex++;
                         }
-                        if (z) {
+                        if (copiedAnyChannel) {
                             NetPresenter.getDefault().setConfig(this);
                         }
                     }
@@ -379,17 +374,17 @@ public class AlarmFragment extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForChannel")) {
-            if (list.size() > 0) {
-                updateDateForChannel(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForChannel")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForChannel(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForSST")) {
-            if (list.size() > 0) {
-                updateDateForSST(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForSST")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForSST(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForCopy") && list.size() > 0) {
-            updateDateForCopy(list);
+        } else if (fragmentTag.equals("SelectFragmentForCopy") && selectedIndexes.size() > 0) {
+            updateDateForCopy(selectedIndexes);
         }
     }
 }
