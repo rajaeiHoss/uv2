@@ -17,16 +17,16 @@ public final class PickerLayoutManager extends LinearLayoutManager {
     private final float mScale;
 
     public interface OnPickerListener {
-        void onPicked(RecyclerView recyclerView, int i);
+        void onPicked(RecyclerView recyclerView, int position);
     }
 
-    private PickerLayoutManager(Context context, int i, boolean z, int i2, float f, boolean z2) {
-        super(context, i, z);
+    private PickerLayoutManager(Context context, int orientation, boolean reverseLayout, int maxItem, float scale, boolean alphaEnabled) {
+        super(context, orientation, reverseLayout);
         this.mLinearSnapHelper = new LinearSnapHelper();
-        this.mMaxItem = i2;
-        this.mOrientation = i;
-        this.mAlpha = z2;
-        this.mScale = f;
+        this.mMaxItem = maxItem;
+        this.mOrientation = orientation;
+        this.mAlpha = alphaEnabled;
+        this.mScale = scale;
     }
 
     public void onAttachedToWindow(RecyclerView recyclerView) {
@@ -45,32 +45,32 @@ public final class PickerLayoutManager extends LinearLayoutManager {
         return this.mMaxItem == 0;
     }
 
-    public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int i, int i2) {
-        int chooseSize = RecyclerView.LayoutManager.chooseSize(i, getPaddingLeft() + getPaddingRight(), ViewCompat.getMinimumWidth(this.mRecyclerView));
-        int chooseSize2 = RecyclerView.LayoutManager.chooseSize(i2, getPaddingTop() + getPaddingBottom(), ViewCompat.getMinimumHeight(this.mRecyclerView));
+    public void onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec) {
+        int measuredWidth = RecyclerView.LayoutManager.chooseSize(widthSpec, getPaddingLeft() + getPaddingRight(), ViewCompat.getMinimumWidth(this.mRecyclerView));
+        int measuredHeight = RecyclerView.LayoutManager.chooseSize(heightSpec, getPaddingTop() + getPaddingBottom(), ViewCompat.getMinimumHeight(this.mRecyclerView));
         if (!(state.getItemCount() == 0 || this.mMaxItem == 0)) {
             View viewForPosition = recycler.getViewForPosition(0);
-            measureChildWithMargins(viewForPosition, i, i2);
-            int i3 = this.mOrientation;
-            if (i3 == 0) {
-                int measuredWidth = viewForPosition.getMeasuredWidth();
-                int i4 = ((this.mMaxItem - 1) / 2) * measuredWidth;
-                this.mRecyclerView.setPadding(i4, 0, i4, 0);
-                chooseSize = measuredWidth * this.mMaxItem;
-            } else if (i3 == 1) {
-                int measuredHeight = viewForPosition.getMeasuredHeight();
-                int i5 = ((this.mMaxItem - 1) / 2) * measuredHeight;
-                this.mRecyclerView.setPadding(0, i5, 0, i5);
-                chooseSize2 = measuredHeight * this.mMaxItem;
+            measureChildWithMargins(viewForPosition, widthSpec, heightSpec);
+            int orientation = this.mOrientation;
+            if (orientation == 0) {
+                int itemWidth = viewForPosition.getMeasuredWidth();
+                int horizontalPadding = ((this.mMaxItem - 1) / 2) * itemWidth;
+                this.mRecyclerView.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+                measuredWidth = itemWidth * this.mMaxItem;
+            } else if (orientation == 1) {
+                int itemHeight = viewForPosition.getMeasuredHeight();
+                int verticalPadding = ((this.mMaxItem - 1) / 2) * itemHeight;
+                this.mRecyclerView.setPadding(0, verticalPadding, 0, verticalPadding);
+                measuredHeight = itemHeight * this.mMaxItem;
             }
         }
-        setMeasuredDimension(chooseSize, chooseSize2);
+        setMeasuredDimension(measuredWidth, measuredHeight);
     }
 
-    public void onScrollStateChanged(int i) {
+    public void onScrollStateChanged(int newState) {
         OnPickerListener onPickerListener;
-        super.onScrollStateChanged(i);
-        if (i == 0 && (onPickerListener = this.mListener) != null) {
+        super.onScrollStateChanged(newState);
+        if (newState == 0 && (onPickerListener = this.mListener) != null) {
             onPickerListener.onPicked(this.mRecyclerView, getPickedPosition());
         }
     }
@@ -78,50 +78,50 @@ public final class PickerLayoutManager extends LinearLayoutManager {
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
         super.onLayoutChildren(recycler, state);
         if (getItemCount() >= 0 && !state.isPreLayout()) {
-            int i = this.mOrientation;
-            if (i == 0) {
+            int orientation = this.mOrientation;
+            if (orientation == 0) {
                 scaleHorizontalChildView();
-            } else if (i == 1) {
+            } else if (orientation == 1) {
                 scaleVerticalChildView();
             }
         }
     }
 
-    public int scrollHorizontallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
         scaleHorizontalChildView();
-        return super.scrollHorizontallyBy(i, recycler, state);
+        return super.scrollHorizontallyBy(dx, recycler, state);
     }
 
-    public int scrollVerticallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
         scaleVerticalChildView();
-        return super.scrollVerticallyBy(i, recycler, state);
+        return super.scrollVerticallyBy(dy, recycler, state);
     }
 
     private void scaleHorizontalChildView() {
-        float width = ((float) getWidth()) / 2.0f;
-        for (int i = 0; i < getChildCount(); i++) {
-            View childAt = getChildAt(i);
-            if (childAt != null) {
-                float min = ((((1.0f - this.mScale) * -1.0f) * Math.min(width, Math.abs(width - (((float) (getDecoratedLeft(childAt) + getDecoratedRight(childAt))) / 2.0f)))) / width) + 1.0f;
-                childAt.setScaleX(min);
-                childAt.setScaleY(min);
+        float horizontalCenter = ((float) getWidth()) / 2.0f;
+        for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+            View childView = getChildAt(childIndex);
+            if (childView != null) {
+                float childScale = ((((1.0f - this.mScale) * -1.0f) * Math.min(horizontalCenter, Math.abs(horizontalCenter - (((float) (getDecoratedLeft(childView) + getDecoratedRight(childView))) / 2.0f)))) / horizontalCenter) + 1.0f;
+                childView.setScaleX(childScale);
+                childView.setScaleY(childScale);
                 if (this.mAlpha) {
-                    childAt.setAlpha(min);
+                    childView.setAlpha(childScale);
                 }
             }
         }
     }
 
     private void scaleVerticalChildView() {
-        float height = ((float) getHeight()) / 2.0f;
-        for (int i = 0; i < getChildCount(); i++) {
-            View childAt = getChildAt(i);
-            if (childAt != null) {
-                float min = ((((1.0f - this.mScale) * -1.0f) * Math.min(height, Math.abs(height - (((float) (getDecoratedTop(childAt) + getDecoratedBottom(childAt))) / 2.0f)))) / height) + 1.0f;
-                childAt.setScaleX(min);
-                childAt.setScaleY(min);
+        float verticalCenter = ((float) getHeight()) / 2.0f;
+        for (int childIndex = 0; childIndex < getChildCount(); childIndex++) {
+            View childView = getChildAt(childIndex);
+            if (childView != null) {
+                float childScale = ((((1.0f - this.mScale) * -1.0f) * Math.min(verticalCenter, Math.abs(verticalCenter - (((float) (getDecoratedTop(childView) + getDecoratedBottom(childView))) / 2.0f)))) / verticalCenter) + 1.0f;
+                childView.setScaleX(childScale);
+                childView.setScaleY(childScale);
                 if (this.mAlpha) {
-                    childAt.setAlpha(min);
+                    childView.setAlpha(childScale);
                 }
             }
         }
@@ -152,28 +152,28 @@ public final class PickerLayoutManager extends LinearLayoutManager {
             this.mContext = context;
         }
 
-        public Builder setOrientation(int i) {
-            this.mOrientation = i;
+        public Builder setOrientation(int orientation) {
+            this.mOrientation = orientation;
             return this;
         }
 
-        public Builder setReverseLayout(boolean z) {
-            this.mReverseLayout = z;
+        public Builder setReverseLayout(boolean reverseLayout) {
+            this.mReverseLayout = reverseLayout;
             return this;
         }
 
-        public Builder setMaxItem(int i) {
-            this.mMaxItem = i;
+        public Builder setMaxItem(int maxItem) {
+            this.mMaxItem = maxItem;
             return this;
         }
 
-        public Builder setScale(float f) {
-            this.mScale = f;
+        public Builder setScale(float scale) {
+            this.mScale = scale;
             return this;
         }
 
-        public Builder setAlpha(boolean z) {
-            this.mAlpha = z;
+        public Builder setAlpha(boolean alphaEnabled) {
+            this.mAlpha = alphaEnabled;
             return this;
         }
 
