@@ -29,17 +29,17 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
     public Timer mTimer = new Timer();
     public String mTitle;
 
-    public static PlayFragmentDown getInstance(String str, PlayActivity playActivity) {
+    public static PlayFragmentDown getInstance(String title, PlayActivity playActivity) {
         PlayFragmentDown playFragmentDown = new PlayFragmentDown();
-        playFragmentDown.mTitle = str;
+        playFragmentDown.mTitle = title;
         playFragmentDown.mActivity = playActivity;
         return playFragmentDown;
     }
 
     public View initView() {
-        View inflate = this.mInflater.inflate(R.layout.play_fragment_down, (ViewGroup) null);
-        this.mRootView = inflate;
-        this.mListView = (ListView) inflate.findViewById(R.id.down_list);
+        View rootView = this.mInflater.inflate(R.layout.play_fragment_down, (ViewGroup) null);
+        this.mRootView = rootView;
+        this.mListView = (ListView) rootView.findViewById(R.id.down_list);
         DownAdapter downAdapter = new DownAdapter();
         this.mDownAdapter = downAdapter;
         this.mListView.setAdapter(downAdapter);
@@ -50,7 +50,7 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
     /* access modifiers changed from: protected */
     public void initEvent() {
         this.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             }
         });
         TimerTask task = new TimerTask() {
@@ -63,28 +63,24 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
     }
 
     public int downNewFile(PlayFileInfo playFileInfo) {
-        int i;
-        int i2 = 0;
-        int i3 = 0;
-        while (true) {
-            if (i2 >= this.mFileList.size()) {
-                i = 0;
+        int downloadState = 0;
+        int pendingDownloadCount = 0;
+        for (int fileIndex = 0; fileIndex < this.mFileList.size(); fileIndex++) {
+            DownFileInfo existingFile = this.mFileList.get(fileIndex);
+            if (isSameFileName(playFileInfo.name, existingFile.name)) {
+                downloadState = existingFile.mIsDown ? 1 : 2;
                 break;
-            } else if (playFileInfo.name == this.mFileList.get(i2).name) {
-                i = this.mFileList.get(i2).mIsDown ? 1 : 2;
-            } else {
-                if (!this.mFileList.get(i2).mIsDown) {
-                    i3++;
-                }
-                if (i3 >= 5) {
-                    i = 3;
-                    break;
-                }
-                i2++;
+            }
+            if (!existingFile.mIsDown) {
+                pendingDownloadCount++;
+            }
+            if (pendingDownloadCount >= 5) {
+                downloadState = 3;
+                break;
             }
         }
-        if (i != 0) {
-            return i;
+        if (downloadState != 0) {
+            return downloadState;
         }
         DownFileInfo downFileInfo = new DownFileInfo();
         downFileInfo.mActivity = this.mActivity;
@@ -116,7 +112,7 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
         this.mDownAdapter.notifyDataSetChanged();
         this.mActivity.setViewPager(1);
         downFileInfo.startDown();
-        return i;
+        return downloadState;
     }
 
     public void DownFileCallback(int status, String fileName) {
@@ -128,7 +124,7 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
             while (true) {
                 if (index >= this.mFileList.size()) {
                     break;
-                } else if (fileName == this.mFileList.get(index).name) {
+                } else if (isSameFileName(fileName, this.mFileList.get(index).name)) {
                     targetIndex = index;
                     break;
                 } else {
@@ -143,15 +139,19 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
     }
 
     /* access modifiers changed from: private */
-    public void onFileOptClick(int i) {
-        if (i <= this.mFileList.size()) {
-            if (!this.mFileList.get(i).mIsDown) {
-                this.mFileList.get(i).stopDown(true);
+    public void onFileOptClick(int fileIndex) {
+        if (fileIndex >= 0 && fileIndex < this.mFileList.size()) {
+            if (!this.mFileList.get(fileIndex).mIsDown) {
+                this.mFileList.get(fileIndex).stopDown(true);
                 return;
             }
-            String format = String.format("%s(%s)", new Object[]{this.mFileList.get(i).mTitle, this.mFileList.get(i).mSubTitle});
-            new VideoPlayActivity.Builder().setVideoTitle(format).setVideoSource(this.mFileList.get(i).mDstFile).setActivityOrientation(1).start(this.mActivity);
+            String videoTitle = String.format("%s(%s)", new Object[]{this.mFileList.get(fileIndex).mTitle, this.mFileList.get(fileIndex).mSubTitle});
+            new VideoPlayActivity.Builder().setVideoTitle(videoTitle).setVideoSource(this.mFileList.get(fileIndex).mDstFile).setActivityOrientation(1).start(this.mActivity);
         }
+    }
+
+    private boolean isSameFileName(String leftFileName, String rightFileName) {
+        return leftFileName == null ? rightFileName == null : leftFileName.equals(rightFileName);
     }
 
     public class DownTag {
@@ -166,11 +166,11 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
     }
 
     public class DownAdapter extends BaseAdapter {
-        public Object getItem(int i) {
+        public Object getItem(int position) {
             return null;
         }
 
-        public long getItemId(int i) {
+        public long getItemId(int position) {
             return 0;
         }
 
@@ -184,49 +184,49 @@ public class PlayFragmentDown extends FragmentBase implements DownFileInterface 
             return PlayFragmentDown.this.mFileList.size();
         }
 
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(int position, View view, ViewGroup viewGroup) {
             DownTag downTag;
-            View view2;
-            int i2 = 100;
-            int i3 = R.drawable.icon_cancel;
+            View itemView;
+            int downloadPercent = 100;
+            int optionIcon = R.drawable.icon_cancel;
             if (view == null) {
                 downTag = new DownTag();
-                view2 = PlayFragmentDown.this.mInflater.inflate(R.layout.play_down_list_item, (ViewGroup) null);
-                downTag.tvTitle = (TextView) view2.findViewById(R.id.title_view);
-                downTag.tvSubTitle = (TextView) view2.findViewById(R.id.subtitle_view);
-                downTag.ivOpt = (ImageView) view2.findViewById(R.id.icon_opt);
+                itemView = PlayFragmentDown.this.mInflater.inflate(R.layout.play_down_list_item, (ViewGroup) null);
+                downTag.tvTitle = (TextView) itemView.findViewById(R.id.title_view);
+                downTag.tvSubTitle = (TextView) itemView.findViewById(R.id.subtitle_view);
+                downTag.ivOpt = (ImageView) itemView.findViewById(R.id.icon_opt);
                 downTag.ivOpt.setImageResource(R.drawable.icon_cancel);
                 downTag.ivOpt.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         PlayFragmentDown.this.onFileOptClick(((DownTag) view.getTag()).pos);
                     }
                 });
-                downTag.seekBar = (SeekBar) view2.findViewById(R.id.remote_playback_progressbar);
+                downTag.seekBar = (SeekBar) itemView.findViewById(R.id.remote_playback_progressbar);
                 downTag.seekBar.setMax(100);
                 downTag.seekBar.setProgress(0);
                 downTag.seekBar.setSecondaryProgress(0);
-                view2.setTag(downTag);
+                itemView.setTag(downTag);
             } else {
-                view2 = view;
+                itemView = view;
                 downTag = (DownTag) view.getTag();
             }
-            downTag.pos = i;
-            downTag.tvTitle.setText(PlayFragmentDown.this.mFileList.get(i).mTitle);
-            downTag.tvSubTitle.setText(PlayFragmentDown.this.mFileList.get(i).mSubTitle);
-            long j = (long) PlayFragmentDown.this.mFileList.get(i).mCur;
-            long j2 = (long) PlayFragmentDown.this.mFileList.get(i).mTotal;
-            if (j < 0 || j2 <= 0) {
-                i2 = 0;
-            } else if (j < j2) {
-                i2 = (int) ((j * 100) / j2);
+            downTag.pos = position;
+            downTag.tvTitle.setText(PlayFragmentDown.this.mFileList.get(position).mTitle);
+            downTag.tvSubTitle.setText(PlayFragmentDown.this.mFileList.get(position).mSubTitle);
+            long downloadedBytes = (long) PlayFragmentDown.this.mFileList.get(position).mCur;
+            long totalBytes = (long) PlayFragmentDown.this.mFileList.get(position).mTotal;
+            if (downloadedBytes < 0 || totalBytes <= 0) {
+                downloadPercent = 0;
+            } else if (downloadedBytes < totalBytes) {
+                downloadPercent = (int) ((downloadedBytes * 100) / totalBytes);
             }
-            downTag.seekBar.setProgress(i2);
-            if (PlayFragmentDown.this.mFileList.get(i).mIsDown) {
-                i3 = R.drawable.icon_play;
+            downTag.seekBar.setProgress(downloadPercent);
+            if (PlayFragmentDown.this.mFileList.get(position).mIsDown) {
+                optionIcon = R.drawable.icon_play;
             }
             downTag.ivOpt.setTag(downTag);
-            downTag.ivOpt.setImageResource(i3);
-            return view2;
+            downTag.ivOpt.setImageResource(optionIcon);
+            return itemView;
         }
     }
 }
