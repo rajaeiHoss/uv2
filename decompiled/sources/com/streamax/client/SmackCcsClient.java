@@ -40,9 +40,9 @@ public class SmackCcsClient {
     class GcmPacketExtension extends DefaultPacketExtension {
         String json;
 
-        public GcmPacketExtension(String str) {
+        public GcmPacketExtension(String jsonPayload) {
             super("gcm", SmackCcsClient.GCM_NAMESPACE);
-            this.json = str;
+            this.json = jsonPayload;
         }
 
         public String getJson() {
@@ -104,60 +104,60 @@ public class SmackCcsClient {
         return "m-" + Long.toString(random.nextLong());
     }
 
-    public void send(String str) {
-        this.connection.sendPacket(new GcmPacketExtension(str).toPacket());
+    public void send(String jsonPayload) {
+        this.connection.sendPacket(new GcmPacketExtension(jsonPayload).toPacket());
     }
 
-    public void handleIncomingDataMessage(Map<String, Object> map) {
-        String obj = map.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
-        String obj2 = map.get("category").toString();
-        Map map2 = (Map) map.get(DataPacketExtension.ELEMENT_NAME);
-        map2.put("ECHO", "Application: " + obj2);
-        send(createJsonMessage(obj, getRandomMessageId(), map2, "echo:CollapseKey", (Long) null, false));
+    public void handleIncomingDataMessage(Map<String, Object> messageMap) {
+        String from = messageMap.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
+        String category = messageMap.get("category").toString();
+        Map dataPayload = (Map) messageMap.get(DataPacketExtension.ELEMENT_NAME);
+        dataPayload.put("ECHO", "Application: " + category);
+        send(createJsonMessage(from, getRandomMessageId(), dataPayload, "echo:CollapseKey", (Long) null, false));
     }
 
-    public void handleAckReceipt(Map<String, Object> map) {
-        String obj = map.get("message_id").toString();
-        String obj2 = map.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
-        Logger logger2 = this.logger;
+    public void handleAckReceipt(Map<String, Object> messageMap) {
+        String messageId = messageMap.get("message_id").toString();
+        String from = messageMap.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
+        Logger clientLogger = this.logger;
         Level level = Level.INFO;
-        logger2.log(level, "handleAckReceipt() from: " + obj2 + ", messageId: " + obj);
+        clientLogger.log(level, "handleAckReceipt() from: " + from + ", messageId: " + messageId);
     }
 
-    public void handleNackReceipt(Map<String, Object> map) {
-        String obj = map.get("message_id").toString();
-        String obj2 = map.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
-        Logger logger2 = this.logger;
+    public void handleNackReceipt(Map<String, Object> messageMap) {
+        String messageId = messageMap.get("message_id").toString();
+        String from = messageMap.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString();
+        Logger clientLogger = this.logger;
         Level level = Level.INFO;
-        logger2.log(level, "handleNackReceipt() from: " + obj2 + ", messageId: " + obj);
+        clientLogger.log(level, "handleNackReceipt() from: " + from + ", messageId: " + messageId);
     }
 
-    public static String createJsonMessage(String str, String str2, Map<String, String> map, String str3, Long l, Boolean bool) {
-        HashMap hashMap = new HashMap();
-        hashMap.put("to", str);
-        if (str3 != null) {
-            hashMap.put("collapse_key", str3);
+    public static String createJsonMessage(String to, String messageId, Map<String, String> dataPayload, String collapseKey, Long timeToLive, Boolean delayWhileIdle) {
+        HashMap jsonMap = new HashMap();
+        jsonMap.put("to", to);
+        if (collapseKey != null) {
+            jsonMap.put("collapse_key", collapseKey);
         }
-        if (l != null) {
-            hashMap.put("time_to_live", l);
+        if (timeToLive != null) {
+            jsonMap.put("time_to_live", timeToLive);
         }
-        if (bool != null && bool.booleanValue()) {
-            hashMap.put("delay_while_idle", true);
+        if (delayWhileIdle != null && delayWhileIdle.booleanValue()) {
+            jsonMap.put("delay_while_idle", true);
         }
-        hashMap.put("message_id", str2);
-        hashMap.put(DataPacketExtension.ELEMENT_NAME, map);
-        return JSONValue.toJSONString(hashMap);
+        jsonMap.put("message_id", messageId);
+        jsonMap.put(DataPacketExtension.ELEMENT_NAME, dataPayload);
+        return JSONValue.toJSONString(jsonMap);
     }
 
-    public static String createJsonAck(String str, String str2) {
-        HashMap hashMap = new HashMap();
-        hashMap.put("message_type", "ack");
-        hashMap.put("to", str);
-        hashMap.put("message_id", str2);
-        return JSONValue.toJSONString(hashMap);
+    public static String createJsonAck(String to, String messageId) {
+        HashMap jsonMap = new HashMap();
+        jsonMap.put("message_type", "ack");
+        jsonMap.put("to", to);
+        jsonMap.put("message_id", messageId);
+        return JSONValue.toJSONString(jsonMap);
     }
 
-    public void connect(String str, String str2) throws XMPPException {
+    public void connect(String username, String password) throws XMPPException {
         ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(GCM_SERVER, (int) GCM_PORT);
         this.config = connectionConfiguration;
         connectionConfiguration.setSecurityMode(ConnectionConfiguration.SecurityMode.enabled);
@@ -179,8 +179,8 @@ public class SmackCcsClient {
                 SmackCcsClient.this.logger.log(Level.INFO, "Reconnection failed.. ", exc);
             }
 
-            public void reconnectingIn(int i) {
-                SmackCcsClient.this.logger.log(Level.INFO, "Reconnecting in %d secs", Integer.valueOf(i));
+            public void reconnectingIn(int seconds) {
+                SmackCcsClient.this.logger.log(Level.INFO, "Reconnecting in %d secs", Integer.valueOf(seconds));
             }
 
             public void connectionClosedOnError(Exception exc) {
@@ -193,29 +193,28 @@ public class SmackCcsClient {
         });
         this.connection.addPacketListener(new PacketListener() {
             public void processPacket(Packet packet) {
-                Logger logger = SmackCcsClient.this.logger;
+                Logger clientLogger = SmackCcsClient.this.logger;
                 Level level = Level.INFO;
-                logger.log(level, "Received: " + packet.toXML());
-                String json = ((GcmPacketExtension) ((Message) packet).getExtension(SmackCcsClient.GCM_NAMESPACE)).getJson();
+                clientLogger.log(level, "Received: " + packet.toXML());
+                String incomingJson = ((GcmPacketExtension) ((Message) packet).getExtension(SmackCcsClient.GCM_NAMESPACE)).getJson();
                 try {
-                    Map map = (Map) JSONValue.parseWithException(json);
-                    Object obj = map.get("message_type");
-                    if (obj == null) {
-                        SmackCcsClient.this.handleIncomingDataMessage(map);
-                        SmackCcsClient.this.send(SmackCcsClient.createJsonAck(map.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString(), map.get("message_id").toString()));
-                    } else if ("ack".equals(obj.toString())) {
-                        SmackCcsClient.this.handleAckReceipt(map);
-                    } else if ("nack".equals(obj.toString())) {
-                        SmackCcsClient.this.handleNackReceipt(map);
+                    Map messageMap = (Map) JSONValue.parseWithException(incomingJson);
+                    Object messageType = messageMap.get("message_type");
+                    if (messageType == null) {
+                        SmackCcsClient.this.handleIncomingDataMessage(messageMap);
+                        SmackCcsClient.this.send(SmackCcsClient.createJsonAck(messageMap.get(PrivacyItem.PrivacyRule.SUBSCRIPTION_FROM).toString(), messageMap.get("message_id").toString()));
+                    } else if ("ack".equals(messageType.toString())) {
+                        SmackCcsClient.this.handleAckReceipt(messageMap);
+                    } else if ("nack".equals(messageType.toString())) {
+                        SmackCcsClient.this.handleNackReceipt(messageMap);
                     } else {
-                        SmackCcsClient.this.logger.log(Level.WARNING, "Unrecognized message type (%s)", obj.toString());
+                        SmackCcsClient.this.logger.log(Level.WARNING, "Unrecognized message type (%s)", messageType.toString());
                     }
-                } catch (ParseException e) {
-                    Logger logger2 = SmackCcsClient.this.logger;
+                } catch (ParseException parseException) {
                     Level level2 = Level.SEVERE;
-                    logger2.log(level2, "Error parsing JSON " + json, e);
-                } catch (Exception e2) {
-                    SmackCcsClient.this.logger.log(Level.SEVERE, "Couldn't send echo.", e2);
+                    clientLogger.log(level2, "Error parsing JSON " + incomingJson, parseException);
+                } catch (Exception sendException) {
+                    SmackCcsClient.this.logger.log(Level.SEVERE, "Couldn't send echo.", sendException);
                 }
             }
         }, new PacketTypeFilter(Message.class));
@@ -224,7 +223,7 @@ public class SmackCcsClient {
                 SmackCcsClient.this.logger.log(Level.INFO, "Sent: {0}", packet.toXML());
             }
         }, new PacketTypeFilter(Message.class));
-        this.connection.login(str, str2);
+        this.connection.login(username, password);
     }
 
     public static void test() {
@@ -232,11 +231,11 @@ public class SmackCcsClient {
         try {
             smackCcsClient.connect("918132393478@gcm.googleapis.com", CommonUtilities.API_KEY);
             String randomMessageId = smackCcsClient.getRandomMessageId();
-            HashMap hashMap = new HashMap();
-            hashMap.put("Hello", "World");
-            hashMap.put("CCS", "Dummy Message");
-            hashMap.put("EmbeddedMessageId", randomMessageId);
-            smackCcsClient.send(createJsonMessage("RegistrationIdOfTheTargetDevice", randomMessageId, hashMap, "sample", Long.valueOf(NotificationOptions.SKIP_STEP_TEN_SECONDS_IN_MS), true));
+            HashMap dataPayload = new HashMap();
+            dataPayload.put("Hello", "World");
+            dataPayload.put("CCS", "Dummy Message");
+            dataPayload.put("EmbeddedMessageId", randomMessageId);
+            smackCcsClient.send(createJsonMessage("RegistrationIdOfTheTargetDevice", randomMessageId, dataPayload, "sample", Long.valueOf(NotificationOptions.SKIP_STEP_TEN_SECONDS_IN_MS), true));
         } catch (XMPPException e) {
             e.printStackTrace();
         }
