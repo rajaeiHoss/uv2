@@ -85,13 +85,13 @@ public class MainActivity extends TabActivity {
         SetTabWidgetBackground(0, true);
         this.mTabHost.setCurrentTab(0);
         this.mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            public void onTabChanged(String str) {
-                for (int i = 0; i < MainActivity.this.mTabWidget.getChildCount(); i++) {
-                    if (MainActivity.this.mTabHost.getCurrentTab() == i) {
-                        MainActivity.this.SetTabWidgetBackground(i, true);
+            public void onTabChanged(String tabId) {
+                for (int tabIndex = 0; tabIndex < MainActivity.this.mTabWidget.getChildCount(); tabIndex++) {
+                    if (MainActivity.this.mTabHost.getCurrentTab() == tabIndex) {
+                        MainActivity.this.SetTabWidgetBackground(tabIndex, true);
                     } else {
-                        MainActivity.this.mTabLinearLayout[i].setBackgroundColor(-1);
-                        MainActivity.this.SetTabWidgetBackground(i, false);
+                        MainActivity.this.mTabLinearLayout[tabIndex].setBackgroundColor(-1);
+                        MainActivity.this.SetTabWidgetBackground(tabIndex, false);
                     }
                 }
             }
@@ -105,14 +105,14 @@ public class MainActivity extends TabActivity {
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, MainActivity.this.mApp.mDevInfo, MainActivity.this.mApp);
                 int intValue = connDeviceProxy != null ? ((Integer) connDeviceProxy.get("errorcode")).intValue() : -1;
-                final int i = dvrNet.nChannelCount;
+                final int channelCount = dvrNet.nChannelCount;
                 if (intValue == 0) {
                     dvrNet.CloseDeviceHandle();
                 }
-                if (intValue == 0 && i > 1) {
+                if (intValue == 0 && channelCount > 1) {
                     MainActivity.this.mHandler.post(new Runnable() {
                         public void run() {
-                            MainActivity.this.mApp.mDevInfo.mChCounts = i;
+                            MainActivity.this.mApp.mDevInfo.mChCounts = channelCount;
                             EventBus.getDefault().post(MainActivity.this.mApp.mDevInfo);
                         }
                     });
@@ -131,9 +131,9 @@ public class MainActivity extends TabActivity {
     }
 
     /* access modifiers changed from: private */
-    public void SetTabWidgetBackground(int i, boolean z) {
-        ((ImageView) findViewById(this.TAB_IMAGE_ID[i])).setImageResource(z ? this.TAB_IMAGE_PRESSED[i] : this.TAB_IMAGE_NORMATL[i]);
-        ((TextView) findViewById(this.TAB_TEXT_ID[i])).setTextColor(z ? Color.argb(200, 41, Cea708CCParser.Const.CODE_C1_DF2, 231) : DayStyle.iColorBkg);
+    public void SetTabWidgetBackground(int tabIndex, boolean selected) {
+        ((ImageView) findViewById(this.TAB_IMAGE_ID[tabIndex])).setImageResource(selected ? this.TAB_IMAGE_PRESSED[tabIndex] : this.TAB_IMAGE_NORMATL[tabIndex]);
+        ((TextView) findViewById(this.TAB_TEXT_ID[tabIndex])).setTextColor(selected ? Color.argb(200, 41, Cea708CCParser.Const.CODE_C1_DF2, 231) : DayStyle.iColorBkg);
     }
 
     class UdtAncyncTask extends AsyncTask<Void, Void, Void> {
@@ -146,30 +146,30 @@ public class MainActivity extends TabActivity {
                 MainActivity.this.mApp.mWebService = new WebService(MyApp.LastServerHostName, MyApp.username, MyApp.password);
             }
             Map<String, String> GetServer = MainActivity.this.mApp.mWebService.GetServer();
-            String str = GetServer.get("nat_ip");
-            String str2 = GetServer.get("nat_port");
-            if (!(str == null || str2 == null)) {
-                MainActivity.this.mApp.mUdtServerIp = str;
-                MainActivity.this.mApp.mUdtServerPort = Integer.valueOf(str2).intValue();
+            String natServerIp = GetServer.get("nat_ip");
+            String natServerPort = GetServer.get("nat_port");
+            if (!(natServerIp == null || natServerPort == null)) {
+                MainActivity.this.mApp.mUdtServerIp = natServerIp;
+                MainActivity.this.mApp.mUdtServerPort = Integer.valueOf(natServerPort).intValue();
             }
-            String str3 = GetServer.get("event_ip");
-            String str4 = GetServer.get("event_port");
-            if (!(str3 == null || str4 == null)) {
-                MainActivity.this.mApp.mEventServerIp = str3;
-                MainActivity.this.mApp.mEventServerPort = Integer.valueOf(str4).intValue();
+            String eventServerIp = GetServer.get("event_ip");
+            String eventServerPort = GetServer.get("event_port");
+            if (!(eventServerIp == null || eventServerPort == null)) {
+                MainActivity.this.mApp.mEventServerIp = eventServerIp;
+                MainActivity.this.mApp.mEventServerPort = Integer.valueOf(eventServerPort).intValue();
             }
-            String str5 = GetServer.get("gt_ip");
-            String str6 = GetServer.get("gt_port");
-            if (!(str5 == null || str6 == null)) {
-                MainActivity.this.mApp.mGtServerIp = str5;
+            String gtServerIp = GetServer.get("gt_ip");
+            String gtServerPort = GetServer.get("gt_port");
+            if (!(gtServerIp == null || gtServerPort == null)) {
+                MainActivity.this.mApp.mGtServerIp = gtServerIp;
             }
-            String str7 = GetServer.get("msg_ip");
-            String str8 = GetServer.get("msg_port");
-            if (str7 == null || str8 == null) {
+            String messageServerIp = GetServer.get("msg_ip");
+            String messageServerPort = GetServer.get("msg_port");
+            if (messageServerIp == null || messageServerPort == null) {
                 return null;
             }
-            MainActivity.this.mApp.mMsgServerIp = str7;
-            MainActivity.this.mApp.mMsgServerPort = Integer.valueOf(str8).intValue();
+            MainActivity.this.mApp.mMsgServerIp = messageServerIp;
+            MainActivity.this.mApp.mMsgServerPort = Integer.valueOf(messageServerPort).intValue();
             return null;
         }
 
@@ -207,16 +207,16 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    public boolean onKeyDown(int i, KeyEvent keyEvent) {
-        if (i != 4) {
-            return super.onKeyDown(i, keyEvent);
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        if (keyCode != 4) {
+            return super.onKeyDown(keyCode, keyEvent);
         }
         if (ConfigFragment.mPopupWindow == null || !ConfigFragment.mPopupWindow.isShowing()) {
             new AlertDialog.Builder(this).setIcon(R.drawable.icon).setTitle(R.string.app_name).setMessage(R.string.confirm_exit).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                 }
             }).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                     MainActivity.this.finish();
                 }
             }).show();
@@ -232,10 +232,10 @@ public class MainActivity extends TabActivity {
         }
         if (ConfigFragment.mPopupWindow == null || !ConfigFragment.mPopupWindow.isShowing()) {
             new AlertDialog.Builder(this).setIcon(R.drawable.icon).setTitle(R.string.app_name).setMessage(R.string.confirm_exit).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                 }
             }).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                     MainActivity.this.finish();
                 }
             }).show();
@@ -246,8 +246,8 @@ public class MainActivity extends TabActivity {
     }
 
     /* access modifiers changed from: protected */
-    public void onActivityResult(int i, int i2, Intent intent) {
-        super.onActivityResult(i, i2, intent);
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     /* access modifiers changed from: protected */
