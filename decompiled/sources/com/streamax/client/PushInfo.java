@@ -20,40 +20,40 @@ public class PushInfo {
     public int nAlarmType = -1;
     public String time = "";
 
-    public PushInfo(String str) {
-        Log.v(TAG, "[PushInfo]message:" + str);
-        this.message = str;
+    public PushInfo(String pushMessage) {
+        Log.v(TAG, "[PushInfo]message:" + pushMessage);
+        this.message = pushMessage;
         getInfo();
     }
 
-    public PushInfo(String str, int i) {
-        Log.v(TAG, "[PushInfo]message:" + str);
-        this.message = str;
-        this.nAlarmType = i;
+    public PushInfo(String pushMessage, int alarmType) {
+        Log.v(TAG, "[PushInfo]message:" + pushMessage);
+        this.message = pushMessage;
+        this.nAlarmType = alarmType;
         getInfo();
     }
 
     public void getInfo() {
-        Date date;
-        String[] split = this.message.split("\n");
-        this.devicename = split[0].split(":")[0];
-        this.channel = Integer.valueOf(split[1].split(":")[1].split(",")[0]).intValue() - 1;
+        Date eventDate;
+        String[] messageLines = this.message.split("\n");
+        this.devicename = messageLines[0].split(":")[0];
+        this.channel = Integer.valueOf(messageLines[1].split(":")[1].split(",")[0]).intValue() - 1;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(split[2].substring(split[2].indexOf(58, 0) + 1));
+            eventDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(messageLines[2].substring(messageLines[2].indexOf(58, 0) + 1));
         } catch (ParseException e) {
             e.printStackTrace();
-            date = null;
+            eventDate = null;
         }
-        if (date != null) {
-            Calendar instance = Calendar.getInstance();
-            instance.setTime(date);
-            this.mYear = instance.get(1);
-            this.mMonth = instance.get(2) + 1;
-            this.mDay = instance.get(5);
-            this.mHour = instance.get(11);
-            this.mMinute = instance.get(12);
-            this.mSecond = instance.get(13);
-            this.time = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13))});
+        if (eventDate != null) {
+            Calendar eventCalendar = Calendar.getInstance();
+            eventCalendar.setTime(eventDate);
+            this.mYear = eventCalendar.get(1);
+            this.mMonth = eventCalendar.get(2) + 1;
+            this.mDay = eventCalendar.get(5);
+            this.mHour = eventCalendar.get(11);
+            this.mMinute = eventCalendar.get(12);
+            this.mSecond = eventCalendar.get(13);
+            this.time = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(eventCalendar.get(1)), Integer.valueOf(eventCalendar.get(2) + 1), Integer.valueOf(eventCalendar.get(5)), Integer.valueOf(eventCalendar.get(11)), Integer.valueOf(eventCalendar.get(12)), Integer.valueOf(eventCalendar.get(13))});
         }
         Log.v(TAG, "devicename:" + this.devicename);
         Log.v(TAG, "channel:" + this.channel);
@@ -61,19 +61,19 @@ public class PushInfo {
     }
 
     /* access modifiers changed from: package-private */
-    public void Print(String str) {
-        Log.v(str, "****************start**********************");
-        Log.v(str, "message = " + this.message);
-        Log.v(str, "devicename = " + this.devicename);
-        Log.v(str, "time = " + this.time);
-        Log.v(str, "mYear = " + this.mYear);
-        Log.v(str, "mMonth = " + this.mMonth);
-        Log.v(str, "mDay = " + this.mDay);
-        Log.v(str, "mHour = " + this.mHour);
-        Log.v(str, "mMinute = " + this.mMinute);
-        Log.v(str, "mSecond = " + this.mSecond);
-        Log.v(str, "channel = " + this.channel);
-        Log.v(str, "nAlarmType = " + this.nAlarmType);
-        Log.v(str, "***************end************************");
+    public void Print(String logTag) {
+        Log.v(logTag, "****************start**********************");
+        Log.v(logTag, "message = " + this.message);
+        Log.v(logTag, "devicename = " + this.devicename);
+        Log.v(logTag, "time = " + this.time);
+        Log.v(logTag, "mYear = " + this.mYear);
+        Log.v(logTag, "mMonth = " + this.mMonth);
+        Log.v(logTag, "mDay = " + this.mDay);
+        Log.v(logTag, "mHour = " + this.mHour);
+        Log.v(logTag, "mMinute = " + this.mMinute);
+        Log.v(logTag, "mSecond = " + this.mSecond);
+        Log.v(logTag, "channel = " + this.channel);
+        Log.v(logTag, "nAlarmType = " + this.nAlarmType);
+        Log.v(logTag, "***************end************************");
     }
 }
