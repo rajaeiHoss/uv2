@@ -27,25 +27,25 @@ public class LvVideoFrame extends FrameLayout {
     public boolean mbMax = false;
     public boolean mbPlay = false;
 
-    public LvVideoFrame(Context context, int i) {
+    public LvVideoFrame(Context context, int serial) {
         super(context);
         this.mContext = context;
-        this.mSearial = i;
+        this.mSearial = serial;
         LoadViews();
     }
 
-    public LvVideoFrame(Context context, int i, boolean z) {
+    public LvVideoFrame(Context context, int serial, boolean fullMode) {
         super(context);
         this.mContext = context;
-        this.mSearial = i;
-        this.mbFull = z;
+        this.mSearial = serial;
+        this.mbFull = fullMode;
         LoadViews();
     }
 
-    public LvVideoFrame(Context context, AttributeSet attributeSet, int i) {
+    public LvVideoFrame(Context context, AttributeSet attributeSet, int serial) {
         super(context, attributeSet);
         this.mContext = context;
-        this.mSearial = i;
+        this.mSearial = serial;
         LoadViews();
     }
 
@@ -53,10 +53,10 @@ public class LvVideoFrame extends FrameLayout {
         return this.mVideoView;
     }
 
-    public LvVideoFrame(Context context, AttributeSet attributeSet, int i, int i2) {
-        super(context, attributeSet, i);
+    public LvVideoFrame(Context context, AttributeSet attributeSet, int defStyleAttr, int serial) {
+        super(context, attributeSet, defStyleAttr);
         this.mContext = context;
-        this.mSearial = i2;
+        this.mSearial = serial;
         LoadViews();
     }
 
@@ -94,44 +94,44 @@ public class LvVideoFrame extends FrameLayout {
             this.mImgFull = imageView2;
             imageView2.setImageResource(R.drawable.full);
             this.mImgFull.setVisibility(0);
-            View.OnClickListener r1 = new View.OnClickListener() {
+            View.OnClickListener fullClickListener = new View.OnClickListener() {
                 public void onClick(View view) {
                     EventBus.getDefault().post(new ClickFullEvent(LvVideoFrame.this.getId()));
                 }
             };
-            this.mOnFullClickListener = r1;
-            this.mImgFull.setOnClickListener(r1);
+            this.mOnFullClickListener = fullClickListener;
+            this.mImgFull.setOnClickListener(fullClickListener);
             addView(this.mImgFull, layoutParams5);
         }
     }
 
-    public void showFull(boolean z) {
-        this.mImgFull.setVisibility(z ? 0 : 8);
+    public void showFull(boolean visible) {
+        this.mImgFull.setVisibility(visible ? 0 : 8);
     }
 
-    public void SetFocusState(boolean z) {
-        this.mbFocus = z;
-        this.mVideoView.setFocusState(z);
-        this.mCusImageView.setFocusState(z);
+    public void SetFocusState(boolean focused) {
+        this.mbFocus = focused;
+        this.mVideoView.setFocusState(focused);
+        this.mCusImageView.setFocusState(focused);
     }
 
-    public void SetPlayState(boolean z) {
-        this.mbPlay = z;
-        if (!z) {
+    public void SetPlayState(boolean playing) {
+        this.mbPlay = playing;
+        if (!playing) {
             ClearViews();
         }
     }
 
-    public void SetRecState(boolean z) {
-        this.mImgRec.setVisibility(z ? 0 : 4);
+    public void SetRecState(boolean recording) {
+        this.mImgRec.setVisibility(recording ? 0 : 4);
     }
 
-    public void SetBusyState(boolean z) {
-        this.mProcessBar.setVisibility(z ? 0 : 4);
+    public void SetBusyState(boolean busy) {
+        this.mProcessBar.setVisibility(busy ? 0 : 4);
     }
 
-    public void SetMax(boolean z) {
-        this.mbMax = z;
+    public void SetMax(boolean max) {
+        this.mbMax = max;
         postInvalidate();
     }
 
@@ -156,12 +156,12 @@ public class LvVideoFrame extends FrameLayout {
         this.mVideoView.setDigitalZoomIn(f);
     }
 
-    public void setDragState(boolean z) {
-        this.mVideoView.setDragState(z);
+    public void setDragState(boolean dragging) {
+        this.mVideoView.setDragState(dragging);
     }
 
-    public void setFatherW_H(int i, int i2, int i3, int i4, int i5, int i6) {
-        this.mVideoView.setFatherW_H(i, i2, i3, i4, i5, i6);
+    public void setFatherW_H(int startLeft, int startTop, int startRight, int startBottom, int initialWidth, int initialHeight) {
+        this.mVideoView.setFatherW_H(startLeft, startTop, startRight, startBottom, initialWidth, initialHeight);
     }
 
     public void onTouchMove(MotionEvent motionEvent) {
