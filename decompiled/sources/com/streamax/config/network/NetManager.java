@@ -41,12 +41,12 @@ public class NetManager {
         dvrNet = null;
     }
 
-    public void setUserRigth(String str, String str2, SuperListener.SetConfigListener setConfigListener) {
-        executor.execute(new SetUserRigthTask(str, str2, setConfigListener));
+    public void setUserRigth(String username, String userRight, SuperListener.SetConfigListener setConfigListener) {
+        executor.execute(new SetUserRigthTask(username, userRight, setConfigListener));
     }
 
-    public void setRestoreDefault3(byte[] bArr, int i, SuperListener.SetConfigListener setConfigListener) {
-        executor.execute(new SetRestoreDefault(bArr, i, setConfigListener));
+    public void setRestoreDefault3(byte[] paramBitArray, int length, SuperListener.SetConfigListener setConfigListener) {
+        executor.execute(new SetRestoreDefault(paramBitArray, length, setConfigListener));
     }
 
     public void rebootDev(SuperListener.SetConfigListener setConfigListener) {
@@ -58,9 +58,9 @@ public class NetManager {
         public SuperListener.SetConfigListener mListener;
         public byte[] mParamBitArray;
 
-        public SetRestoreDefault(byte[] bArr, int i, SuperListener.SetConfigListener setConfigListener) {
-            this.mParamBitArray = bArr;
-            this.mLength = i;
+        public SetRestoreDefault(byte[] paramBitArray, int length, SuperListener.SetConfigListener setConfigListener) {
+            this.mParamBitArray = paramBitArray;
+            this.mLength = length;
             this.mListener = setConfigListener;
         }
 
@@ -97,10 +97,10 @@ public class NetManager {
                 });
                 return;
             }
-            final int SendCtrlCommand = NetManager.dvrNet.SendCtrlCommand(0);
+            final int commandResult = NetManager.dvrNet.SendCtrlCommand(0);
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (SendCtrlCommand == 0) {
+                    if (commandResult == 0) {
                         RebootDevTask.this.mListener.onSuccess();
                     } else {
                         RebootDevTask.this.mListener.onFailure();
@@ -110,17 +110,17 @@ public class NetManager {
         }
     }
 
-    public void formatStorage(int i, SuperListener.SetConfigListener setConfigListener) {
-        executor.execute(new FormatStorageTask(i, setConfigListener));
+    public void formatStorage(int storageIndex, SuperListener.SetConfigListener setConfigListener) {
+        executor.execute(new FormatStorageTask(storageIndex, setConfigListener));
     }
 
     public class FormatStorageTask implements Runnable {
         public int mIndex;
         public SuperListener.SetConfigListener mListener;
 
-        public FormatStorageTask(int i, SuperListener.SetConfigListener setConfigListener) {
+        public FormatStorageTask(int storageIndex, SuperListener.SetConfigListener setConfigListener) {
             this.mListener = setConfigListener;
-            this.mIndex = i;
+            this.mIndex = storageIndex;
         }
 
         public void run() {
@@ -132,10 +132,10 @@ public class NetManager {
                 });
                 return;
             }
-            final int FormatStorage = NetManager.dvrNet.FormatStorage(this.mIndex);
+            final int formatResult = NetManager.dvrNet.FormatStorage(this.mIndex);
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (FormatStorage == 0) {
+                    if (formatResult == 0) {
                         FormatStorageTask.this.mListener.onSuccess();
                     } else {
                         FormatStorageTask.this.mListener.onFailure();
@@ -150,9 +150,9 @@ public class NetManager {
         public String mUserRigth;
         public String mUsername;
 
-        public SetUserRigthTask(String str, String str2, SuperListener.SetConfigListener setConfigListener) {
-            this.mUsername = str;
-            this.mUserRigth = str2;
+        public SetUserRigthTask(String username, String userRight, SuperListener.SetConfigListener setConfigListener) {
+            this.mUsername = username;
+            this.mUserRigth = userRight;
             this.mListener = setConfigListener;
         }
 
@@ -174,16 +174,16 @@ public class NetManager {
         }
     }
 
-    public void getUserRigth(String str, SuperListener.GetConfigListener getConfigListener) {
-        executor.execute(new GetUserRigthTask(str, getConfigListener));
+    public void getUserRigth(String request, SuperListener.GetConfigListener getConfigListener) {
+        executor.execute(new GetUserRigthTask(request, getConfigListener));
     }
 
     public class GetUserRigthTask implements Runnable {
         public SuperListener.GetConfigListener mListener;
         public String mRequest;
 
-        public GetUserRigthTask(String str, SuperListener.GetConfigListener getConfigListener) {
-            this.mRequest = str;
+        public GetUserRigthTask(String request, SuperListener.GetConfigListener getConfigListener) {
+            this.mRequest = request;
             this.mListener = getConfigListener;
         }
 
@@ -197,11 +197,11 @@ public class NetManager {
                 return;
             }
             this.mRequest = JsonUtils.getUpJsonString(this.mRequest);
-            final String GetUserRigth = NetManager.dvrNet.GetUserRigth(this.mRequest);
+            final String userRightResponse = NetManager.dvrNet.GetUserRigth(this.mRequest);
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (!TextUtils.isEmpty(GetUserRigth)) {
-                        GetUserRigthTask.this.mListener.onSuccess(GetUserRigth);
+                    if (!TextUtils.isEmpty(userRightResponse)) {
+                        GetUserRigthTask.this.mListener.onSuccess(userRightResponse);
                     } else {
                         GetUserRigthTask.this.mListener.onFailure();
                     }
@@ -210,16 +210,16 @@ public class NetManager {
         }
     }
 
-    public void getConfig(String str, SuperListener.GetConfigListener getConfigListener) {
-        executor.execute(new GetConfigTask(str, getConfigListener));
+    public void getConfig(String request, SuperListener.GetConfigListener getConfigListener) {
+        executor.execute(new GetConfigTask(request, getConfigListener));
     }
 
     public class GetConfigTask implements Runnable {
         public SuperListener.GetConfigListener mListener;
         public String mRequest;
 
-        public GetConfigTask(String str, SuperListener.GetConfigListener getConfigListener) {
-            this.mRequest = str;
+        public GetConfigTask(String request, SuperListener.GetConfigListener getConfigListener) {
+            this.mRequest = request;
             this.mListener = getConfigListener;
         }
 
@@ -234,11 +234,11 @@ public class NetManager {
                 return;
             }
             this.mRequest = JsonUtils.getDownJsonString(this.mRequest);
-            final String GetConfig = NetManager.dvrNet.GetConfig(this.mRequest);
+            final String configResponse = NetManager.dvrNet.GetConfig(this.mRequest);
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (!TextUtils.isEmpty(GetConfig)) {
-                        GetConfigTask.this.mListener.onSuccess(GetConfig);
+                    if (!TextUtils.isEmpty(configResponse)) {
+                        GetConfigTask.this.mListener.onSuccess(configResponse);
                     } else {
                         GetConfigTask.this.mListener.onFailure();
                     }
@@ -247,16 +247,16 @@ public class NetManager {
         }
     }
 
-    public void setConfig(String str, SuperListener.SetConfigListener setConfigListener) {
-        executor.execute(new SetConfigTask(str, setConfigListener));
+    public void setConfig(String request, SuperListener.SetConfigListener setConfigListener) {
+        executor.execute(new SetConfigTask(request, setConfigListener));
     }
 
     public class SetConfigTask implements Runnable {
         public SuperListener.SetConfigListener mListener;
         public String mRequest;
 
-        public SetConfigTask(String str, SuperListener.SetConfigListener setConfigListener) {
-            this.mRequest = str;
+        public SetConfigTask(String request, SuperListener.SetConfigListener setConfigListener) {
+            this.mRequest = request;
             this.mListener = setConfigListener;
         }
 
@@ -270,10 +270,10 @@ public class NetManager {
                 return;
             }
             this.mRequest = JsonUtils.getUpJsonString(this.mRequest);
-            final int SetConfig = NetManager.dvrNet.SetConfig(this.mRequest);
+            final int setConfigResult = NetManager.dvrNet.SetConfig(this.mRequest);
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (SetConfig == 0) {
+                    if (setConfigResult == 0) {
                         SetConfigTask.this.mListener.onSuccess();
                     } else {
                         SetConfigTask.this.mListener.onFailure();
@@ -303,11 +303,11 @@ public class NetManager {
                 });
                 return;
             }
-            final String GetStorageInfo = NetManager.dvrNet.GetStorageInfo();
+            final String storageInfoResponse = NetManager.dvrNet.GetStorageInfo();
             NetManager.handler.post(new Runnable() {
                 public void run() {
-                    if (!TextUtils.isEmpty(GetStorageInfo)) {
-                        GetStorageInfoTask.this.mListener.onSuccess(GetStorageInfo);
+                    if (!TextUtils.isEmpty(storageInfoResponse)) {
+                        GetStorageInfoTask.this.mListener.onSuccess(storageInfoResponse);
                     } else {
                         GetStorageInfoTask.this.mListener.onFailure();
                     }
