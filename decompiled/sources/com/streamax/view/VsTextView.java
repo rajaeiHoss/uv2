@@ -22,23 +22,23 @@ public class VsTextView extends TextView {
         this.mResources = context.getResources();
     }
 
-    public VsTextView SetClickable(boolean z) {
-        setClickable(z);
+    public VsTextView SetClickable(boolean clickable) {
+        setClickable(clickable);
         return this;
     }
 
-    public VsTextView SetEnabled(boolean z) {
-        setEnabled(z);
+    public VsTextView SetEnabled(boolean enabled) {
+        setEnabled(enabled);
         return this;
     }
 
-    public VsTextView SetBackgroundColor(int i) {
-        setBackgroundColor(this.mResources.getColor(i));
+    public VsTextView SetBackgroundColor(int colorResId) {
+        setBackgroundColor(this.mResources.getColor(colorResId));
         return this;
     }
 
-    public VsTextView SetTextColor(int i) {
-        setTextColor(i);
+    public VsTextView SetTextColor(int color) {
+        setTextColor(color);
         return this;
     }
 
@@ -47,26 +47,26 @@ public class VsTextView extends TextView {
         return this;
     }
 
-    public VsTextView SetText(String str) {
-        setText(str);
+    public VsTextView SetText(String text) {
+        setText(text);
         return this;
     }
 
-    public VsTextView SetText(int i) {
-        setText(StringUtils.getString(Integer.valueOf(i)));
+    public VsTextView SetText(int stringResId) {
+        setText(StringUtils.getString(Integer.valueOf(stringResId)));
         return this;
     }
 
-    public VsTextView IsClickable(boolean z, boolean z2, int i) {
-        setClickable(z);
-        setEnabled(z2);
-        setBackgroundResource(i);
+    public VsTextView IsClickable(boolean clickable, boolean enabled, int backgroundResId) {
+        setClickable(clickable);
+        setEnabled(enabled);
+        setBackgroundResource(backgroundResId);
         return this;
     }
 
-    public VsTextView IsClickable(boolean z, boolean z2) {
-        setClickable(z);
-        setEnabled(z2);
+    public VsTextView IsClickable(boolean clickable, boolean enabled) {
+        setClickable(clickable);
+        setEnabled(enabled);
         return this;
     }
 
@@ -75,8 +75,9 @@ public class VsTextView extends TextView {
         return this;
     }
 
-    public VsTextView SetSelected(boolean z) {
-        setSelected(z);
+    public VsTextView SetSelected(boolean selected) {
+        this.mIsSelected = selected;
+        setSelected(selected);
         return this;
     }
 
@@ -84,8 +85,8 @@ public class VsTextView extends TextView {
         return this.mIsSelected;
     }
 
-    public VsTextView SetDrawableRight(int i) {
-        setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, AppProxy.getDrawable(i), (Drawable) null);
+    public VsTextView SetDrawableRight(int drawableResId) {
+        setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, AppProxy.getDrawable(drawableResId), (Drawable) null);
         return this;
     }
 }
