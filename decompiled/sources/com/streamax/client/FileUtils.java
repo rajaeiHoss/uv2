@@ -21,26 +21,27 @@ public class FileUtils {
         public int size = 0;
     }
 
-    public int compare(Object obj, Object obj2) {
+    public int compare(Object left, Object right) {
         return 0;
     }
 
     public static void refreshFiles(LocalRecordFileList localRecordFileList) {
-        String[] list = new File(Configs.Key.RecordDirPath).list();
+        String[] fileNames = new File(Configs.Key.RecordDirPath).list();
         fileList.clear();
-        if (list != null) {
-            for (int i = 0; i < list.length; i++) {
-                FileEntry file2 = new FileEntry();
-                file2.name = list[i];
-                file2.bSelect = false;
-                file2.size = getFileSize(Configs.Key.RecordDirPath + list[i]);
-                fileList.add(file2);
+        count = 0;
+        if (fileNames != null) {
+            for (int fileIndex = 0; fileIndex < fileNames.length; fileIndex++) {
+                FileEntry fileEntry = new FileEntry();
+                fileEntry.name = fileNames[fileIndex];
+                fileEntry.bSelect = false;
+                fileEntry.size = getFileSize(Configs.Key.RecordDirPath + fileNames[fileIndex]);
+                fileList.add(fileEntry);
             }
         }
     }
 
-    public static int getFileSize(String str) {
-        return (int) new File(str).length();
+    public static int getFileSize(String filePath) {
+        return (int) new File(filePath).length();
     }
 
     public static void deleteSelectItems() {
@@ -54,12 +55,12 @@ public class FileUtils {
         }
     }
 
-    public static void setCheckState(int i, boolean z) {
-        if (i <= fileList.size()) {
-            FileEntry file2 = fileList.get(i);
-            if (file2.bSelect != z) {
-                file2.bSelect = z;
-                if (z) {
+    public static void setCheckState(int fileIndex, boolean selected) {
+        if (fileIndex >= 0 && fileIndex < fileList.size()) {
+            FileEntry fileEntry = fileList.get(fileIndex);
+            if (fileEntry.bSelect != selected) {
+                fileEntry.bSelect = selected;
+                if (selected) {
                     count++;
                 } else {
                     count--;
@@ -80,19 +81,19 @@ public class FileUtils {
         return list.size();
     }
 
-    public static Map<String, Object> getAt(int i) {
-        if (i > fileList.size()) {
+    public static Map<String, Object> getAt(int fileIndex) {
+        if (fileIndex < 0 || fileIndex >= fileList.size()) {
             return null;
         }
         HashMap hashMap = new HashMap();
-        String str = fileList.get(i).name;
-        String format = String.format("%s:%s-%s-%s %s:%s:%s %s:%s", new Object[]{StringUtils.getString(Integer.valueOf(R.string.time)), str.substring(0, 4), str.substring(4, 6), str.substring(6, 8), str.substring(8, 10), str.substring(10, 12), str.substring(12, 14), StringUtils.getString(Integer.valueOf(R.string.channel)), str.substring(14, 16)});
-        String format2 = String.format("%s:%d K", new Object[]{StringUtils.getString(Integer.valueOf(R.string.size)), Integer.valueOf(fileList.get(i).size / 1000)});
-        hashMap.put("filename", str);
-        hashMap.put("info", format);
-        hashMap.put("path", Configs.Key.RecordDirPath + str);
-        hashMap.put("size", format2);
-        hashMap.put("select", Boolean.valueOf(fileList.get(i).bSelect));
+        String fileName = fileList.get(fileIndex).name;
+        String infoText = String.format("%s:%s-%s-%s %s:%s:%s %s:%s", new Object[]{StringUtils.getString(Integer.valueOf(R.string.time)), fileName.substring(0, 4), fileName.substring(4, 6), fileName.substring(6, 8), fileName.substring(8, 10), fileName.substring(10, 12), fileName.substring(12, 14), StringUtils.getString(Integer.valueOf(R.string.channel)), fileName.substring(14, 16)});
+        String sizeText = String.format("%s:%d K", new Object[]{StringUtils.getString(Integer.valueOf(R.string.size)), Integer.valueOf(fileList.get(fileIndex).size / 1000)});
+        hashMap.put("filename", fileName);
+        hashMap.put("info", infoText);
+        hashMap.put("path", Configs.Key.RecordDirPath + fileName);
+        hashMap.put("size", sizeText);
+        hashMap.put("select", Boolean.valueOf(fileList.get(fileIndex).bSelect));
         return hashMap;
     }
 }
