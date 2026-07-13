@@ -9,8 +9,8 @@ public class OperateDevInfoBean {
         return this.OPERATE_DEV;
     }
 
-    public void setOPERATE_DEV(List<OPERATEDEVBean> list) {
-        this.OPERATE_DEV = list;
+    public void setOPERATE_DEV(List<OPERATEDEVBean> operateDevices) {
+        this.OPERATE_DEV = operateDevices;
     }
 
     public static class OPERATEDEVBean {
@@ -28,72 +28,72 @@ public class OperateDevInfoBean {
             return this.OPERATE_TYPE;
         }
 
-        public void setOPERATE_TYPE(String str) {
-            this.OPERATE_TYPE = str;
+        public void setOPERATE_TYPE(String operateType) {
+            this.OPERATE_TYPE = operateType;
         }
 
         public String getDEV_ID() {
             return this.DEV_ID;
         }
 
-        public void setDEV_ID(String str) {
-            this.DEV_ID = str;
+        public void setDEV_ID(String deviceId) {
+            this.DEV_ID = deviceId;
         }
 
         public String getDEV_IP() {
             return this.DEV_IP;
         }
 
-        public void setDEV_IP(String str) {
-            this.DEV_IP = str;
+        public void setDEV_IP(String deviceIp) {
+            this.DEV_IP = deviceIp;
         }
 
         public int getDEV_PORT() {
             return this.DEV_PORT;
         }
 
-        public void setDEV_PORT(int i) {
-            this.DEV_PORT = i;
+        public void setDEV_PORT(int devicePort) {
+            this.DEV_PORT = devicePort;
         }
 
         public String getDEV_SERIAL() {
             return this.DEV_SERIAL;
         }
 
-        public void setDEV_SERIAL(String str) {
-            this.DEV_SERIAL = str;
+        public void setDEV_SERIAL(String deviceSerial) {
+            this.DEV_SERIAL = deviceSerial;
         }
 
         public String getDEV_USERNAME() {
             return this.DEV_USERNAME;
         }
 
-        public void setDEV_USERNAME(String str) {
-            this.DEV_USERNAME = str;
+        public void setDEV_USERNAME(String deviceUsername) {
+            this.DEV_USERNAME = deviceUsername;
         }
 
         public String getDEV_PASSWORD() {
             return this.DEV_PASSWORD;
         }
 
-        public void setDEV_PASSWORD(String str) {
-            this.DEV_PASSWORD = str;
+        public void setDEV_PASSWORD(String devicePassword) {
+            this.DEV_PASSWORD = devicePassword;
         }
 
         public String getDEV_TYPE() {
             return this.DEV_TYPE;
         }
 
-        public void setDEV_TYPE(String str) {
-            this.DEV_TYPE = str;
+        public void setDEV_TYPE(String deviceType) {
+            this.DEV_TYPE = deviceType;
         }
 
         public int getDEV_LAST_LINKTYPE() {
             return this.DEV_LAST_LINKTYPE;
         }
 
-        public void setDEV_LAST_LINKTYPE(int i) {
-            this.DEV_LAST_LINKTYPE = i;
+        public void setDEV_LAST_LINKTYPE(int lastLinkType) {
+            this.DEV_LAST_LINKTYPE = lastLinkType;
         }
     }
 }
