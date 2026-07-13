@@ -93,10 +93,10 @@ public class MyApp extends Application {
     }
 
     public String getLocalMacAddress() {
-        String str = new String("00-00-00-00-00-00");
+        String defaultMacAddress = new String("00-00-00-00-00-00");
         WifiManager wifiManager = (WifiManager) getSystemService(Configs.Key.WifiStatus);
         if (wifiManager == null) {
-            return str;
+            return defaultMacAddress;
         }
         WifiInfo connectionInfo = wifiManager.getConnectionInfo();
         if (connectionInfo == null) {
@@ -104,10 +104,10 @@ public class MyApp extends Application {
         }
         String macAddress = connectionInfo.getMacAddress();
         if (macAddress == null) {
-            return str;
+            return defaultMacAddress;
         }
         String replace = macAddress.replace(":", "-");
-        return replace.length() > 0 ? replace : str;
+        return replace.length() > 0 ? replace : defaultMacAddress;
     }
 
     public void ReadConfig() {
@@ -134,22 +134,22 @@ public class MyApp extends Application {
         sharedPreferences.edit().putInt("endtime", this.mEndTime).commit();
     }
 
-    public void writeuser(boolean z, int i, String str, String str2, String str3) {
+    public void writeuser(boolean rememberUser, int loginMode, String serverIp, String userName, String userPassword) {
         SharedPreferences sharedPreferences = getSharedPreferences(UserID.ELEMENT_NAME, 0);
-        sharedPreferences.edit().putBoolean("remmber", z).commit();
-        if (i == 0) {
+        sharedPreferences.edit().putBoolean("remmber", rememberUser).commit();
+        if (loginMode == 0) {
             return;
         }
-        if (!z) {
+        if (!rememberUser) {
             sharedPreferences.edit().remove("serverip").remove("username").remove("password").commit();
             return;
         }
-        if (str != null && str.length() > 0) {
-            sharedPreferences.edit().putString("serverip", str).commit();
+        if (serverIp != null && serverIp.length() > 0) {
+            sharedPreferences.edit().putString("serverip", serverIp).commit();
         }
-        if (str2 != null && str2.length() > 0) {
-            sharedPreferences.edit().putString("username", str2).commit();
-            sharedPreferences.edit().putString("password", str3).commit();
+        if (userName != null && userName.length() > 0) {
+            sharedPreferences.edit().putString("username", userName).commit();
+            sharedPreferences.edit().putString("password", userPassword).commit();
         }
     }
 
