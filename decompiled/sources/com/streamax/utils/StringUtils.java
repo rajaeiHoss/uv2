@@ -13,30 +13,30 @@ public class StringUtils {
     public String mFormat;
     public final Map<String, Object> tags = new LinkedHashMap();
 
-    public StringUtils(String str) {
-        this.mFormat = str;
+    public StringUtils(String format) {
+        this.mFormat = format;
     }
 
-    public static StringUtils from(String str) {
-        return new StringUtils(str);
+    public static StringUtils from(String format) {
+        return new StringUtils(format);
     }
 
-    public StringUtils with(String str, Object obj) {
+    public StringUtils with(String tagName, Object value) {
         Map<String, Object> map = this.tags;
-        map.put("\\{" + str + "\\}", obj);
+        map.put("\\{" + tagName + "\\}", value);
         return this;
     }
 
     public String format() {
-        String str = this.mFormat;
-        for (Map.Entry next : this.tags.entrySet()) {
-            str = str.replaceAll((String) next.getKey(), next.getValue().toString());
+        String formattedText = this.mFormat;
+        for (Map.Entry<String, Object> tagEntry : this.tags.entrySet()) {
+            formattedText = formattedText.replaceAll(tagEntry.getKey(), tagEntry.getValue().toString());
         }
-        return str;
+        return formattedText;
     }
 
-    public static String formatBaseOnChina(String str, Object... objArr) {
-        return String.format(Locale.getDefault(), str, objArr);
+    public static String formatBaseOnChina(String format, Object... args) {
+        return String.format(Locale.getDefault(), format, args);
     }
 
     public static <T> String getString(T t) {
@@ -72,26 +72,26 @@ public class StringUtils {
         }
     }
 
-    public static List<String> getStrDatas(int i) {
-        return Arrays.asList(AppProxy.getResources().getStringArray(i));
+    public static List<String> getStrDatas(int arrayResId) {
+        return Arrays.asList(AppProxy.getResources().getStringArray(arrayResId));
     }
 
-    public static List<Integer> getIntDatas(int i) {
-        int[] intArray = AppProxy.getResources().getIntArray(i);
-        ArrayList arrayList = new ArrayList();
+    public static List<Integer> getIntDatas(int arrayResId) {
+        int[] intArray = AppProxy.getResources().getIntArray(arrayResId);
+        ArrayList<Integer> arrayList = new ArrayList<>();
         for (int valueOf : intArray) {
             arrayList.add(Integer.valueOf(valueOf));
         }
         return arrayList;
     }
 
-    public static int getInt(int i) {
-        return AppProxy.getResources().getInteger(i);
+    public static int getInt(int intResId) {
+        return AppProxy.getResources().getInteger(intResId);
     }
 
-    public static Boolean isNumber(String str) {
+    public static Boolean isNumber(String value) {
         try {
-            return Boolean.valueOf(Pattern.compile("[0-9]*").matcher(str).matches());
+            return Boolean.valueOf(Pattern.compile("[0-9]*").matcher(value).matches());
         } catch (Exception unused) {
             return false;
         }
