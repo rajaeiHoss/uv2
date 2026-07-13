@@ -120,10 +120,10 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
                         }
                         return;
                     case R.id.local_playback_controlbar_fast /*2131362535*/:
-                        int i2 = LocalPlaybackActivity.this.mSpeed;
-                        if (i2 == -2) {
+                        int currentFastSpeed = LocalPlaybackActivity.this.mSpeed;
+                        if (currentFastSpeed == -2) {
                             LocalPlaybackActivity.this.mSpeed = 1;
-                        } else if (i2 == 1) {
+                        } else if (currentFastSpeed == 1) {
                             LocalPlaybackActivity.this.mSpeed = 2;
                         }
                         LocalPlaybackActivity.this.mtvSpeed.setText(String.format("%dX", new Object[]{Integer.valueOf(LocalPlaybackActivity.this.mSpeed)}));
@@ -153,10 +153,10 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
                         }
                         return;
                     case R.id.local_playback_controlbar_slow /*2131362537*/:
-                        int i3 = LocalPlaybackActivity.this.mSpeed;
-                        if (i3 == 1) {
+                        int currentSlowSpeed = LocalPlaybackActivity.this.mSpeed;
+                        if (currentSlowSpeed == 1) {
                             LocalPlaybackActivity.this.mSpeed = -2;
-                        } else if (i3 == 2) {
+                        } else if (currentSlowSpeed == 2) {
                             LocalPlaybackActivity.this.mSpeed = 1;
                         }
                         LocalPlaybackActivity.this.mtvSpeed.setText(String.format("%dX", new Object[]{Integer.valueOf(LocalPlaybackActivity.this.mSpeed)}));
@@ -192,7 +192,7 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
         this.mImageCapture.setOnClickListener(this.mOnclickListener);
         this.mImageSound.setOnClickListener(this.mOnclickListener);
         this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -213,20 +213,20 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
     }
 
     public List<Map<String, Object>> CaptureImage() {
-        String str = Environment.getExternalStorageDirectory() + "/streaming/capture/";
+        String capturePath = Environment.getExternalStorageDirectory() + "/streaming/capture/";
         Calendar instance = Calendar.getInstance();
         String format = String.format("%04d%02d%02d%02d%02d%02d", new Object[]{Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13))});
         ArrayList arrayList = new ArrayList();
         if (this.mAVStream != null) {
             HashMap hashMap = new HashMap();
-            String str2 = str + format + (Integer.toString(0) + ".bmp");
+            String captureFilePath = capturePath + format + (Integer.toString(0) + ".bmp");
             hashMap.put("channel", 0);
-            hashMap.put("path", str2);
-            long j = this.mhFileDecoder;
-            if (j == 0) {
+            hashMap.put("path", captureFilePath);
+            long fileDecoder = this.mhFileDecoder;
+            if (fileDecoder == 0) {
                 return null;
             }
-            if (this.mAVStream.AVCaptureImage(j, str2.getBytes()) == 0) {
+            if (this.mAVStream.AVCaptureImage(fileDecoder, captureFilePath.getBytes()) == 0) {
                 arrayList.add(hashMap);
             }
         }
@@ -247,37 +247,37 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
             int i = 17;
             linearLayout.setGravity(17);
             linearLayout.setBackgroundColor(Color.argb(200, 40, 40, 40));
-            int i2 = 0;
+            int zeroPadding = 0;
             linearLayout.setPadding(0, 0, 0, 0);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(-2, -2);
             layoutParams.width = MyApp.getScreenWidth();
             layoutParams.height = (MyApp.getScreenWidth() * 3) / 4;
-            int i3 = 0;
+            int rowIndex = 0;
             while (true) {
-                double d = (double) i3;
+                double row = (double) rowIndex;
                 double d2 = (double) size;
-                if (d < Math.sqrt(d2)) {
+                if (row < Math.sqrt(d2)) {
                     LinearLayout linearLayout2 = new LinearLayout(this.mContext);
-                    linearLayout2.setOrientation(i2);
+                    linearLayout2.setOrientation(zeroPadding);
                     linearLayout2.setGravity(i);
-                    linearLayout2.setPadding(i2, i2, i2, i2);
-                    int i4 = 0;
+                    linearLayout2.setPadding(zeroPadding, zeroPadding, zeroPadding, zeroPadding);
+                    int columnIndex = 0;
                     while (true) {
-                        double d3 = (double) i4;
-                        if (d3 >= Math.sqrt(d2)) {
+                        double column = (double) columnIndex;
+                        if (column >= Math.sqrt(d2)) {
                             break;
                         }
-                        String obj = list2.get((int) ((Math.sqrt(d2) * d) + d3)).get("path").toString();
+                        String obj = list2.get((int) ((Math.sqrt(d2) * row) + column)).get("path").toString();
                         ImageView imageView = new ImageView(this.mContext);
                         imageView.setImageBitmap(BitmapFactory.decodeFile(obj, options));
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                         linearLayout2.addView(imageView, layoutParams);
-                        i4++;
+                        columnIndex++;
                     }
                     linearLayout.addView(linearLayout2, layoutParams);
-                    i3++;
+                    rowIndex++;
                     i = 17;
-                    i2 = 0;
+                    zeroPadding = 0;
                 } else {
                     ((LinearLayout) this.mpopViewer.findViewById(R.id.preview_capture_imagegroup)).addView(linearLayout);
                     this.mPopupCapture = null;
@@ -309,7 +309,7 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
         }
     }
 
-    public void OpenFiles(String str) {
+    public void OpenFiles(String playbackFilePath) {
         AVStream aVStream = this.mAVStream;
         if (aVStream == null) {
             this.mAVStream = new AVStream();
@@ -320,7 +320,7 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
             this.mAudioTrack.SwitchChannels(0);
             this.mAVStream.SetFilePlaybackInterface(this);
             this.mAVStream.SetAudioInterface(this.mAudioTrack);
-            this.mhFileDecoder = this.mAVStream.AVOpenFileDecoder(str.getBytes());
+            this.mhFileDecoder = this.mAVStream.AVOpenFileDecoder(playbackFilePath.getBytes());
         } else if (this.mhFileDecoder != 0) {
             aVStream.StopPlay();
             this.mAVStream.AVCloseDecoder(this.mhFileDecoder);
@@ -361,12 +361,12 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
         }
     }
 
-    public void Seek(int i, int i2) {
+    public void Seek(int maxProgress, int progress) {
         AVStream aVStream = this.mAVStream;
         if (aVStream != null) {
-            long j = this.mhFileDecoder;
-            if (j != 0) {
-                aVStream.AVFileSeekPos(j, (i2 * 100) / i);
+            long fileDecoder = this.mhFileDecoder;
+            if (fileDecoder != 0) {
+                aVStream.AVFileSeekPos(fileDecoder, (progress * 100) / maxProgress);
             }
         }
     }
@@ -385,7 +385,7 @@ public class LocalPlaybackActivity extends Activity implements FilePlaybackInter
         if (configuration.orientation == 2) {
             i = 8;
         } else {
-            int i2 = configuration.orientation;
+            int currentOrientation = configuration.orientation;
         }
         findViewById(R.id.local_playback_title).setVisibility(i);
         findViewById(R.id.local_playback_progress).setVisibility(i);
