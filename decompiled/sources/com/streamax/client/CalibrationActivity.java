@@ -179,11 +179,11 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
 
     public void popMenu(View view, View view2) {
         new DisplayMetrics();
-        int i = (getResources().getDisplayMetrics().widthPixels / 3) + 40;
-        int i2 = this.mApp.mDevInfo.mChCounts * this.mMenuHeight;
+        int popupWidth = (getResources().getDisplayMetrics().widthPixels / 3) + 40;
+        int popupHeight = this.mApp.mDevInfo.mChCounts * this.mMenuHeight;
         PopupWindow popupWindow = this.popChannel;
         if (popupWindow == null) {
-            PopupWindow popupWindow2 = new PopupWindow(view, i, i2, true);
+            PopupWindow popupWindow2 = new PopupWindow(view, popupWidth, popupHeight, true);
             this.popChannel = popupWindow2;
             popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.popChannel.setTouchInterceptor(new View.OnTouchListener() {
@@ -203,7 +203,7 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
             this.popChannel = null;
         } else {
             this.popChannel = null;
-            PopupWindow popupWindow3 = new PopupWindow(view, i, i2, true);
+            PopupWindow popupWindow3 = new PopupWindow(view, popupWidth, popupHeight, true);
             this.popChannel = popupWindow3;
             popupWindow3.setBackgroundDrawable(getResources().getDrawable(R.drawable.select_device_bg));
             this.popChannel.setOutsideTouchable(false);
@@ -237,11 +237,11 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
     }
 
     /* access modifiers changed from: private */
-    public void startPlay(final String str, final int i) {
+    public void startPlay(final String channelLabel, final int channel) {
         new Thread(new Runnable() {
             public void run() {
                 synchronized (CalibrationActivity.lock) {
-                    int i = -1;
+                    int connectionErrorCode = -1;
                     if (-1 != CalibrationActivity.this.mChannel) {
                         CalibrationActivity calibrationActivity = CalibrationActivity.this;
                         calibrationActivity.stopChannel(calibrationActivity.mChannel);
@@ -250,9 +250,9 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
                         DvrNet dvrNet = new DvrNet();
                         Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, CalibrationActivity.this.mApp.mDevInfo, CalibrationActivity.this.mApp);
                         if (connDeviceProxy != null) {
-                            i = ((Integer) connDeviceProxy.get("errorcode")).intValue();
+                            connectionErrorCode = ((Integer) connDeviceProxy.get("errorcode")).intValue();
                         }
-                        if (i != 0) {
+                        if (connectionErrorCode != 0) {
                             CalibrationActivity.this.mHandler.post(new Runnable() {
                                 public void run() {
                                     CalibrationActivity.this.toastSf(R.string.ai_cal_get_adas_config_fail);
@@ -265,20 +265,20 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
                     CalibrationActivity.this.mAudioTrack.mPlayer.play();
                     CalibrationActivity.this.mAudioTrack.SetMute(false);
                     AVStream unused2 = CalibrationActivity.this.mAVStream = new AVStream();
-                    CalibrationActivity.this.mAVStream.GetHandle(i);
+                    CalibrationActivity.this.mAVStream.GetHandle(channel);
                     CalibrationActivity.this.mAVStream.SetMute(false);
                     CalibrationActivity.this.mAVStream.StartPlay();
                     CalibrationActivity.this.mAVStream.SetVideoInterface(CalibrationActivity.this.mInterface);
                     CalibrationActivity.this.mAVStream.SetAudioInterface(CalibrationActivity.this.mAudioTrack);
-                    CalibrationActivity.this.mDvrNet.SetAVStream(i, CalibrationActivity.this.mAVStream);
-                    CalibrationActivity.this.mDvrNet.StartRealAv(i, 0);
-                    int unused3 = CalibrationActivity.this.mChannel = i;
+                    CalibrationActivity.this.mDvrNet.SetAVStream(channel, CalibrationActivity.this.mAVStream);
+                    CalibrationActivity.this.mDvrNet.StartRealAv(channel, 0);
+                    int unused3 = CalibrationActivity.this.mChannel = channel;
                     CalibrationActivity.this.mHandler.post(new Runnable() {
                         public void run() {
-                            CalibrationActivity.this.mTitleTv.setText(str);
+                            CalibrationActivity.this.mTitleTv.setText(channelLabel);
                         }
                     });
-                    CalibrationActivity.this.getAdasCali(i);
+                    CalibrationActivity.this.getAdasCali(channel);
                 }
             }
         }).start();
@@ -290,42 +290,42 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
     }
 
     /* access modifiers changed from: private */
-    public void getAdasCali(final int i) {
+    public void getAdasCali(final int channel) {
         new Thread(new Runnable() {
             public void run() {
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, CalibrationActivity.this.mApp.mDevInfo, CalibrationActivity.this.mApp);
-                int[] iArr = new int[1];
-                int[] iArr2 = new int[1];
-                int[] iArr3 = new int[1];
-                int[] iArr4 = new int[1];
-                int[] iArr5 = new int[1];
+                int[] horizonResult = new int[1];
+                int[] verticalResult = new int[1];
+                int[] cameraHeightResult = new int[1];
+                int[] vehicleWidthResult = new int[1];
+                int[] camToVehicleHeadResult = new int[1];
                 int result;
                 if ((connDeviceProxy != null ? ((Integer) connDeviceProxy.get("errorcode")).intValue() : -1) == 0) {
-                    int GetAdasCali = dvrNet.GetAdasCali(i, iArr, iArr2, iArr3, iArr4, iArr5);
+                    int getAdasCaliResult = dvrNet.GetAdasCali(channel, horizonResult, verticalResult, cameraHeightResult, vehicleWidthResult, camToVehicleHeadResult);
                     dvrNet.CloseDeviceHandle();
-                    result = GetAdasCali;
+                    result = getAdasCaliResult;
                 } else {
                     result = -1;
                 }
                 final int resultFinal = result;
-                final int[] iArr6 = iArr;
-                final int[] iArr7 = iArr2;
-                final int[] iArr8 = iArr3;
-                final int[] iArr9 = iArr4;
-                final int[] iArr10 = iArr5;
+                final int[] horizonFinal = horizonResult;
+                final int[] verticalFinal = verticalResult;
+                final int[] cameraHeightFinal = cameraHeightResult;
+                final int[] vehicleWidthFinal = vehicleWidthResult;
+                final int[] camToVehicleHeadFinal = camToVehicleHeadResult;
                 CalibrationActivity.this.mHandler.post(new Runnable() {
                     public void run() {
                         if (resultFinal == 0) {
-                            int unused = CalibrationActivity.this.mAdasHorizon = iArr6[0];
-                            int unused2 = CalibrationActivity.this.mAdasVertical = iArr7[0];
+                            int unused = CalibrationActivity.this.mAdasHorizon = horizonFinal[0];
+                            int unused2 = CalibrationActivity.this.mAdasVertical = verticalFinal[0];
                             CalibrationActivity.this.setAdasCalText(true, true);
                             VsEditView access$1100 = CalibrationActivity.this.mAdasCameraHeightTv;
-                            access$1100.setText("" + iArr8[0]);
+                            access$1100.setText("" + cameraHeightFinal[0]);
                             VsEditView access$1200 = CalibrationActivity.this.mAdasVehicleWidthTv;
-                            access$1200.setText("" + iArr9[0]);
+                            access$1200.setText("" + vehicleWidthFinal[0]);
                             VsEditView access$1300 = CalibrationActivity.this.mAdasCamToVehicleHeadTv;
-                            access$1300.setText("" + iArr10[0]);
+                            access$1300.setText("" + camToVehicleHeadFinal[0]);
                             CalibrationActivity.this.toastSf(R.string.ai_cal_get_adas_config_success);
                             return;
                         }
@@ -337,27 +337,27 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
     }
 
     /* access modifiers changed from: private */
-    public void saveAdasCali(int i) {
-        final int i2 = this.mAdasHorizon;
-        final int i3 = this.mAdasVertical;
-        final int parseInt = Integer.parseInt(StringUtils.getString(this.mAdasCameraHeightTv));
-        final int parseInt2 = Integer.parseInt(StringUtils.getString(this.mAdasVehicleWidthTv));
-        final int parseInt3 = Integer.parseInt(StringUtils.getString(this.mAdasCamToVehicleHeadTv));
-        if (parseInt < 0 || parseInt > 500) {
+    public void saveAdasCali(int channel) {
+        final int horizon = this.mAdasHorizon;
+        final int vertical = this.mAdasVertical;
+        final int cameraHeight = Integer.parseInt(StringUtils.getString(this.mAdasCameraHeightTv));
+        final int vehicleWidth = Integer.parseInt(StringUtils.getString(this.mAdasVehicleWidthTv));
+        final int camToVehicleHead = Integer.parseInt(StringUtils.getString(this.mAdasCamToVehicleHeadTv));
+        if (cameraHeight < 0 || cameraHeight > 500) {
             toastSf(R.string.ai_cal_set_adas_camera_height_range_error);
-        } else if (parseInt2 < 0 || parseInt2 > 255) {
+        } else if (vehicleWidth < 0 || vehicleWidth > 255) {
             toastSf(R.string.ai_cal_set_adas_vehicle_width_range_error);
-        } else if (parseInt3 < -255 || parseInt3 > 255) {
+        } else if (camToVehicleHead < -255 || camToVehicleHead > 255) {
             toastSf(R.string.ai_cal_set_adas_cam_to_vehicle_head_range_error);
         } else {
-            final int i4 = i;
+            final int selectedChannel = channel;
             new Thread(new Runnable() {
                 public void run() {
                     DvrNet dvrNet = new DvrNet();
                     Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, CalibrationActivity.this.mApp.mDevInfo, CalibrationActivity.this.mApp);
                     final int[] result = new int[]{-1};
                     if ((connDeviceProxy != null ? ((Integer) connDeviceProxy.get("errorcode")).intValue() : -1) == 0) {
-                        result[0] = CalibrationActivity.this.mDvrNet.SetAdasCali(i4, i2, i3, parseInt, parseInt2, parseInt3);
+                        result[0] = CalibrationActivity.this.mDvrNet.SetAdasCali(selectedChannel, horizon, vertical, cameraHeight, vehicleWidth, camToVehicleHead);
                         dvrNet.CloseDeviceHandle();
                     }
                     CalibrationActivity.this.mHandler.post(new Runnable() {
@@ -375,52 +375,52 @@ public class CalibrationActivity extends Activity implements MyCallInterface {
     }
 
     /* access modifiers changed from: private */
-    public void setAdasCalText(boolean z, boolean z2) {
-        if (z) {
+    public void setAdasCalText(boolean updateHorizon, boolean updateVertical) {
+        if (updateHorizon) {
             VsTextView vsTextView = this.mAdasHorizonTv;
             vsTextView.setText("" + this.mAdasHorizon);
             this.mVideoGroup.setAdasHorizon(0, this.mAdasHorizon);
         }
-        if (z2) {
+        if (updateVertical) {
             VsTextView vsTextView2 = this.mAdasVerticalTv;
             vsTextView2.setText("" + this.mAdasVertical);
             this.mVideoGroup.setAdasVertical(0, this.mAdasVertical);
         }
     }
 
-    private boolean checkAdasHorizon(int i) {
-        int i2 = this.mVideoHeight;
-        if (i2 <= 0) {
+    private boolean checkAdasHorizon(int action) {
+        int videoHeight = this.mVideoHeight;
+        if (videoHeight <= 0) {
             return false;
         }
-        int i3 = this.mAdasHorizon;
-        if (MENU_ACTION_UP == i) {
-            i3--;
-        } else if (MENU_ACTION_DOWN == i) {
-            i3++;
+        int nextHorizon = this.mAdasHorizon;
+        if (MENU_ACTION_UP == action) {
+            nextHorizon--;
+        } else if (MENU_ACTION_DOWN == action) {
+            nextHorizon++;
         }
-        float f = (((float) i2) * 2.0f) / 3.0f;
-        float f2 = (float) i3;
-        if (f2 < ((float) i2) / 3.0f || f2 > f) {
+        float maxHorizon = (((float) videoHeight) * 2.0f) / 3.0f;
+        float nextHorizonFloat = (float) nextHorizon;
+        if (nextHorizonFloat < ((float) videoHeight) / 3.0f || nextHorizonFloat > maxHorizon) {
             return false;
         }
         return true;
     }
 
-    private boolean checkAdasVertical(int i) {
-        int i2 = this.mVideoWidth;
-        if (i2 <= 0) {
+    private boolean checkAdasVertical(int action) {
+        int videoWidth = this.mVideoWidth;
+        if (videoWidth <= 0) {
             return false;
         }
-        int i3 = this.mAdasVertical;
-        if (MENU_ACTION_LEFT == i) {
-            i3--;
-        } else if (MENU_ACTION_RIGHT == i) {
-            i3++;
+        int nextVertical = this.mAdasVertical;
+        if (MENU_ACTION_LEFT == action) {
+            nextVertical--;
+        } else if (MENU_ACTION_RIGHT == action) {
+            nextVertical++;
         }
-        float f = (((float) i2) * 3.0f) / 4.0f;
-        float f2 = (float) i3;
-        if (f2 < ((float) i2) / 4.0f || f2 > f) {
+        float maxVertical = (((float) videoWidth) * 3.0f) / 4.0f;
+        float nextVerticalFloat = (float) nextVertical;
+        if (nextVerticalFloat < ((float) videoWidth) / 4.0f || nextVerticalFloat > maxVertical) {
             return false;
         }
         return true;
