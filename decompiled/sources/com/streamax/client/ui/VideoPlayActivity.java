@@ -69,9 +69,9 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
     }
 
     public void onPlayStart(PlayerView playerView) {
-        int access$300 = this.mBuilder.getPlayProgress();
-        if (access$300 > 0) {
-            this.mPlayerView.setProgress(access$300);
+        int savedProgress = this.mBuilder.getPlayProgress();
+        if (savedProgress > 0) {
+            this.mPlayerView.setProgress(savedProgress);
         }
     }
 
@@ -111,8 +111,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
                 return new Builder(parcel);
             }
 
-            public Builder[] newArray(int i) {
-                return new Builder[i];
+            public Builder[] newArray(int size) {
+                return new Builder[size];
             }
         };
         private int activityOrientation = -1;
@@ -132,7 +132,6 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
         }
 
         protected Builder(Parcel parcel) {
-            boolean z = true;
             this.videoSource = parcel.readString();
             this.videoTitle = parcel.readString();
             this.activityOrientation = parcel.readInt();
@@ -140,7 +139,7 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             this.gestureEnabled = parcel.readByte() != 0;
             this.loopPlay = parcel.readByte() != 0;
             this.autoPlay = parcel.readByte() != 0;
-            this.autoOver = parcel.readByte() == 0 ? false : z;
+            this.autoOver = parcel.readByte() != 0;
         }
 
         public Builder setVideoSource(File file) {
@@ -151,8 +150,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this;
         }
 
-        public Builder setVideoSource(String str) {
-            this.videoSource = str;
+        public Builder setVideoSource(String videoSource) {
+            this.videoSource = videoSource;
             return this;
         }
 
@@ -161,8 +160,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.videoSource;
         }
 
-        public Builder setVideoTitle(String str) {
-            this.videoTitle = str;
+        public Builder setVideoTitle(String videoTitle) {
+            this.videoTitle = videoTitle;
             return this;
         }
 
@@ -171,8 +170,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.videoTitle;
         }
 
-        public Builder setPlayProgress(int i) {
-            this.playProgress = i;
+        public Builder setPlayProgress(int playProgress) {
+            this.playProgress = playProgress;
             return this;
         }
 
@@ -181,8 +180,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.playProgress;
         }
 
-        public Builder setGestureEnabled(boolean z) {
-            this.gestureEnabled = z;
+        public Builder setGestureEnabled(boolean gestureEnabled) {
+            this.gestureEnabled = gestureEnabled;
             return this;
         }
 
@@ -191,8 +190,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.gestureEnabled;
         }
 
-        public Builder setLoopPlay(boolean z) {
-            this.loopPlay = z;
+        public Builder setLoopPlay(boolean loopPlay) {
+            this.loopPlay = loopPlay;
             return this;
         }
 
@@ -201,8 +200,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.loopPlay;
         }
 
-        public Builder setAutoPlay(boolean z) {
-            this.autoPlay = z;
+        public Builder setAutoPlay(boolean autoPlay) {
+            this.autoPlay = autoPlay;
             return this;
         }
 
@@ -210,8 +209,8 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.autoPlay;
         }
 
-        public Builder setAutoOver(boolean z) {
-            this.autoOver = z;
+        public Builder setAutoOver(boolean autoOver) {
+            this.autoOver = autoOver;
             return this;
         }
 
@@ -220,17 +219,17 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             return this.autoOver;
         }
 
-        public Builder setActivityOrientation(int i) {
-            this.activityOrientation = i;
+        public Builder setActivityOrientation(int activityOrientation) {
+            this.activityOrientation = activityOrientation;
             return this;
         }
 
         public void start(Context context) {
             Intent intent = new Intent();
-            int i = this.activityOrientation;
-            if (i == 0) {
+            int activityOrientation = this.activityOrientation;
+            if (activityOrientation == 0) {
                 intent.setClass(context, Landscape.class);
-            } else if (i != 1) {
+            } else if (activityOrientation != 1) {
                 intent.setClass(context, VideoPlayActivity.class);
             } else {
                 intent.setClass(context, Portrait.class);
@@ -242,7 +241,7 @@ public class VideoPlayActivity extends AppActivity implements PlayerView.OnPlayL
             context.startActivity(intent);
         }
 
-        public void writeToParcel(Parcel parcel, int i) {
+        public void writeToParcel(Parcel parcel, int flags) {
             parcel.writeString(this.videoSource);
             parcel.writeString(this.videoTitle);
             parcel.writeInt(this.activityOrientation);
