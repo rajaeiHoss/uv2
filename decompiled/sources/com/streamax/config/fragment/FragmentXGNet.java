@@ -91,70 +91,70 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
     }
 
     public void refreshUi() {
-        int i;
+        int selectedAuthTypeIndex;
         if (this.mXgNetRes != null && this.mListModeName.size() == this.mListModeCase.size() && this.mListAuthTypeName.size() == this.mListAuthTypeCase.size()) {
             try {
-                JSONObject jSONObject = this.mXgNetRes.getJSONObject("NWSM");
-                if (jSONObject != null) {
-                    JSONObject jSONObject2 = jSONObject.getJSONObject("MOBILENET");
-                    this.mMobileNetObj = jSONObject2;
-                    if (jSONObject2 != null) {
-                        int i2 = jSONObject2.getInt("SWITCH");
-                        String string = this.mMobileNetObj.getString("MODE");
-                        String string2 = this.mMobileNetObj.getString("APN");
-                        String string3 = this.mMobileNetObj.getString("CENTERNUM");
-                        String string4 = this.mMobileNetObj.getString("USER");
-                        String string5 = this.mMobileNetObj.getString(Intents.WifiConnect.PASSWORD);
-                        String string6 = this.mMobileNetObj.getString("AUTHTYPE");
-                        this.mBtnEnableStatus.setBackgroundResource(i2 == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                        int i3 = 0;
-                        boolean z = true;
-                        this.mTvMode.SetEnabled(i2 == 1);
+                JSONObject networkConfig = this.mXgNetRes.getJSONObject("NWSM");
+                if (networkConfig != null) {
+                    JSONObject mobileNetConfig = networkConfig.getJSONObject("MOBILENET");
+                    this.mMobileNetObj = mobileNetConfig;
+                    if (mobileNetConfig != null) {
+                        int switchValue = mobileNetConfig.getInt("SWITCH");
+                        String modeValue = this.mMobileNetObj.getString("MODE");
+                        String apnValue = this.mMobileNetObj.getString("APN");
+                        String centerNumber = this.mMobileNetObj.getString("CENTERNUM");
+                        String userName = this.mMobileNetObj.getString("USER");
+                        String passwordValue = this.mMobileNetObj.getString(Intents.WifiConnect.PASSWORD);
+                        String authTypeValue = this.mMobileNetObj.getString("AUTHTYPE");
+                        this.mBtnEnableStatus.setBackgroundResource(switchValue == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                        int authTypeIndex = 0;
+                        boolean authTypeEnabled = true;
+                        this.mTvMode.SetEnabled(switchValue == 1);
                         this.mListStrMode.clear();
                         this.mListIntMode.clear();
-                        int i4 = 0;
+                        int modeIndex = 0;
                         while (true) {
-                            i = -1;
-                            if (i4 >= this.mListModeCase.size()) {
-                                i4 = -1;
+                            selectedAuthTypeIndex = -1;
+                            if (modeIndex >= this.mListModeCase.size()) {
+                                modeIndex = -1;
                                 break;
-                            } else if (string.equalsIgnoreCase(this.mListModeCase.get(i4))) {
+                            } else if (modeValue.equalsIgnoreCase(this.mListModeCase.get(modeIndex))) {
                                 break;
                             } else {
-                                i4++;
+                                modeIndex++;
                             }
                         }
-                        if (i4 >= 0) {
-                            this.mTvMode.setText(this.mListModeName.get(i4));
+                        if (modeIndex >= 0) {
+                            this.mTvMode.setText(this.mListModeName.get(modeIndex));
                             this.mListStrMode.addAll(this.mListModeName);
-                            this.mListIntMode.add(new Integer(i4));
+                            this.mListIntMode.add(new Integer(modeIndex));
                         }
-                        int i5 = i2 == 0 ? 1 : 0;
-                        setTvEnableAndContent(this.mEtApn, i5, string2);
-                        setTvEnableAndContent(this.mEtCenterNum, i5, string3);
-                        setTvEnableAndContent(this.mEtUser, i5, string4);
-                        setTvEnableAndContent(this.mEtPassword, i5, string5);
+                        int editDisabledFlag = switchValue == 0 ? 1 : 0;
+                        setTvEnableAndContent(this.mEtApn, editDisabledFlag, apnValue);
+                        setTvEnableAndContent(this.mEtCenterNum, editDisabledFlag, centerNumber);
+                        setTvEnableAndContent(this.mEtUser, editDisabledFlag, userName);
+                        setTvEnableAndContent(this.mEtPassword, editDisabledFlag, passwordValue);
                         VsTextView vsTextView = this.mTvAuthType;
-                        if (i2 != 1) {
-                            z = false;
+                        if (switchValue != 1) {
+                            authTypeEnabled = false;
                         }
-                        vsTextView.SetEnabled(z);
+                        vsTextView.SetEnabled(authTypeEnabled);
                         this.mListStrAuthType.clear();
                         this.mListIntAuthType.clear();
                         while (true) {
-                            if (i3 >= this.mListAuthTypeCase.size()) {
+                            if (authTypeIndex >= this.mListAuthTypeCase.size()) {
                                 break;
-                            } else if (string6.equalsIgnoreCase(this.mListAuthTypeCase.get(i3))) {
-                                i = i3;
+                            } else if (authTypeValue.equalsIgnoreCase(this.mListAuthTypeCase.get(authTypeIndex))) {
+                                selectedAuthTypeIndex = authTypeIndex;
                                 break;
                             } else {
-                                i3++;
+                                authTypeIndex++;
                             }
                         }
-                        if (i >= 0) {
-                            this.mTvAuthType.setText(this.mListAuthTypeName.get(i));
+                        if (selectedAuthTypeIndex >= 0) {
+                            this.mTvAuthType.setText(this.mListAuthTypeName.get(selectedAuthTypeIndex));
                             this.mListStrAuthType.addAll(this.mListAuthTypeName);
-                            this.mListIntAuthType.add(new Integer(i));
+                            this.mListIntAuthType.add(new Integer(selectedAuthTypeIndex));
                         }
                     }
                 }
@@ -199,10 +199,10 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
     }
 
     public void setEnableBtnStatus() {
-        JSONObject jSONObject = this.mMobileNetObj;
-        if (jSONObject != null) {
+        JSONObject mobileNetConfig = this.mMobileNetObj;
+        if (mobileNetConfig != null) {
             try {
-                this.mMobileNetObj.put("SWITCH", jSONObject.getInt("SWITCH") == 0 ? 1 : 0);
+                this.mMobileNetObj.put("SWITCH", mobileNetConfig.getInt("SWITCH") == 0 ? 1 : 0);
                 refreshUi();
             } catch (JSONException unused) {
             }
@@ -222,12 +222,12 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
     }
 
     public boolean saveUi() {
-        JSONObject jSONObject = this.mMobileNetObj;
-        if (jSONObject == null) {
+        JSONObject mobileNetConfig = this.mMobileNetObj;
+        if (mobileNetConfig == null) {
             return false;
         }
         try {
-            jSONObject.put("APN", getString(this.mEtApn));
+            mobileNetConfig.put("APN", getString(this.mEtApn));
             this.mMobileNetObj.put("CENTERNUM", getString(this.mEtCenterNum));
             this.mMobileNetObj.put("USER", getString(this.mEtUser));
             this.mMobileNetObj.put(Intents.WifiConnect.PASSWORD, getString(this.mEtPassword));
@@ -245,19 +245,19 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("MOBILENET", "?");
-            jSONObject.put("NWSM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject requestRoot = new JSONObject();
+            JSONObject networkConfig = new JSONObject();
+            networkConfig.put("MOBILENET", "?");
+            requestRoot.put("NWSM", networkConfig);
+            return requestRoot.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String jsonResponse) {
         try {
-            this.mXgNetRes = new JSONObject(str);
+            this.mXgNetRes = new JSONObject(jsonResponse);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -269,11 +269,11 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mXgNetRes;
-        if (jSONObject == null) {
+        JSONObject xgNetConfig = this.mXgNetRes;
+        if (xgNetConfig == null) {
             return "";
         }
-        return jSONObject.toString();
+        return xgNetConfig.toString();
     }
 
     public void setSuccess() {
@@ -286,10 +286,10 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
         toastSf((int) R.string.config_info_set_failure);
     }
 
-    public void updateDateForMode(int i) {
-        if (this.mMobileNetObj != null && i < this.mListModeCase.size()) {
+    public void updateDateForMode(int modeIndex) {
+        if (this.mMobileNetObj != null && modeIndex < this.mListModeCase.size()) {
             try {
-                this.mMobileNetObj.put("MODE", this.mListModeCase.get(i));
+                this.mMobileNetObj.put("MODE", this.mListModeCase.get(modeIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -297,10 +297,10 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
         }
     }
 
-    public void updateDateForAuthType(int i) {
-        if (this.mMobileNetObj != null && i < this.mListAuthTypeCase.size()) {
+    public void updateDateForAuthType(int authTypeIndex) {
+        if (this.mMobileNetObj != null && authTypeIndex < this.mListAuthTypeCase.size()) {
             try {
-                this.mMobileNetObj.put("AUTHTYPE", this.mListAuthTypeCase.get(i));
+                this.mMobileNetObj.put("AUTHTYPE", this.mListAuthTypeCase.get(authTypeIndex));
                 saveUi();
                 refreshUi();
             } catch (JSONException unused) {
@@ -308,13 +308,13 @@ public class FragmentXGNet extends ConfigFragment implements BaseListener.SetLis
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForMode")) {
-            if (list.size() > 0) {
-                updateDateForMode(list.get(0).intValue());
+    public void saveSelect(String fragmentTag, List<Integer> selectedIndexes) {
+        if (fragmentTag.equals("SelectFragmentForMode")) {
+            if (selectedIndexes.size() > 0) {
+                updateDateForMode(selectedIndexes.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForAuthType") && list.size() > 0) {
-            updateDateForAuthType(list.get(0).intValue());
+        } else if (fragmentTag.equals("SelectFragmentForAuthType") && selectedIndexes.size() > 0) {
+            updateDateForAuthType(selectedIndexes.get(0).intValue());
         }
     }
 }
