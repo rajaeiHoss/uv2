@@ -137,16 +137,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     /* access modifiers changed from: protected */
-    public List<String> getStrDatas(int i) {
-        return StringUtils.getStrDatas(i);
+    public List<String> getStrDatas(int arrayResId) {
+        return StringUtils.getStrDatas(arrayResId);
     }
 
-    public static List<Integer> getIntDatas(int i) {
-        return StringUtils.getIntDatas(i);
+    public static List<Integer> getIntDatas(int arrayResId) {
+        return StringUtils.getIntDatas(arrayResId);
     }
 
-    public static int getInt(int i) {
-        return StringUtils.getInt(i);
+    public static int getInt(int intResId) {
+        return StringUtils.getInt(intResId);
     }
 
     /* access modifiers changed from: protected */
@@ -158,18 +158,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     /* access modifiers changed from: protected */
-    public String parse2String_86399(int i) {
+    public String parse2String_86399(int secondsOfDay) {
         try {
-            return TimeUtils.parse2String_86399(i);
+            return TimeUtils.parse2String_86399(secondsOfDay);
         } catch (Exception unused) {
             return "00:00:00";
         }
     }
 
     /* access modifiers changed from: protected */
-    public int parse2Int_86399(String str) {
+    public int parse2Int_86399(String timeText) {
         try {
-            return TimeUtils.parse2Int_86399(str);
+            return TimeUtils.parse2Int_86399(timeText);
         } catch (Exception unused) {
             return 0;
         }
@@ -185,25 +185,25 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     /* access modifiers changed from: protected */
-    public String timeLong2String(String str, String str2, long j) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(str);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(str2));
-        return simpleDateFormat.format(new Date(j));
+    public String timeLong2String(String pattern, String timeZoneId, long timestampMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timeZoneId));
+        return simpleDateFormat.format(new Date(timestampMillis));
     }
 
     /* access modifiers changed from: protected */
-    public String parseTime2String(String str, String str2, Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(str);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(str2));
+    public String parseTime2String(String pattern, String timeZoneId, Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timeZoneId));
         return simpleDateFormat.format(date);
     }
 
     /* access modifiers changed from: protected */
-    public long parseString2Long(String str, String str2, String str3) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(str);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(str2));
+    public long parseString2Long(String pattern, String timeZoneId, String timeText) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(timeZoneId));
         try {
-            return simpleDateFormat.parse(str3).getTime();
+            return simpleDateFormat.parse(timeText).getTime();
         } catch (ParseException unused) {
             return 0;
         }
