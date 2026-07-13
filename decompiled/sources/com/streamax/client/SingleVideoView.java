@@ -33,9 +33,9 @@ public class SingleVideoView extends ImageView {
     private boolean mbMax = false;
     private boolean mbOsd = true;
 
-    public SingleVideoView(Context context, int i) {
+    public SingleVideoView(Context context, int serial) {
         super(context);
-        this.mSerial = i;
+        this.mSerial = serial;
         Paint paint = new Paint();
         this.mPaint = paint;
         paint.setAntiAlias(true);
@@ -54,50 +54,50 @@ public class SingleVideoView extends ImageView {
         this.mPaint.setStrokeWidth(1.0f);
     }
 
-    public SingleVideoView(Context context, AttributeSet attributeSet, int i) {
-        super(context, attributeSet, i);
+    public SingleVideoView(Context context, AttributeSet attributeSet, int defStyleAttr) {
+        super(context, attributeSet, defStyleAttr);
     }
 
-    public void SetFocusState(boolean z) {
-        this.mbFocus = z;
+    public void SetFocusState(boolean focused) {
+        this.mbFocus = focused;
         postInvalidate();
     }
 
-    public void SetDragState(boolean z) {
-        this.mbDrag = z;
+    public void SetDragState(boolean dragging) {
+        this.mbDrag = dragging;
         postInvalidate();
     }
 
-    public void SetOsdState(boolean z) {
-        this.mbOsd = z;
+    public void SetOsdState(boolean osdEnabled) {
+        this.mbOsd = osdEnabled;
         postInvalidate();
     }
 
-    public void SetMax(boolean z) {
-        this.mbMax = z;
+    public void SetMax(boolean max) {
+        this.mbMax = max;
         postInvalidate();
     }
 
-    public void WriteIn(byte[] bArr, int i, int i2) {
-        if (bArr != null && i != 0 && i2 != 0) {
-            int i3 = i * i2 * 2;
-            byte[] bArr2 = this.mPixel;
-            if (bArr2 == null) {
-                byte[] bArr3 = new byte[i3];
-                this.mPixel = bArr3;
-                this.buffer = ByteBuffer.wrap(bArr3);
-            } else if (bArr2.length < i3) {
-                byte[] bArr4 = new byte[i3];
-                this.mPixel = bArr4;
-                this.buffer = ByteBuffer.wrap(bArr4);
+    public void WriteIn(byte[] pixelData, int width, int height) {
+        if (pixelData != null && width != 0 && height != 0) {
+            int requiredPixelBytes = width * height * 2;
+            byte[] existingPixels = this.mPixel;
+            if (existingPixels == null) {
+                byte[] pixelBuffer = new byte[requiredPixelBytes];
+                this.mPixel = pixelBuffer;
+                this.buffer = ByteBuffer.wrap(pixelBuffer);
+            } else if (existingPixels.length < requiredPixelBytes) {
+                byte[] resizedPixelBuffer = new byte[requiredPixelBytes];
+                this.mPixel = resizedPixelBuffer;
+                this.buffer = ByteBuffer.wrap(resizedPixelBuffer);
             }
-            if (!(this.mWidth == i && this.mHeight == i2)) {
-                this.mWidth = i;
-                this.mHeight = i2;
+            if (!(this.mWidth == width && this.mHeight == height)) {
+                this.mWidth = width;
+                this.mHeight = height;
             }
-            if (bArr.length != 0) {
+            if (pixelData.length != 0) {
                 try {
-                    System.arraycopy(bArr, 0, this.mPixel, 0, i3);
+                    System.arraycopy(pixelData, 0, this.mPixel, 0, requiredPixelBytes);
                 } catch (IndexOutOfBoundsException unused) {
                 }
                 postInvalidate();
@@ -106,15 +106,15 @@ public class SingleVideoView extends ImageView {
     }
 
     public void DeDraw(Canvas canvas) {
-        int i;
-        int i2 = this.mWidth;
-        if (i2 == 0 || (i = this.mHeight) == 0) {
+        int frameHeight;
+        int frameWidth = this.mWidth;
+        if (frameWidth == 0 || (frameHeight = this.mHeight) == 0) {
             DoPaint(canvas);
             return;
         }
         Bitmap bitmap = this.VideoBlt;
         if (bitmap == null) {
-            this.VideoBlt = Bitmap.createBitmap(i2, i, Bitmap.Config.RGB_565);
+            this.VideoBlt = Bitmap.createBitmap(frameWidth, frameHeight, Bitmap.Config.RGB_565);
         } else if (!(bitmap.getWidth() == this.mWidth && this.VideoBlt.getHeight() == this.mHeight)) {
             this.VideoBlt.recycle();
             this.VideoBlt = Bitmap.createBitmap(this.mWidth, this.mHeight, Bitmap.Config.RGB_565);
@@ -131,31 +131,31 @@ public class SingleVideoView extends ImageView {
         Matrix matrix = new Matrix();
         PointF pointF = new PointF();
         if (this.mScales >= 0.0f) {
-            float width = ((float) (getWidth() - 2)) / ((float) this.mWidth);
-            float height = ((float) (getHeight() - 2)) / ((float) this.mHeight);
-            float f = this.mScales;
-            float f2 = width * f;
-            float f3 = f * height;
-            float f4 = this.mTranslate.x / f2;
-            float f5 = this.mTranslate.y / f3;
-            if (f2 > width) {
-                pointF.x = (((f2 - width) * ((float) this.mWidth)) / (f2 * 2.0f)) + f4;
-                pointF.y = (((f3 - height) * ((float) this.mHeight)) / (2.0f * f3)) + f5;
+            float baseScaleX = ((float) (getWidth() - 2)) / ((float) this.mWidth);
+            float baseScaleY = ((float) (getHeight() - 2)) / ((float) this.mHeight);
+            float zoomScale = this.mScales;
+            float scaledWidth = baseScaleX * zoomScale;
+            float scaledHeight = zoomScale * baseScaleY;
+            float translateX = this.mTranslate.x / scaledWidth;
+            float translateY = this.mTranslate.y / scaledHeight;
+            if (scaledWidth > baseScaleX) {
+                pointF.x = (((scaledWidth - baseScaleX) * ((float) this.mWidth)) / (scaledWidth * 2.0f)) + translateX;
+                pointF.y = (((scaledHeight - baseScaleY) * ((float) this.mHeight)) / (2.0f * scaledHeight)) + translateY;
             } else {
-                pointF.x = (((width - f2) * ((float) this.mWidth)) / (f2 * 2.0f)) + f4;
-                pointF.y = (((height - f3) * ((float) this.mHeight)) / (2.0f * f3)) + f5;
+                pointF.x = (((baseScaleX - scaledWidth) * ((float) this.mWidth)) / (scaledWidth * 2.0f)) + translateX;
+                pointF.y = (((baseScaleY - scaledHeight) * ((float) this.mHeight)) / (2.0f * scaledHeight)) + translateY;
             }
-            matrix.postScale(f2, f3, pointF.x, pointF.y);
+            matrix.postScale(scaledWidth, scaledHeight, pointF.x, pointF.y);
         }
         canvas.drawColor(ViewCompat.MEASURED_STATE_MASK);
         canvas.drawBitmap(this.VideoBlt, matrix, (Paint) null);
         DoPaint(canvas);
     }
 
-    public void SetDigitalZoomIn(float f) {
-        float f2 = this.mScales;
-        if (f2 * f > 0.0f) {
-            this.mScales = f2 * f;
+    public void SetDigitalZoomIn(float scaleFactor) {
+        float currentScale = this.mScales;
+        if (currentScale * scaleFactor > 0.0f) {
+            this.mScales = currentScale * scaleFactor;
             this.mTranslate.set(0.0f, 0.0f);
         }
         invalidate();
@@ -171,11 +171,11 @@ public class SingleVideoView extends ImageView {
         invalidate();
     }
 
-    public void SetDigitalTranslate(float f, float f2) {
+    public void SetDigitalTranslate(float deltaX, float deltaY) {
         if (this.mTranslate == null) {
             this.mTranslate = new PointF();
         }
-        this.mTranslate.offset(f, f2);
+        this.mTranslate.offset(deltaX, deltaY);
         invalidate();
     }
 
