@@ -93,23 +93,23 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
     }
 
     public void refreshUi() {
-        JSONObject jSONObject = this.mSystemSetRes;
-        if (jSONObject == null) {
+        JSONObject systemSetResponse = this.mSystemSetRes;
+        if (systemSetResponse == null) {
             showErrorFragment();
             return;
         }
         try {
-            JSONObject jSONObject2 = jSONObject.getJSONObject("DEVEMM");
-            if (jSONObject2 == null) {
+            JSONObject deviceMaintenance = systemSetResponse.getJSONObject("DEVEMM");
+            if (deviceMaintenance == null) {
                 showErrorFragment();
                 return;
             }
-            JSONObject jSONObject3 = jSONObject2.getJSONObject("SSP");
-            if (jSONObject3 == null) {
+            JSONObject systemParams = deviceMaintenance.getJSONObject("SSP");
+            if (systemParams == null) {
                 showErrorFragment();
                 return;
             }
-            this.mVsa = jSONObject3.getInt("VSA");
+            this.mVsa = systemParams.getInt("VSA");
             configureForFragment();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -192,14 +192,14 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
             AlertDialog.Builder builder = new AlertDialog.Builder(this.mConfigUi);
             builder.setTitle(R.string.config_systemSet_RebootRemind);
             builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                     LogUtils.e("SystemSetFragment", "reboot 1");
                     SystemSetFragment.this.mDialog.hide();
                     NetPresenter.getDefault().rebootDevice(SystemSetFragment.this);
                 }
             });
             builder.setNegativeButton(R.string.group_Cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void onClick(DialogInterface dialogInterface, int which) {
                     SystemSetFragment.this.mDialog.hide();
                 }
             });
@@ -209,19 +209,19 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("SSP", "?");
-            jSONObject.put("DEVEMM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject request = new JSONObject();
+            JSONObject deviceMaintenance = new JSONObject();
+            deviceMaintenance.put("SSP", "?");
+            request.put("DEVEMM", deviceMaintenance);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String responseJson) {
         try {
-            this.mSystemSetRes = new JSONObject(str);
+            this.mSystemSetRes = new JSONObject(responseJson);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -237,11 +237,11 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mSystemSetRes;
-        if (jSONObject == null) {
+        JSONObject systemSetResponse = this.mSystemSetRes;
+        if (systemSetResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return systemSetResponse.toString();
     }
 
     public void setSuccess() {
@@ -253,15 +253,15 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
         toastFailure();
     }
 
-    public void updateDateForVSA(int i) {
-        JSONObject jSONObject;
-        JSONObject jSONObject2 = this.mSystemSetRes;
-        if (jSONObject2 != null) {
+    public void updateDateForVSA(int videoFormat) {
+        JSONObject systemParams;
+        JSONObject systemSetResponse = this.mSystemSetRes;
+        if (systemSetResponse != null) {
             try {
-                JSONObject jSONObject3 = jSONObject2.getJSONObject("DEVEMM");
-                if (jSONObject3 != null && (jSONObject = jSONObject3.getJSONObject("SSP")) != null) {
-                    this.mVsa = i;
-                    jSONObject.put("VSA", i);
+                JSONObject deviceMaintenance = systemSetResponse.getJSONObject("DEVEMM");
+                if (deviceMaintenance != null && (systemParams = deviceMaintenance.getJSONObject("SSP")) != null) {
+                    this.mVsa = videoFormat;
+                    systemParams.put("VSA", videoFormat);
                     NetPresenter.getDefault().setConfig(this);
                 }
             } catch (JSONException unused) {
@@ -269,24 +269,25 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
         }
     }
 
-    public void updateDateForReset(List<Integer> list) {
-        int intValue;
-        byte[] bArr = new byte[512];
-        int i = 0;
-        while (i < list.size() && (intValue = list.get(i).intValue()) <= mResetbitArray.length) {
-            int i2 = 0;
-            while (true) {
-                int[][] iArr = mResetbitArray;
-                if (i2 >= iArr[intValue].length || iArr[intValue][i2] > 512) {
-                    break;
-                } else {
-                    bArr[iArr[intValue][i2]] = 1;
-                    i2++;
+    public void updateDateForReset(List<Integer> resetSelections) {
+        byte[] resetDefaults = new byte[512];
+        int selectionIndex = 0;
+        while (selectionIndex < resetSelections.size()) {
+            int resetCategory = resetSelections.get(selectionIndex).intValue();
+            if (resetCategory >= 0 && resetCategory < mResetbitArray.length) {
+                int resetBitIndex = 0;
+                while (true) {
+                    int[][] resetBitMap = mResetbitArray;
+                    if (resetBitIndex >= resetBitMap[resetCategory].length || resetBitMap[resetCategory][resetBitIndex] >= resetDefaults.length) {
+                        break;
+                    }
+                    resetDefaults[resetBitMap[resetCategory][resetBitIndex]] = 1;
+                    resetBitIndex++;
                 }
             }
-            i++;
+            selectionIndex++;
         }
-        NetManager.getDefault().setRestoreDefault3(bArr, 512, new SuperListener.SetConfigListener() {
+        NetManager.getDefault().setRestoreDefault3(resetDefaults, 512, new SuperListener.SetConfigListener() {
             public void onFailure() {
             }
 
@@ -295,13 +296,13 @@ public class SystemSetFragment extends ConfigFragment implements BaseListener.Ge
         });
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForVSA")) {
-            if (list.size() > 0) {
-                updateDateForVSA(list.get(0).intValue());
+    public void saveSelect(String selectorTag, List<Integer> selectedItems) {
+        if (selectorTag.equals("SelectFragmentForVSA")) {
+            if (selectedItems.size() > 0) {
+                updateDateForVSA(selectedItems.get(0).intValue());
             }
-        } else if (str.equals("SelectFragmentForReset") && list.size() > 0) {
-            updateDateForReset(list);
+        } else if (selectorTag.equals("SelectFragmentForReset") && selectedItems.size() > 0) {
+            updateDateForReset(selectedItems);
         }
     }
 
