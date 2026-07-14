@@ -137,9 +137,9 @@ public class FragmentDevInfo extends ConfigFragment implements BaseListener.SetL
         return this.mDevInfoReq;
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mDevInfoObj = new JSONObject(str);
+            this.mDevInfoObj = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
