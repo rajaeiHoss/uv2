@@ -10,14 +10,14 @@ public class FragmentBean {
     public FragmentBean() {
     }
 
-    public FragmentBean(String str, ConfigFragment configFragment) {
-        this.mTitle = str;
+    public FragmentBean(String title, ConfigFragment configFragment) {
+        this.mTitle = title;
         this.mFragment = configFragment;
     }
 
-    public FragmentBean(String str, ConfigFragment configFragment, int i) {
-        this.mTitle = str;
+    public FragmentBean(String title, ConfigFragment configFragment, int visible) {
+        this.mTitle = title;
         this.mFragment = configFragment;
-        this.mVisible = i;
+        this.mVisible = visible;
     }
 }
