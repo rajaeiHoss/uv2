@@ -50,28 +50,28 @@ public class FtpOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     private void refreshUi() {
-        JSONObject jSONObject = this.mFtpRes;
-        if (jSONObject != null) {
+        JSONObject ftpResponse = this.mFtpRes;
+        if (ftpResponse != null) {
             try {
-                JSONObject jSONObject2 = jSONObject.getJSONObject("NWPM");
-                if (jSONObject2 != null) {
-                    JSONObject jSONObject3 = jSONObject2.getJSONObject("FTPS");
-                    this.mFtpObj = jSONObject3;
-                    if (jSONObject3 != null) {
-                        int i = jSONObject3.getInt("EN");
-                        this.mBtnEnable.setBackgroundResource(i == 0 ? R.drawable.switch_close : R.drawable.switch_open);
-                        String string = this.mFtpObj.getString("SERVERIP");
-                        int i2 = this.mFtpObj.getInt("PORT");
-                        String string2 = this.mFtpObj.getString("LOGINUSER");
-                        String string3 = this.mFtpObj.getString("LOGINPWD");
-                        String string4 = this.mFtpObj.getString("SUBFOLDER");
-                        int i3 = i == 0 ? 1 : 0;
-                        setTvEnableAndContent(this.mEtServer, i3, string);
-                        VsEditView vsEditView = this.mEtPort;
-                        setTvEnableAndContent(vsEditView, i3, "" + i2);
-                        setTvEnableAndContent(this.mEtUsername, i3, string2);
-                        setTvEnableAndContent(this.mEtPwd, i3, string3);
-                        setTvEnableAndContent(this.mEtFolder, i3, string4);
+                JSONObject networkParams = ftpResponse.getJSONObject("NWPM");
+                if (networkParams != null) {
+                    JSONObject ftpConfig = networkParams.getJSONObject("FTPS");
+                    this.mFtpObj = ftpConfig;
+                    if (ftpConfig != null) {
+                        int ftpEnabled = ftpConfig.getInt("EN");
+                        this.mBtnEnable.setBackgroundResource(ftpEnabled == 0 ? R.drawable.switch_close : R.drawable.switch_open);
+                        String serverIp = this.mFtpObj.getString("SERVERIP");
+                        int port = this.mFtpObj.getInt("PORT");
+                        String username = this.mFtpObj.getString("LOGINUSER");
+                        String password = this.mFtpObj.getString("LOGINPWD");
+                        String subfolder = this.mFtpObj.getString("SUBFOLDER");
+                        int editMode = ftpEnabled == 0 ? 1 : 0;
+                        setTvEnableAndContent(this.mEtServer, editMode, serverIp);
+                        VsEditView portView = this.mEtPort;
+                        setTvEnableAndContent(portView, editMode, "" + port);
+                        setTvEnableAndContent(this.mEtUsername, editMode, username);
+                        setTvEnableAndContent(this.mEtPwd, editMode, password);
+                        setTvEnableAndContent(this.mEtFolder, editMode, subfolder);
                     }
                 }
             } catch (JSONException unused) {
@@ -114,15 +114,15 @@ public class FtpOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     public void saveData() {
-        int intValue = parse2Int(this.mEtPort).intValue();
-        if (intValue <= 0 || intValue > 65535) {
+        int port = parse2Int(this.mEtPort).intValue();
+        if (port <= 0 || port > 65535) {
             toastSf((int) R.string.PortIsError);
             return;
         }
-        JSONObject jSONObject = this.mFtpObj;
-        if (jSONObject != null) {
+        JSONObject ftpConfig = this.mFtpObj;
+        if (ftpConfig != null) {
             try {
-                jSONObject.put("SERVERIP", StringUtils.getString(this.mEtServer));
+                ftpConfig.put("SERVERIP", StringUtils.getString(this.mEtServer));
                 this.mFtpObj.put("PORT", StringUtils.getString(this.mEtPort));
                 this.mFtpObj.put("LOGINUSER", StringUtils.getString(this.mEtUsername));
                 this.mFtpObj.put("LOGINPWD", StringUtils.getString(this.mEtPwd));
@@ -134,10 +134,10 @@ public class FtpOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     public void setBtnStatus() {
-        JSONObject jSONObject = this.mFtpObj;
-        if (jSONObject != null) {
+        JSONObject ftpConfig = this.mFtpObj;
+        if (ftpConfig != null) {
             try {
-                this.mFtpObj.put("EN", jSONObject.getInt("EN") == 0 ? 1 : 0);
+                this.mFtpObj.put("EN", ftpConfig.getInt("EN") == 0 ? 1 : 0);
                 refreshUi();
             } catch (JSONException unused) {
             }
@@ -146,20 +146,20 @@ public class FtpOfNetwork extends ConfigFragment implements BaseListener.GetList
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("FTPS", "?");
-            jSONObject.put("NWPM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject request = new JSONObject();
+            JSONObject networkParams = new JSONObject();
+            networkParams.put("FTPS", "?");
+            request.put("NWPM", networkParams);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String responseJson) {
         try {
-            LogUtils.e("FtpOfNetwork", "getSuccess 1, result: " + str);
-            this.mFtpRes = new JSONObject(str);
+            LogUtils.e("FtpOfNetwork", "getSuccess 1, result: " + responseJson);
+            this.mFtpRes = new JSONObject(responseJson);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -167,11 +167,11 @@ public class FtpOfNetwork extends ConfigFragment implements BaseListener.GetList
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mFtpRes;
-        if (jSONObject == null) {
+        JSONObject ftpResponse = this.mFtpRes;
+        if (ftpResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return ftpResponse.toString();
     }
 
     public void setSuccess() {
