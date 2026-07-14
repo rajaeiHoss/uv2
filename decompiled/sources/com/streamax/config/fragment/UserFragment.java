@@ -75,17 +75,17 @@ public class UserFragment extends ConfigFragment implements BaseListener.GetList
     }
 
     public void savePassword() {
-        String string = StringUtils.getString(this.mEtPwd);
-        String string2 = StringUtils.getString(this.mEtConfirm);
-        if (TextUtils.isEmpty(string) || TextUtils.isEmpty(string2)) {
+        String password = StringUtils.getString(this.mEtPwd);
+        String confirmedPassword = StringUtils.getString(this.mEtConfirm);
+        if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmedPassword)) {
             toastSf((int) R.string.config_PasswordIsEmpty);
-        } else if (!string.equals(string2)) {
+        } else if (!password.equals(confirmedPassword)) {
             toastSf((int) R.string.config_TwicePasswordIsNotEquals);
         } else {
             JSONObject jSONObject = this.mUserRes;
             if (jSONObject != null) {
                 try {
-                    jSONObject.put("PW", string);
+                    jSONObject.put("PW", password);
                     showLoading();
                     NetManager.getDefault().setUserRigth(username, this.mUserRes.toString(), new SuperListener.SetConfigListener() {
                         public void onSuccess() {
@@ -103,10 +103,10 @@ public class UserFragment extends ConfigFragment implements BaseListener.GetList
         }
     }
 
-    public void getSuccess(String str) {
-        LogUtils.e("UserFragment", "getSuccess 1, result: " + str);
+    public void getSuccess(String response) {
+        LogUtils.e("UserFragment", "getSuccess 1, result: " + response);
         try {
-            this.mUserRes = new JSONObject(str);
+            this.mUserRes = new JSONObject(response);
         } catch (JSONException unused) {
             showErrorFragment();
         }
