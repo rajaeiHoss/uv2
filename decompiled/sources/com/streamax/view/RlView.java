@@ -13,9 +13,9 @@ public class RlView extends RelativeLayout {
         super(context, attributeSet);
     }
 
-    public RlView SetCliskable(boolean z) {
-        setClickable(z);
-        setFocusable(z);
+    public RlView SetCliskable(boolean clickable) {
+        setClickable(clickable);
+        setFocusable(clickable);
         return this;
     }
 }
