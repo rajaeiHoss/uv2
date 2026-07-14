@@ -12,10 +12,10 @@ public final class CommonUtilities {
     public static final String SERVER_URL = "http://180.188.196.70:8080/gcm-demo/";
     static final String TAG = "CommonUtilities";
 
-    static void displayMessage(Context context, String str) {
+    static void displayMessage(Context context, String message) {
         Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
-        Log.v(TAG, "[CommonUtilities]message:" + str);
-        intent.putExtra(EXTRA_MESSAGE, str);
+        Log.v(TAG, "[CommonUtilities]message:" + message);
+        intent.putExtra(EXTRA_MESSAGE, message);
         context.sendBroadcast(intent);
     }
 }
