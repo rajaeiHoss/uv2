@@ -47,8 +47,8 @@ public class LocalRecordFileList extends ListView {
         this(context, (AttributeSet) null);
     }
 
-    public void setEditState(boolean z) {
-        bEdit = z;
+    public void setEditState(boolean isEditing) {
+        bEdit = isEditing;
         refreshAdapter();
     }
 
