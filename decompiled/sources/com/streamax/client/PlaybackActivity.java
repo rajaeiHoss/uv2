@@ -190,12 +190,12 @@ public class PlaybackActivity extends Activity {
         this.mLocalFileSelect.findViewById(R.id.localfile_title_delete).setOnClickListener(this.mOnClickListener);
         this.mLocalFileSelect.findViewById(R.id.localfile_title_confirm).setOnClickListener(this.mOnClickListener);
         this.mLocalFileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 if (!PlaybackActivity.this.mLocalFileList.getEditState()) {
-                    String str = ((LocalRecordFileList.ViewHolder) view.getTag()).path;
+                    String recordPath = ((LocalRecordFileList.ViewHolder) view.getTag()).path;
                     Intent intent = new Intent(PlaybackActivity.this, LocalPlaybackActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("path", str);
+                    bundle.putString("path", recordPath);
                     intent.putExtras(bundle);
                     PlaybackActivity.this.startActivity(intent);
                 }
@@ -243,8 +243,8 @@ public class PlaybackActivity extends Activity {
     public class PlaybackAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
-        public long getItemId(int i) {
-            return (long) i;
+        public long getItemId(int position) {
+            return (long) position;
         }
 
         public PlaybackAdapter(Context context) {
@@ -255,38 +255,38 @@ public class PlaybackActivity extends Activity {
             return PlaybackActivity.this.mData.size();
         }
 
-        public Object getItem(int i) {
-            return PlaybackActivity.this.mData.get(i);
+        public Object getItem(int position) {
+            return PlaybackActivity.this.mData.get(position);
         }
 
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            View view2;
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View itemView;
             ViewHolder viewHolder;
-            if (view == null) {
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                view2 = this.mInflater.inflate(R.layout.playback_item, (ViewGroup) null);
-                viewHolder.img = (ImageView) view2.findViewById(R.id.playback_item_image);
-                viewHolder.title = (TextView) view2.findViewById(R.id.playback_item_title);
-                viewHolder.ccontent = (TextView) view2.findViewById(R.id.playback_item_content);
-                view2.setTag(viewHolder);
+                itemView = this.mInflater.inflate(R.layout.playback_item, (ViewGroup) null);
+                viewHolder.img = (ImageView) itemView.findViewById(R.id.playback_item_image);
+                viewHolder.title = (TextView) itemView.findViewById(R.id.playback_item_title);
+                viewHolder.ccontent = (TextView) itemView.findViewById(R.id.playback_item_content);
+                itemView.setTag(viewHolder);
             } else {
-                view2 = view;
-                viewHolder = (ViewHolder) view.getTag();
+                itemView = convertView;
+                viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.img.setBackgroundResource(((Integer) PlaybackActivity.this.mData.get(i).get("image")).intValue());
-            viewHolder.title.setText((String) PlaybackActivity.this.mData.get(i).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
-            viewHolder.ccontent.setText((String) PlaybackActivity.this.mData.get(i).get(FirebaseAnalytics.Param.CONTENT));
-            return view2;
+            viewHolder.img.setBackgroundResource(((Integer) PlaybackActivity.this.mData.get(position).get("image")).intValue());
+            viewHolder.title.setText((String) PlaybackActivity.this.mData.get(position).get(PlusShare.KEY_CONTENT_DEEP_LINK_METADATA_TITLE));
+            viewHolder.ccontent.setText((String) PlaybackActivity.this.mData.get(position).get(FirebaseAnalytics.Param.CONTENT));
+            return itemView;
         }
     }
 
     /* access modifiers changed from: protected */
     public void onResume() {
-        int i = this.mCurrentPage;
-        if (i == 3) {
+        int currentPage = this.mCurrentPage;
+        if (currentPage == 3) {
             this.mLocalFileList.refreshFiles();
             this.mLocalFileList.refreshAdapter();
-        } else if (i == 4) {
+        } else if (currentPage == 4) {
             this.mImageViewer.refreshAdapter();
         }
         super.onResume();
