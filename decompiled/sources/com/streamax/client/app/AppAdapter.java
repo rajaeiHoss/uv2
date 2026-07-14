@@ -28,8 +28,8 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
         return list.size();
     }
 
-    public void setData(List<T> list) {
-        this.mDataSet = list;
+    public void setData(List<T> dataSet) {
+        this.mDataSet = dataSet;
         notifyDataSetChanged();
     }
 
@@ -37,15 +37,15 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
         return this.mDataSet;
     }
 
-    public void addData(List<T> list) {
-        if (list != null && list.size() != 0) {
-            List<T> list2 = this.mDataSet;
-            if (list2 == null || list2.size() == 0) {
-                setData(list);
+    public void addData(List<T> dataSet) {
+        if (dataSet != null && dataSet.size() != 0) {
+            List<T> currentDataSet = this.mDataSet;
+            if (currentDataSet == null || currentDataSet.size() == 0) {
+                setData(dataSet);
                 return;
             }
-            this.mDataSet.addAll(list);
-            notifyItemRangeInserted(this.mDataSet.size() - list.size(), list.size());
+            this.mDataSet.addAll(dataSet);
+            notifyItemRangeInserted(this.mDataSet.size() - dataSet.size(), dataSet.size());
         }
     }
 
@@ -57,96 +57,96 @@ public abstract class AppAdapter<T> extends BaseAdapter<BaseAdapter<?>.ViewHolde
         }
     }
 
-    public boolean containsItem(int i) {
-        return containsItem(getItem(i));
+    public boolean containsItem(int position) {
+        return containsItem(getItem(position));
     }
 
-    public boolean containsItem(T t) {
+    public boolean containsItem(T item) {
         List<T> list = this.mDataSet;
-        if (list == null || t == null) {
+        if (list == null || item == null) {
             return false;
         }
-        return list.contains(t);
+        return list.contains(item);
     }
 
-    public T getItem(int i) {
+    public T getItem(int position) {
         List<T> list = this.mDataSet;
         if (list == null) {
             return null;
         }
-        return list.get(i);
+        return list.get(position);
     }
 
-    public void setItem(int i, T t) {
+    public void setItem(int position, T item) {
         if (this.mDataSet == null) {
             this.mDataSet = new ArrayList();
         }
-        this.mDataSet.set(i, t);
-        notifyItemChanged(i);
+        this.mDataSet.set(position, item);
+        notifyItemChanged(position);
     }
 
-    public void addItem(T t) {
+    public void addItem(T item) {
         if (this.mDataSet == null) {
             this.mDataSet = new ArrayList();
         }
-        addItem(this.mDataSet.size(), t);
+        addItem(this.mDataSet.size(), item);
     }
 
-    public void addItem(int i, T t) {
+    public void addItem(int position, T item) {
         if (this.mDataSet == null) {
             this.mDataSet = new ArrayList();
         }
-        if (i < this.mDataSet.size()) {
-            this.mDataSet.add(i, t);
+        if (position < this.mDataSet.size()) {
+            this.mDataSet.add(position, item);
         } else {
-            this.mDataSet.add(t);
-            i = this.mDataSet.size() - 1;
+            this.mDataSet.add(item);
+            position = this.mDataSet.size() - 1;
         }
-        notifyItemInserted(i);
+        notifyItemInserted(position);
     }
 
-    public void removeItem(T t) {
-        int indexOf = this.mDataSet.indexOf(t);
+    public void removeItem(T item) {
+        int indexOf = this.mDataSet.indexOf(item);
         if (indexOf != -1) {
             removeItem(indexOf);
         }
     }
 
-    public void removeItem(int i) {
-        this.mDataSet.remove(i);
-        notifyItemRemoved(i);
+    public void removeItem(int position) {
+        this.mDataSet.remove(position);
+        notifyItemRemoved(position);
     }
 
     public int getPageNumber() {
         return this.mPageNumber;
     }
 
-    public void setPageNumber(int i) {
-        this.mPageNumber = i;
+    public void setPageNumber(int pageNumber) {
+        this.mPageNumber = pageNumber;
     }
 
     public boolean isLastPage() {
         return this.mLastPage;
     }
 
-    public void setLastPage(boolean z) {
-        this.mLastPage = z;
+    public void setLastPage(boolean lastPage) {
+        this.mLastPage = lastPage;
     }
 
     public Object getTag() {
         return this.mTag;
     }
 
-    public void setTag(Object obj) {
-        this.mTag = obj;
+    public void setTag(Object tag) {
+        this.mTag = tag;
     }
 
     public final class SimpleHolder extends BaseAdapter<BaseAdapter<?>.ViewHolder>.ViewHolder {
-        public void onBindView(int i) {
+        public void onBindView(int position) {
         }
 
-        public SimpleHolder(int i) {
-            super((BaseAdapter) AppAdapter.this, i);
+        public SimpleHolder(int layoutResId) {
+            super((BaseAdapter) AppAdapter.this, layoutResId);
         }
 
         public SimpleHolder(View view) {
