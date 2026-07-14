@@ -51,7 +51,7 @@ public class FragmentBase extends Fragment implements SelectInterface {
         return null;
     }
 
-    public void saveSelect(String str, List<Integer> list) {
+    public void saveSelect(String name, List<Integer> selectedValues) {
     }
 
     /* access modifiers changed from: protected */
@@ -70,25 +70,25 @@ public class FragmentBase extends Fragment implements SelectInterface {
     }
 
     /* access modifiers changed from: protected */
-    public List<String> getStrDatas(int i) {
-        return StringUtils.getStrDatas(i);
+    public List<String> getStrDatas(int stringArrayId) {
+        return StringUtils.getStrDatas(stringArrayId);
     }
 
     /* access modifiers changed from: protected */
-    public List<Integer> getIntDatas(int i) {
-        return StringUtils.getIntDatas(i);
+    public List<Integer> getIntDatas(int intArrayId) {
+        return StringUtils.getIntDatas(intArrayId);
     }
 
-    public void pushSelectFragment(String str, String str2, int i, List<String> list, List<Integer> list2) {
+    public void pushSelectFragment(String title, String fragmentName, int checkBoxMode, List<String> values, List<Integer> selectedValues) {
         FragmentSelect fragmentSelect = new FragmentSelect();
         fragmentSelect.mPopFragment = this;
         fragmentSelect.SetSelectInterface(this);
-        fragmentSelect.mFragTitle = str;
-        fragmentSelect.mFragName = str2;
+        fragmentSelect.mFragTitle = title;
+        fragmentSelect.mFragName = fragmentName;
         fragmentSelect.SetTextViewData(UiUtils.getString(R.string.config_All));
-        fragmentSelect.SetListViewData(list);
-        fragmentSelect.SetListViewSelect(list2);
-        fragmentSelect.mCheckBox = i;
+        fragmentSelect.SetListViewData(values);
+        fragmentSelect.SetListViewSelect(selectedValues);
+        fragmentSelect.mCheckBox = checkBoxMode;
         ((PlayActivity) getActivity()).refreshPager(fragmentSelect);
     }
 
@@ -107,24 +107,24 @@ public class FragmentBase extends Fragment implements SelectInterface {
         initTitleView();
     }
 
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        this.mInflater = layoutInflater;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.mInflater = inflater;
         return initView();
     }
 
-    public void onActivityCreated(Bundle bundle) {
-        super.onActivityCreated(bundle);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initData();
         initEvent();
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(int i) {
-        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(i)));
+    public void toastSf(int messageResId) {
+        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(messageResId)));
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(String str) {
-        ToastUtils.show((CharSequence) str);
+    public void toastSf(String message) {
+        ToastUtils.show((CharSequence) message);
     }
 }
