@@ -21,8 +21,8 @@ public class NetPresenter {
 
     public void getConfig(final BaseListener.GetListener getListener) {
         NetManager.getDefault().getConfig(getListener.requestForGetConfig(), new SuperListener.GetConfigListener() {
-            public void onSuccess(String str) {
-                getListener.getSuccess(str);
+            public void onSuccess(String response) {
+                getListener.getSuccess(response);
             }
 
             public void onFailure() {
@@ -46,9 +46,9 @@ public class NetPresenter {
     public void getStorageInfo(final BaseListener.GetStorageInfoListener getStorageInfoListener) {
         getStorageInfoListener.getCurFragment().showLoading();
         NetManager.getDefault().getStorageInfo(new SuperListener.GetConfigListener() {
-            public void onSuccess(String str) {
+            public void onSuccess(String response) {
                 getStorageInfoListener.getCurFragment().hideLoading();
-                getStorageInfoListener.getSuccess(str);
+                getStorageInfoListener.getSuccess(response);
             }
 
             public void onFailure() {
@@ -79,9 +79,9 @@ public class NetPresenter {
         String json = new Gson().toJson((Object) userBean);
         getListener.getCurFragment().showLoading();
         NetManager.getDefault().getUserRigth(json, new SuperListener.GetConfigListener() {
-            public void onSuccess(String str) {
+            public void onSuccess(String response) {
                 getListener.getCurFragment().hideLoading();
-                getListener.getSuccess(str);
+                getListener.getSuccess(response);
             }
 
             public void onFailure() {
