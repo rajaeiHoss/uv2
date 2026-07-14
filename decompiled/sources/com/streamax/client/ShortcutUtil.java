@@ -10,18 +10,18 @@ import android.os.Build;
 import com.zycs.UView.R;
 
 public class ShortcutUtil {
-    private static SharedPreferences getSharedPreferences(String str, int i) {
+    private static SharedPreferences getSharedPreferences(String name, int mode) {
         return null;
     }
 
-    public static void createShortCut(Activity activity, int i, int i2) {
+    public static void createShortCut(Activity activity, int iconResId, int labelResId) {
         if (!hasShortCut(activity)) {
             SharedPreferences sharedPreferences = activity.getSharedPreferences("viewcam", 0);
             if (sharedPreferences == null || !sharedPreferences.getBoolean("icon", false)) {
                 Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
                 intent.putExtra("duplicate", false);
-                intent.putExtra("android.intent.extra.shortcut.NAME", activity.getString(i2));
-                intent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", Intent.ShortcutIconResource.fromContext(activity.getApplicationContext(), i));
+                intent.putExtra("android.intent.extra.shortcut.NAME", activity.getString(labelResId));
+                intent.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", Intent.ShortcutIconResource.fromContext(activity.getApplicationContext(), iconResId));
                 intent.putExtra("android.intent.extra.shortcut.INTENT", new Intent(activity.getApplicationContext(), activity.getClass()));
                 activity.sendBroadcast(intent);
                 sharedPreferences.edit().putBoolean("icon", true).commit();
