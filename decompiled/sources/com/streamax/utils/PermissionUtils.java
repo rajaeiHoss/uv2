@@ -5,12 +5,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class PermissionUtils {
-    public static boolean checkPermissionGranted(Activity activity, String str) {
-        return ContextCompat.checkSelfPermission(activity, str) == 0;
+    public static boolean checkPermissionGranted(Activity activity, String permission) {
+        return ContextCompat.checkSelfPermission(activity, permission) == 0;
     }
 
-    public static void requestPermission(Activity activity, String str, int i) {
-        ActivityCompat.shouldShowRequestPermissionRationale(activity, str);
-        ActivityCompat.requestPermissions(activity, new String[]{str}, i);
+    public static void requestPermission(Activity activity, String permission, int requestCode) {
+        ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
     }
 }
