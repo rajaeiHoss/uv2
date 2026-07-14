@@ -32,32 +32,32 @@ public class AppProxy {
         return context.getPackageName();
     }
 
-    public static Drawable getDrawable(int i) {
-        return getResources().getDrawable(i);
+    public static Drawable getDrawable(int drawableResId) {
+        return getResources().getDrawable(drawableResId);
     }
 
     public static boolean isCNLan() {
         return getResources().getConfiguration().locale.getLanguage().endsWith("zh");
     }
 
-    public static float s2g(int i, long j) {
-        if (i == STORAGE_UNIT_B) {
-            return ((((float) j) * 10.0f) / 1.0E9f) / 10.0f;
+    public static float s2g(int storageUnit, long size) {
+        if (storageUnit == STORAGE_UNIT_B) {
+            return ((((float) size) * 10.0f) / 1.0E9f) / 10.0f;
         }
-        if (i == STORAGE_UNIT_KB) {
-            return ((((float) j) * 10.0f) / 1000000.0f) / 10.0f;
+        if (storageUnit == STORAGE_UNIT_KB) {
+            return ((((float) size) * 10.0f) / 1000000.0f) / 10.0f;
         }
-        if (i == STORAGE_UNIT_MB) {
-            return ((((float) j) * 10.0f) / 1000.0f) / 10.0f;
+        if (storageUnit == STORAGE_UNIT_MB) {
+            return ((((float) size) * 10.0f) / 1000.0f) / 10.0f;
         }
-        if (i == STORAGE_UNIT_GB) {
-            return ((float) j) * 1.0f;
+        if (storageUnit == STORAGE_UNIT_GB) {
+            return ((float) size) * 1.0f;
         }
-        return i == STORAGE_UNIT_TB ? ((float) j) * 1000.0f : ((float) j) * 1.0f;
+        return storageUnit == STORAGE_UNIT_TB ? ((float) size) * 1000.0f : ((float) size) * 1.0f;
     }
 
-    public static void singleIcon(boolean z, View view) {
-        if (z) {
+    public static void singleIcon(boolean selected, View view) {
+        if (selected) {
             if (view instanceof ImageView) {
                 ((ImageView) view).setImageResource(R.drawable.rb_signle_checked);
             }
