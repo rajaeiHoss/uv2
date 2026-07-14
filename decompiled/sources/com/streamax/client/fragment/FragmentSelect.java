@@ -32,8 +32,8 @@ public class FragmentSelect extends FragmentBase implements View.OnClickListener
         this.mInterface = selectInterface;
     }
 
-    public void SetTextViewData(String str) {
-        this.mText = str;
+    public void SetTextViewData(String text) {
+        this.mText = text;
     }
 
     public void SetListViewData(List<String> list) {
@@ -84,14 +84,14 @@ public class FragmentSelect extends FragmentBase implements View.OnClickListener
         }
 
         /* access modifiers changed from: protected */
-        public View initConvertView(int i, View view, ViewGroup viewGroup) {
-            final Integer num = new Integer(i);
-            if (view == null) {
-                view = View.inflate(FragmentSelect.this.mContext, R.layout.view_lv_item, (ViewGroup) null);
-                new ViewHolder(view);
+        public View initConvertView(int position, View convertView, ViewGroup parent) {
+            final Integer selectedValue = new Integer(position);
+            if (convertView == null) {
+                convertView = View.inflate(FragmentSelect.this.mContext, R.layout.view_lv_item, (ViewGroup) null);
+                new ViewHolder(convertView);
             }
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
-            if (FragmentSelect.this.mSelectList.contains(num)) {
+            ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+            if (FragmentSelect.this.mSelectList.contains(selectedValue)) {
                 if (FragmentSelect.this.mCheckBox == 1) {
                     ImageUtils.showIcon(viewHolder.mRbForCh, R.drawable.cb_selected);
                 } else {
@@ -105,20 +105,20 @@ public class FragmentSelect extends FragmentBase implements View.OnClickListener
             if (FragmentSelect.this.mCheckBox == 1 && FragmentSelect.this.mSelectList.size() == FragmentSelect.this.mAlDatas.size()) {
                 ImageUtils.showIcon(FragmentSelect.this.mTvAll, R.drawable.cb_selected);
             }
-            viewHolder.mRbForCh.setText((CharSequence) this.mDataSource.get(i));
+            viewHolder.mRbForCh.setText((CharSequence) this.mDataSource.get(position));
             viewHolder.mRbForCh.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     if (FragmentSelect.this.mCheckBox != 1) {
                         FragmentSelect.this.mSelectList.clear();
-                        FragmentSelect.this.mSelectList.add(num);
+                        FragmentSelect.this.mSelectList.add(selectedValue);
                         FragmentSelect.this.mAdapter.notifyDataSetChanged();
                         FragmentSelect.this.saveSelect();
                         return;
                     }
-                    if (FragmentSelect.this.mSelectList.indexOf(num) >= 0) {
-                        FragmentSelect.this.mSelectList.remove(num);
+                    if (FragmentSelect.this.mSelectList.indexOf(selectedValue) >= 0) {
+                        FragmentSelect.this.mSelectList.remove(selectedValue);
                     } else {
-                        FragmentSelect.this.mSelectList.add(num);
+                        FragmentSelect.this.mSelectList.add(selectedValue);
                     }
                     if (FragmentSelect.this.mSelectList.size() == FragmentSelect.this.mAlDatas.size()) {
                         ImageUtils.showIcon(FragmentSelect.this.mTvAll, R.drawable.cb_selected);
@@ -128,7 +128,7 @@ public class FragmentSelect extends FragmentBase implements View.OnClickListener
                     FragmentSelect.this.mAdapter.notifyDataSetChanged();
                 }
             });
-            return view;
+            return convertView;
         }
 
         class ViewHolder {
@@ -168,10 +168,10 @@ public class FragmentSelect extends FragmentBase implements View.OnClickListener
             this.mSelectList.clear();
             ImageUtils.showIcon(this.mTvAll, R.drawable.cb_unselected);
         } else {
-            for (int i = 0; i < this.mAlDatas.size(); i++) {
-                Integer num = new Integer(i);
-                if (this.mSelectList.indexOf(num) < 0) {
-                    this.mSelectList.add(num);
+            for (int index = 0; index < this.mAlDatas.size(); index++) {
+                Integer selectedValue = new Integer(index);
+                if (this.mSelectList.indexOf(selectedValue) < 0) {
+                    this.mSelectList.add(selectedValue);
                 }
             }
             ImageUtils.showIcon(this.mTvAll, R.drawable.cb_selected);
