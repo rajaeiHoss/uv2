@@ -54,26 +54,26 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
     }
 
     public void refreshUi() {
-        JSONObject jSONObject;
-        JSONObject jSONObject2 = this.mPortRes;
-        if (jSONObject2 != null) {
+        JSONObject portConfig;
+        JSONObject portResponse = this.mPortRes;
+        if (portResponse != null) {
             try {
-                JSONObject jSONObject3 = jSONObject2.getJSONObject("NWSM");
-                if (jSONObject3 != null && (jSONObject = jSONObject3.getJSONObject("PORT")) != null) {
-                    JSONArray jSONArray = jSONObject.getJSONArray("PORTLIST");
-                    this.mPortArr = jSONArray;
-                    if (jSONArray != null) {
-                        if (jSONArray.length() >= 1) {
-                            VsEditView vsEditView = this.mEtWp;
-                            vsEditView.SetText(String.valueOf(this.mPortArr.get(0)));
+                JSONObject networkSettings = portResponse.getJSONObject("NWSM");
+                if (networkSettings != null && (portConfig = networkSettings.getJSONObject("PORT")) != null) {
+                    JSONArray portList = portConfig.getJSONArray("PORTLIST");
+                    this.mPortArr = portList;
+                    if (portList != null) {
+                        if (portList.length() >= 1) {
+                            VsEditView webPortView = this.mEtWp;
+                            webPortView.SetText(String.valueOf(this.mPortArr.get(0)));
                         }
                         if (this.mPortArr.length() >= 2) {
-                            VsEditView vsEditView2 = this.mEtMp;
-                            vsEditView2.SetText(String.valueOf(this.mPortArr.get(1)));
+                            VsEditView mediaPortView = this.mEtMp;
+                            mediaPortView.SetText(String.valueOf(this.mPortArr.get(1)));
                         }
                         if (this.mPortArr.length() >= 3) {
-                            VsEditView vsEditView3 = this.mEtRp;
-                            vsEditView3.SetText(String.valueOf(this.mPortArr.get(2)));
+                            VsEditView rtspPortView = this.mEtRp;
+                            rtspPortView.SetText(String.valueOf(this.mPortArr.get(2)));
                         }
                     }
                 }
@@ -114,24 +114,24 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
     }
 
     public void saveData() {
-        int strLen = getStrLen(this.mEtWp);
-        int strLen2 = getStrLen(this.mEtMp);
-        int strLen3 = getStrLen(this.mEtRp);
-        if (strLen == 0 || strLen2 == 0 || strLen3 == 0) {
+        int webPortLength = getStrLen(this.mEtWp);
+        int mediaPortLength = getStrLen(this.mEtMp);
+        int rtspPortLength = getStrLen(this.mEtRp);
+        if (webPortLength == 0 || mediaPortLength == 0 || rtspPortLength == 0) {
             toastSf((int) R.string.PortIsError);
             return;
         }
-        int intValue = parse2Int(this.mEtWp).intValue();
-        int intValue2 = parse2Int(this.mEtMp).intValue();
-        int intValue3 = parse2Int(this.mEtRp).intValue();
-        if (intValue == intValue2 || intValue == intValue3 || intValue2 == intValue3 || intValue <= 0 || intValue2 <= 0 || intValue3 <= 0) {
+        int webPort = parse2Int(this.mEtWp).intValue();
+        int mediaPort = parse2Int(this.mEtMp).intValue();
+        int rtspPort = parse2Int(this.mEtRp).intValue();
+        if (webPort == mediaPort || webPort == rtspPort || mediaPort == rtspPort || webPort <= 0 || mediaPort <= 0 || rtspPort <= 0) {
             toastSf((int) R.string.PortIsError);
             return;
         }
-        JSONArray jSONArray = this.mPortArr;
-        if (jSONArray != null) {
+        JSONArray portList = this.mPortArr;
+        if (portList != null) {
             try {
-                jSONArray.put(0, parse2Int(this.mEtWp));
+                portList.put(0, parse2Int(this.mEtWp));
                 this.mPortArr.put(1, parse2Int(this.mEtMp));
                 this.mPortArr.put(2, parse2Int(this.mEtRp));
                 NetPresenter.getDefault().setConfig(this);
@@ -140,7 +140,7 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
         }
     }
 
-    public void onFocusChange(View view, boolean z) {
+    public void onFocusChange(View view, boolean hasFocus) {
         switch (view.getId()) {
             case R.id.network_port_et_httpsport /*2131362815*/:
                 setRegion(this.mEtHps, 65535);
@@ -159,35 +159,34 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
         }
     }
 
-    public void setRegion(final EditText editText, final int i) {
+    public void setRegion(final EditText editText, final int maxPort) {
         editText.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                if (i > 1) {
-                    String charSequence2 = charSequence.toString();
-                    if (i != -1 && !charSequence2.isEmpty()) {
-                        int parseInt = Integer.parseInt(charSequence2);
-                        int i4 = i;
-                        if (parseInt > i4) {
-                            charSequence = String.valueOf(i4);
-                            editText.setText(charSequence);
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                if (maxPort > 1) {
+                    String portText = text.toString();
+                    if (maxPort != -1 && !portText.isEmpty()) {
+                        int portValue = Integer.parseInt(portText);
+                        if (portValue > maxPort) {
+                            text = String.valueOf(maxPort);
+                            editText.setText(text);
                         }
-                        editText.setSelection(charSequence.length());
+                        editText.setSelection(text.length());
                     }
                 }
             }
 
             public void afterTextChanged(Editable editable) {
-                if (editable != null && !editable.equals("") && i != -1) {
+                if (editable != null && !editable.equals("") && maxPort != -1) {
                     int value;
                     try {
                         value = Integer.parseInt(editable.toString());
                     } catch (NumberFormatException unused) {
                         value = 0;
                     }
-                    int max = i;
+                    int max = maxPort;
                     if (value > max) {
                         editText.setText(String.valueOf(max));
                         editText.setSelection(String.valueOf(max).length());
@@ -199,19 +198,19 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
 
     public String requestForGetConfig() {
         try {
-            JSONObject jSONObject = new JSONObject();
-            JSONObject jSONObject2 = new JSONObject();
-            jSONObject2.put("PORT", "?");
-            jSONObject.put("NWSM", jSONObject2);
-            return jSONObject.toString();
+            JSONObject request = new JSONObject();
+            JSONObject networkSettings = new JSONObject();
+            networkSettings.put("PORT", "?");
+            request.put("NWSM", networkSettings);
+            return request.toString();
         } catch (JSONException unused) {
             return "";
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String responseJson) {
         try {
-            this.mPortRes = new JSONObject(str);
+            this.mPortRes = new JSONObject(responseJson);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
@@ -219,11 +218,11 @@ public class PortOfNetwork extends ConfigFragment implements View.OnFocusChangeL
     }
 
     public String requestForSetConfig() {
-        JSONObject jSONObject = this.mPortRes;
-        if (jSONObject == null) {
+        JSONObject portResponse = this.mPortRes;
+        if (portResponse == null) {
             return "";
         }
-        return jSONObject.toString();
+        return portResponse.toString();
     }
 
     public void setSuccess() {
