@@ -23,15 +23,15 @@ public class ConfigActivity2 extends Activity {
     public WebView mWebView;
 
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         this.mApp = (MyApp) getApplication();
         View inflate = LayoutInflater.from(this).inflate(R.layout.configpage2, (ViewGroup) null);
         this.mRootView = inflate;
         setContentView(inflate);
-        Integer valueOf = Integer.valueOf(getString(R.string.settinglanguage));
+        Integer languageSetting = Integer.valueOf(getString(R.string.settinglanguage));
         this.mUrl = "https://www.baidu.com/";
-        this.mUrl = String.format("http://%s/Login?%s|%s|%d", new Object[]{MyApp.serverip, MyApp.username, MyApp.password, valueOf});
+        this.mUrl = String.format("http://%s/Login?%s|%s|%d", new Object[]{MyApp.serverip, MyApp.username, MyApp.password, languageSetting});
         WebView webView = (WebView) this.mRootView.findViewById(R.id.webview);
         this.mWebView = webView;
         webView.setHorizontalScrollBarEnabled(false);
@@ -54,14 +54,14 @@ public class ConfigActivity2 extends Activity {
                 }
             }
 
-            public boolean shouldOverrideUrlLoading(WebView webView, String str) {
-                if (webView == null || str == null) {
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                if (webView == null || url == null) {
                     return false;
                 }
-                if (!str.startsWith("http") && !str.startsWith("https")) {
+                if (!url.startsWith("http") && !url.startsWith("https")) {
                     return true;
                 }
-                webView.loadUrl(str);
+                webView.loadUrl(url);
                 return true;
             }
         });
