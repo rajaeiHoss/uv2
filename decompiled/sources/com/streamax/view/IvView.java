@@ -15,8 +15,8 @@ public class IvView extends ImageView {
         super(context, attributeSet);
     }
 
-    public IvView SetSelected(boolean z) {
-        this.mIsSelected = z;
+    public IvView SetSelected(boolean selected) {
+        this.mIsSelected = selected;
         return this;
     }
 
@@ -24,8 +24,8 @@ public class IvView extends ImageView {
         return this.mIsSelected;
     }
 
-    public IvView SetImageResource(int i) {
-        setImageResource(i);
+    public IvView SetImageResource(int resId) {
+        setImageResource(resId);
         return this;
     }
 }
