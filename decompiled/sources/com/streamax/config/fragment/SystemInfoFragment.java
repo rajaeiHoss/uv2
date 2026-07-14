@@ -150,9 +150,9 @@ public class SystemInfoFragment extends ConfigFragment implements BaseListener.G
         return this.mSystemInfoReq;
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mSystemInfoObj = new JSONObject(str);
+            this.mSystemInfoObj = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
