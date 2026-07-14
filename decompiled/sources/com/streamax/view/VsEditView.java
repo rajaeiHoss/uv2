@@ -11,7 +11,7 @@ public class VsEditView extends EditText {
     public Builder mBuilder;
 
     public interface TextChangedListener {
-        void AddTextChangedListener(VsEditView vsEditView, CharSequence charSequence, int i, int i2, int i3);
+        void AddTextChangedListener(VsEditView editView, CharSequence text, int start, int before, int count);
     }
 
     public VsEditView(Context context) {
@@ -30,8 +30,8 @@ public class VsEditView extends EditText {
     public class Builder {
         public VsEditView mEditView;
 
-        public Builder(VsEditView vsEditView) {
-            this.mEditView = vsEditView;
+        public Builder(VsEditView editView) {
+            this.mEditView = editView;
         }
 
         public int getLength() {
@@ -39,16 +39,16 @@ public class VsEditView extends EditText {
         }
     }
 
-    public void addTextChangedListener(final VsEditView vsEditView, final TextChangedListener textChangedListener) {
+    public void addTextChangedListener(final VsEditView editView, final TextChangedListener textChangedListener) {
         addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable editable) {
             }
 
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                textChangedListener.AddTextChangedListener(vsEditView, charSequence, i, i2, i3);
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                textChangedListener.AddTextChangedListener(editView, text, start, before, count);
             }
         });
     }
@@ -58,23 +58,23 @@ public class VsEditView extends EditText {
         return this;
     }
 
-    public VsEditView SetText(CharSequence charSequence) {
-        setText(charSequence);
+    public VsEditView SetText(CharSequence text) {
+        setText(text);
         return this;
     }
 
-    public VsEditView SetText(int i) {
-        setText(StringUtils.getString(Integer.valueOf(i)));
+    public VsEditView SetText(int stringResId) {
+        setText(StringUtils.getString(Integer.valueOf(stringResId)));
         return this;
     }
 
-    public VsEditView SetTextColor(int i) {
-        setTextColor(i);
+    public VsEditView SetTextColor(int color) {
+        setTextColor(color);
         return this;
     }
 
-    public VsEditView SetEnable(boolean z) {
-        setEnabled(z);
+    public VsEditView SetEnable(boolean enabled) {
+        setEnabled(enabled);
         return this;
     }
 
