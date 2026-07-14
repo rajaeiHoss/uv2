@@ -314,11 +314,11 @@ public class DeviceListFragment extends ConfigFragment {
         super.onResume();
     }
 
-    public void getOperateMaskInt(String str) {
-        if (str == null || "".equals(str) || str.isEmpty()) {
+    public void getOperateMaskInt(String operateMask) {
+        if (operateMask == null || "".equals(operateMask) || operateMask.isEmpty()) {
             this.mApp.mOperateMaskInt = 0;
         } else {
-            this.mApp.mOperateMaskInt = Long.parseLong(str);
+            this.mApp.mOperateMaskInt = Long.parseLong(operateMask);
         }
         MyApp myApp = this.mApp;
         myApp.mRecordMaskInt = 256 & myApp.mOperateMaskInt;
