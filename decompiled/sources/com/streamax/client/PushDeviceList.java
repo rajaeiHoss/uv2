@@ -129,14 +129,15 @@ public class PushDeviceList extends ListView {
                 viewholder.tv = (TextView) view.findViewById(R.id.pushconfigtv);
                 viewholder.tb = (ToggleButton) view.findViewById(R.id.pushitemswitch);
                 viewholder.tb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
-                        Log.v(PushDeviceList.TAG, "[onCheckedChanged]CheckState:" + z);
-                        if (PushDeviceList.this.mData != null && compoundButton.getId() <= PushDeviceList.this.mData.size()) {
-                            DevInfoBean devInfoBean = PushDeviceList.this.mData.get(compoundButton.getId());
-                            if (z && devInfoBean.mPush == 0) {
-                                PushDeviceList.this.RegisterPushService(compoundButton.getId());
-                            } else if (!z && devInfoBean.mPush == 1) {
-                                PushDeviceList.this.UnregisterPushService(compoundButton.getId());
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                        Log.v(PushDeviceList.TAG, "[onCheckedChanged]CheckState:" + checked);
+                        int position = compoundButton.getId();
+                        if (PushDeviceList.this.mData != null && position < PushDeviceList.this.mData.size()) {
+                            DevInfoBean devInfoBean = PushDeviceList.this.mData.get(position);
+                            if (checked && devInfoBean.mPush == 0) {
+                                PushDeviceList.this.RegisterPushService(position);
+                            } else if (!checked && devInfoBean.mPush == 1) {
+                                PushDeviceList.this.UnregisterPushService(position);
                             }
                         }
                     }
