@@ -18,11 +18,11 @@ public class SingleFragment extends ConfigFragment implements AdapterView.OnItem
     private String mTitle;
 
     public interface SingleFragmentInterface {
-        void saveSingleFragment(String str, int i);
+        void saveSingleFragment(String name, int position);
     }
 
-    public SingleFragment SetInterface(String str, SingleFragmentInterface singleFragmentInterface) {
-        this.mName = str;
+    public SingleFragment SetInterface(String name, SingleFragmentInterface singleFragmentInterface) {
+        this.mName = name;
         this.mInterface = singleFragmentInterface;
         return this;
     }
@@ -32,23 +32,23 @@ public class SingleFragment extends ConfigFragment implements AdapterView.OnItem
         return this;
     }
 
-    public SingleFragment setDatas(int i) {
-        this.mDatas = StringUtils.getStrDatas(i);
+    public SingleFragment setDatas(int stringArrayId) {
+        this.mDatas = StringUtils.getStrDatas(stringArrayId);
         return this;
     }
 
-    public SingleFragment setTitle(String str) {
-        this.mTitle = str;
+    public SingleFragment setTitle(String title) {
+        this.mTitle = title;
         return this;
     }
 
-    public SingleFragment setTitle(int i) {
-        this.mTitle = StringUtils.getString(Integer.valueOf(i));
+    public SingleFragment setTitle(int titleResId) {
+        this.mTitle = StringUtils.getString(Integer.valueOf(titleResId));
         return this;
     }
 
-    public SingleFragment setPosition(int i) {
-        itemPosition = i;
+    public SingleFragment setPosition(int position) {
+        itemPosition = position;
         return this;
     }
 
@@ -98,15 +98,15 @@ public class SingleFragment extends ConfigFragment implements AdapterView.OnItem
         }
     }
 
-    public void onHiddenChanged(boolean z) {
-        super.onHiddenChanged(z);
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
     }
 
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-        itemPosition = i;
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        itemPosition = position;
         SingleFragmentInterface singleFragmentInterface = this.mInterface;
         if (singleFragmentInterface != null) {
-            singleFragmentInterface.saveSingleFragment(this.mName, i);
+            singleFragmentInterface.saveSingleFragment(this.mName, position);
         }
         prePage();
     }
