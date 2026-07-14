@@ -57,13 +57,13 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(int i) {
-        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(i)));
+    public void toastSf(int messageResId) {
+        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(messageResId)));
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(String str) {
-        ToastUtils.show((CharSequence) str);
+    public void toastSf(String message) {
+        ToastUtils.show((CharSequence) message);
     }
 
     private boolean checkDownRunnable() {
@@ -86,11 +86,11 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
             if (DownFileInfo.this.mDvrNet == null) {
                 DvrNet dvrNet = new DvrNet();
                 Map<String, Object> connDeviceProxy = ConnDeviceProxy.connDeviceProxy(dvrNet, DownFileInfo.this.mApp.mDevInfo, DownFileInfo.this.mApp);
-                int i = -1;
+                int errorCode = -1;
                 if (connDeviceProxy != null) {
-                    i = ((Integer) connDeviceProxy.get("errorcode")).intValue();
+                    errorCode = ((Integer) connDeviceProxy.get("errorcode")).intValue();
                 }
-                if (i != 0) {
+                if (errorCode != 0) {
                     DownFileInfo.this.mHandler.post(new Runnable() {
                         public void run() {
                             DownFileInfo.this.mDownStartRunnable = null;
@@ -103,11 +103,11 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
             if (DownFileInfo.this.mDvrNet != null) {
                 DownFileInfo.this.mDvrNet.SetDownVideoInterface(DownFileInfo.this);
                 String path = Environment.getExternalStorageDirectory().getPath();
-                String valueOf = String.valueOf(System.currentTimeMillis() / 1000);
+                String timestampSeconds = String.valueOf(System.currentTimeMillis() / 1000);
                 DownFileInfo downFileInfo = DownFileInfo.this;
-                downFileInfo.mTmpFile = String.format("%s/uview/%s_%s.tmp", new Object[]{path, downFileInfo.name, valueOf});
-                DownFileInfo downFileInfo2 = DownFileInfo.this;
-                downFileInfo2.mDstFile = String.format("%s/DCIM/Camera/%s_%s.mp4", new Object[]{path, downFileInfo2.name, valueOf});
+                downFileInfo.mTmpFile = String.format("%s/uview/%s_%s.tmp", new Object[]{path, downFileInfo.name, timestampSeconds});
+                DownFileInfo currentDownload = DownFileInfo.this;
+                currentDownload.mDstFile = String.format("%s/DCIM/Camera/%s_%s.mp4", new Object[]{path, currentDownload.name, timestampSeconds});
                 if (DownFileInfo.this.mDvrNet.DownVideoStart(DownFileInfo.this.mDstFile, DownFileInfo.this.mTmpFile, DownFileInfo.this.nDiskType, 1 << DownFileInfo.this.mChannel, 1, DownFileInfo.this.mStartTime, DownFileInfo.this.mEndTime, DownFileInfo.this.name) != 0) {
                     DownFileInfo.this.mHandler.post(new Runnable() {
                         public void run() {
@@ -133,8 +133,8 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
     public class DownStopRunnable implements Runnable {
         public boolean cancel;
 
-        DownStopRunnable(boolean z) {
-            this.cancel = z;
+        DownStopRunnable(boolean cancel) {
+            this.cancel = cancel;
         }
 
         public void run() {
@@ -152,9 +152,9 @@ public class DownFileInfo extends RemoteFileInfo implements DownVideoInterface {
         }
     }
 
-    public void stopDown(boolean z) {
+    public void stopDown(boolean cancel) {
         if (checkDownRunnable()) {
-            this.mDownStopRunnable = new DownStopRunnable(z);
+            this.mDownStopRunnable = new DownStopRunnable(cancel);
             new Thread(this.mDownStopRunnable).start();
         }
     }
