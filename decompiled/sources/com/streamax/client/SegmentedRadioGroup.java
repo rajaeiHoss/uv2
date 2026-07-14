@@ -26,17 +26,11 @@ public class SegmentedRadioGroup extends RadioGroup {
         int childCount = super.getChildCount();
         if (childCount > 1) {
             super.getChildAt(0).setBackgroundResource(R.drawable.segment_radio_left);
-            int i = 1;
-            while (true) {
-                int i2 = childCount - 1;
-                if (i < i2) {
-                    super.getChildAt(i).setBackgroundResource(R.drawable.segment_radio_middle);
-                    i++;
-                } else {
-                    super.getChildAt(i2).setBackgroundResource(R.drawable.segment_radio_right);
-                    return;
-                }
+            int lastChildIndex = childCount - 1;
+            for (int childIndex = 1; childIndex < lastChildIndex; childIndex++) {
+                super.getChildAt(childIndex).setBackgroundResource(R.drawable.segment_radio_middle);
             }
+            super.getChildAt(lastChildIndex).setBackgroundResource(R.drawable.segment_radio_right);
         } else if (childCount == 1) {
             super.getChildAt(0).setBackgroundResource(R.drawable.segment_button);
         }
