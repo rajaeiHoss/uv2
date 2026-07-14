@@ -8,33 +8,33 @@ public class EditLoginTypeEvent {
     public EditLoginTypeEvent() {
     }
 
-    public EditLoginTypeEvent(int i, String str, boolean z) {
-        this.mPosition = i;
-        this.mServerName = str;
-        this.mIsAdd = z;
+    public EditLoginTypeEvent(int position, String serverName, boolean isAdd) {
+        this.mPosition = position;
+        this.mServerName = serverName;
+        this.mIsAdd = isAdd;
     }
 
     public String getmServerName() {
         return this.mServerName;
     }
 
-    public void setmServerName(String str) {
-        this.mServerName = str;
+    public void setmServerName(String serverName) {
+        this.mServerName = serverName;
     }
 
     public int getmPosition() {
         return this.mPosition;
     }
 
-    public void setmPosition(int i) {
-        this.mPosition = i;
+    public void setmPosition(int position) {
+        this.mPosition = position;
     }
 
     public boolean ismIsAdd() {
         return this.mIsAdd;
     }
 
-    public void setmIsAdd(boolean z) {
-        this.mIsAdd = z;
+    public void setmIsAdd(boolean isAdd) {
+        this.mIsAdd = isAdd;
     }
 }
