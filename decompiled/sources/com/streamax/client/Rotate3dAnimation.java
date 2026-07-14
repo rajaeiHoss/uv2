@@ -14,38 +14,38 @@ public class Rotate3dAnimation extends Animation {
     private final boolean mReverse;
     private final float mToDegrees;
 
-    public Rotate3dAnimation(float f, float f2, float f3, float f4, float f5, boolean z) {
-        this.mFromDegrees = f;
-        this.mToDegrees = f2;
-        this.mCenterX = f3;
-        this.mCenterY = f4;
-        this.mDepthZ = f5;
-        this.mReverse = z;
+    public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX, float centerY, float depthZ, boolean reverse) {
+        this.mFromDegrees = fromDegrees;
+        this.mToDegrees = toDegrees;
+        this.mCenterX = centerX;
+        this.mCenterY = centerY;
+        this.mDepthZ = depthZ;
+        this.mReverse = reverse;
     }
 
-    public void initialize(int i, int i2, int i3, int i4) {
-        super.initialize(i, i2, i3, i4);
+    public void initialize(int width, int height, int parentWidth, int parentHeight) {
+        super.initialize(width, height, parentWidth, parentHeight);
         this.mCamera = new Camera();
     }
 
     /* access modifiers changed from: protected */
-    public void applyTransformation(float f, Transformation transformation) {
-        float f2 = this.mFromDegrees;
-        float f3 = f2 + ((this.mToDegrees - f2) * f);
-        float f4 = this.mCenterX;
-        float f5 = this.mCenterY;
+    public void applyTransformation(float interpolatedTime, Transformation transformation) {
+        float fromDegrees = this.mFromDegrees;
+        float degrees = fromDegrees + ((this.mToDegrees - fromDegrees) * interpolatedTime);
+        float centerX = this.mCenterX;
+        float centerY = this.mCenterY;
         Camera camera = this.mCamera;
         Matrix matrix = transformation.getMatrix();
         camera.save();
         if (this.mReverse) {
-            camera.translate(0.0f, 0.0f, this.mDepthZ * f);
+            camera.translate(0.0f, 0.0f, this.mDepthZ * interpolatedTime);
         } else {
-            camera.translate(0.0f, 0.0f, this.mDepthZ * (1.0f - f));
+            camera.translate(0.0f, 0.0f, this.mDepthZ * (1.0f - interpolatedTime));
         }
-        camera.rotateY(f3);
+        camera.rotateY(degrees);
         camera.getMatrix(matrix);
         camera.restore();
-        matrix.preTranslate(-f4, -f5);
-        matrix.postTranslate(f4, f5);
+        matrix.preTranslate(-centerX, -centerY);
+        matrix.postTranslate(centerX, centerY);
     }
 }
