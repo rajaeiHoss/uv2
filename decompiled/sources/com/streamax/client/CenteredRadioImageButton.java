@@ -21,7 +21,7 @@ public class CenteredRadioImageButton extends RadioButton {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        float f;
+        float scale;
         super.onDraw(canvas);
         Drawable drawable = this.image;
         if (drawable != null) {
@@ -31,15 +31,15 @@ public class CenteredRadioImageButton extends RadioButton {
             int width = getWidth();
             int height = getHeight();
             if (intrinsicWidth > width || intrinsicHeight > height) {
-                f = Math.min(((float) width) / ((float) intrinsicWidth), ((float) height) / ((float) intrinsicHeight));
+                scale = Math.min(((float) width) / ((float) intrinsicWidth), ((float) height) / ((float) intrinsicHeight));
             } else {
-                f = 1.0f;
+                scale = 1.0f;
             }
-            float f2 = ((float) intrinsicWidth) * f;
-            int i = (int) (((((float) width) - f2) * 0.5f) + 0.5f);
-            float f3 = ((float) intrinsicHeight) * f;
-            int i2 = (int) (((((float) height) - f3) * 0.5f) + 0.5f);
-            this.image.setBounds(i, i2, (int) (((float) i) + f2), (int) (((float) i2) + f3));
+            float scaledWidth = ((float) intrinsicWidth) * scale;
+            int left = (int) (((((float) width) - scaledWidth) * 0.5f) + 0.5f);
+            float scaledHeight = ((float) intrinsicHeight) * scale;
+            int top = (int) (((((float) height) - scaledHeight) * 0.5f) + 0.5f);
+            this.image.setBounds(left, top, (int) (((float) left) + scaledWidth), (int) (((float) top) + scaledHeight));
             this.image.draw(canvas);
         }
     }
