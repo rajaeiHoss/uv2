@@ -36,15 +36,15 @@ public class AddPlanFragment extends ConfigFragment implements TimeUtils.TimePic
     public View mViewLine;
 
     public interface AddPlanInterface {
-        void savePlan(int i, int i2, int i3);
+        void savePlan(int startTime, int endTime, int recordType);
     }
 
     public void SetAddPlanInterface(AddPlanInterface addPlanInterface) {
         this.mInterface = addPlanInterface;
     }
 
-    public void ShowType(boolean z) {
-        this.mShowType = z;
+    public void ShowType(boolean showType) {
+        this.mShowType = showType;
     }
 
     /* access modifiers changed from: protected */
@@ -94,8 +94,8 @@ public class AddPlanFragment extends ConfigFragment implements TimeUtils.TimePic
             this.mListStrType.clear();
             this.mListIntType.clear();
             List<String> strDatas = getStrDatas(R.array.config_record_schedule_rtSelector);
-            int i = this.mType;
-            if (i >= 0 && i < strDatas.size()) {
+            int recordType = this.mType;
+            if (recordType >= 0 && recordType < strDatas.size()) {
                 this.mTvType.setText(strDatas.get(this.mType));
                 this.mListStrType.addAll(strDatas);
                 this.mListIntType.add(new Integer(this.mType));
@@ -127,15 +127,15 @@ public class AddPlanFragment extends ConfigFragment implements TimeUtils.TimePic
     }
 
     public void saveData() {
-        int i = this.mStart;
-        int i2 = this.mEnd;
-        if (i >= i2) {
+        int startTime = this.mStart;
+        int endTime = this.mEnd;
+        if (startTime >= endTime) {
             toastSf((int) R.string.time_is_error);
             return;
         }
         AddPlanInterface addPlanInterface = this.mInterface;
         if (addPlanInterface != null) {
-            addPlanInterface.savePlan(i, i2, this.mType);
+            addPlanInterface.savePlan(startTime, endTime, this.mType);
         }
         prePage();
     }
@@ -165,26 +165,26 @@ public class AddPlanFragment extends ConfigFragment implements TimeUtils.TimePic
 
     public void setTimePickListener(TextView textView, Date date) {
         textView.setText(TimeUtils.getTime(date, TimeUtils.HMS));
-        String string = StringUtils.getString(this.mTvStart);
-        String string2 = StringUtils.getString(this.mTvEnd);
-        int parse2Int_86399 = parse2Int_86399(string);
-        int parse2Int_863992 = parse2Int_86399(string2);
-        if (parse2Int_86399 < parse2Int_863992) {
-            this.mStart = parse2Int_86399;
-            this.mEnd = parse2Int_863992;
+        String startTimeText = StringUtils.getString(this.mTvStart);
+        String endTimeText = StringUtils.getString(this.mTvEnd);
+        int startTime = parse2Int_86399(startTimeText);
+        int endTime = parse2Int_86399(endTimeText);
+        if (startTime < endTime) {
+            this.mStart = startTime;
+            this.mEnd = endTime;
         }
     }
 
-    public void updateDateForType(int i) {
-        if (this.mType != i) {
-            this.mType = i;
+    public void updateDateForType(int recordType) {
+        if (this.mType != recordType) {
+            this.mType = recordType;
             refreshUi();
         }
     }
 
-    public void saveSelect(String str, List<Integer> list) {
-        if (str.equals("SelectFragmentForType") && list.size() > 0) {
-            updateDateForType(list.get(0).intValue());
+    public void saveSelect(String selectorTag, List<Integer> selectedItems) {
+        if (selectorTag.equals("SelectFragmentForType") && selectedItems.size() > 0) {
+            updateDateForType(selectedItems.get(0).intValue());
         }
     }
 }
