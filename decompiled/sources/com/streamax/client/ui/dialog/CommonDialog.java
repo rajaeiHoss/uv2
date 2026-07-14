@@ -38,8 +38,8 @@ public final class CommonDialog {
             return (B) this;
         }
 
-        public B setCustomView(int i) {
-            return setCustomView(LayoutInflater.from(getContext()).inflate(i, this.mContainerLayout, false));
+        public B setCustomView(int layoutResId) {
+            return setCustomView(LayoutInflater.from(getContext()).inflate(layoutResId, this.mContainerLayout, false));
         }
 
         public B setCustomView(View view) {
@@ -47,8 +47,8 @@ public final class CommonDialog {
             return self();
         }
 
-        public B setTitle(int i) {
-            return setTitle((CharSequence) getString(i));
+        public B setTitle(int titleResId) {
+            return setTitle((CharSequence) getString(titleResId));
         }
 
         public B setTitle(CharSequence charSequence) {
@@ -56,8 +56,8 @@ public final class CommonDialog {
             return self();
         }
 
-        public B setCancel(int i) {
-            return setCancel((CharSequence) getString(i));
+        public B setCancel(int cancelResId) {
+            return setCancel((CharSequence) getString(cancelResId));
         }
 
         public B setCancel(CharSequence charSequence) {
@@ -66,8 +66,8 @@ public final class CommonDialog {
             return self();
         }
 
-        public B setConfirm(int i) {
-            return setConfirm((CharSequence) getString(i));
+        public B setConfirm(int confirmResId) {
+            return setConfirm((CharSequence) getString(confirmResId));
         }
 
         public B setConfirm(CharSequence charSequence) {
@@ -75,8 +75,8 @@ public final class CommonDialog {
             return self();
         }
 
-        public B setAutoDismiss(boolean z) {
-            this.mAutoDismiss = z;
+        public B setAutoDismiss(boolean autoDismiss) {
+            this.mAutoDismiss = autoDismiss;
             return self();
         }
 
