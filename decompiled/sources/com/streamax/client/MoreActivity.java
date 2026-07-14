@@ -307,7 +307,7 @@ public class MoreActivity extends Activity implements View.OnClickListener {
         this.mSeekBar = seekBar;
         seekBar.setProgress(this.mApp.mPtzSpeed);
         this.mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(SeekBar seekBar, int i, boolean z) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -324,7 +324,7 @@ public class MoreActivity extends Activity implements View.OnClickListener {
         webView.setHorizontalScrollBarEnabled(false);
         this.mWebView.setHorizontalScrollbarOverlay(false);
         this.mWebView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView webView, String str) {
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 webView.loadUrl(MoreActivity.URL);
                 return false;
             }
@@ -334,26 +334,26 @@ public class MoreActivity extends Activity implements View.OnClickListener {
         this.mBtnAutoLogin = toggleButton;
         toggleButton.setChecked(this.mApp.readuser());
         this.mBtnAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
-                MyApp.autoLogin = z;
-                SpUtils.putBoolean(Configs.Key.AutoLogin, z);
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                MyApp.autoLogin = checked;
+                SpUtils.putBoolean(Configs.Key.AutoLogin, checked);
             }
         });
         ToggleButton toggleButton2 = (ToggleButton) this.mSystemView.findViewById(R.id.systemsetting_wifi_radio);
         this.mBtnOnlyWIFI = toggleButton2;
         toggleButton2.setChecked(MyApp.wifiStatus);
         this.mBtnOnlyWIFI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
-                MyApp.wifiStatus = z;
-                SpUtils.putBoolean(Configs.Key.WifiStatus, z);
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                MyApp.wifiStatus = checked;
+                SpUtils.putBoolean(Configs.Key.WifiStatus, checked);
             }
         });
         ToggleButton toggleButton3 = (ToggleButton) this.mSystemView.findViewById(R.id.systemsetting_autoplay_radio);
         this.mBtnAutoplay = toggleButton3;
         toggleButton3.setChecked(this.mApp.mbAutoPlay);
         this.mBtnAutoplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
-                MoreActivity.this.mApp.mbAutoPlay = z;
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                MoreActivity.this.mApp.mbAutoPlay = checked;
             }
         });
         this.mSegmentLiveMode = (SegmentedRadioGroup) this.mSystemView.findViewById(R.id.livemode_segment_text);
