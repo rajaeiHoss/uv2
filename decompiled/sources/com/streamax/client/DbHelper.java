@@ -16,19 +16,19 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TAG = "DbHelper";
     public static boolean alartTable = false;
 
-    public DbHelper(Context context, String str, SQLiteDatabase.CursorFactory cursorFactory, int i) {
+    public DbHelper(Context context, String databaseName, SQLiteDatabase.CursorFactory cursorFactory, int version) {
         super(context, DATABASENAME, cursorFactory, 3);
         Log.v(TAG, "[DbHelper]" + context.toString());
     }
 
-    public void onCreate(SQLiteDatabase sQLiteDatabase) {
+    public void onCreate(SQLiteDatabase database) {
         Log.v(TAG, "DbHelper oncreate");
-        sQLiteDatabase.execSQL("Create table IF NOT EXISTS " + DEVICE_TABLE_NAME + "(id integer primary key autoincrement,deviceName varchar,deviceIp varchar,mediaPort integer,webPort integer,channelNum integer,username varchar,password varchar,push integer,linkmode varchar default '');");
+        database.execSQL("Create table IF NOT EXISTS " + DEVICE_TABLE_NAME + "(id integer primary key autoincrement,deviceName varchar,deviceIp varchar,mediaPort integer,webPort integer,channelNum integer,username varchar,password varchar,push integer,linkmode varchar default '');");
     }
 
-    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int i, int i2) {
-        sQLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DEVICE_TABLE_NAME);
-        onCreate(sQLiteDatabase);
+    public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        database.execSQL("DROP TABLE IF EXISTS " + DEVICE_TABLE_NAME);
+        onCreate(database);
     }
 
     public boolean insert(DevInfoBean devInfoBean) {
@@ -63,17 +63,17 @@ public class DbHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean delete(int i) {
+    public boolean delete(int deviceId) {
         SQLiteDatabase writableDatabase = getWritableDatabase();
-        writableDatabase.delete(DEVICE_TABLE_NAME, "id=?", new String[]{Integer.toString(i)});
+        writableDatabase.delete(DEVICE_TABLE_NAME, "id=?", new String[]{Integer.toString(deviceId)});
         writableDatabase.close();
         return true;
     }
 
-    public boolean queryDeviceName(String str) {
+    public boolean queryDeviceName(String deviceName) {
         SQLiteDatabase readableDatabase = getReadableDatabase();
-        SQLiteDatabase sQLiteDatabase = readableDatabase;
-        Cursor query = sQLiteDatabase.query(DEVICE_TABLE_NAME, (String[]) null, "devicename=?", new String[]{str}, (String) null, (String) null, "id asc");
+        SQLiteDatabase database = readableDatabase;
+        Cursor query = database.query(DEVICE_TABLE_NAME, (String[]) null, "devicename=?", new String[]{deviceName}, (String) null, (String) null, "id asc");
         if (query.getCount() == 0) {
             query.close();
             return false;
@@ -87,10 +87,10 @@ public class DbHelper extends SQLiteOpenHelper {
         return getReadableDatabase().query(DEVICE_TABLE_NAME, (String[]) null, "channelNum=?", new String[]{"0"}, (String) null, (String) null, "id asc").getCount();
     }
 
-    public DevInfoBean query(String str) {
+    public DevInfoBean query(String deviceName) {
         SQLiteDatabase readableDatabase = getReadableDatabase();
-        SQLiteDatabase sQLiteDatabase = readableDatabase;
-        Cursor query = sQLiteDatabase.query(DEVICE_TABLE_NAME, (String[]) null, "devicename=?", new String[]{str}, (String) null, (String) null, "id asc");
+        SQLiteDatabase database = readableDatabase;
+        Cursor query = database.query(DEVICE_TABLE_NAME, (String[]) null, "devicename=?", new String[]{deviceName}, (String) null, (String) null, "id asc");
         if (query.getCount() == 0) {
             query.close();
             return null;
@@ -114,18 +114,18 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int getIdByName(String str) {
-        Cursor query = getReadableDatabase().query(DEVICE_TABLE_NAME, (String[]) null, "deviceName=?", new String[]{str}, (String) null, (String) null, "id asc");
+    public int getIdByName(String deviceName) {
+        Cursor query = getReadableDatabase().query(DEVICE_TABLE_NAME, (String[]) null, "deviceName=?", new String[]{deviceName}, (String) null, (String) null, "id asc");
         if (query == null || !query.moveToNext()) {
             return -1;
         }
         return query.getInt(0);
     }
 
-    public DevInfoBean query(int i) {
+    public DevInfoBean query(int deviceId) {
         SQLiteDatabase readableDatabase = getReadableDatabase();
-        SQLiteDatabase sQLiteDatabase = readableDatabase;
-        Cursor query = sQLiteDatabase.query(DEVICE_TABLE_NAME, (String[]) null, "id=?", new String[]{Integer.toString(i)}, (String) null, (String) null, "id asc");
+        SQLiteDatabase database = readableDatabase;
+        Cursor query = database.query(DEVICE_TABLE_NAME, (String[]) null, "id=?", new String[]{Integer.toString(deviceId)}, (String) null, (String) null, "id asc");
         if (query.moveToNext()) {
             DevInfoBean devInfoBean = new DevInfoBean();
             devInfoBean.mDevId = query.getInt(query.getColumnIndex("id"));
@@ -172,7 +172,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return arrayList;
     }
 
-    public boolean Update(int i, DevInfoBean devInfoBean) {
+    public boolean Update(int deviceId, DevInfoBean devInfoBean) {
         SQLiteDatabase writableDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("deviceName", devInfoBean.mDevName);
@@ -184,7 +184,7 @@ public class DbHelper extends SQLiteOpenHelper {
         contentValues.put("password", devInfoBean.mPwd);
         contentValues.put("push", Integer.valueOf(devInfoBean.mPush));
         contentValues.put("linkmode", devInfoBean.mLinkMode);
-        int update = writableDatabase.update(DEVICE_TABLE_NAME, contentValues, "id=?", new String[]{Integer.toString(i)});
+        int update = writableDatabase.update(DEVICE_TABLE_NAME, contentValues, "id=?", new String[]{Integer.toString(deviceId)});
         writableDatabase.close();
         if (update > 0) {
             return true;
