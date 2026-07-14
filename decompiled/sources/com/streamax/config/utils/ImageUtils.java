@@ -15,25 +15,25 @@ public class ImageUtils {
         textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
     }
 
-    public static void showIcon(TextView textView, int i) {
-        showIconForTv(textView, i, 3);
+    public static void showIcon(TextView textView, int drawableResId) {
+        showIconForTv(textView, drawableResId, 3);
     }
 
-    public static void showNone(TextView textView, int i) {
-        showIconForTv(textView, i, 0);
+    public static void showNone(TextView textView, int drawableResId) {
+        showIconForTv(textView, drawableResId, 0);
     }
 
-    public static void showIconForTv(TextView textView, int i, int i2) {
-        Drawable drawable = AppProxy.getDrawable(i);
-        if (i2 == 0) {
+    public static void showIconForTv(TextView textView, int drawableResId, int position) {
+        Drawable drawable = AppProxy.getDrawable(drawableResId);
+        if (position == 0) {
             textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
-        } else if (i2 == 1) {
+        } else if (position == 1) {
             textView.setCompoundDrawablesWithIntrinsicBounds(drawable, (Drawable) null, (Drawable) null, (Drawable) null);
-        } else if (i2 == 2) {
+        } else if (position == 2) {
             textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, drawable, (Drawable) null, (Drawable) null);
-        } else if (i2 == 3) {
+        } else if (position == 3) {
             textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, drawable, (Drawable) null);
-        } else if (i2 == 4) {
+        } else if (position == 4) {
             textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, drawable);
         }
     }
