@@ -104,9 +104,9 @@ public class UpnpOfNetwork extends ConfigFragment implements BaseListener.GetLis
         }
     }
 
-    public void getSuccess(String str) {
+    public void getSuccess(String response) {
         try {
-            this.mUpnpRes = new JSONObject(str);
+            this.mUpnpRes = new JSONObject(response);
             refreshUi();
         } catch (JSONException unused) {
             showErrorFragment();
