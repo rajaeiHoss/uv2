@@ -30,8 +30,8 @@ public abstract class BaseUi extends FragmentActivity {
     public abstract void initView();
 
     /* access modifiers changed from: protected */
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         this.mContext = AppProxy.getContext();
         this.mHandler = AppProxy.getHandler();
         this.mResources = AppProxy.getResources();
@@ -42,12 +42,12 @@ public abstract class BaseUi extends FragmentActivity {
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(int i) {
-        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(i)));
+    public void toastSf(int messageResId) {
+        ToastUtils.show((CharSequence) StringUtils.getString(Integer.valueOf(messageResId)));
     }
 
     /* access modifiers changed from: protected */
-    public void toastSf(String str) {
-        ToastUtils.show((CharSequence) str);
+    public void toastSf(String message) {
+        ToastUtils.show((CharSequence) message);
     }
 }
