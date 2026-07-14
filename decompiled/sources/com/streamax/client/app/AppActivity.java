@@ -58,7 +58,7 @@ public abstract class AppActivity extends BaseActivity implements ToastAction, T
         TitleBarAction.CC.$default$onRightClick(this, view);
     }
 
-    public /* synthetic */ void onSucceed(Object obj, boolean z) {
+    public /* synthetic */ void onSucceed(Object obj, boolean isCache) {
         onSucceed(obj);
     }
 
