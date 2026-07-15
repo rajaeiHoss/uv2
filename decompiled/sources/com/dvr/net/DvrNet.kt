@@ -172,7 +172,7 @@ class DvrNet {
     init {
         nBBCount = 0
         mPixels = arrayOfNulls(16)
-        mAudio = Array(1) { ByteArray(1024) }
+        mAudio = Array(1) { ByteArray(MULTIPLAY_AUDIO_BUFFER_SIZE) }
         CmsHandle = IntArray(16)
         mRealplayChannel = IntArray(32)
         mStreamTypeArray = IntArray(32)
@@ -1413,6 +1413,7 @@ class DvrNet {
         const val STREAM_CONTROL_SWTICH = 3
         const val SUB_STREAM = 0
         private const val TAG = "DvrNet"
+        private const val MULTIPLAY_AUDIO_BUFFER_SIZE = 64 * 1024
         const val UNKNOWN_STREAM = -1
         const val UPLOAD_EVENTTYPE_ElLECTRONICFENCE = 8
         const val UPLOAD_EVENTTYPE_IMPORTPARAMETER = 1

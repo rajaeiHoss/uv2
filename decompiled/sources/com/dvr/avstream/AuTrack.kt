@@ -105,7 +105,10 @@ class AuTrack : AudioTrackInterface {
         val player = mPlayer
         val audioTrack = player.mAudioTrack
         if (audioTrack != null && !mbMute && channel == mChannel && audioTrack.playState == 3 && audioData != null) {
-            audioTrack.write(audioData, 0, length)
+            val safeLength = length.coerceIn(0, audioData.size)
+            if (safeLength > 0) {
+                audioTrack.write(audioData, 0, safeLength)
+            }
         }
     }
 
