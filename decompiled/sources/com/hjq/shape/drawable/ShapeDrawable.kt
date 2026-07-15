@@ -5,8 +5,12 @@ import android.graphics.ColorFilter
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.LinearGradient
+import android.graphics.RadialGradient
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
@@ -105,8 +109,8 @@ open class ShapeDrawable : Drawable {
 
     fun setStrokeColor(strokeColor: Int): ShapeDrawable {
         setStroke(
-            mShapeState.mStrokeColor,
             mShapeState.mStrokeWidth,
+            strokeColor,
             mShapeState.mStrokeDashWidth,
             mShapeState.mStrokeDashGap
         )
@@ -115,8 +119,8 @@ open class ShapeDrawable : Drawable {
 
     fun setStrokeWidth(strokeWidth: Int): ShapeDrawable {
         setStroke(
-            mShapeState.mStrokeColor,
             strokeWidth,
+            mShapeState.mStrokeColor,
             mShapeState.mStrokeDashWidth,
             mShapeState.mStrokeDashGap
         )
@@ -125,8 +129,8 @@ open class ShapeDrawable : Drawable {
 
     fun setDashWidth(dashWidth: Float): ShapeDrawable {
         setStroke(
-            mShapeState.mStrokeColor,
             mShapeState.mStrokeWidth,
+            mShapeState.mStrokeColor,
             dashWidth,
             mShapeState.mStrokeDashGap
         )
@@ -135,16 +139,16 @@ open class ShapeDrawable : Drawable {
 
     fun setDashGap(dashGap: Float): ShapeDrawable {
         setStroke(
-            mShapeState.mStrokeColor,
             mShapeState.mStrokeWidth,
+            mShapeState.mStrokeColor,
             mShapeState.mStrokeDashWidth,
             dashGap
         )
         return this
     }
 
-    fun setStroke(strokeColor: Int, strokeWidth: Int, dashWidth: Float, dashGap: Float): ShapeDrawable {
-        mShapeState.setStroke(strokeColor, strokeWidth, dashWidth, dashGap)
+    fun setStroke(strokeWidth: Int, strokeColor: Int, dashWidth: Float, dashGap: Float): ShapeDrawable {
+        mShapeState.setStroke(strokeWidth, strokeColor, dashWidth, dashGap)
 
         if (mStrokePaint == null) {
             val paint = Paint(1)
@@ -152,8 +156,8 @@ open class ShapeDrawable : Drawable {
             paint.style = Paint.Style.STROKE
         }
 
-        mStrokePaint!!.strokeWidth = strokeColor.toFloat()
-        mStrokePaint!!.color = strokeWidth
+        mStrokePaint!!.strokeWidth = strokeWidth.toFloat()
+        mStrokePaint!!.color = strokeColor
         val dashPathEffect = if (dashWidth > 0.0f) {
             DashPathEffect(floatArrayOf(dashWidth, dashGap), 0.0f)
         } else {
@@ -549,7 +553,77 @@ open class ShapeDrawable : Drawable {
     }
 
     private fun ensureValidRect(): Boolean {
-        throw UnsupportedOperationException("Method not decompiled: com.hjq.shape.drawable.ShapeDrawable.ensureValidRect():boolean")
+        if (mRectIsDirty) {
+            mRectIsDirty = false
+            val bounds = bounds
+            val strokeInset = (mStrokePaint?.strokeWidth ?: 0f) * 0.5f
+            mRect.set(bounds)
+            if (strokeInset > 0f) {
+                mRect.inset(strokeInset, strokeInset)
+            }
+
+            val gradientColors = mShapeState.mGradientColors
+            if (gradientColors != null) {
+                val level = if (mShapeState.mUseLevel) level / 10000f else 1f
+                val left = mRect.left
+                val top = mRect.top
+                val right = mRect.right
+                val bottom = mRect.bottom
+                val width = mRect.width()
+                val height = mRect.height()
+                val centerX = left + width * mShapeState.mCenterX
+                val centerY = top + height * mShapeState.mCenterY
+                mFillPaint.shader = when (mShapeState.mGradientType) {
+                    ShapeGradientType.RADIAL_GRADIENT -> {
+                        val radius = (if (mShapeState.mGradientRadius > 0f) {
+                            mShapeState.mGradientRadius
+                        } else {
+                            maxOf(width, height) * 0.5f
+                        }) * level
+                        RadialGradient(centerX, centerY, radius, gradientColors, mShapeState.mPositions, Shader.TileMode.CLAMP)
+                    }
+                    ShapeGradientType.SWEEP_GRADIENT -> {
+                        SweepGradient(centerX, centerY, gradientColors, mShapeState.mPositions)
+                    }
+                    else -> {
+                        val coordinates = getLinearGradientCoordinates(left, top, right, bottom, width, height, level)
+                        LinearGradient(
+                            coordinates[0],
+                            coordinates[1],
+                            coordinates[2],
+                            coordinates[3],
+                            gradientColors,
+                            mShapeState.mPositions,
+                            Shader.TileMode.CLAMP
+                        )
+                    }
+                }
+            } else {
+                mFillPaint.shader = null
+            }
+        }
+        return !mRect.isEmpty
+    }
+
+    private fun getLinearGradientCoordinates(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        width: Float,
+        height: Float,
+        level: Float
+    ): FloatArray {
+        return when (mShapeState.mGradientOrientation) {
+            ShapeGradientOrientation.TR_BL -> floatArrayOf(right, top, right - width * level, top + height * level)
+            ShapeGradientOrientation.RIGHT_LEFT -> floatArrayOf(right, top, right - width * level, top)
+            ShapeGradientOrientation.BR_TL -> floatArrayOf(right, bottom, right - width * level, bottom - height * level)
+            ShapeGradientOrientation.BOTTOM_TOP -> floatArrayOf(left, bottom, left, bottom - height * level)
+            ShapeGradientOrientation.BL_TR -> floatArrayOf(left, bottom, left + width * level, bottom - height * level)
+            ShapeGradientOrientation.LEFT_RIGHT -> floatArrayOf(left, top, left + width * level, top)
+            ShapeGradientOrientation.TL_BR -> floatArrayOf(left, top, left + width * level, top + height * level)
+            ShapeGradientOrientation.TOP_BOTTOM -> floatArrayOf(left, top, left, top + height * level)
+        }
     }
 
     override fun getIntrinsicWidth(): Int {

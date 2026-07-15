@@ -159,34 +159,10 @@ class RoundRectDrawable extends Drawable {
         return true;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x000a, code lost:
-        r0 = r1.mBackground;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean isStateful() {
-        /*
-            r1 = this;
-            android.content.res.ColorStateList r0 = r1.mTint
-            if (r0 == 0) goto L_0x000a
-            boolean r0 = r0.isStateful()
-            if (r0 != 0) goto L_0x001a
-        L_0x000a:
-            android.content.res.ColorStateList r0 = r1.mBackground
-            if (r0 == 0) goto L_0x0014
-            boolean r0 = r0.isStateful()
-            if (r0 != 0) goto L_0x001a
-        L_0x0014:
-            boolean r0 = super.isStateful()
-            if (r0 == 0) goto L_0x001c
-        L_0x001a:
-            r0 = 1
-            goto L_0x001d
-        L_0x001c:
-            r0 = 0
-        L_0x001d:
-            return r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: androidx.cardview.widget.RoundRectDrawable.isStateful():boolean");
+        return (this.mTint != null && this.mTint.isStateful())
+                || (this.mBackground != null && this.mBackground.isStateful())
+                || super.isStateful();
     }
 
     private PorterDuffColorFilter createTintFilter(ColorStateList colorStateList, PorterDuff.Mode mode) {

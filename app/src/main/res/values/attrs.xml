@@ -586,7 +586,12 @@
     <attr name="shape_solidPressedColor" format="color" />
     <attr name="shape_solidColor" format="color" />
     <attr name="shape_angle" format="integer" />
-    <attr name="shape" format="string" />
+    <attr name="shape">
+        <enum name="rectangle" value="0" />
+        <enum name="oval" value="1" />
+        <enum name="line" value="2" />
+        <enum name="ring" value="3" />
+    </attr>
     <attr name="layout_constraintGuide_begin" format="dimension" />
     <attr name="layout_constraintVertical_chainStyle" format="string|integer" />
     <attr name="horizontalOffset" format="dimension" />
